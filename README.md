@@ -111,4 +111,3 @@ MIT License — libre para usar, modificar y distribuir. Solo se requiere **atri
 
 **El DT** — Orquestador para Cursor  
 Creado por [Lucas](https://github.com/Mazalucas)  
-Inspirado en [Agents examples](https://github.com/agents/examples)
