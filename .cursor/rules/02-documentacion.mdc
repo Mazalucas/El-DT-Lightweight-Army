@@ -1,0 +1,41 @@
+---
+description: Jerarquía de documentación y cuándo documentar qué
+alwaysApply: false
+globs: "**/*.md"
+---
+
+# Jerarquía de Documentación
+
+Usa esta jerarquía para decidir dónde y cómo documentar.
+
+## Niveles
+
+| Nivel | Ubicación | Uso |
+|-------|-----------|-----|
+| **1 - Acceso rápido** | README, CHANGELOG, índices | Visión general, quick start |
+| **2 - Contexto de decisión** | docs/, ADRs, guías de arquitectura | Decisiones, patrones, contexto |
+| **3 - Memoria de implementación** | Comentarios, JSDoc, docstrings | Detalles de código |
+| **4 - Trazabilidad** | Commits descriptivos, PR descriptions | Historial, cambios |
+
+## Cuándo documentar qué
+
+- **Decisiones arquitectónicas**: docs/ con ADRs (Architecture Decision Records)
+- **Cambios de API**: CHANGELOG
+- **Contexto de implementación**: Comentarios en código, JSDoc/docstrings
+- **Setup del proyecto**: README
+- **Guías de uso**: docs/ con guías específicas
+
+## Formato ADR (ejemplo)
+
+```markdown
+# ADR-001: [Título]
+
+## Contexto
+[Qué problema se resuelve]
+
+## Decisión
+[Qué se decidió]
+
+## Consecuencias
+[Pros y contras]
+```
