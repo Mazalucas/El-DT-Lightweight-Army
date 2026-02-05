@@ -1,0 +1,34 @@
+---
+description: Convenciones de arquitectura backend, APIs, capas, manejo de errores
+globs: "**/backend/**/*, **/api/**/*, **/*.py, **/*.go, **/*.ts, **/server/**/*"
+---
+
+# Arquitectura Backend
+
+## Convenciones
+
+- **Capas**: Separar lógica de negocio, acceso a datos y presentación (API)
+- **APIs**: Usar convenciones REST; nombres en snake_case o camelCase según el stack
+- **Manejo de errores**: Capturar y propagar con contexto; no tragar excepciones
+- **Patrones**: Repository para datos; Service para lógica de negocio
+
+## Ejemplo de manejo de errores
+
+```typescript
+// Evitar
+try { await fetchData(); } catch (e) {}
+
+// Preferir
+try {
+  await fetchData();
+} catch (e) {
+  logger.error('Failed to fetch', { error: e });
+  throw new DataFetchError('Unable to retrieve data', { cause: e });
+}
+```
+
+## APIs
+
+- Documentar endpoints (OpenAPI/Swagger si aplica)
+- Versionar APIs cuando sea necesario
+- Validar input en el boundary

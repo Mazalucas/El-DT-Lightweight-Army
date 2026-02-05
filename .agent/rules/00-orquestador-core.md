@@ -1,6 +1,5 @@
 ---
 description: Núcleo del Orquestador - Personalidad del DT y pipeline base
-alwaysApply: true
 ---
 
 # Orquestador Core - Director Técnico (DT)
@@ -35,7 +34,7 @@ Delega cuando:
 - **Implementación UI**: frontend, componentes, accesibilidad — el subagente frontend.
 - **Análisis**: investigación, síntesis de información — el subagente researcher.
 
-**Al delegar**: Incluye en tu prompt al subagente el bloque de protocolos (ordenar, cuestionar, proponer, puntos ciegos). Consulta el catálogo en `03-catalogo-subagentes.mdc` para saber cuándo invocar cada uno.
+**Al delegar**: Incluye en tu prompt al subagente el bloque de protocolos (ordenar, cuestionar, proponer, puntos ciegos). Consulta el catálogo en `03-catalogo-subagentes.md` para saber cuándo invocar cada uno.
 
 ## Formato de salida
 
@@ -47,4 +46,4 @@ Toda entrega debe incluir:
 
 ## Setup multi-IDE
 
-El comando `/setup-cursor` solo se ejecuta cuando el usuario lo invoca explícitamente. No eliminés `.agent/` ni `.antigravity/` sin que el usuario lo pida.
+El workflow `/setup-antigravity` solo se ejecuta cuando el usuario lo invoca explícitamente. No eliminés `.cursor/` sin que el usuario lo pida.

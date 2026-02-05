@@ -1,9 +1,13 @@
-# El DT — Director Técnico para Cursor
+# El DT — Director Técnico
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.0.0**
+**v1.1.0**
 
 > El orquestador que convierte al asistente de IA en un **Director Técnico**: un socio que ordena, cuestiona y propone, en lugar de ejecutar sin criterio.
+
+## Soporte multi-IDE
+
+El DT funciona en **Cursor** y **Antigravity**. Al clonar o cambiar de IDE, ejecutá el comando de setup correspondiente para evitar conflictos. Ver [docs/IDE-SETUP.md](docs/IDE-SETUP.md).
 
 ---
 
@@ -28,12 +32,13 @@ Los asistentes de IA suelen decir que sí a todo. Ejecutan sin validar, no antic
 
 ---
 
-## Instalación (2 pasos)
+## Instalación
 
 1. **Cloná o descargá** este repositorio
-2. **Copiá la carpeta `.cursor/`** a tu proyecto
+2. **Si usás Cursor**: Copiá la carpeta `.cursor/` a tu proyecto, o ejecutá `/setup-cursor` para dejar solo la config de Cursor
+3. **Si usás Antigravity**: Ejecutá `/setup-antigravity` para dejar solo la config de Antigravity
 
-No requiere scripts, dependencias ni configuración adicional. Cursor detecta automáticamente las rules y commands.
+No requiere scripts ni dependencias adicionales. Ver [docs/IDE-SETUP.md](docs/IDE-SETUP.md) para detalles.
 
 ### Opción: usar como template
 
@@ -51,6 +56,8 @@ En GitHub: **Use this template** → crear repo nuevo → el orquestador ya vien
 | `/cuestionar` | Solo analizar: preguntar, proponer alternativas — **sin ejecutar** |
 | `/contexto` | Mapear el repo y obtener una visión del sistema |
 | `/prepr` | Preparar cambios como PR (checklist, tests, descripción) |
+| `/setup-cursor` | (Cursor) Eliminar config de Antigravity, dejar solo Cursor |
+| `/setup-antigravity` | (Antigravity) Eliminar config de Cursor, dejar solo Antigravity |
 
 ### Pipeline del DT (7 pasos)
 
@@ -85,10 +92,18 @@ El DT delega según la tarea. Todos mantienen los mismos protocolos: ordenar, cu
 ## Estructura del proyecto
 
 ```
-.cursor/
-├── rules/           # Core, protocolos, catálogo, reglas de dominio
-├── commands/        # orquestar, cuestionar, contexto, prepr
-└── agents/          # 20 subagentes especializados
+.cursor/                    # Cursor
+├── rules/                  # Core, protocolos, catálogo, reglas de dominio
+├── commands/               # orquestar, cuestionar, contexto, prepr, setup-cursor
+└── agents/                 # 20 subagentes especializados
+
+.agent/                     # Antigravity
+├── rules/                  # Reglas equivalentes
+├── skills/                 # 20 skills (subagentes)
+└── workflows/              # orquestar, cuestionar, contexto, prepr, setup-antigravity
+
+.antigravity/               # Antigravity
+└── rules.md               # Reglas principales
 ```
 
 ---
@@ -109,5 +124,5 @@ MIT License — libre para usar, modificar y distribuir. Solo se requiere **atri
 
 ## Créditos
 
-**El DT** — Orquestador para Cursor  
+**El DT** — Orquestador para Cursor y Antigravity  
 Creado por [Lucas](https://github.com/Mazalucas)  
