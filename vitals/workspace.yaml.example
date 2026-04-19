@@ -1,0 +1,20 @@
+# Copiar a vitals/workspace.yaml y ajustar (opcional). No commitear secretos.
+version: 1
+updated: "2026-04-19"
+default_project: main-app
+
+projects:
+  - id: main-app
+    label: "App principal"
+    path: .
+    git_root: .
+    aliases:
+      - app
+      - root
+
+  # - id: other-service
+  #   label: "Microservicio X"
+  #   path: ../other-service
+  #   git_root: ../other-service
+  #   aliases:
+  #     - service

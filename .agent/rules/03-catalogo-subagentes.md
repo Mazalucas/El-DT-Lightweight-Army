@@ -94,3 +94,9 @@ Al invocar un subagente, incluye en tu prompt:
 1. El contexto de la tarea
 2. El bloque: "Aplica los protocolos DT: ordenar, cuestionar, proponer alternativas, incluir Puntos ciegos / Mejoras detectadas en tu entrega."
 3. Qué formato de salida esperas
+
+## Un mensaje, varios agentes
+
+Si el usuario mezcla varios pedidos en un solo mensaje, cada skill debe **aportar solo lo que corresponde a su rol**; para partes fuera de alcance usar una línea `DEFER: <rol>` sin inventar. Al cerrar, **post-delegación** y huella opcional en docs (`agent_contributors`, `pulse_ref` — ver DOC-META-001 §5.3) y en `vitals/pulse/entries/`.
+
+**Vitals / índice:** `vitals/INDEX.md`.

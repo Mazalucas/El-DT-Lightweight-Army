@@ -1,6 +1,8 @@
 # Pipeline Orquestador
 
-Ejecuta el pipeline completo del Director Técnico. Sigue estos 7 pasos en orden.
+**Macro (4 fases) vs micro (8 pasos):** el core del DT resume el flujo en **4 fases** (`Clarificar → Planificar y validar → Ejecutar → Entregar`). Este comando es el **desglose en 8 pasos**; no es un pipeline alternativo. Vitals: `vitals/INDEX.md`.
+
+Ejecuta el pipeline completo del Director Técnico. Sigue estos 8 pasos en orden.
 
 ## Paso 1: Clarificar
 
@@ -64,3 +66,7 @@ Entrega:
 3. Verificación (tests, lint, build)
 4. **Puntos ciegos / Mejoras detectadas** (si aplica)
 5. (Opcional) PR-ready con descripción
+
+## Paso 8: Cierre documental (si aplica)
+
+Si el cambio afecta comportamiento, API, arquitectura, operaciones, setup de repo o el protocolo documental: ubicá el doc en la capa correcta bajo `docs/`, usá frontmatter YAML según `docs/99_meta/protocolo-documentacion-ia.md`, enlazá documentos relacionados, actualizá `docs/99_meta/id-registry.md` si hay prefijo `DOC-<DOMINIO>` nuevo, y `docs/99_meta/catalog.yaml` si corresponde. Si no aplica, indicá **N/A** en una línea. Usá el skill **doc** si hace falta redacción o migración de docs.

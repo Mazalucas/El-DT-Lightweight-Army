@@ -1,6 +1,19 @@
-# Antigravity Compatibility Mode
+# Director Técnico (DT) — Repositorio multi-IDE (plantilla dual)
 
-CONTEXT: You are the Director Técnico (DT) agent running in Antigravity.
-INSTRUCTION: Read and follow the rules defined in `.antigravity/rules.md` and `.agent/rules/`.
-INSTRUCTION: Use the skills in `.agent/skills/` when delegating specialized tasks.
-INSTRUCTION: The workflow `/setup-antigravity` removes `.cursor/` only when the user explicitly invokes it. Do NOT delete `.cursor/` proactively.
+> Tras `/setup-cursor` o `/setup-antigravity`, este archivo debe reemplazarse por la plantilla **cursor** o **antigravity** en `docs/99_meta/` (ver guía IDE).
+
+## Si usás **Cursor**
+
+La fuente de reglas del agente son las **Project Rules** en **`.cursor/rules/*.mdc`**: orquestador, protocolos, catálogo de subagentes, recomendación de herramientas, multi-proyecto Git, arquitectura, frontend, seguridad, testing y **`02-documentacion.mdc`** (protocolo de documentación IA, `alwaysApply: true` → `docs/99_meta/protocolo-documentacion-ia.md`). **Telemetría y specs del DT:** `vitals/INDEX.md`.
+
+**`.agent/rules/`** es el equivalente para Antigravity, no la fuente principal en Cursor.
+
+## Si usás **Antigravity**
+
+Leé **`.antigravity/rules.md`** y las reglas en **`.agent/rules/`**. Para delegar tareas especializadas usá los skills en **`.agent/skills/`**.
+
+**`.cursor/rules/*.mdc`** es el equivalente para Cursor; en Antigravity no están activas si no existe `.cursor/`.
+
+## Setup multi-IDE
+
+Los comandos **`/setup-cursor`** y **`/setup-antigravity`** solo se ejecutan cuando el usuario lo pide. Ajustan `.cursorrules` al IDE elegido usando las plantillas en **`docs/99_meta/cursorrules.*.md`** y eliminan la carpeta del otro IDE. No borres carpetas sin confirmación explícita.

@@ -1,40 +1,27 @@
-# Configuración multi-IDE: Cursor y Antigravity
+---
+id: DOC-GUIDE-002
+title: "Redirect: IDE setup movido"
+type: guide
+status: deprecated
+owner: dt-platform
+created: 2026-04-19
+updated: 2026-04-19
+tags:
+  - redirect
+domain:
+  - meta
+summary: Este archivo conserva la ruta histórica; el contenido canónico está en 02_guides.
+related:
+  - DOC-GUIDE-001
+keywords:
+  - redirect
+priority: low
+intended_audience:
+  - engineers
+source_of_truth: false
+review_cycle_days: 365
+---
 
-El DT (Director Técnico) soporta **Cursor** y **Antigravity**. El repositorio incluye configuración para ambos IDEs. Para evitar conflictos, ejecutá el comando de setup del IDE que vas a usar.
+# Contenido movido
 
-## Cuándo ejecutar el setup
-
-- **Al clonar** el repositorio por primera vez
-- **Al cambiar de IDE** (por ejemplo, pasás de Cursor a Antigravity)
-
-## Comandos de setup
-
-### Si usás Cursor
-
-Ejecutá el comando `/setup-cursor` en el chat del agente.
-
-**Qué hace:** Elimina las carpetas `.agent/` y `.antigravity/`. Deja solo `.cursor/` para la configuración del DT.
-
-### Si usás Antigravity
-
-Ejecutá el workflow `/setup-antigravity` en el chat del agente.
-
-**Qué hace:** Elimina la carpeta `.cursor/`. Deja solo `.agent/` y `.antigravity/` para la configuración del DT.
-
-## Advertencia
-
-**No ejecutes el setup sin intención explícita.** Los comandos eliminan carpetas del proyecto. La IA te pedirá confirmación antes de proceder.
-
-## Cómo restaurar
-
-Si ejecutaste el setup por error o querés volver a tener ambas configuraciones:
-
-- **Restaurar Antigravity** (después de setup-cursor): `git checkout .agent .antigravity`
-- **Restaurar Cursor** (después de setup-antigravity): `git checkout .cursor`
-
-## Estructura según IDE
-
-| IDE | Carpetas activas |
-|-----|------------------|
-| Cursor | `.cursor/` (rules, commands, agents) |
-| Antigravity | `.agent/` (rules, skills, workflows) + `.antigravity/` (rules.md) |
+La guía de configuración multi-IDE está en **[02_guides/ide-setup.md](02_guides/ide-setup.md)** (`DOC-GUIDE-001`).

@@ -1,0 +1,46 @@
+# Catálogo de documentos (índice para humanos y herramientas)
+# Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
+
+version: 1
+updated: "2026-04-19"
+documents:
+  - id: DOC-META-001
+    title: "Protocolo de documentación orientada a IA"
+    path: 99_meta/protocolo-documentacion-ia.md
+    type: policy
+    tags: [documentation, ai, retrieval]
+  - id: DOC-META-002
+    title: "Registro de prefijos DOC-<DOMINIO>"
+    path: 99_meta/id-registry.md
+    type: reference
+    tags: [documentation, ids]
+  - id: DOC-OV-001
+    title: "Portal de documentación del proyecto"
+    path: README.md
+    type: overview
+    tags: [index, docs]
+  - id: DOC-OV-002
+    title: "Overview — índice de capa"
+    path: 00_overview/README.md
+    type: overview
+    tags: [overview]
+  - id: DOC-GUIDE-001
+    title: "Configuración multi-IDE — Cursor y Antigravity"
+    path: 02_guides/ide-setup.md
+    type: guide
+    tags: [cursor, antigravity, setup]
+  - id: DOC-GUIDE-002
+    title: "Redirect histórico IDE-SETUP.md (deprecated)"
+    path: IDE-SETUP.md
+    type: guide
+    tags: [redirect, deprecated]
+  - id: DOC-CONCEPT-001
+    title: "Vitals — telemetría y normativa del Director Técnico"
+    path: 01_concepts/dt-vitals.md
+    type: concept
+    tags: [vitals, dt, pulse, orchestration]
+  - id: DOC-GUIDE-003
+    title: "Adoptar El DT en un repositorio existente"
+    path: 02_guides/adopt-dt-in-existing-repo.md
+    type: guide
+    tags: [adoption, cursor, antigravity, monorepo]

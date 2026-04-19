@@ -30,3 +30,6 @@ build/
 # Logs
 *.log
 logs/
+
+# Vitals — manifest local multi-proyecto (opcional; usar workspace.yaml.example como plantilla)
+vitals/workspace.yaml

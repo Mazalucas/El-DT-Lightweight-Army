@@ -7,6 +7,7 @@ Prepara los cambios como Pull Request listo para review.
 1. **Tests**: ¿Pasan todos los tests?
 2. **Lint**: ¿El código cumple con el linter?
 3. **Resumen de cambios**: ¿Qué se modificó y por qué?
+4. **Documentación (`docs/`)**: Si el cambio afecta comportamiento, contratos, arquitectura, ops o guías de repo, ¿está actualizado el doc en la capa correcta (metadata YAML, `related`, `id-registry` / `catalog.yaml` si aplica)? Si no aplica: **N/A** + una línea de justificación.
 
 ## Formato de descripción de PR
 
@@ -20,6 +21,10 @@ Prepara los cambios como Pull Request listo para review.
 
 ## Cómo probar
 [Pasos para verificar]
+
+## Documentación
+
+Incluí en el PR si tocaste `docs/` o si el cambio requería doc: enlace a archivos clave o **N/A**.
 
 ## Puntos ciegos
 ¿Qué podría fallar en review? ¿Qué no está documentado?
