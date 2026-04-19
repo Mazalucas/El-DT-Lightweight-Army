@@ -1,120 +1,131 @@
-# El DT — Director Técnico
+# El DT — Technical Director
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.3.0**
+**v1.4.0**
 
-> Dejá de tener un asistente que **solo ejecuta**. El DT es el marco que convierte a la IA en un **Director Técnico**: alguien que ordena la conversación, **cuestiona antes de tocar producción**, propone **alternativas con trade-offs** y cierra con **riesgos visibles**. Menos “sí, jefe”; más criterio, trazabilidad y equipo ampliado cuando hace falta.
+> Stop settling for an assistant that **only ships**. El DT is the framework that turns your AI into a **Technical Director**: it structures the conversation, **challenges you before production changes**, offers **alternatives with trade-offs**, and closes with **visible risks**. Less “yes, boss”; more judgment, traceability, and scaled help when you need it.
 
-**Multi-IDE:** funciona en **Cursor** y **Antigravity**. Para configurar o cambiar de IDE sin mezclar carpetas, seguí la guía canónica: [docs/02_guides/ide-setup.md](docs/02_guides/ide-setup.md) (`DOC-GUIDE-001`). La ruta histórica [docs/IDE-SETUP.md](docs/IDE-SETUP.md) solo redirige allí.
+**Multi-IDE:** works in **Cursor** and **Antigravity**. To configure or switch IDE without mixing folders, use the canonical guide: [docs/02_guides/ide-setup.md](docs/02_guides/ide-setup.md) (`DOC-GUIDE-001`). The legacy path [docs/IDE-SETUP.md](docs/IDE-SETUP.md) only redirects there.
 
----
+## Quick setup
 
-## Por qué existe
+1. **Clone** this repo (or **Use this template** on GitHub for a new project).
+2. **Run setup for the IDE you use** (in the agent chat). The commands are:
+   - **Cursor:** `/setup-cursor`
+   - **Antigravity:** `/setup-antigravity`  
+   Details and what each one changes: [docs/02_guides/ide-setup.md](docs/02_guides/ide-setup.md).
+3. **Start using it** — try `/orquestar` for a full pass, `/cuestionar` for analysis only, or `/fast-lane` when the scope is already tight.
 
-Los modelos optimizan la complacencia: aprueban rápido, asumen alcance y entregan parches que mañana son deuda. **El DT invierte el default:** primero claridad y validación, después ejecución. No es magia: son **protocolos**, **precedencia explícita** (qué manda cuando algo choca) y **Vitals** — un lugar ligero en el repo para pulso, memoria opt-in y specs del orquestador, sin reemplazar tu `docs/` de producto.
-
-**En una frase:** menos ejecución a ciegas; más socio técnico con estructura.
-
----
-
-## Qué ganás
-
-| Ganancia | En la práctica |
-|----------|----------------|
-| **Criterio** | Preguntas de validación antes de acciones con impacto (modo por defecto). |
-| **Opciones** | Dos o más caminos con pros y contras cuando tiene sentido. |
-| **Transparencia** | Al cerrar: riesgos, mejoras y dependencias que otro podría no mencionar. |
-| **Ritmo cuando corres** | Con alcance cerrado, `/fast-lane` reduce preguntas rutinarias — sin relajar seguridad ni secretos. |
-| **Escala humana** | 20 subagentes especializados cuando la tarea lo pide. |
-| **Memoria que no ensucia el chat** | Vitals: pulse breve, memoria sugerida con opt-in, specs compartidas entre IDEs. |
+No runtime dependencies are required for the framework itself. Adopting El DT in an existing repo: [docs/02_guides/adopt-dt-in-existing-repo.md](docs/02_guides/adopt-dt-in-existing-repo.md) (`DOC-GUIDE-003`).
 
 ---
 
-## Los cinco protocolos (lenguaje simple)
+## Why it exists
 
-Reglas de oro del comportamiento del DT; el detalle vive en [`.cursor/rules/01-protocolos-dt.mdc`](.cursor/rules/01-protocolos-dt.mdc) (y espejo en `.agent`).
+Models are tuned for agreeableness: they approve fast, assume scope, and land patches that become debt tomorrow. **El DT flips the default:** clarity and validation first, execution second. It is not magic — it is **protocols**, **explicit precedence** (what wins when rules collide), and **Vitals**: a lightweight place in the repo for pulse, opt-in memory, and orchestrator specs, without replacing your product `docs/`.
 
-1. **No cómplice** — No al “sí” automático. Al menos una pregunta de validación antes de actuar cuando hay impacto.
-2. **Alternativas** — No una sola solución: varias rutas con trade-offs y cuándo conviene cada una.
-3. **Puntos ciegos** — Al entregar, cuando aplica: qué podría salir mal, qué falta, qué revisaría un reviewer.
-4. **Conversacional** — Diálogo y definiciones; no informe unidireccional ni ambigüedad sin nombre.
-5. **Orden** — Estructura clara: **Objetivo → Plan → Ejecución → Validación**.
+**In one line:** less blind execution; more structured technical partnership.
 
 ---
 
-## Cómo opera: macro, micro y precedencia
+## What you get
 
-**Macro** (modelo mental del core): **Clarificar → Planificar y validar → Ejecutar → Entregar** (incluye cierre documental y puntos ciegos cuando corresponde). Esto está en [`.cursor/rules/00-orquestador-core.mdc`](.cursor/rules/00-orquestador-core.mdc).
+| Benefit | In practice |
+|---------|-------------|
+| **Judgment** | Validation questions before high-impact actions (default mode). |
+| **Options** | Two or more paths with trade-offs when it makes sense. |
+| **Transparency** | On delivery: risks, improvements, and dependencies others might skip. |
+| **Speed when you need it** | With a closed scope, `/fast-lane` cuts routine questions — **without** relaxing security or secrets. |
+| **Human scale** | 20 specialized subagents when the task calls for it. |
+| **Memory that does not bloat the chat** | Vitals: short pulse, suggested memory with opt-in, specs shared across IDEs. |
 
-**Micro** — El comando `/orquestar` es el **desglose en 8 pasos** de ese macro: clarificar, cuestionar, mapear, delegar, planificar, ejecutar, entregar, cierre documental.
+---
 
-**Cuando dos reglas pisan** — Aplicá la precedencia en [vitals/specs/precedence.md](vitals/specs/precedence.md): **seguridad y secretos primero**; luego instrucciones explícitas (por ejemplo `/fast-lane` con alcance cerrado); después protocolos “no cómplice” y orden; y en workspaces con **varios roots Git**, resolución multi-proyecto (preguntar o usar `vitals/workspace.yaml` según [vitals/specs/multi-project.md](vitals/specs/multi-project.md)).
+## The five protocols (plain language)
+
+Ground rules for how the DT behaves; full detail in [`.cursor/rules/01-protocolos-dt.mdc`](.cursor/rules/01-protocolos-dt.mdc) (mirrored under `.agent`).
+
+1. **No enabler** — No automatic “yes.” At least one validation question before acting when impact is real.
+2. **Alternatives** — Not a single solution: several routes with trade-offs and when each fits.
+3. **Blind spots** — When delivering: what could go wrong, what is missing, what a reviewer would flag.
+4. **Conversational** — Dialogue and definitions; not a one-way report or unnamed ambiguity.
+5. **Order** — Clear structure: **Goal → Plan → Execution → Validation**.
+
+---
+
+## How it works: macro, micro, and precedence
+
+**Macro** (mental model from the core): **Clarify → Plan and validate → Execute → Deliver** (includes documentation closure and blind spots when relevant). See [`.cursor/rules/00-orquestador-core.mdc`](.cursor/rules/00-orquestador-core.mdc).
+
+**Micro** — The `/orquestar` command is the **8-step breakdown** of that macro: clarify, challenge, map, delegate, plan, execute, deliver, documentation closure.
+
+**When two rules conflict** — Follow precedence in [vitals/specs/precedence.md](vitals/specs/precedence.md): **security and secrets first**; then explicit user instructions (e.g. `/fast-lane` with closed scope); then “no enabler” protocols and order; and for workspaces with **multiple Git roots**, multi-project resolution (ask or use `vitals/workspace.yaml` per [vitals/specs/multi-project.md](vitals/specs/multi-project.md)).
 
 ```mermaid
 flowchart LR
-  req[Pedido]
-  clarify[Clarificar]
-  gate{FastLane_o_validar}
-  planExec[Planificar_y_ejecutar]
-  deliver[Entregar_y_puntos_ciegos]
+  req[Request]
+  clarify[Clarify]
+  gate{FastLane_or_validate}
+  planExec[Plan_and_execute]
+  deliver[Deliver_and_blind_spots]
   req --> clarify
   clarify --> gate
   gate -->|Default| planExec
-  gate -->|Alcance_cerrado| planExec
+  gate -->|Closed_scope| planExec
   planExec --> deliver
 ```
 
-*Nota:* el diagrama resume el flujo; **secretos y seguridad** siguen activos siempre, también en `/fast-lane`.
+*Note:* the diagram summarizes the flow; **secrets and security** always apply, including under `/fast-lane`.
 
 ---
 
-## Vitals: pulso del DT en el repo
+## Vitals: the DT’s pulse in the repo
 
-**Vitals** (`vitals/`) es la capa **operativa** del orquestador: latidos en `pulse/`, propuestas de memoria en `memory/` (promoción con opt-in humano), y **normativa canónica** en `specs/` (precedencia, multi-proyecto, tooling proactivo, protocolo de memoria y de vitals para IA). Complementa `docs/`: ahí va conocimiento de producto y proyecto; en Vitals, lo que ayuda a la IA a no perderse sin inflar el contexto.
+**Vitals** (`vitals/`) is the **operational** layer of the orchestrator: heartbeat entries in `pulse/`, memory proposals in `memory/` (promoted with human opt-in), and **canonical policy** in `specs/` (precedence, multi-project, proactive tooling, memory and vitals protocols for AI). It complements `docs/`: product and project knowledge lives there; Vitals helps the AI stay oriented without blowing up context.
 
-- **Índice operativo:** [vitals/INDEX.md](vitals/INDEX.md)
-- **Concepto:** [docs/01_concepts/dt-vitals.md](docs/01_concepts/dt-vitals.md) (`DOC-CONCEPT-001`)
+- **Operational index:** [vitals/INDEX.md](vitals/INDEX.md)
+- **Concept:** [docs/01_concepts/dt-vitals.md](docs/01_concepts/dt-vitals.md) (`DOC-CONCEPT-001`)
 
-Opcional: [scripts/sync-dt-from-vitals.sh](scripts/sync-dt-from-vitals.sh) regenera las reglas `04`–`05` desde `vitals/specs/rule-bodies/`.
+Optional: [scripts/sync-dt-from-vitals.sh](scripts/sync-dt-from-vitals.sh) regenerates rules `04`–`05` from `vitals/specs/rule-bodies/`.
 
 ---
 
-## Comandos (Cursor)
+## Commands (Cursor)
 
-| Comando | Cuándo usarlo |
+| Command | When to use it |
 |---------|----------------|
-| `/orquestar` | Tarea completa: 8 pasos alineados al macro (clarificar → … → cierre documental). |
-| `/fast-lane` | Alcance cerrado: plan breve y ejecución hasta cerrar; menos preguntas rutinarias; **sin** relajar seguridad ni multi-repo. |
-| `/cuestionar` | Solo análisis: preguntas y alternativas — **sin ejecutar**. |
-| `/contexto` | Mapear el repo y obtener visión del sistema. |
-| `/prepr` | Preparar cambios como PR (checklist, tests, descripción). |
-| `/setup-cursor` | Dejar solo la configuración de Cursor en este template (ver guía IDE). |
-| `/github-save-small` | Flujo de guardado versionado: bump de versión, commit detallado, tag y push (ajustá a tu repo). |
+| `/orquestar` | Full task: 8 steps aligned to the macro (clarify → … → documentation closure). |
+| `/fast-lane` | Closed scope: short plan and run to completion; fewer routine questions; **does not** relax security or multi-repo rules. |
+| `/cuestionar` | Analysis only: questions and alternatives — **no execution**. |
+| `/contexto` | Map the repo and get a system-level view. |
+| `/prepr` | Prepare changes as a PR (checklist, tests, description). |
+| `/setup-cursor` | Keep only Cursor configuration in this template (see IDE guide). |
+| `/github-save-small` | Versioned save flow: bump version, detailed commit, tag, and push (adapt to your repo). |
 
-En **Antigravity**, los flujos equivalentes están bajo [`.agent/workflows/`](.agent/workflows/) (incluye `setup-antigravity`, `fast-lane`, etc.).
+In **Antigravity**, run **`/setup-antigravity`** for IDE-only setup; other flows live under [`.agent/workflows/`](.agent/workflows/) (e.g. `fast-lane`, `orquestar`).
 
-El DT también puede **sugerir** comandos o subagentes cuando encaja el contexto; límites y criterios en [vitals/specs/proactive-tooling.md](vitals/specs/proactive-tooling.md).
-
----
-
-## Los 8 pasos de `/orquestar` (micro)
-
-1. **Clarificar** — Objetivo, restricciones, alcance  
-2. **Cuestionar** — Validar antes de aprobar  
-3. **Mapear** — Archivos y dependencias relevantes  
-4. **Delegar** — Subagentes si aplica  
-5. **Planificar** — Checkpoints y orden  
-6. **Ejecutar** — Implementar con verificación (lint, tests, build) o **N/A**  
-7. **Entregar** — Resumen, cambios, puntos ciegos  
-8. **Cierre documental** — Actualizar `docs/` / catálogo si aplica, o **N/A**
+The DT may also **suggest** commands or subagents when context fits; limits and criteria in [vitals/specs/proactive-tooling.md](vitals/specs/proactive-tooling.md).
 
 ---
 
-## Subagentes (20 especialidades)
+## The 8 steps of `/orquestar` (micro)
 
-Delegación con el mismo espíritu de protocolos. Catálogo: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc).
+1. **Clarify** — Goal, constraints, scope  
+2. **Challenge** — Validate before approving  
+3. **Map** — Relevant files and dependencies  
+4. **Delegate** — Subagents when applicable  
+5. **Plan** — Checkpoints and order  
+6. **Execute** — Implement with verification (lint, tests, build) or **N/A**  
+7. **Deliver** — Summary, changes, blind spots  
+8. **Documentation closure** — Update `docs/` / catalog if applicable, or **N/A**
 
-| Área | Roles |
+---
+
+## Subagents (20 specialties)
+
+Delegation with the same protocol spirit. Catalog: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc).
+
+| Area | Roles |
 |------|--------|
 | **Engineering** | arquitecto, frontend, devops, ui-designer |
 | **Planning** | prd-creator, srd-creator, development-planner |
@@ -128,34 +139,22 @@ Delegación con el mismo espíritu de protocolos. Catálogo: [`.cursor/rules/03-
 
 ---
 
-## Instalación rápida
-
-1. **Cloná** el repo o usá **Use this template** en GitHub para uno nuevo.  
-2. **Cursor:** copiá `.cursor/` a tu proyecto o ejecutá `/setup-cursor` según la guía.  
-3. **Antigravity:** seguí [docs/02_guides/ide-setup.md](docs/02_guides/ide-setup.md) y el workflow `setup-antigravity` si aplica.  
-
-No requiere dependencias de runtime para el marco en sí.
-
-**Adopción en un repo que ya existe:** [docs/02_guides/adopt-dt-in-existing-repo.md](docs/02_guides/adopt-dt-in-existing-repo.md) (`DOC-GUIDE-003`).
-
----
-
-## Estructura del proyecto
+## Project layout
 
 ```text
-docs/                       # Portal por capas; estándar DOC-META-001 (ver docs/README.md)
-vitals/                     # Pulse, memoria sugerida, specs del DT (ver vitals/INDEX.md)
+docs/                       # Layered portal; DOC-META-001 standard (see docs/README.md)
+vitals/                     # Pulse, suggested memory, DT specs (see vitals/INDEX.md)
 scripts/
-└── sync-dt-from-vitals.sh  # Regenera rules 04–05 desde vitals/specs/rule-bodies/
+└── sync-dt-from-vitals.sh  # Regenerates rules 04–05 from vitals/specs/rule-bodies/
 
 .cursor/                    # Cursor
-├── rules/                  # Core, protocolos, catálogo, tooling, multi-repo, dominio
+├── rules/                  # Core, protocols, catalog, tooling, multi-repo, domain
 ├── commands/               # orquestar, fast-lane, cuestionar, contexto, prepr, setup-cursor, …
-└── agents/                 # 20 subagentes especializados
+└── agents/                 # 20 specialized subagents
 
 .agent/                     # Antigravity
 ├── rules/
-├── skills/                 # 20 skills (subagentes)
+├── skills/                 # 20 skills (subagents)
 └── workflows/
 
 .antigravity/
@@ -164,27 +163,27 @@ scripts/
 
 ---
 
-## Personalizar
+## Customize
 
-- **Rules:** añadí archivos en `.cursor/rules/` para tu stack.  
-- **Commands:** nuevos `.md` en `.cursor/commands/`.  
-- **Subagentes:** plantilla [`.cursor/agents/_plantilla-subagente.md`](.cursor/agents/_plantilla-subagente.md) y registro en el catálogo.  
-- **Multi-proyecto:** copiá [vitals/workspace.yaml.example](vitals/workspace.yaml.example) a `vitals/workspace.yaml` (ignorado por git) si tu workspace tiene varios roots.
-
----
-
-## Documentación profunda
-
-El portal con rutas por intención está en [docs/README.md](docs/README.md) (`DOC-OV-001`). El protocolo completo de escritura para IA: [docs/99_meta/protocolo-documentacion-ia.md](docs/99_meta/protocolo-documentacion-ia.md) (`DOC-META-001`).
+- **Rules:** add files under `.cursor/rules/` for your stack.  
+- **Commands:** new `.md` files under `.cursor/commands/`.  
+- **Subagents:** template [`.cursor/agents/_plantilla-subagente.md`](.cursor/agents/_plantilla-subagente.md) and register in the catalog.  
+- **Multi-project:** copy [vitals/workspace.yaml.example](vitals/workspace.yaml.example) to `vitals/workspace.yaml` (gitignored) if your workspace has multiple roots.
 
 ---
 
-## Licencia
+## Deeper documentation
 
-MIT — uso, modificación y distribución libres con **atribución** (copyright y licencia). Ver [LICENSE](LICENSE).
+The portal with intent-based routes is [docs/README.md](docs/README.md) (`DOC-OV-001`). Full AI-oriented documentation protocol: [docs/99_meta/protocolo-documentacion-ia.md](docs/99_meta/protocolo-documentacion-ia.md) (`DOC-META-001`).
 
 ---
 
-## Créditos y atribución
+## License
 
-**El DT** es un orquestador open source para Cursor y Antigravity. Si este marco te sirve en tu flujo, producto o charla, **mencioná al autor: @LucasMazalan** — podés enlazar el repo o tu material a **[GitHub: Mazalucas](https://github.com/Mazalucas)** como atribución directa. Eso ayuda a que otros descubran el enfoque y mantiene clara la procedencia del trabajo.
+MIT — free to use, modify, and distribute with **attribution** (copyright and license text). See [LICENSE](LICENSE).
+
+---
+
+## Credits and attribution
+
+**El DT** is an open-source orchestrator for Cursor and Antigravity. If this framework helps your workflow, product, or talk, **credit the author: @LucasMazalan** — you can link your repo or materials to **[GitHub: Mazalucas](https://github.com/Mazalucas)** for direct attribution. That helps others discover the approach and keeps provenance clear.
