@@ -1,7 +1,9 @@
+![El DT — Technical Director: orchestrator core, 8-step workflow, and subagents](assets/el-dt-readme-banner.png)
+
 # El DT — Technical Director
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.4.0**
+**v1.4.1**
 
 > Stop settling for an assistant that **only ships**. El DT is the framework that turns your AI into a **Technical Director**: it structures the conversation, **challenges you before production changes**, offers **alternatives with trade-offs**, and closes with **visible risks**. Less “yes, boss”; more judgment, traceability, and scaled help when you need it.
 
