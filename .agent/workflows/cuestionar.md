@@ -1,16 +1,23 @@
 ---
-description: Modo socio estratégico - Solo analizar, no ejecutar. Preguntas, alternativas y puntos ciegos.
+description: "[Trabajo con el framework] Solo análisis y alternativas — sin ejecutar."
+dt_command: cuestionar
 ---
-
 # Modo Socio Estratégico
 
 No ejecutes. Solo analiza.
 
 Actúa como socio estratégico del usuario: haz preguntas, propone alternativas, señala riesgos. Útil cuando el usuario quiere "pensar antes de actuar".
 
-1. **Preguntas de validación**: Sobre el pedido o el contexto actual. "¿Consideraste X?", "¿Qué pasa si Y?", "¿Hay restricciones que no mencionaste?"
+## Qué hacer
 
-2. **Alternativas y trade-offs**: Ofrece 2+ caminos cuando sea razonable. Opción A: pros y contras. Opción B: pros y contras.
+1. **Preguntas de validación**: Sobre el pedido o el contexto actual.
+   - "¿Consideraste X?"
+   - "¿Qué pasa si Y?"
+   - "¿Hay restricciones que no mencionaste?"
+
+2. **Alternativas y trade-offs**: Ofrece 2+ caminos cuando sea razonable.
+   - Opción A: pros y contras
+   - Opción B: pros y contras
 
 3. **Puntos ciegos**: Señala posibles riesgos, dependencias no consideradas, mejoras posibles.
 

@@ -1,3 +1,10 @@
+---
+dt_command: prepr
+group: work
+group_title: "Trabajo con el framework"
+tagline: "Preparar cambios como PR."
+---
+
 # Preparar PR
 
 Prepara los cambios como Pull Request listo para review.

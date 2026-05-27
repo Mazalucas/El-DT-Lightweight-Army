@@ -96,7 +96,11 @@ Tras el setup, solo debe existir la familia de carpetas del IDE elegido (tabla s
 | Cursor | `.cursor/` (rules, commands, agents) + `vitals/` (compartido) |
 | Antigravity | `.agent/` (rules, skills, workflows) + `.antigravity/` (rules.md) + `vitals/` (compartido) |
 
-Tras editar `vitals/specs/rule-bodies/*.body.md`, ejecutá desde la raíz: `./scripts/sync-dt-from-vitals.sh` para regenerar las rules `04` y `05` en ambos IDEs.
+Tras editar `vitals/specs/rule-bodies/*.body.md`, ejecutá: `./scripts/sync-dt-from-vitals.sh` (rules `04` y `05`).
+
+Tras editar `vitals/config/commands-meta.yaml`, ejecutá: `./scripts/sync-commands-from-meta.sh` (commands de rutina en Cursor y workflows en Antigravity).
+
+**Antigravity:** la lógica ejecutable está en **`.agent/skills/`** (no lee `.cursor/skills/`). Mantener espejo al cambiar skills de Git/sesión. Ver `.antigravity/rules.md`.
 
 ## Errores comunes
 

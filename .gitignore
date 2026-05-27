@@ -31,5 +31,12 @@ build/
 *.log
 logs/
 
-# Vitals — manifest local multi-proyecto (opcional; usar workspace.yaml.example como plantilla)
+# Vitals — local only (plantillas en repo; valores reales no viajan por Git)
 vitals/workspace.yaml
+vitals/ops/session.yaml
+
+# Borradores personales temporales (si usás vitals/work/inbox/)
+vitals/work/inbox/**/draft-*
+
+# Credenciales
+*.credentials

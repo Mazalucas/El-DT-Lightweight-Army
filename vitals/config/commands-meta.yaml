@@ -1,0 +1,91 @@
+# Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agent/workflows
+version: 1
+updated: "2026-05-27"
+locale: es
+
+groups:
+  routine:
+    title: "Rutina del día a día"
+    description: "Sincronizar con el equipo, identidad local y subir trabajo."
+  work:
+    title: "Trabajo con el framework"
+    description: "Orquestación, análisis y entrega técnica del repo."
+  framework:
+    title: "Framework DT"
+    description: "Desarrollo y evolución del orquestador (no día a día de producto)."
+
+commands:
+  actualizar:
+    group: routine
+    tagline: "Traer lo último del equipo desde GitHub."
+    when: "Al abrir el editor; antes de /guardar si estás behind."
+    example: "/actualizar"
+    skill: git-actualizar
+  yo:
+    group: routine
+    tagline: "Decir quién está trabajando en esta máquina."
+    when: "Después de cada /actualizar; primera vez en el repo."
+    example: '/yo → "Soy Ana García, rol desarrollo"'
+    skill: dt-session
+  guardar:
+    group: routine
+    tagline: "Subir mi trabajo a GitHub."
+    when: "Al cerrar bloque de trabajo o antes de irte."
+    example: "/guardar"
+    skill: git-guardar
+  orquestar:
+    group: work
+    tagline: "Pipeline completo del DT en 8 pasos."
+    when: "Tarea con alcance amplio o varias capas del repo."
+    example: "/orquestar"
+    skill: null
+    command_path: .cursor/commands/orquestar.md
+  fast-lane:
+    group: work
+    tagline: "Ejecutar alcance cerrado con menos preguntas rutinarias."
+    when: "Alcance ya definido; no relaja seguridad."
+    example: "/fast-lane"
+    skill: null
+    command_path: .cursor/commands/fast-lane.md
+  cuestionar:
+    group: work
+    tagline: "Solo análisis y alternativas — sin ejecutar."
+    when: "Querés validar idea antes de tocar código."
+    example: "/cuestionar"
+    skill: null
+    command_path: .cursor/commands/cuestionar.md
+  contexto:
+    group: work
+    tagline: "Mapa del repo y vista de sistema."
+    when: "Entrás a un repo desconocido o después de un pull grande."
+    example: "/contexto"
+    skill: null
+    command_path: .cursor/commands/contexto.md
+  prepr:
+    group: work
+    tagline: "Preparar cambios como PR."
+    when: "Antes de abrir pull request."
+    example: "/prepr"
+    skill: null
+    command_path: .cursor/commands/prepr.md
+  setup-cursor:
+    group: framework
+    tagline: "Dejar solo configuración Cursor en este clon."
+    when: "Setup inicial o cambio de IDE."
+    example: "/setup-cursor"
+    skill: null
+    command_path: .cursor/commands/setup-cursor.md
+  setup-antigravity:
+    group: framework
+    tagline: "Dejar solo configuración Antigravity en este clon."
+    when: "Setup inicial o cambio de IDE."
+    example: "/setup-antigravity"
+    skill: null
+    workflow_path: .agent/workflows/setup-antigravity.md
+  github-save-small:
+    group: framework
+    tagline: "Versionado tipo release — bump, commit, tag, push."
+    when: "Cierre de iteración del template o app consumidora."
+    example: "/github-save-small"
+    skill: github-save-release
+    command_path: .cursor/commands/github-save-small.md

@@ -1,17 +1,46 @@
 ---
-description: Preparar cambios como Pull Request listo para review - Checklist, descripción, validaciones
+description: "[Trabajo con el framework] Preparar cambios como PR."
+dt_command: prepr
 ---
-
 # Preparar PR
 
 Prepara los cambios como Pull Request listo para review.
 
-1. **Checklist pre-PR**: ¿Pasan todos los tests? ¿El código cumple con el linter? ¿Hay resumen de cambios?
+## Checklist pre-PR
 
-2. **Documentación (`docs/`)**: ¿Los cambios de producto, API, arquitectura, ops o flujo de trabajo quedaron reflejados en la capa correcta bajo `docs/` con frontmatter y enlaces, según `docs/99_meta/protocolo-documentacion-ia.md`? Si no aplica, declarar explícitamente **N/A** con una línea de justificación.
+1. **Tests**: ¿Pasan todos los tests?
+2. **Lint**: ¿El código cumple con el linter?
+3. **Resumen de cambios**: ¿Qué se modificó y por qué?
+4. **Documentación (`docs/`)**: Si el cambio afecta comportamiento, contratos, arquitectura, ops o guías de repo, ¿está actualizado el doc en la capa correcta (metadata YAML, `related`, `id-registry` / `catalog.yaml` si aplica)? Si no aplica: **N/A** + una línea de justificación.
 
-3. **Formato de descripción de PR**: Incluir Resumen, Cambios (lista), Cómo probar, Puntos ciegos (y línea de documentación o N/A).
+## Formato de descripción de PR
 
-4. **Validaciones antes de merge**: Sugerir validaciones que el revisor debería hacer (tests relevantes, impacto en otras partes, coherencia de documentación e IDs si tocó `docs/`).
+```markdown
+## Resumen
+[Breve descripción del cambio]
 
-5. **Puntos ciegos**: Incluir sección "¿Qué podría fallar en review? ¿Qué no está documentado?"
+## Cambios
+- [ ] Cambio 1
+- [ ] Cambio 2
+
+## Cómo probar
+[Pasos para verificar]
+
+## Documentación
+
+Incluí en el PR si tocaste `docs/` o si el cambio requería doc: enlace a archivos clave o **N/A**.
+
+## Puntos ciegos
+¿Qué podría fallar en review? ¿Qué no está documentado?
+```
+
+## Validaciones antes de merge
+
+Sugiere validaciones que el revisor debería hacer:
+- Tests relevantes
+- Impacto en otras partes del sistema
+- Documentación actualizada
+
+## Puntos ciegos
+
+Incluye sección: "¿Qué podría fallar en review? ¿Qué no está documentado?"

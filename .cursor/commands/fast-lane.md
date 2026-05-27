@@ -1,3 +1,10 @@
+---
+dt_command: fast-lane
+group: work
+group_title: "Trabajo con el framework"
+tagline: "Ejecutar alcance cerrado con menos preguntas rutinarias."
+---
+
 # Fast lane — ejecutar hasta completar el alcance
 
 **Solo** cuando el usuario invoque este comando explícitamente. Precedencia: `vitals/specs/precedence.md` (seguridad y secretos **no** se relajan).

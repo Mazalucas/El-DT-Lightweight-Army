@@ -1,0 +1,4 @@
+# Roles permitidos en tu equipo (opcional). Vacío = el operador define su rol en /yo (texto libre).
+# Cuando definís la lista, dt-session puede validar o sugerir; si no coincide, preguntá al usuario.
+version: 1
+roles: []

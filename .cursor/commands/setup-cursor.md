@@ -1,3 +1,10 @@
+---
+dt_command: setup-cursor
+group: framework
+group_title: "Framework DT"
+tagline: "Dejar solo configuración Cursor en este clon."
+---
+
 # Setup Cursor
 
 Este comando configura el proyecto para usar **solo** Cursor IDE. Elimina las carpetas `.agent/` y `.antigravity/` para asegurar que no haya conflictos entre configuraciones de distintos IDEs.

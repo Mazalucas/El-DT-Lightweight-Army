@@ -5,7 +5,7 @@ type: reference
 status: canonical
 owner: dt-platform
 created: 2026-04-19
-updated: 2026-04-19
+updated: 2026-05-27
 tags:
   - documentation
   - ids
@@ -34,12 +34,12 @@ Antes de crear un documento con un prefijo nuevo, añadí una fila a esta tabla 
 |---------------------|-------------|----------|
 | META | Meta-documentación, protocolo, políticas editoriales | DOC-META-001 |
 | GUIDE | Guías how-to del repositorio / DT | DOC-GUIDE-001 … DOC-GUIDE-003 |
-| OV | Overview, índices de capa, quickstart, portal `docs/README` | DOC-OV-001 … DOC-OV-009 |
+| OV | Overview, índices de capa, quickstart, portal `docs/README` | DOC-OV-001 … DOC-OV-009 (DOC-OV-004 = cerebro DT) |
+| OPS | Operaciones, runbooks en `06_operations` | DOC-OPS-001 |
 | CONCEPT | Conceptos en `01_concepts` | DOC-CONCEPT-001 |
-| REF | Referencia técnica en `03_reference` | DOC-REF-001 |
+| REF | Referencia técnica en `03_reference` | DOC-REF-001 (sesión/roster) |
 | ARCH | Arquitectura en `04_architecture` | DOC-ARCH-001 |
 | DEC | Decisiones / ADRs en `05_decisions` | DOC-DEC-001 |
-| OPS | Operaciones, runbooks en `06_operations` | DOC-OPS-001 |
 | GLOSS | Glosario en `07_glossary` | DOC-GLOSS-001 |
 
 **Convención:** `DOC-<DOMINIO>-<NNN>` con `NNN` numérico de al menos tres dígitos (001, 002, …). Mismo dominio puede tener muchos números.

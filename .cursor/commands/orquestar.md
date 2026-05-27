@@ -1,3 +1,10 @@
+---
+dt_command: orquestar
+group: work
+group_title: "Trabajo con el framework"
+tagline: "Pipeline completo del DT en 8 pasos."
+---
+
 # Pipeline Orquestador
 
 **Macro (4 fases) vs micro (8 pasos):** el core del DT resume el flujo en **4 fases** (`Clarificar → Planificar y validar → Ejecutar → Entregar`). Este comando es el **desglose en 8 pasos**; no es un pipeline alternativo. Vitals: `vitals/INDEX.md`.

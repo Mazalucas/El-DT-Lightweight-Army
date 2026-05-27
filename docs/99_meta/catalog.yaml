@@ -2,7 +2,7 @@
 # Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
 
 version: 1
-updated: "2026-04-19"
+updated: "2026-05-27"
 documents:
   - id: DOC-META-001
     title: "Protocolo de documentación orientada a IA"
@@ -44,3 +44,18 @@ documents:
     path: 02_guides/adopt-dt-in-existing-repo.md
     type: guide
     tags: [adoption, cursor, antigravity, monorepo]
+  - id: DOC-OV-004
+    title: "Cerebro del equipo — mecanismos DT, Git, sesiones y commands"
+    path: 00_overview/cerebro-equipo-mecanismos-dt.md
+    type: overview
+    tags: [dt, session, git, commands, brain]
+  - id: DOC-OPS-001
+    title: "Colaboración Git en repos con El DT"
+    path: 06_operations/git-colaboracion-dt.md
+    type: runbook
+    tags: [git, collaboration, session]
+  - id: DOC-REF-001
+    title: "Referencia — sesión local y roster"
+    path: 03_reference/dt-session-roster.md
+    type: reference
+    tags: [session, roster, roles]

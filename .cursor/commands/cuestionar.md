@@ -1,3 +1,10 @@
+---
+dt_command: cuestionar
+group: work
+group_title: "Trabajo con el framework"
+tagline: "Solo análisis y alternativas — sin ejecutar."
+---
+
 # Modo Socio Estratégico
 
 No ejecutes. Solo analiza.

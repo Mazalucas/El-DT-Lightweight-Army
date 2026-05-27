@@ -4,7 +4,7 @@
 
 ## Si usás **Cursor**
 
-La fuente de reglas del agente son las **Project Rules** en **`.cursor/rules/*.mdc`**: orquestador, protocolos, catálogo de subagentes, recomendación de herramientas, multi-proyecto Git, arquitectura, frontend, seguridad, testing y **`02-documentacion.mdc`** (protocolo de documentación IA, `alwaysApply: true` → `docs/99_meta/protocolo-documentacion-ia.md`). **Telemetría y specs del DT:** `vitals/INDEX.md`.
+La fuente de reglas del agente son las **Project Rules** en **`.cursor/rules/*.mdc`**: orquestador, protocolos, catálogo de subagentes, recomendación de herramientas, multi-proyecto Git, **`06-dt-colaboracion`** (sesión `/yo`, ritual Git), arquitectura, frontend, seguridad, testing y **`02-documentacion.mdc`** (protocolo de documentación IA, `alwaysApply: true` → `docs/99_meta/protocolo-documentacion-ia.md`). **Cerebro del equipo:** `docs/00_overview/cerebro-equipo-mecanismos-dt.md` (`DOC-OV-004`) · **IA:** `AGENTS.md` · **Telemetría:** `vitals/INDEX.md`.
 
 **`.agent/rules/`** es el equivalente para Antigravity, no la fuente principal en Cursor.
 

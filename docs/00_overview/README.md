@@ -5,7 +5,7 @@ type: overview
 status: canonical
 owner: dt-platform
 created: 2026-04-19
-updated: 2026-04-19
+updated: 2026-05-27
 tags:
   - overview
 domain:
@@ -26,5 +26,11 @@ review_cycle_days: 90
 # `00_overview/`
 
 Puerta de entrada: mapa general, quickstart, vistas de conjunto.
+
+## Canónicos
+
+| ID | Documento |
+|----|-----------|
+| DOC-OV-004 | [Cerebro del equipo — mecanismos DT, Git, sesiones y commands](cerebro-equipo-mecanismos-dt.md) |
 
 Volver al [portal principal](../README.md).

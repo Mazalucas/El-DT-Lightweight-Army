@@ -1,15 +1,18 @@
-## Esta es una instruccion para activar un flujo de guardado y versionado del proyecto.
+---
+dt_command: github-save-small
+group: framework
+group_title: "Framework DT"
+tagline: "Versionado tipo release — bump, commit, tag, push."
+skill: github-save-release
+---
 
-1. Comienza por actualizar la version actual del proyecto tanto front como back y en sus lugares pertinentes haz un +1 al numero de version de la app. Si no tiene número de versión, crea uno.
+# /github-save-small
 
-2. Verifica que repo esta sincronizado con el proyecto y confirma que sea el correcto con el user.
+**Grupo:** Framework DT
+**En una frase:** Versionado tipo release — bump, commit, tag, push.
+**Cuándo:** Cierre de iteración del template o app consumidora.
+**Quién:** Cualquier operador del repo.
 
-3. Git status
+Ejecutá el skill **`github-save-release`** — `.cursor/skills/github-save-release/` y `.agent/skills/github-save-release/`.
 
-4. Git add all
-
-5. Comiit detallado de todas las novedades del proyecto, destacando si el estado es local only, pre deploy, version deployada, o la terminologia que consideres adecuada para identificar el estado del proyecto y su version.
-
-6. Tag de la version
-
-7. Push al master
+_Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

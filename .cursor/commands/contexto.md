@@ -1,3 +1,10 @@
+---
+dt_command: contexto
+group: work
+group_title: "Trabajo con el framework"
+tagline: "Mapa del repo y vista de sistema."
+---
+
 # Mapa del Sistema
 
 Lee el repo y produce un mapa del sistema. Estructura la respuesta con jerarquía clara.

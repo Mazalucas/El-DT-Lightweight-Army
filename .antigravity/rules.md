@@ -1,28 +1,31 @@
 # El DT - Director Técnico para Antigravity
 
-Este proyecto soporta **Cursor** y **Antigravity**. Para usar solo Antigravity, ejecutá el workflow `/setup-antigravity` para eliminar la carpeta `.cursor/` y evitar conflictos.
+Este proyecto soporta **Cursor** y **Antigravity**. Setup: `/setup-antigravity` o `/setup-cursor` (solo cuando el usuario lo pida).
 
-## Reglas principales
+## Reglas
 
-Las reglas detalladas están en `.agent/rules/`. Lee especialmente:
-- `00-orquestador-core.md` - Personalidad del DT y pipeline base (macro 4 fases / micro 8 pasos en `/orquestar`)
-- `01-protocolos-dt.md` - Protocolos obligatorios (cuestionar, alternativas, puntos ciegos)
-- `02-documentacion.md` - Protocolo de documentación orientada a IA (`docs/`, metadata, IDs `DOC-<DOMINIO>`, canónico en `docs/99_meta/protocolo-documentacion-ia.md`)
-- `03-catalogo-subagentes.md` - Catálogo de skills y cuándo invocarlos
-- `04-recomendacion-herramientas.md` - Sugerir al usuario workflows/skills pertinentes
-- `05-multi-project-git.md` - Contexto Git multi-proyecto
+**`.agent/rules/`** — espejo de `.cursor/rules/`, incluye **`06-dt-colaboracion`** (sin sesión → pedir **`/yo`**; sesión solo local, no Git).
 
-**Vitals** (pulse, memoria sugerida, specs del DT): `vitals/INDEX.md`
+**Cerebro:** `docs/00_overview/cerebro-equipo-mecanismos-dt.md` · **IA:** `AGENTS.md`
 
-## Comportamiento del setup
+## Commands = workflows
 
-El workflow `/setup-antigravity` **solo** se ejecuta cuando el usuario lo invoca explícitamente. No eliminés `.cursor/` sin que el usuario lo pida.
+Cada command del meta existe en **`.agent/workflows/<nombre>.md`** y en **`.cursor/commands/<nombre>.md`** (generados con `scripts/sync-commands-from-meta.sh`). **No** mantener copias manuales divergentes.
 
-## Workflows disponibles
+## Skills
 
-- `/orquestar` - Pipeline completo en **8 pasos** (anidados en el macro de **4 fases** del core): clarificar → cuestionar → mapear → delegar → planificar → ejecutar → entregar → **cierre documental**
-- `/fast-lane` - Alcance cerrado: plan breve y ejecución hasta terminar (sin preguntas rutinarias; seguridad y multi-repo sin relajar)
-- `/cuestionar` - Modo socio estratégico (solo analizar, no ejecutar)
-- `/contexto` - Mapa del sistema
-- `/prepr` - Preparar PR
-- `/setup-antigravity` - Configurar solo para Antigravity (elimina .cursor/)
+Lógica en **`.agent/skills/<nombre>/SKILL.md`**, espejo de **`.cursor/skills/`** (`scripts/sync-skills-parity.sh`).
+
+| Ritual | Skill |
+|--------|--------|
+| `/actualizar` | `git-actualizar` (solo Git) |
+| `/yo` | `dt-session` (crea sesión local) |
+| `/guardar` | `git-guardar` |
+
+## Ritual
+
+```text
+/actualizar  →  /yo (si no hay sesión)  →  trabajar  →  /guardar
+```
+
+`session.yaml` no se versiona.

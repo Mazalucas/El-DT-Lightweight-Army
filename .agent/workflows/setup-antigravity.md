@@ -1,7 +1,7 @@
 ---
-description: Configurar proyecto solo para Antigravity - Elimina .cursor/ para evitar conflictos entre IDEs
+description: "[Framework DT] Dejar solo configuración Antigravity en este clon."
+dt_command: setup-antigravity
 ---
-
 # Setup Antigravity
 
 Este workflow configura el proyecto para usar **solo** Antigravity IDE. Elimina la carpeta `.cursor/` para asegurar que no haya conflictos entre configuraciones de distintos IDEs.
