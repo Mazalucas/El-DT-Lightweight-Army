@@ -13,7 +13,7 @@ Este repo es el **cerebro compartido** de El DT. Leé esto antes de actuar a esc
 | ¿Reglas del DT? | `.cursor/rules/` o `.agent/rules/` |
 | ¿Pulso y specs? | `vitals/INDEX.md` |
 | ¿Documentación humana? | `docs/README.md` (`DOC-OV-001`) |
-| ¿Marketing (42 skills)? | [README#marketing-strategist](README.md#marketing-strategist--42-skills) · Cursor: `.cursor/skills/marketing/` · Antigravity: `.agent/skills/marketing/` |
+| ¿Subagentes y skills? | [README#subagentes-20](README.md#subagentes-20) · marketing táctico: `.cursor/skills/marketing/` |
 
 ## Ritual de jornada (obligatorio en equipo)
 
@@ -73,11 +73,22 @@ Cada command debe existir en **`.cursor/commands/`** y **`.agent/workflows/`**; 
 
 Precedencia: `vitals/specs/precedence.md`
 
-## Subagentes
+## Subagentes (20)
 
-20 roles — catálogo en `.cursor/rules/03-catalogo-subagentes.mdc`. Al delegar, incluir protocolos DT.
+Tabla maestra con agente, skill de rol y keywords: **[README — Subagentes (20)](README.md#subagentes-20)**. Reglas de delegación: `.cursor/rules/03-catalogo-subagentes.mdc`.
 
-**Marketing:** subagente `marketing-strategist` + 42 skills — **Cursor** `.cursor/skills/marketing/{skill}/` · **Antigravity** `.agent/skills/marketing/{skill}/` (sync: `sync-skills-parity.sh`). Contexto: `.agents/product-marketing.md` (local).
+| Grupo | Subagentes |
+|-------|------------|
+| Engineering | arquitecto, frontend, devops, ui-designer |
+| Planning | prd-creator, srd-creator, development-planner |
+| Testing | qa |
+| Design & UX | ux-researcher |
+| Product | product-strategist, feedback-synthesizer, researcher |
+| Documentation | doc |
+| Marketing & Content | content-creator, **marketing-strategist** (+42 tácticas), brand-guardian, growth-hacker, pitch-specialist, storytelling-specialist |
+| Operations | operations-maintainer |
+
+**Marketing táctico:** `.cursor/skills/marketing/` · Antigravity: `.agent/skills/marketing/` · contexto `.agents/product-marketing.md` (local).
 
 ## Versión del template
 

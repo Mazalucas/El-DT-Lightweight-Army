@@ -22,11 +22,11 @@ Lógica en **`.agent/skills/<nombre>/SKILL.md`**, espejo de **`.cursor/skills/`*
 | `/yo` | `dt-session` (crea sesión local) |
 | `/guardar` | `git-guardar` |
 
-### Marketing strategist (42 skills tácticas)
+### Subagentes (20)
 
-Subagente **`marketing-strategist`** + skills en **`.agent/skills/marketing/{skill}/`** (mismo árbol que Cursor). Contexto de producto: **`.agents/product-marketing.md`** (local, no Git).
+Cada rol: **`.agent/skills/{nombre}/SKILL.md`**. Definiciones Cursor: **`.cursor/agents/{nombre}.md`**.
 
-Catálogo completo: [README raíz — Marketing strategist](README.md#marketing-strategist--42-skills) · índice: [`.cursor/skills/marketing/README.md`](.cursor/skills/marketing/README.md).
+Catálogo completo (20 filas + 42 skills de marketing): [README — Subagentes (20)](README.md#subagentes-20).
 
 Tras editar skills en Cursor, corré `./scripts/sync-skills-parity.sh`.
 

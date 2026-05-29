@@ -3,7 +3,7 @@
 # El DT — Technical Director
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.6.2**
+**v1.6.3**
 
 > Stop settling for an assistant that **only ships**. El DT is the framework that turns your AI into a **Technical Director**: it structures the conversation, **challenges you before production changes**, offers **alternatives with trade-offs**, and closes with **visible risks**.
 
@@ -140,34 +140,54 @@ Detalle: [scripts/README.md](scripts/README.md).
 
 ---
 
-## Subagents (20)
+## Subagentes (20)
 
-Catálogo general: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc) — arquitecto, frontend, qa, doc, …
+El DT delega en **20 especialistas**. Cada uno tiene definición de agente en **Cursor** y skill de rol en **Antigravity** (y espejo en `.agent/skills/` para todos).
 
----
+| IDE | Definición del subagente | Skill de rol | Skills tácticas extra |
+|-----|--------------------------|--------------|------------------------|
+| **Cursor** | [`.cursor/agents/{nombre}.md`](.cursor/agents/) | [`.cursor/skills/{nombre}/`](.cursor/skills/) cuando existe | Solo **marketing-strategist**: [`.cursor/skills/marketing/`](.cursor/skills/marketing/) |
+| **Antigravity** | Misma skill de rol | [`.agent/skills/{nombre}/SKILL.md`](.agent/skills/) | [`.agent/skills/marketing/`](.agent/skills/marketing/) |
 
-## Marketing strategist — 42 skills
+Tras editar skills en Cursor: `./scripts/sync-skills-parity.sh`. Reglas de delegación: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc).
 
-El subagente **`marketing-strategist`** combina estrategia de marketing con **42 skills tácticas** (CRO, SEO, ads, copy, growth, RevOps, etc.), integradas desde [marketingskills](https://github.com/coreyhaines31/marketingskills) v2.
+### Catálogo de los 20 subagentes
 
-### Disponibles en todos los IDEs
+| # | Subagente | Grupo | Rol | Invocar cuando (keywords) | Agente (Cursor) | Skill de rol |
+|---|-----------|-------|-----|---------------------------|-----------------|--------------|
+| 1 | **arquitecto** | Engineering | Backend, APIs, arquitectura, patrones | `backend`, `api`, `database`, `server`, `arquitectura`, `SRD` | [agente](.cursor/agents/arquitecto.md) | [`.agent/skills/arquitecto/`](.agent/skills/arquitecto/) |
+| 2 | **frontend** | Engineering | UI, componentes, accesibilidad | `frontend`, `ui`, `ux`, `interface`, `client`, `componentes` | [agente](.cursor/agents/frontend.md) | [`.agent/skills/frontend/`](.agent/skills/frontend/) |
+| 3 | **devops** | Engineering | CI/CD, infra, deploy | `deploy`, `infrastructure`, `ci/cd`, `devops`, `pipelines` | [agente](.cursor/agents/devops.md) | [`.agent/skills/devops/`](.agent/skills/devops/) |
+| 4 | **ui-designer** | Engineering | Mockups, design systems, specs UI | `UI design`, `mockups`, `design specs`, `design systems` | [agente](.cursor/agents/ui-designer.md) | [`.agent/skills/ui-designer/`](.agent/skills/ui-designer/) |
+| 5 | **prd-creator** | Planning | PRD, visión de producto, user stories | `product idea`, `requirements`, `PRD` | [agente](.cursor/agents/prd-creator.md) | [`.agent/skills/prd-creator/`](.agent/skills/prd-creator/) |
+| 6 | **srd-creator** | Planning | SRD y specs técnicas desde PRD | `technical spec`, `SRD`, `PRD to technical` | [agente](.cursor/agents/srd-creator.md) | [`.agent/skills/srd-creator/`](.agent/skills/srd-creator/) |
+| 7 | **development-planner** | Planning | Fases, MVP, roadmap, timelines | `development plan`, `phases`, `MVP`, `roadmap` | [agente](.cursor/agents/development-planner.md) | [`.agent/skills/development-planner/`](.agent/skills/development-planner/) |
+| 8 | **qa** | Testing | Tests, edge cases, validación | `test`, `qa`, `quality`, `pruebas` | [agente](.cursor/agents/qa.md) | [`.agent/skills/qa/`](.agent/skills/qa/) |
+| 9 | **ux-researcher** | Design & UX | Personas, journey, research UX | `user research`, `personas`, `UX`, `journey mapping` | [agente](.cursor/agents/ux-researcher.md) | [`.agent/skills/ux-researcher/`](.agent/skills/ux-researcher/) |
+| 10 | **product-strategist** | Product | Priorización, roadmap de producto | `prioritization`, `roadmap`, `product strategy` | [agente](.cursor/agents/product-strategist.md) | [`.agent/skills/product-strategist/`](.agent/skills/product-strategist/) |
+| 11 | **feedback-synthesizer** | Product | Síntesis de feedback en insights | `feedback`, `synthesis`, `insights` | [agente](.cursor/agents/feedback-synthesizer.md) | [`.agent/skills/feedback-synthesizer/`](.agent/skills/feedback-synthesizer/) |
+| 12 | **researcher** | Product | Investigación y análisis de información | `research`, `analyze`, `investigate` | [agente](.cursor/agents/researcher.md) | [`.agent/skills/researcher/`](.agent/skills/researcher/) |
+| 13 | **doc** | Documentation | Docs por niveles, README, ADRs | `document`, `docs`, `readme`, `documentación` | [agente](.cursor/agents/doc.md) | [`.agent/skills/doc/`](.agent/skills/doc/) |
+| 14 | **content-creator** | Marketing & Content | Contenido multi-canal, SEO, brand | `content`, `copy` (contenido editorial) | [agente](.cursor/agents/content-creator.md) | [`.agent/skills/content-creator/`](.agent/skills/content-creator/) |
+| 15 | **marketing-strategist** | Marketing & Content | Estrategia + **42 skills tácticas** | `marketing`, `CRO`, `SEO`, `ads`, `campaigns`, `growth` | [agente](.cursor/agents/marketing-strategist.md) | [`.cursor/skills/marketing-strategist/`](.cursor/skills/marketing-strategist/) + [tácticas ↓](#marketing-strategist--42-skills-tácticas) |
+| 16 | **brand-guardian** | Marketing & Content | Marca y brand guidelines | `brand`, `brand compliance` | [agente](.cursor/agents/brand-guardian.md) | [`.agent/skills/brand-guardian/`](.agent/skills/brand-guardian/) |
+| 17 | **growth-hacker** | Marketing & Content | Experimentos y conversión | `growth`, `experiments`, `conversion` | [agente](.cursor/agents/growth-hacker.md) | [`.agent/skills/growth-hacker/`](.agent/skills/growth-hacker/) |
+| 18 | **pitch-specialist** | Marketing & Content | Pitch inversores y stakeholders | `pitch`, `presentation`, `investors` | [agente](.cursor/agents/pitch-specialist.md) | [`.agent/skills/pitch-specialist/`](.agent/skills/pitch-specialist/) |
+| 19 | **storytelling-specialist** | Marketing & Content | Narrativa y story arcs | `storytelling`, `narrative`, `story` | [agente](.cursor/agents/storytelling-specialist.md) | [`.agent/skills/storytelling-specialist/`](.agent/skills/storytelling-specialist/) |
+| 20 | **operations-maintainer** | Operations | Monitoreo, incidentes, mantenimiento | `operations`, `monitoring`, `incidentes` | [agente](.cursor/agents/operations-maintainer.md) | [`.agent/skills/operations-maintainer/`](.agent/skills/operations-maintainer/) |
 
-| IDE | Agente / skill orquestadora | Skills tácticas (árbol completo) |
-|-----|------------------------------|----------------------------------|
-| **Cursor** | [`.cursor/agents/marketing-strategist.md`](.cursor/agents/marketing-strategist.md) · [`.cursor/skills/marketing-strategist/SKILL.md`](.cursor/skills/marketing-strategist/SKILL.md) | [`.cursor/skills/marketing/{skill}/`](.cursor/skills/marketing/) |
-| **Antigravity** | [`.agent/skills/marketing-strategist/SKILL.md`](.agent/skills/marketing-strategist/SKILL.md) | [`.agent/skills/marketing/{skill}/`](.agent/skills/marketing/) |
+**Skills de rutina DT** (no son subagentes): `dt-session`, `git-actualizar`, `git-guardar`, `github-save-release` en [`.cursor/skills/`](.cursor/skills/) — comandos `/yo`, `/actualizar`, `/guardar`, `/github-save-small`.
 
-**Fuente canónica en Git:** `.cursor/skills/marketing/` (incluye `SKILL.md`, `references/`, `evals/`). Antigravity usa el espejo en `.agent/skills/marketing/` — mantener con:
+### Marketing strategist — 42 skills tácticas
 
-```bash
-./scripts/sync-skills-parity.sh
-```
+Único subagente con **pack de skills especializadas** (origen: [marketingskills](https://github.com/coreyhaines31/marketingskills) v2). Contexto compartido: `.agents/product-marketing.md` (local; skill `product-marketing`).
 
-**Contexto de producto** (todas las skills lo leen primero): `.agents/product-marketing.md` — crear con la skill `product-marketing`; archivo **local** (no va a Git). Ver [`.agents/README.md`](.agents/README.md).
+| IDE | Orquestadora | Pack táctico (`SKILL.md` + `references/` + `evals/`) |
+|-----|--------------|------------------------------------------------------|
+| **Cursor** | [`.cursor/skills/marketing-strategist/`](.cursor/skills/marketing-strategist/) | [`.cursor/skills/marketing/{skill}/`](.cursor/skills/marketing/) |
+| **Antigravity** | [`.agent/skills/marketing-strategist/`](.agent/skills/marketing-strategist/) | [`.agent/skills/marketing/{skill}/`](.agent/skills/marketing/) |
 
-**Índice detallado:** [`.cursor/skills/marketing/README.md`](.cursor/skills/marketing/README.md)
-
-### Catálogo de skills
+Índice: [`.cursor/skills/marketing/README.md`](.cursor/skills/marketing/README.md)
 
 | Skill | Área |
 |-------|------|
@@ -213,8 +233,6 @@ El subagente **`marketing-strategist`** combina estrategia de marketing con **42
 | `sms` | SMS/MMS marketing |
 | `social` | Redes sociales |
 | `video` | Video marketing (IA) |
-
-**Uso:** delegá en `marketing-strategist` (p. ej. “auditoría SEO”, “copy de pricing”) o pedí la skill por nombre; el agente carga `marketing/{skill}/SKILL.md` y sus referencias.
 
 ---
 
