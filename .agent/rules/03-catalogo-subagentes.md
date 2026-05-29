@@ -54,7 +54,7 @@ Lista completa de subagentes (inspirados en Agents examples). Al delegar, incluy
 | Subagente | Cuándo invocar |
 |-----------|----------------|
 | **content-creator** | content, copy, marketing |
-| **marketing-strategist** | marketing strategy, campaigns |
+| **marketing-strategist** | marketing strategy, campaigns, CRO, SEO, ads, copy, growth — 42 skills en `.agent/skills/marketing/` |
 | **brand-guardian** | brand, brand compliance |
 | **growth-hacker** | growth, experiments, conversion |
 | **pitch-specialist** | pitch, presentation, investors |

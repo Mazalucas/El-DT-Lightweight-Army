@@ -3,7 +3,7 @@
 # El DT — Technical Director
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.6.0**
+**v1.6.2**
 
 > Stop settling for an assistant that **only ships**. El DT is the framework that turns your AI into a **Technical Director**: it structures the conversation, **challenges you before production changes**, offers **alternatives with trade-offs**, and closes with **visible risks**.
 
@@ -47,7 +47,8 @@ En el chat: **`/actualizar`** → **`/yo`** (ej. *"Soy Ana García, analista"*) 
 | `vitals/config/roster.yaml` | **Sí** | Equipo registrado |
 | `vitals/workspace.yaml` | **No** | Multi-repo local (plantilla: `.example`) |
 | `.env`, `*.credentials` | **No** | Secretos |
-| `.cursor/`, `.agent/`, `docs/`, skills | **Sí** | Comportamiento de la IA |
+| `.cursor/`, `.agent/`, `.agents/README.md`, `docs/`, skills | **Sí** | Comportamiento de la IA |
+| `.agents/product-marketing.md` | **No** | Contexto de producto local |
 
 ### Commands (resumen)
 
@@ -133,7 +134,7 @@ Security and secrets **always** apply, including under `/fast-lane`.
 |--------|-----|
 | [sync-dt-from-vitals.sh](scripts/sync-dt-from-vitals.sh) | Rules `04`–`05` desde `vitals/specs/rule-bodies/` |
 | [sync-commands-from-meta.sh](scripts/sync-commands-from-meta.sh) | Commands en Cursor + Antigravity desde `commands-meta.yaml` |
-| [sync-skills-parity.sh](scripts/sync-skills-parity.sh) | Skills `.cursor/skills` → `.agent/skills` |
+| [sync-skills-parity.sh](scripts/sync-skills-parity.sh) | Skills `.cursor/skills` → `.agent/skills` (incl. árbol `marketing/*`) |
 
 Detalle: [scripts/README.md](scripts/README.md).
 
@@ -141,7 +142,79 @@ Detalle: [scripts/README.md](scripts/README.md).
 
 ## Subagents (20)
 
-Catalog: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc) — arquitecto, frontend, qa, doc, …
+Catálogo general: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc) — arquitecto, frontend, qa, doc, …
+
+---
+
+## Marketing strategist — 42 skills
+
+El subagente **`marketing-strategist`** combina estrategia de marketing con **42 skills tácticas** (CRO, SEO, ads, copy, growth, RevOps, etc.), integradas desde [marketingskills](https://github.com/coreyhaines31/marketingskills) v2.
+
+### Disponibles en todos los IDEs
+
+| IDE | Agente / skill orquestadora | Skills tácticas (árbol completo) |
+|-----|------------------------------|----------------------------------|
+| **Cursor** | [`.cursor/agents/marketing-strategist.md`](.cursor/agents/marketing-strategist.md) · [`.cursor/skills/marketing-strategist/SKILL.md`](.cursor/skills/marketing-strategist/SKILL.md) | [`.cursor/skills/marketing/{skill}/`](.cursor/skills/marketing/) |
+| **Antigravity** | [`.agent/skills/marketing-strategist/SKILL.md`](.agent/skills/marketing-strategist/SKILL.md) | [`.agent/skills/marketing/{skill}/`](.agent/skills/marketing/) |
+
+**Fuente canónica en Git:** `.cursor/skills/marketing/` (incluye `SKILL.md`, `references/`, `evals/`). Antigravity usa el espejo en `.agent/skills/marketing/` — mantener con:
+
+```bash
+./scripts/sync-skills-parity.sh
+```
+
+**Contexto de producto** (todas las skills lo leen primero): `.agents/product-marketing.md` — crear con la skill `product-marketing`; archivo **local** (no va a Git). Ver [`.agents/README.md`](.agents/README.md).
+
+**Índice detallado:** [`.cursor/skills/marketing/README.md`](.cursor/skills/marketing/README.md)
+
+### Catálogo de skills
+
+| Skill | Área |
+|-------|------|
+| `product-marketing` | Contexto de producto (base para todas) |
+| `ab-testing` | Experimentación y A/B tests |
+| `ad-creative` | Creatividades de ads |
+| `ads` | Campañas pagadas (Google, Meta, LinkedIn, etc.) |
+| `ai-seo` | SEO para motores / respuestas IA |
+| `analytics` | Medición, GA4, tracking |
+| `aso` | App Store / Google Play |
+| `churn-prevention` | Retención, dunning, cancel flows |
+| `co-marketing` | Partnerships y campañas conjuntas |
+| `cold-email` | Outbound B2B |
+| `community-marketing` | Comunidades y advocacy |
+| `competitor-profiling` | Research de competidores (URLs) |
+| `competitors` | Páginas comparison / alternatives |
+| `content-strategy` | Estrategia de contenido |
+| `copy-editing` | Editar copy existente |
+| `copywriting` | Copy nuevo (landings, web) |
+| `cro` | Conversión en páginas y forms |
+| `customer-research` | Research de clientes |
+| `directory-submissions` | Directorios startup/SaaS |
+| `emails` | Secuencias y lifecycle email |
+| `free-tools` | Herramientas gratis como lead gen |
+| `image` | Imágenes de marketing (IA) |
+| `launch` | Lanzamientos |
+| `lead-magnets` | Lead magnets |
+| `marketing-ideas` | Ideas e inspiración |
+| `marketing-psychology` | Psicología y persuasión |
+| `onboarding` | Activación post-signup |
+| `paywalls` | Paywalls in-app |
+| `popups` | Modales y overlays |
+| `pricing` | Pricing y packaging |
+| `programmatic-seo` | SEO programático |
+| `prospecting` | Listas y calificación B2B |
+| `referrals` | Referidos y afiliados |
+| `revops` | RevOps y handoff marketing→ventas |
+| `sales-enablement` | Collateral de ventas |
+| `schema` | Schema markup |
+| `seo-audit` | Auditoría SEO |
+| `signup` | Flujos de registro |
+| `site-architecture` | Arquitectura del sitio |
+| `sms` | SMS/MMS marketing |
+| `social` | Redes sociales |
+| `video` | Video marketing (IA) |
+
+**Uso:** delegá en `marketing-strategist` (p. ej. “auditoría SEO”, “copy de pricing”) o pedí la skill por nombre; el agente carga `marketing/{skill}/SKILL.md` y sus referencias.
 
 ---
 
@@ -149,16 +222,16 @@ Catalog: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-
 
 ```text
 README.md / AGENTS.md / VERSION
+.agents/                    # README + product-marketing.md (local)
 docs/                       # Portal DOC-META-001 — cerebro DOC-OV-004
 vitals/
   config/                   # commands-meta.yaml, roster.yaml
   ops/                      # README schema; session.yaml = local (/yo)
-  config/                   # roster.yaml, roles.yaml (vacíos al inicio)
   pulse/ memory/ specs/
   work/inbox/{operator_id}/ # cuaderno personal opcional
 
-.cursor/                    # rules 00–06, 90; commands; skills; agents
-.agent/                     # Antigravity mirror
+.cursor/                    # rules, commands, agents, skills (+ marketing/)
+.agent/                     # Antigravity: rules, workflows, skills (+ marketing/)
 ```
 
 ---

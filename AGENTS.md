@@ -13,6 +13,7 @@ Este repo es el **cerebro compartido** de El DT. Leé esto antes de actuar a esc
 | ¿Reglas del DT? | `.cursor/rules/` o `.agent/rules/` |
 | ¿Pulso y specs? | `vitals/INDEX.md` |
 | ¿Documentación humana? | `docs/README.md` (`DOC-OV-001`) |
+| ¿Marketing (42 skills)? | [README#marketing-strategist](README.md#marketing-strategist--42-skills) · Cursor: `.cursor/skills/marketing/` · Antigravity: `.agent/skills/marketing/` |
 
 ## Ritual de jornada (obligatorio en equipo)
 
@@ -75,6 +76,8 @@ Precedencia: `vitals/specs/precedence.md`
 ## Subagentes
 
 20 roles — catálogo en `.cursor/rules/03-catalogo-subagentes.mdc`. Al delegar, incluir protocolos DT.
+
+**Marketing:** subagente `marketing-strategist` + 42 skills — **Cursor** `.cursor/skills/marketing/{skill}/` · **Antigravity** `.agent/skills/marketing/{skill}/` (sync: `sync-skills-parity.sh`). Contexto: `.agents/product-marketing.md` (local).
 
 ## Versión del template
 

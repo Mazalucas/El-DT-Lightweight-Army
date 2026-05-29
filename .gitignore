@@ -40,3 +40,6 @@ vitals/work/inbox/**/draft-*
 
 # Credenciales
 *.credentials
+
+# Marketing — contexto por proyecto (skill product-marketing)
+.agents/product-marketing.md

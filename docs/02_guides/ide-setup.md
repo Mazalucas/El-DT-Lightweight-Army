@@ -102,6 +102,8 @@ Tras editar `vitals/config/commands-meta.yaml`, ejecutá: `./scripts/sync-comman
 
 **Antigravity:** la lógica ejecutable está en **`.agent/skills/`** (no lee `.cursor/skills/`). Mantener espejo al cambiar skills de Git/sesión. Ver `.antigravity/rules.md`.
 
+**Marketing (42 skills):** canónico en `.cursor/skills/marketing/`; espejo en `.agent/skills/marketing/` tras `./scripts/sync-skills-parity.sh`. Catálogo: [README raíz — Marketing strategist](../../README.md#marketing-strategist--42-skills).
+
 ## Errores comunes
 
 - Ejecutar setup sin querer → usar `git checkout` según la sección de restauración.
