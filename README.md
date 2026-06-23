@@ -13,7 +13,9 @@
 
 ## Cerebro del equipo — empezá acá
 
-Este repo es **memoria versionada + reglas** para que varias personas trabajen con la misma IA sin pisarse. La referencia técnica completa está en **[docs/00_overview/cerebro-equipo-mecanismos-dt.md](docs/00_overview/cerebro-equipo-mecanismos-dt.md)** (`DOC-OV-004`). La IA debe leer **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
+Este repo es **memoria versionada + reglas** para que varias personas trabajen con la misma IA sin pisarse. En **Lucas Prime** también funciona como **segundo cerebro personal**: módulos y herramientas en **[BRAIN.md](BRAIN.md)** · catálogo en `vitals/catalog/`.
+
+La referencia técnica completa está en **[docs/00_overview/cerebro-equipo-mecanismos-dt.md](docs/00_overview/cerebro-equipo-mecanismos-dt.md)** (`DOC-OV-004`). La IA debe leer **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
 
 ### Ritual diario (regla de oro)
 

@@ -10,6 +10,12 @@ env/
 .env
 .env.local
 .env.*.local
+modules/cerebro-app/.firebaserc
+modules/cerebro-app/functions/.env
+modules/cerebro-app/functions/.env.local
+modules/cerebro-app/functions/.env.cerebro-prime-a0729
+modules/cerebro-app/src/.env.development.local
+modules/cerebro-app/src/.env.production.local
 
 # IDE
 .idea/
@@ -40,6 +46,20 @@ vitals/work/inbox/**/draft-*
 
 # Credenciales
 *.credentials
+client_secret*.json
+**/google-credentials.json
+**/google-token.json
 
 # Marketing — contexto por proyecto (skill product-marketing)
 .agents/product-marketing.md
+
+# Módulos — datos fiscales / personales locales (NIF, IBAN, facturas emitidas)
+modules/*/assets/local/
+modules/**/assets/local/**
+
+# Config local de ruta Google Drive (copiar desde assets/export-config.example.json)
+modules/facturas-autonomo-es/assets/local/export-config.json
+
+# Módulos — cola local de captura (chat → app)
+modules/*/.local/
+modules/**/.local/**

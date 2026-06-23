@@ -4,6 +4,7 @@ Usá este archivo para decidir **qué leer primero** y no inflar el contexto.
 
 | Pregunta | Archivo |
 |----------|---------|
+| ¿Qué módulos / herramientas existen en el segundo cerebro? | [catalog/INDEX.md](catalog/INDEX.md) · [../BRAIN.md](../BRAIN.md) |
 | ¿Cuál es el último pulso / estado reciente? | [pulse/current.md](pulse/current.md) |
 | ¿Cómo escribir pulse, compactar, presupuesto de contexto? | [specs/protocolo-vitals-ia.md](specs/protocolo-vitals-ia.md) |
 | ¿Memoria sugerida (inbox / accepted / opt-in)? | [memory/README.md](memory/README.md) y [specs/protocolo-memoria-dt.md](specs/protocolo-memoria-dt.md) |

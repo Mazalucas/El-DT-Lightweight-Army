@@ -1,0 +1,127 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function isOrgMember(orgId) {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/orgs/$(orgId)/members/$(request.auth.uid))
+        && get(/databases/$(database)/documents/orgs/$(orgId)/members/$(request.auth.uid)).data.status == 'active';
+    }
+
+    match /oauth_states/{state} {
+      allow read, write: if false;
+    }
+
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+
+      match /settings/{doc} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /integrations/{doc} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /integrations/llm/providers/{providerId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /meetings/{meetingId} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /sync/{doc} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /jobs/{jobId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /store/{doc} {
+        allow read, write: if isOwner(uid);
+
+        match /meetingChunks/{chunkId} {
+          allow read, write: if isOwner(uid);
+        }
+      }
+
+      match /people/{doc} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /prospects/{doc} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /projects/{doc} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /teams/{doc} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /todos/{doc} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /suggestions/{doc} {
+        allow read, write: if isOwner(uid);
+      }
+
+      match /assistant/{doc} {
+        allow read, write: if isOwner(uid);
+
+        match /conversations/{conversationId} {
+          allow read, write: if isOwner(uid);
+        }
+      }
+
+      match /memberships/{orgId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      match /facturas/{doc} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    match /orgs/{orgId} {
+      allow read: if isOrgMember(orgId);
+      allow write: if false;
+
+      match /members/{memberUid} {
+        allow read: if isOrgMember(orgId);
+        allow write: if false;
+      }
+
+      match /invites/{inviteId} {
+        allow read, write: if false;
+      }
+
+      match /store/{doc} {
+        allow read: if isOrgMember(orgId);
+        allow write: if false;
+
+        match /meetingChunks/{chunkId} {
+          allow read: if isOrgMember(orgId);
+          allow write: if false;
+        }
+      }
+
+      match /joinRequests/{requestId} {
+        allow read, write: if false;
+      }
+    }
+  }
+}

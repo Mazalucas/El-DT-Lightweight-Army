@@ -1,19 +1,7 @@
-# Director Técnico (DT) — Repositorio multi-IDE (plantilla dual)
+# Director Técnico (DT) — Cursor (proyecto configurado con `/setup-cursor`)
 
-> Tras `/setup-cursor` o `/setup-antigravity`, este archivo debe reemplazarse por la plantilla **cursor** o **antigravity** en `docs/99_meta/` (ver guía IDE).
+> **Uso:** copiar a **`.cursorrules`** en la raíz del repo tras ejecutar `/setup-cursor` (solo configuración Cursor).
 
-## Si usás **Cursor**
+Este proyecto está configurado para **Cursor**. La fuente de reglas del agente son las **Project Rules** en **`.cursor/rules/*.mdc`**: orquestador (`00-orquestador-core`), protocolos DT (`01-protocolos-dt`), **documentación IA (`02-documentacion.mdc`, `alwaysApply: true`)** alineado con `docs/99_meta/protocolo-documentacion-ia.md`, catálogo de subagentes, recomendación de herramientas (`04`), multi-proyecto Git (`05`), arquitectura, frontend, seguridad y testing. **Vitals:** `vitals/INDEX.md` (pulse, memoria sugerida, specs del DT).
 
-La fuente de reglas del agente son las **Project Rules** en **`.cursor/rules/*.mdc`**: orquestador, protocolos, catálogo de subagentes, recomendación de herramientas, multi-proyecto Git, **`06-dt-colaboracion`** (sesión `/yo`, ritual Git), arquitectura, frontend, seguridad, testing y **`02-documentacion.mdc`** (protocolo de documentación IA, `alwaysApply: true` → `docs/99_meta/protocolo-documentacion-ia.md`). **Cerebro del equipo:** `docs/00_overview/cerebro-equipo-mecanismos-dt.md` (`DOC-OV-004`) · **IA:** `AGENTS.md` · **Telemetría:** `vitals/INDEX.md`.
-
-**`.agent/rules/`** es el equivalente para Antigravity, no la fuente principal en Cursor.
-
-## Si usás **Antigravity**
-
-Leé **`.antigravity/rules.md`** y las reglas en **`.agent/rules/`**. Para delegar tareas especializadas usá los skills en **`.agent/skills/`**.
-
-**`.cursor/rules/*.mdc`** es el equivalente para Cursor; en Antigravity no están activas si no existe `.cursor/`.
-
-## Setup multi-IDE
-
-Los comandos **`/setup-cursor`** y **`/setup-antigravity`** solo se ejecutan cuando el usuario lo pide. Ajustan `.cursorrules` al IDE elegido usando las plantillas en **`docs/99_meta/cursorrules.*.md`** y eliminan la carpeta del otro IDE. No borres carpetas sin confirmación explícita.
+No busques reglas del DT en `.agent/rules/`: esa carpeta se eliminó en el setup. Para volver al modo multi-IDE restaurá con git (por ejemplo `git checkout .agent .antigravity`) y reemplazá `.cursorrules` por `docs/99_meta/cursorrules.dual.md`.

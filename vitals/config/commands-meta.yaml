@@ -13,6 +13,9 @@ groups:
   framework:
     title: "Framework DT"
     description: "Desarrollo y evolución del orquestador (no día a día de producto)."
+  modules:
+    title: "Módulos del segundo cerebro"
+    description: "Atajos para herramientas y proyectos registrados en vitals/catalog/."
 
 commands:
   actualizar:
@@ -33,6 +36,12 @@ commands:
     when: "Al cerrar bloque de trabajo o antes de irte."
     example: "/guardar"
     skill: git-guardar
+  exit:
+    group: routine
+    tagline: "Cerrar dev servers locales de módulos (Vite)."
+    when: "Al terminar la jornada o cuando quedaron apps abiertas en segundo plano."
+    example: "/exit"
+    skill: exit
   orquestar:
     group: work
     tagline: "Pipeline completo del DT en 8 pasos."
@@ -89,3 +98,65 @@ commands:
     example: "/github-save-small"
     skill: github-save-release
     command_path: .cursor/commands/github-save-small.md
+  nueva-factura:
+    group: modules
+    tagline: "Abrir la app local de facturas autónomo (España)."
+    when: "Querés emitir o borrador una factura sin recordar paths ni npm."
+    example: "/nueva-factura"
+    skill: nueva-factura
+  start:
+    group: modules
+    tagline: "Abrir Tools Hub — índice interactivo de herramientas con búsqueda."
+    when: "Querés ver o encontrar rápido tus tools y commands del segundo cerebro."
+    example: "/start"
+    skill: start
+  recordatorio:
+    group: modules
+    tagline: "Crear un recordatorio desde el chat (cola local → app web)."
+    when: "Capturás una tarea sin abrir el navegador; usá @categoria #tag y fechas como mañana."
+    example: "/recordatorio comprar leche mañana @personal #casa"
+    skill: recordatorio
+  recordatorios:
+    group: modules
+    tagline: "Recordatorios unificados en Cerebro profesional (vista Recordatorios)."
+    when: "Querés ver tareas con fecha — redirige a /cerebro-profesional."
+    example: "/recordatorios"
+    skill: recordatorios
+    deprecated: true
+    redirect: cerebro-profesional
+  cerebro-profesional:
+    group: modules
+    tagline: "Agenda de reuniones, contactos, equipos y búsqueda profesional."
+    when: "Querés explorar notas Meet, timelines por persona o filtrar por proyecto."
+    example: "/cerebro-profesional"
+    skill: cerebro-profesional
+  sincronizar-notas-meet:
+    group: modules
+    tagline: "Exportar notas Gemini (.gdoc) a Markdown local en el cerebro."
+    when: "Hay reuniones nuevas en Drive o falta contenido en el espejo .md."
+    example: "/sincronizar-notas-meet"
+    skill: sincronizar-notas-meet
+  cerebro-work:
+    group: modules
+    tagline: "Sync cerebro profesional — atajo CerebroWork (script en raíz)."
+    when: "Querés correr el sync Meet→Markdown sin recordar paths; ritual rápido post-OAuth."
+    example: "/CerebroWork"
+    skill: cerebro-work
+  indexar-reuniones:
+    group: modules
+    tagline: "Actualizar manifest de archivos Meet sin descargar contenido."
+    when: "Solo querés saber qué hay nuevo en la carpeta de grabaciones."
+    example: "/indexar-reuniones"
+    skill: indexar-reuniones
+  procesar-reuniones:
+    group: modules
+    tagline: "Analizar notas .md locales y enriquecer contactos/proyectos (Cursor)."
+    when: "Tras sincronizar; refinás personas, temas y action items."
+    example: "/procesar-reuniones"
+    skill: procesar-reuniones
+  deploy:
+    group: modules
+    tagline: "Desplegar Cerebro App a Firebase (build + hosting/functions)."
+    when: "Querés publicar cambios de la webapp unificada en producción."
+    example: "/deploy"
+    skill: deploy

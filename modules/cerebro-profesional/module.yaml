@@ -1,0 +1,16 @@
+id: cerebro-profesional
+kind: tool
+label: "Cerebro profesional"
+status: active
+location:
+  type: internal
+  path: modules/cerebro-profesional
+tags: [reuniones, contactos, equipos, meet, cerebro]
+aliases: [cerebro, reuniones, meet-brain]
+entrypoints:
+  readme: README.md
+  dev: "./scripts/dev-cerebro-profesional.sh"
+  command: "/cerebro-profesional"
+  bridge: bridge/analysis-inbox.schema.json
+dependencies:
+  - meet-notes-sync

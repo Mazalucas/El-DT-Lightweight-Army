@@ -5,6 +5,7 @@
 | [sync-commands-from-meta.sh](sync-commands-from-meta.sh) | YAML → `.cursor/commands/` + `.agent/workflows/` (misma lista, sin duplicar lógica manual) |
 | [sync-skills-parity.sh](sync-skills-parity.sh) | `.cursor/skills/` → `.agent/skills/` (raíz: solo `SKILL.md`; `marketing/*`: árbol completo) |
 | [sync-dt-from-vitals.sh](sync-dt-from-vitals.sh) | Rules `04`–`05` desde `vitals/specs/rule-bodies/` |
+| [dev-facturas-autonomo.sh](dev-facturas-autonomo.sh) | Dev server del módulo `facturas-autonomo-es` (usado por `/nueva-factura`) |
 
 ## Flujo al agregar un command
 

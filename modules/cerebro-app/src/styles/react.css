@@ -1,0 +1,204 @@
+/* Ajustes mínimos para la capa React — reutiliza tokens y componentes existentes. */
+
+.ds-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ds-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.app-splash {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workspace-switcher {
+  width: 100%;
+}
+
+.app-nav-link--back {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.app-nav-link--back .nav-icon svg {
+  transform: rotate(180deg);
+}
+
+.page-header-actions,
+.page-section-actions {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* --- Pantalla Hoy --- */
+
+.hoy-digest {
+  border-left: 3px solid var(--accent);
+  padding-left: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.hoy-digest-headline {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin: 0 0 var(--space-1);
+}
+
+.hoy-digest-summary {
+  color: var(--ink-secondary);
+  margin: 0 0 var(--space-2);
+}
+
+.hoy-focus-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+/* --- Búsqueda global --- */
+
+.search-hit-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.search-hit-snippet {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* --- Sugerencias inteligentes --- */
+
+.smart-suggestion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.smart-suggestion-title {
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
+.smart-suggestion-reason {
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+.smart-suggestion-evidence {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  border-left: 2px solid var(--border);
+  padding-left: var(--space-3);
+  margin: 0;
+}
+
+.smart-suggestion-actions {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.smart-suggestion-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* --- Listas genéricas --- */
+
+.list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.row-meta {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.row-title-link {
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.row-title-link:hover {
+  color: var(--accent);
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.toolbar-row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.toolbar-row .field-input {
+  max-width: 320px;
+}
+
+.pagination-row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.meetings-pagination .pagination-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.meetings-list-meta {
+  margin: 0 0 var(--space-3);
+}
+
+/* --- Markdown simple en detalle de reunión / chat --- */
+
+.md-content {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,15 @@
+id: cerebro-app
+kind: hub
+label: "Cerebro App — webapp unificada"
+status: active
+location:
+  type: internal
+  path: modules/cerebro-app
+tags: [cerebro, webapp, firebase, hub, produccion]
+aliases: [cerebro-app, app, start]
+entrypoints:
+  readme: README.md
+  dev: "./scripts/dev-cerebro-app.sh"
+  command: "/start"
+  deploy: "cd modules/cerebro-app && npm run deploy"
+dependencies: []

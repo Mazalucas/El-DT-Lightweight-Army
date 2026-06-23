@@ -1,0 +1,82 @@
+:root {
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal-backdrop: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-bubble: 450;
+
+  --sidebar-w: 280px;
+  --transition-fast: 180ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  --accent: oklch(0.58 0.11 195);
+  --accent-hover: oklch(0.52 0.12 195);
+  --accent-muted: oklch(0.58 0.11 195 / 0.15);
+  --accent-ink: oklch(0.98 0.01 195);
+
+  --success: oklch(0.65 0.15 155);
+  --success-muted: oklch(0.65 0.15 155 / 0.15);
+  --warn: oklch(0.72 0.14 75);
+  --warn-muted: oklch(0.72 0.14 75 / 0.15);
+  --danger: oklch(0.58 0.18 25);
+  --danger-muted: oklch(0.58 0.18 25 / 0.15);
+  --info: oklch(0.58 0.11 195);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: oklch(0.13 0.012 250);
+  --bg-elevated: oklch(0.15 0.012 250);
+  --surface: oklch(0.17 0.012 250);
+  --surface-raised: oklch(0.20 0.014 250);
+  --surface-sidebar: oklch(0.14 0.013 252);
+  --border: oklch(0.28 0.015 250);
+  --border-subtle: oklch(0.22 0.012 250);
+  --ink: oklch(0.93 0.01 250);
+  --ink-secondary: oklch(0.78 0.015 250);
+  --muted: oklch(0.62 0.02 250);
+  --focus-ring: oklch(0.58 0.11 195 / 0.45);
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.35);
+  --shadow-md: 0 4px 16px oklch(0 0 0 / 0.4);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: oklch(0.97 0.008 250);
+  --bg-elevated: oklch(0.99 0.006 250);
+  --surface: oklch(0.99 0.006 250);
+  --surface-raised: oklch(0.96 0.008 250);
+  --surface-sidebar: oklch(0.94 0.01 252);
+  --border: oklch(0.88 0.012 250);
+  --border-subtle: oklch(0.92 0.01 250);
+  --ink: oklch(0.22 0.02 250);
+  --ink-secondary: oklch(0.35 0.02 250);
+  --muted: oklch(0.48 0.02 250);
+  --focus-ring: oklch(0.50 0.12 195 / 0.35);
+  --shadow-sm: 0 1px 2px oklch(0.2 0.02 250 / 0.08);
+  --shadow-md: 0 4px 16px oklch(0.2 0.02 250 / 0.1);
+  --accent: oklch(0.50 0.12 195);
+  --accent-hover: oklch(0.44 0.13 195);
+  --accent-muted: oklch(0.50 0.12 195 / 0.12);
+}

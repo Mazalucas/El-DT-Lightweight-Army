@@ -1,0 +1,10 @@
+{
+  "name": "cerebro-prime",
+  "private": true,
+  "description": "Scripts de atajo en la raíz del repo (Tools Hub, módulos)",
+  "scripts": {
+    "start": "bash ./scripts/dev-cerebro-local.sh",
+    "start:spa-only": "bash ./scripts/dev-cerebro-app.sh",
+    "exit": "bash ./scripts/stop-dev-servers.sh"
+  }
+}

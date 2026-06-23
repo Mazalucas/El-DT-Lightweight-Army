@@ -1,0 +1,13 @@
+{
+  "name": "cerebro-app-root",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix src",
+    "build": "npm run build --prefix src && npm run build --prefix functions",
+    "build:prod": "npm run build --prefix src -- --mode production && npm run build --prefix functions",
+    "emulators": "firebase emulators:start",
+    "deploy": "npm run build && firebase deploy",
+    "deploy:hosting": "npm run build --prefix src && firebase deploy --only hosting",
+    "deploy:functions": "npm run build --prefix functions && firebase deploy --only functions"
+  }
+}

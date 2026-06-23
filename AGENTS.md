@@ -6,6 +6,7 @@ Este repo es el **cerebro compartido** de El DT. Leé esto antes de actuar a esc
 
 | Pregunta | Dónde |
 |----------|--------|
+| ¿Segundo cerebro — módulos y herramientas? | **`BRAIN.md`** · `vitals/catalog/modules.yaml` |
 | ¿Cómo sincronizo y subo trabajo? | Ritual abajo + `docs/00_overview/cerebro-equipo-mecanismos-dt.md` (`DOC-OV-004`) |
 | ¿Quién está en esta sesión? | `vitals/ops/session.yaml` (local) — pedir `/yo` si falta |
 | ¿Equipo registrado? | `vitals/config/roster.yaml` |
@@ -40,6 +41,7 @@ Fuente canónica: **`vitals/config/commands-meta.yaml`**
 | `/actualizar` | `git-actualizar` |
 | `/yo` | `dt-session` |
 | `/guardar` | `git-guardar` |
+| `/exit` | `exit` — cierra dev servers Vite de módulos (5173–5182) |
 
 ### Trabajo
 
@@ -58,6 +60,21 @@ Fuente canónica: **`vitals/config/commands-meta.yaml`**
 | `/setup-cursor` | Solo Cursor |
 | `/setup-antigravity` | Solo Antigravity |
 | `/github-save-small` | Skill `github-save-release` (mismas exclusiones que guardar) |
+
+### Módulos
+
+| Command | Skill |
+|---------|--------|
+| `/nueva-factura` | `nueva-factura` — app facturas autónomo (Vite) |
+| `/recordatorio` | `recordatorio` — crear recordatorio desde chat (cola local) |
+| `/recordatorios` | `recordatorios` — app web de recordatorios (Vite, puerto 5181) |
+| `/cerebro-profesional` | `cerebro-profesional` — reuniones, contactos, búsqueda (puerto 5182) |
+| `/sincronizar-notas-meet` | `sincronizar-notas-meet` — notas Gemini → Markdown local |
+| `/CerebroWork` · `/cerebro-work` | `cerebro-work` — atajo: `./scripts/sync-meet-notes.sh` desde raíz |
+| `/indexar-reuniones` | `indexar-reuniones` — manifest Meet sin descargar contenido |
+| `/procesar-reuniones` | `procesar-reuniones` — análisis Cursor sobre `.md` locales |
+| `/start` | `start` — Cerebro App, webapp unificada (dev local) |
+| `/deploy` | `deploy` — build + Firebase deploy (producción) |
 
 ## Paridad multi-IDE
 
