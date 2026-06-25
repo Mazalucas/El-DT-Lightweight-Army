@@ -1,0 +1,42 @@
+/**
+ * Slide deck HTML — tokens base (Atelier)
+ * Sobrescribir desde manual de marca antes de producción.
+ * Ver: frameworks/slide-deck-html/presentation.md
+ */
+:root {
+  /* Colores — reemplazar con paleta del manual de marca */
+  --deck-bg: #0a0a0a;
+  --deck-accent: #6366f1;
+  --deck-text: #ffffff;
+  --deck-text-muted: #9ca3af;
+  --deck-text-secondary: #e5e7eb;
+  --deck-surface: rgba(255, 255, 255, 0.05);
+  --deck-surface-border: rgba(255, 255, 255, 0.1);
+  --deck-overlay: rgba(0, 0, 0, 0.5);
+  --deck-on-accent: #ffffff;
+  --deck-text-on-light: #0f172a;
+  --deck-bg-light: #f8fafc;
+
+  /* Tipografía — reemplazar con stack del manual de marca */
+  --deck-font-display: system-ui, -apple-system, sans-serif;
+  --deck-font-body: system-ui, -apple-system, sans-serif;
+
+  /* Escala tipográfica */
+  --deck-title-size: clamp(2.5rem, 6vw, 5rem);
+  --deck-heading-size: clamp(1.5rem, 3vw, 2.5rem);
+  --deck-cover-size: clamp(2.25rem, 5vw, 4rem);
+  --deck-body-size: 1.25rem;
+  --deck-label-size: 0.875rem;
+
+  /* Espaciado */
+  --deck-padding-x: 6rem;
+  --deck-padding-y: 4rem;
+  --deck-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --deck-padding-x: 2rem;
+    --deck-padding-y: 3rem;
+  }
+}

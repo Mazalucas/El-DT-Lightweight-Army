@@ -1,6 +1,8 @@
 # El DT - Director Técnico para Antigravity
 
-Este proyecto soporta **Cursor** y **Antigravity**. Setup: `/setup-antigravity` o `/setup-cursor` (solo cuando el usuario lo pida).
+Este proyecto soporta **multi-IDE** (Cursor, Antigravity, Claude Code, Codex, GitHub Copilot). Registro: `vitals/config/ide-targets.yaml`.
+
+**Primera vez:** `/bienvenida` → `/yo`. **Repair:** `/setup`.
 
 ## Reglas
 
@@ -18,6 +20,8 @@ Lógica en **`.agent/skills/<nombre>/SKILL.md`**, espejo de **`.cursor/skills/`*
 
 | Ritual | Skill |
 |--------|--------|
+| `/bienvenida` | `dt-setup` (first-run) |
+| `/setup` | `dt-setup` (repair) |
 | `/actualizar` | `git-actualizar` (solo Git) |
 | `/yo` | `dt-session` (crea sesión local) |
 | `/guardar` | `git-guardar` |
@@ -33,7 +37,8 @@ Tras editar skills en Cursor, corré `./scripts/sync-skills-parity.sh`.
 ## Ritual
 
 ```text
-/actualizar  →  /yo (si no hay sesión)  →  trabajar  →  /guardar
+/bienvenida  →  /yo  →  trabajar  →  /guardar
+/actualizar  =  cuando el remoto tenga novedades
 ```
 
 `session.yaml` no se versiona.

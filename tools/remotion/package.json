@@ -1,0 +1,16 @@
+{
+  "name": "dt-remotion-toolkit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Remotion toolkit for El DT — install and run from tools/remotion/",
+  "license": "UNLICENSED",
+  "workspaces": ["starter"],
+  "scripts": {
+    "dev": "npm run dev --workspace=remotion-starter",
+    "build": "npm run build --workspace=remotion-starter",
+    "lint": "npm run lint --workspace=remotion-starter",
+    "upgrade": "npm run upgrade --workspace=remotion-starter",
+    "render": "npm run render --workspace=remotion-starter",
+    "scaffold": "bash scripts/scaffold.sh"
+  }
+}

@@ -1,0 +1,44 @@
+/**
+ * IBM Carbon — semantic tokens (Atelier template)
+ */
+:root {
+  --ds-font: "IBM Plex Sans", system-ui, sans-serif;
+  --ds-font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --ds-background: #ffffff;
+  --ds-layer-01: #f4f4f4;
+  --ds-layer-02: #ffffff;
+  --ds-layer-accent: #e0e0e0;
+  --ds-field-01: #f4f4f4;
+  --ds-border-subtle: #e0e0e0;
+  --ds-border-strong: #8d8d8d;
+  --ds-text-primary: #161616;
+  --ds-text-secondary: #525252;
+  --ds-text-helper: #6f6f6f;
+  --ds-text-on-color: #ffffff;
+  --ds-interactive: #0f62fe;
+  --ds-interactive-hover: #0353e9;
+  --ds-support-success: #24a148;
+  --ds-support-warning: #f1c21b;
+  --ds-support-error: #da1e28;
+
+  --ds-spacing-03: 0.5rem;
+  --ds-spacing-05: 1rem;
+  --ds-spacing-06: 1.5rem;
+  --ds-spacing-07: 2rem;
+  --ds-spacing-09: 3rem;
+  --ds-spacing-10: 4rem;
+
+  --ds-radius: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ds-background: #161616;
+    --ds-layer-01: #262626;
+    --ds-layer-02: #393939;
+    --ds-text-primary: #f4f4f4;
+    --ds-text-secondary: #c6c6c6;
+    --ds-border-subtle: #525252;
+  }
+}

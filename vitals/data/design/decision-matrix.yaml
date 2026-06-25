@@ -1,0 +1,56 @@
+# Atelier — reglas de precedencia (ecosystem lock-in primero)
+version: 1
+updated: "2026-06-13"
+
+ecosystem_lock:
+  - id: shopify
+    signals: [shopify, polaris, checkout extension, admin app, merchant]
+    design_system: polaris-design
+    visual_overlay: digital-minimalism
+    lock: true
+    library: "Polaris Web Components (CDN)"
+  - id: atlassian
+    signals: [atlassian, jira, confluence, forge, atlaskit, rovo]
+    design_system: atlassian-design
+    visual_overlay: digital-minimalism
+    lock: true
+    library: "@atlaskit/*"
+  - id: microsoft
+    signals: [microsoft 365, teams, outlook, fluent, azure portal, sharepoint]
+    design_system: fluent-design
+    visual_overlay: digital-minimalism
+    lock: true
+    library: "@fluentui/react-components"
+  - id: ios-native
+    signals: [ios native, swiftui, uikit, ipados, visionos, sf symbols]
+    design_system: apple-hig
+    visual_overlay: glassmorphism
+    lock: true
+    library: SwiftUI / UIKit
+  - id: android-native
+    signals: [android native, jetpack compose, material you]
+    design_system: material-design
+    visual_overlay: digital-minimalism
+    lock: true
+    library: Material 3 Compose
+
+a11y_strict:
+  signals: [wcag, accessibility, gov, government, health, fintech, banking, HIPAA]
+  exclude_styles: [neumorphism-full, glassmorphism-full]
+  require_baseline: AA
+
+surface_types:
+  brand:
+    signals: [landing, marketing, portfolio, pitch, presentation, hero]
+    prefer_patterns: [hero-centric, conversion-optimized, storytelling]
+  product:
+    signals: [dashboard, admin, app ui, settings, saas tool, analytics]
+    prefer_patterns: [data-dense, executive, feature-rich]
+
+default_avoid:
+  - purple-to-blue gradients without brand justification
+  - Inter as default without justification
+  - glassmorphism on all cards
+  - neumorphism on full UI
+  - cards nested in cards
+  - emojis as icons

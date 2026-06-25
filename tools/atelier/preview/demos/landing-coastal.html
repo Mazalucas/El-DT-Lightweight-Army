@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Costa Norte · Suites sobre el mar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: oklch(97% 0.012 85);
+      --ink: oklch(22% 0.02 55);
+      --muted: oklch(48% 0.02 55);
+      --gold: oklch(68% 0.11 72);
+      --gold-deep: oklch(52% 0.09 65);
+      --line: oklch(88% 0.01 85);
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-body: "DM Sans", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--line);
+      background: oklch(97% 0.012 85 / 0.92);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(6px);
+    }
+    .wordmark {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+    .site-nav {
+      display: flex;
+      gap: 1.75rem;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .site-nav a { color: var(--muted); }
+    .site-nav a:hover { color: var(--ink); }
+    .book-btn {
+      padding: 0.55rem 1.1rem;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 0.8125rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .site-nav { display: none; }
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 72vh;
+    }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+    }
+    .hero-visual {
+      background:
+        linear-gradient(to top, oklch(22% 0.03 240 / 0.5), transparent 40%),
+        url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85") center / cover;
+      min-height: 320px;
+    }
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 2.5rem;
+    }
+    .hero-copy .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.6875rem;
+      color: var(--gold-deep);
+      margin: 0 0 1rem;
+    }
+    .hero-copy h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 3.75rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 1.25rem;
+      max-width: 12ch;
+    }
+    .hero-copy .lede {
+      font-size: 1.125rem;
+      color: var(--muted);
+      max-width: 36ch;
+      margin: 0 0 2rem;
+    }
+    .hero-copy .cta {
+      align-self: flex-start;
+      padding: 0.85rem 1.5rem;
+      background: var(--gold);
+      color: var(--ink);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+    }
+
+    .suites {
+      padding: 4rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .suites-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 2rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .suites-head h2 {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    .suites-head p {
+      font-size: 0.9375rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .suite-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    @media (max-width: 768px) {
+      .suite-grid { grid-template-columns: 1fr; }
+    }
+    .suite-card {
+      border: 1px solid var(--line);
+      background: oklch(100% 0 0);
+    }
+    .suite-card .thumb {
+      aspect-ratio: 4/3;
+      background-size: cover;
+      background-position: center;
+    }
+    .suite-card .thumb.garden {
+      background-image: url("https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&q=80");
+    }
+    .suite-card .thumb.loft {
+      background-image: url("https://images.unsplash.com/photo-1611892440504-42a784e24d68?w=600&q=80");
+    }
+    .suite-card .thumb.cliff {
+      background-image: url("https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&q=80");
+    }
+    .suite-card .body {
+      padding: 1.25rem 1.25rem 1.5rem;
+    }
+    .suite-card .label {
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .suite-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 0.35rem;
+    }
+    .suite-card .meta {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin: 0 0 1rem;
+    }
+    .suite-card .row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .suite-card .price {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    .suite-card .price small {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .suite-card .reserve {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-deep);
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 2px;
+    }
+
+    .journal {
+      border-top: 1px solid var(--line);
+      padding: 3rem 2rem;
+      text-align: center;
+      background: oklch(94% 0.015 85);
+    }
+    .journal h2 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      margin: 0 0 0.5rem;
+    }
+    .journal p {
+      font-size: 0.9375rem;
+      color: var(--muted);
+      margin: 0 0 1.25rem;
+    }
+    .journal a {
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .amenities {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    @media (max-width: 768px) {
+      .amenities { grid-template-columns: 1fr; }
+    }
+    .amenities article {
+      background: var(--paper);
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+    .amenities h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin: 0 0 0.35rem;
+    }
+    .amenities p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .split-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 420px;
+    }
+    @media (max-width: 900px) {
+      .split-section { grid-template-columns: 1fr; }
+    }
+    .split-section.reverse .split-visual { order: 2; }
+    .split-visual {
+      background-size: cover;
+      background-position: center;
+      min-height: 280px;
+    }
+    .split-visual.dining {
+      background-image: url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80");
+    }
+    .split-visual.spa {
+      background-image: url("https://images.unsplash.com/photo-1540555700478-4be289fbec23?w=900&q=80");
+    }
+    .split-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 2.5rem;
+    }
+    .split-copy .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.6875rem;
+      color: var(--gold-deep);
+      margin: 0 0 0.75rem;
+    }
+    .split-copy h2 {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      margin: 0 0 1rem;
+    }
+    .split-copy p {
+      font-size: 1rem;
+      color: var(--muted);
+      margin: 0 0 1.5rem;
+      max-width: 38ch;
+    }
+    .split-copy a {
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--gold);
+      align-self: flex-start;
+    }
+
+    .testimonials {
+      padding: 4rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .testimonials h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      text-align: center;
+      margin: 0 0 2rem;
+    }
+    .quote-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .quote-grid { grid-template-columns: 1fr; }
+    }
+    .quote {
+      border: 1px solid var(--line);
+      padding: 1.75rem;
+      background: oklch(100% 0 0);
+    }
+    .quote blockquote {
+      font-family: var(--font-display);
+      font-size: 1.375rem;
+      font-style: italic;
+      margin: 0 0 1rem;
+      line-height: 1.4;
+    }
+    .quote cite {
+      font-size: 0.8125rem;
+      font-style: normal;
+      color: var(--muted);
+    }
+
+    .site-footer {
+      background: var(--ink);
+      color: oklch(88% 0.01 85);
+      padding: 3rem 2rem 5rem;
+    }
+    .footer-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 2rem;
+    }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+    .site-footer h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin: 0 0 0.75rem;
+      color: oklch(96% 0.01 85);
+    }
+    .site-footer p, .site-footer a {
+      font-size: 0.875rem;
+      color: oklch(68% 0.02 85);
+      line-height: 1.6;
+    }
+    .site-footer a { display: block; margin-bottom: 0.35rem; }
+    .newsletter {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .newsletter input {
+      flex: 1;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid oklch(35% 0.02 55);
+      background: oklch(18% 0.02 55);
+      color: inherit;
+      font: inherit;
+    }
+    .newsletter button {
+      padding: 0.6rem 1rem;
+      background: var(--gold);
+      border: none;
+      color: var(--ink);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+    }
+
+    .demo-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.65rem 1rem;
+      background: oklch(18% 0.02 55);
+      color: oklch(88% 0.01 55);
+      font-size: 0.75rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      z-index: 30;
+    }
+    .demo-bar a { color: oklch(78% 0.12 82); }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <span class="wordmark">COSTA NORTE</span>
+    <nav class="site-nav" aria-label="Principal">
+      <a href="#">Suites</a>
+      <a href="#">Comedor</a>
+      <a href="#">Spa</a>
+      <a href="#">Diario</a>
+    </nav>
+    <button type="button" class="book-btn">Reservar</button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-visual" role="img" aria-label="Playa al atardecer"></div>
+    <div class="hero-copy">
+      <p class="eyebrow">Amalfi · Cuarenta suites</p>
+      <h1>Donde la costa olvida el tiempo</h1>
+      <p class="lede">Terrazas sobre el mar, lino crudo y luz dorada hasta el último cóctel. Sin gradientes violeta, sin copy genérico.</p>
+      <button type="button" class="cta">Reservar estadía</button>
+    </div>
+  </section>
+
+  <section class="suites" id="suites">
+    <div class="suites-head">
+      <h2>Nuestras suites</h2>
+      <p>Tres siluetas sobre el acantilado</p>
+    </div>
+    <div class="suite-grid">
+      <article class="suite-card">
+        <div class="thumb garden" role="img" aria-label="Suite jardín"></div>
+        <div class="body">
+          <p class="label">Suite</p>
+          <h3>Jardín</h3>
+          <p class="meta">Vista mar · 48 m²</p>
+          <div class="row">
+            <p class="price">$420 <small>/ noche</small></p>
+            <span class="reserve">Reservar</span>
+          </div>
+        </div>
+      </article>
+      <article class="suite-card">
+        <div class="thumb loft" role="img" aria-label="Loft terraza"></div>
+        <div class="body">
+          <p class="label">Suite</p>
+          <h3>Loft mar</h3>
+          <p class="meta">Terraza · 62 m²</p>
+          <div class="row">
+            <p class="price">$510 <small>/ noche</small></p>
+            <span class="reserve">Reservar</span>
+          </div>
+        </div>
+      </article>
+      <article class="suite-card">
+        <div class="thumb cliff" role="img" aria-label="Suite acantilado"></div>
+        <div class="body">
+          <p class="label">Suite</p>
+          <h3>Acantilado</h3>
+          <p class="meta">Vista mar · 70 m²</p>
+          <div class="row">
+            <p class="price">$680 <small>/ noche</small></p>
+            <span class="reserve">Reservar</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="amenities">
+    <article><h3>Comedor</h3><p>Mariscos al amanecer, vinos de acantilado</p></article>
+    <article><h3>Spa</h3><p>Hamam, sal de la costa, ritual de 90 min</p></article>
+    <article><h3>Concierge</h3><p>Rutas en velero, cenas privadas en la roca</p></article>
+  </div>
+
+  <section class="split-section">
+    <div class="split-visual dining" role="img" aria-label="Mesa en restaurante"></div>
+    <div class="split-copy">
+      <p class="eyebrow">Comedor</p>
+      <h2>La mesa mira al horizonte</h2>
+      <p>Menú de captura del día, aceite de oliva de la finca y postres que cierran cuando cae la brisa.</p>
+      <a href="#">Reservar mesa</a>
+    </div>
+  </section>
+
+  <section class="split-section reverse">
+    <div class="split-visual spa" role="img" aria-label="Spa interior"></div>
+    <div class="split-copy">
+      <p class="eyebrow">Spa</p>
+      <h2>Silencio con vista al mar</h2>
+      <p>Rituales con algas locales, cabina de vapor y terraza para infusiones al atardecer.</p>
+      <a href="#">Ver tratamientos</a>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <h2>Huéspedes recientes</h2>
+    <div class="quote-grid">
+      <figure class="quote">
+        <blockquote>«La suite Acantilado tiene la luz exacta para leer sin lámpara. Nada de decoración genérica.»</blockquote>
+        <cite>María L. · Milano</cite>
+      </figure>
+      <figure class="quote">
+        <blockquote>«Reservamos desde el móvil y el concierge armó una cena en la roca sin preguntas redundantes.»</blockquote>
+        <cite>Tomás R. · Buenos Aires</cite>
+      </figure>
+    </div>
+  </section>
+
+  <section class="journal">
+    <h2>Diario de costa</h2>
+    <p>Recetas del chef, rutas al amanecer y la luz de septiembre.</p>
+    <a href="#">Leer el diario</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <h3>Costa Norte</h3>
+        <p>Cuarenta suites sobre el mar Amalfi. Demo Atelier · landing brand craft.</p>
+        <form class="newsletter" action="#" onsubmit="return false">
+          <input type="email" placeholder="Email para novedades" aria-label="Email" />
+          <button type="submit">Unirse</button>
+        </form>
+      </div>
+      <div>
+        <h3>Explorar</h3>
+        <a href="#suites">Suites</a>
+        <a href="#">Comedor</a>
+        <a href="#">Spa</a>
+        <a href="#">Diario</a>
+      </div>
+      <div>
+        <h3>Preview</h3>
+        <a href="../index.html">Hub Atelier</a>
+        <a href="pitch-dt.html">Pitch DT</a>
+        <a href="slop-before.html">Slop before</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="demo-bar">
+    <span>Demo · /atelier craft</span>
+    <a href="../index.html">Hub</a>
+    <a href="slop-before.html">Antes (slop)</a>
+  </div>
+</body>
+</html>

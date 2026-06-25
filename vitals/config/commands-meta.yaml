@@ -1,6 +1,6 @@
 # Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agent/workflows
 version: 1
-updated: "2026-05-27"
+updated: "2026-06-25"
 locale: es
 
 groups:
@@ -13,11 +13,17 @@ groups:
   framework:
     title: "Framework DT"
     description: "Desarrollo y evolución del orquestador (no día a día de producto)."
+  design:
+    title: "Diseño y Atelier"
+    description: "Design intelligence — contexto, selección de sistema, anti-slop, specs UI."
+  video:
+    title: "Video programático"
+    description: "Remotion — composiciones React, motion graphics, render."
 
 commands:
   actualizar:
     group: routine
-    tagline: "Traer lo último del equipo desde GitHub."
+    tagline: "Sincronizar tu proyecto y comprobar novedades del framework DT."
     when: "Al abrir el editor; antes de /guardar si estás behind."
     example: "/actualizar"
     skill: git-actualizar
@@ -33,6 +39,12 @@ commands:
     when: "Al cerrar bloque de trabajo o antes de irte."
     example: "/guardar"
     skill: git-guardar
+  bienvenida:
+    group: routine
+    tagline: "Primera vez en este repo — verificar que El DT está listo."
+    when: "Justo después de clonar o abrir el DT por primera vez en esta máquina."
+    example: "/bienvenida"
+    skill: dt-setup
   orquestar:
     group: work
     tagline: "Pipeline completo del DT en 8 pasos."
@@ -68,20 +80,24 @@ commands:
     example: "/prepr"
     skill: null
     command_path: .cursor/commands/prepr.md
-  setup-cursor:
+  setup:
     group: framework
-    tagline: "Dejar solo configuración Cursor en este clon."
-    when: "Setup inicial o cambio de IDE."
-    example: "/setup-cursor"
-    skill: null
-    command_path: .cursor/commands/setup-cursor.md
-  setup-antigravity:
+    tagline: "Verificar o reparar la estructura multi-IDE del DT."
+    when: "Tras un pull grande, drift entre IDEs, o si algo del DT no carga."
+    example: "/setup"
+    skill: dt-setup
+  bootstrap:
     group: framework
-    tagline: "Dejar solo configuración Antigravity en este clon."
-    when: "Setup inicial o cambio de IDE."
-    example: "/setup-antigravity"
-    skill: null
-    workflow_path: .agent/workflows/setup-antigravity.md
+    tagline: "Usar El DT como base: promover al raíz y soltar el remoto del template."
+    when: "Arrancar un proyecto nuevo a partir del template."
+    example: "/bootstrap"
+    skill: dt-bootstrap
+  actualizar-dt:
+    group: framework
+    tagline: "Incorporar una nueva versión del framework DT desde upstream."
+    when: "Cuando /actualizar avisó una versión más nueva; working tree limpio."
+    example: "/actualizar-dt"
+    skill: dt-actualizar
   github-save-small:
     group: framework
     tagline: "Versionado tipo release — bump, commit, tag, push."
@@ -89,3 +105,15 @@ commands:
     example: "/github-save-small"
     skill: github-save-release
     command_path: .cursor/commands/github-save-small.md
+  atelier:
+    group: design
+    tagline: "Design intelligence Impeccable + DT — craft, audit, anti-slop, 23+ commands."
+    when: "Landing, dashboard, mockup, craft UI, critique, polish, design system."
+    example: "/atelier init  ·  /atelier craft hero  ·  /atelier actualizar"
+    skill: atelier
+  remotion:
+    group: video
+    tagline: "Video programático con Remotion — composiciones, motion, render."
+    when: "Video en código, motion graphics, promo, explainers, render MP4."
+    example: "/remotion promo 30s 9:16  ·  /remotion init mi-video"
+    skill: remotion-producer

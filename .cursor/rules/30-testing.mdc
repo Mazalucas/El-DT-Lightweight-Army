@@ -26,3 +26,11 @@ alwaysApply: false
 
 - Un test file por módulo/componente
 - Nombres descriptivos: `describe('FeatureX', () => { it('should do Y when Z', ...) })`
+
+## Reutilización (reuse-first)
+
+Regla transversal: `15-engineering-reuse` · skill `qa` · `DOC-REF-006`.
+
+- **Fixtures y factories compartidos** — no duplicar setup por archivo
+- **Un helper por concepto** — extender mocks existentes
+- **Ejecutar suite del repo** cuando exista toolchain (skill `qa/references/toolchain.md`)

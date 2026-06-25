@@ -1,0 +1,23 @@
+/**
+ * Atelier — contraste (pares obligatorios)
+ * Fuente: shared/contrast-contract.md
+ * Importar al inicio de surfaces.css (antes de dashboard-shell).
+ */
+
+:root {
+  /* Fallbacks globales si el DS no define el par */
+  --tpl-on-primary: #ffffff;
+  --tpl-text-on-dark: #f4f4f4;
+  --tpl-text-on-light: #0f172a;
+
+  /* Sidebar — scope independiente del main (evita heredar --tpl-text oscuro en nav oscuro) */
+  --tpl-sidebar-link-hover: var(--tpl-sidebar-brand, var(--tpl-sidebar-link, var(--tpl-text-muted)));
+  --tpl-sidebar-active-bg: var(--tpl-primary-subtle, color-mix(in srgb, var(--tpl-primary) 14%, transparent));
+  --tpl-sidebar-border: var(--tpl-border);
+  --tpl-sidebar-footer: var(--tpl-sidebar-link, var(--tpl-text-muted));
+}
+
+/* Sidebar: color base del bloque nav */
+.tpl-sidebar {
+  color: var(--tpl-sidebar-brand, var(--tpl-text));
+}

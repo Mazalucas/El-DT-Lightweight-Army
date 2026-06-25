@@ -1,61 +1,187 @@
-# Catálogo de documentos (índice para humanos y herramientas)
+# Catálogo de documentos (ARTEFACTO derivado — no editar a mano)
+# Generado por scripts/sync-catalog.rb desde el frontmatter de docs/**/*.md
 # Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
 
 version: 1
-updated: "2026-05-27"
+updated: "2026-06-25"
 documents:
+  - id: DOC-ARCH-002
+    title: "Arquitectura de la capacidad Atelier"
+    path: 04_architecture/atelier-capability.md
+    type: architecture
+    tags: [design, architecture, atelier, impeccable]
+  - id: DOC-CONCEPT-001
+    title: "Vitals — telemetría y normativa del Director Técnico"
+    path: 01_concepts/dt-vitals.md
+    type: concept
+    tags: [vitals, dt, orchestration, pulse]
+  - id: DOC-DEC-001
+    title: "ADR-001: Convergencia en AGENTS.md + Skills como estándar multi-IDE"
+    path: 05_decisions/adr-001-convergencia-agents-skills.md
+    type: decision
+    tags: [adr, multi-ide, skills]
+  - id: DOC-DEC-002
+    title: "ADR-002: Orden continuo — loop autónomo siempre activo"
+    path: 05_decisions/adr-002-orden-continuo-loop-autonomo.md
+    type: decision
+    tags: [adr, autonomy, order]
+  - id: DOC-DEC-003
+    title: "ADR-003 — Atelier design intelligence nativo"
+    path: 05_decisions/adr-design-atelier.md
+    type: decision
+    tags: [adr, design, atelier]
+  - id: DOC-DEC-004
+    title: "ADR-004 — Vendor Impeccable para Atelier 2.0"
+    path: 05_decisions/adr-atelier-impeccable-vendor.md
+    type: decision
+    tags: [adr, design, atelier, impeccable]
+  - id: DOC-DESIGN-001
+    title: "Atelier — design intelligence en El DT"
+    path: 01_concepts/design-atelier-el-dt.md
+    type: concept
+    tags: [design, atelier, ui, ux]
+  - id: DOC-GUIDE-001
+    title: "Configuración multi-IDE — Cursor, Antigravity, Claude, Codex, Copilot"
+    path: 02_guides/ide-setup.md
+    type: guide
+    tags: [cursor, antigravity, claude, codex, copilot, setup]
+  - id: DOC-GUIDE-002
+    title: "Redirect: IDE setup movido"
+    path: IDE-SETUP.md
+    type: guide
+    tags: [redirect]
+  - id: DOC-GUIDE-003
+    title: "Adoptar El DT en un repositorio existente"
+    path: 02_guides/adopt-dt-in-existing-repo.md
+    type: guide
+    tags: [adoption, cursor, antigravity, dt]
+  - id: DOC-GUIDE-004
+    title: "Usar El DT como base de un proyecto (bootstrap / detach)"
+    path: 02_guides/usar-dt-como-base.md
+    type: guide
+    tags: [bootstrap, detach, git, setup]
+  - id: DOC-GUIDE-005
+    title: "Setup y uso de Atelier"
+    path: 02_guides/atelier-setup.md
+    type: guide
+    tags: [design, atelier, guide]
+  - id: DOC-GUIDE-006
+    title: "Primer setup El DT — post-clone sin saber Git"
+    path: 02_guides/primer-setup-dt.md
+    type: guide
+    tags: [onboarding, setup, bienvenida, first-run]
+  - id: DOC-GUIDE-007
+    title: "Actualizar el framework DT desde upstream"
+    path: 02_guides/actualizar-framework-dt.md
+    type: guide
+    tags: [upstream, actualizar-dt, git, framework]
+  - id: DOC-GUIDE-008
+    title: "Actualizar Impeccable en Atelier (maintainers)"
+    path: 02_guides/atelier-impeccable-sync.md
+    type: guide
+    tags: [atelier, impeccable, guide, vendor]
   - id: DOC-META-001
     title: "Protocolo de documentación orientada a IA"
     path: 99_meta/protocolo-documentacion-ia.md
     type: policy
-    tags: [documentation, ai, retrieval]
+    tags: [documentation, ai, retrieval, metadata]
   - id: DOC-META-002
     title: "Registro de prefijos DOC-<DOMINIO>"
     path: 99_meta/id-registry.md
     type: reference
     tags: [documentation, ids]
-  - id: DOC-OV-001
-    title: "Portal de documentación del proyecto"
-    path: README.md
-    type: overview
-    tags: [index, docs]
-  - id: DOC-OV-002
-    title: "Overview — índice de capa"
-    path: 00_overview/README.md
-    type: overview
-    tags: [overview]
-  - id: DOC-GUIDE-001
-    title: "Configuración multi-IDE — Cursor y Antigravity"
-    path: 02_guides/ide-setup.md
-    type: guide
-    tags: [cursor, antigravity, setup]
-  - id: DOC-GUIDE-002
-    title: "Redirect histórico IDE-SETUP.md (deprecated)"
-    path: IDE-SETUP.md
-    type: guide
-    tags: [redirect, deprecated]
-  - id: DOC-CONCEPT-001
-    title: "Vitals — telemetría y normativa del Director Técnico"
-    path: 01_concepts/dt-vitals.md
-    type: concept
-    tags: [vitals, dt, pulse, orchestration]
-  - id: DOC-GUIDE-003
-    title: "Adoptar El DT en un repositorio existente"
-    path: 02_guides/adopt-dt-in-existing-repo.md
-    type: guide
-    tags: [adoption, cursor, antigravity, monorepo]
-  - id: DOC-OV-004
-    title: "Cerebro del equipo — mecanismos DT, Git, sesiones y commands"
-    path: 00_overview/cerebro-equipo-mecanismos-dt.md
-    type: overview
-    tags: [dt, session, git, commands, brain]
   - id: DOC-OPS-001
     title: "Colaboración Git en repos con El DT"
     path: 06_operations/git-colaboracion-dt.md
     type: runbook
     tags: [git, collaboration, session]
+  - id: DOC-OV-001
+    title: "Portal de documentación del proyecto"
+    path: README.md
+    type: overview
+    tags: [documentation, index]
+  - id: DOC-OV-002
+    title: "Overview — índice de capa"
+    path: 00_overview/README.md
+    type: overview
+    tags: [overview]
+  - id: DOC-OV-003
+    title: "Conceptos — índice de capa"
+    path: 01_concepts/README.md
+    type: overview
+    tags: [concepts]
+  - id: DOC-OV-004
+    title: "Cerebro del equipo — mecanismos DT, Git, sesiones y commands"
+    path: 00_overview/cerebro-equipo-mecanismos-dt.md
+    type: overview
+    tags: [dt, evolution, multi-user, sessions, commands, gitignore, git, platform, brain, faq, checklist, bienvenida]
+  - id: DOC-OV-005
+    title: "Referencia — índice de capa"
+    path: 03_reference/README.md
+    type: overview
+    tags: [reference]
+  - id: DOC-OV-006
+    title: "Arquitectura — índice de capa"
+    path: 04_architecture/README.md
+    type: overview
+    tags: [architecture]
+  - id: DOC-OV-007
+    title: "Decisiones — índice de capa"
+    path: 05_decisions/README.md
+    type: overview
+    tags: [adr]
+  - id: DOC-OV-008
+    title: "Operaciones — índice de capa"
+    path: 06_operations/README.md
+    type: overview
+    tags: [operations]
+  - id: DOC-OV-009
+    title: "Glosario — índice de capa"
+    path: 07_glossary/README.md
+    type: overview
+    tags: [glossary]
+  - id: DOC-OV-010
+    title: "Guías — índice de capa"
+    path: 02_guides/README.md
+    type: overview
+    tags: [guides]
   - id: DOC-REF-001
     title: "Referencia — sesión local y roster"
     path: 03_reference/dt-session-roster.md
     type: reference
     tags: [session, roster, roles]
+  - id: DOC-REF-002
+    title: "Matriz del selector Atelier"
+    path: 03_reference/design-selector-matrix.md
+    type: reference
+    tags: [design, reference, selector]
+  - id: DOC-REF-003
+    title: "Registro de templates de estilo Atelier"
+    path: 03_reference/style-templates-registry.md
+    type: reference
+    tags: [design, reference, templates, atelier]
+  - id: DOC-REF-004
+    title: "Índice de plantillas Atelier"
+    path: 03_reference/atelier-templates-index.md
+    type: reference
+    tags: [design, reference, templates, atelier, index]
+  - id: DOC-REF-005
+    title: "Stack web canónico del DT (Firebase + Node)"
+    path: 03_reference/web-stack-default.md
+    type: reference
+    tags: [engineering, stack, firebase, node]
+  - id: DOC-REF-006
+    title: "Ingeniería reuse-first del DT"
+    path: 03_reference/engineering-reuse-default.md
+    type: reference
+    tags: [engineering, reuse, patterns, best-practices]
+  - id: DOC-REF-007
+    title: "Registro de tools reutilizables"
+    path: 03_reference/tools-registry.md
+    type: reference
+    tags: [tools, remotion, atelier, agents]
+  - id: DOC-REF-008
+    title: "Atelier detector y lock Impeccable"
+    path: 03_reference/atelier-detector-lock.md
+    type: reference
+    tags: [atelier, detector, impeccable]

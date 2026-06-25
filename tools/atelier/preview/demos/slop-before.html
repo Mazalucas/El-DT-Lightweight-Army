@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- Fixture slop intentional para atelier-detect -->
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Slop before · Atelier detect demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background: #f3f4f6;
+      color: #111;
+    }
+    .banner {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      text-align: center;
+      padding: 4rem 1.5rem;
+    }
+    .banner h1 {
+      font-size: 2.5rem;
+      margin: 0 0 0.75rem;
+      background: linear-gradient(90deg, #fff, #e0e7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .banner p { font-size: 1.125rem; margin: 0 0 1.5rem; opacity: 0.95; }
+    .banner a {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      background: #fff;
+      color: #764ba2;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .features {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 640px) { .features { grid-template-columns: 1fr; } }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem;
+      border-left: 4px solid #764ba2;
+      box-shadow: 0 4px 20px rgb(0 0 0 / 0.08);
+      text-align: center;
+    }
+    .card .emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+    .card h2 { font-size: 1.125rem; margin: 0 0 0.5rem; }
+    .card p { font-size: 0.9375rem; color: #6b7280; margin: 0; }
+    .note {
+      max-width: 960px;
+      margin: 2rem auto 3rem;
+      padding: 1rem 1.25rem;
+      background: #1f2937;
+      color: #9ca3af;
+      font-family: ui-monospace, monospace;
+      font-size: 0.8125rem;
+      border-radius: 8px;
+    }
+    .note a { color: #a5b4fc; }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <h1>Welcome to Our Hotel</h1>
+    <p>Book the best rooms at the best prices. Boost your productivity.</p>
+    <a href="#">Book Now</a>
+  </div>
+  <div class="features">
+    <article class="card">
+      <div class="emoji">✦</div>
+      <h2>Feature One</h2>
+      <p>Unlock seamless experiences with our cutting-edge platform.</p>
+    </article>
+    <article class="card">
+      <div class="emoji">⚡</div>
+      <h2>Feature Two</h2>
+      <p>Supercharge your workflow with AI-powered insights.</p>
+    </article>
+    <article class="card">
+      <div class="emoji">🚀</div>
+      <h2>Feature Three</h2>
+      <p>Scale effortlessly with enterprise-grade security.</p>
+    </article>
+  </div>
+  <p class="note">
+    Fixture slop · <a href="../index.html">← Hub Atelier</a> ·
+    <a href="landing-coastal.html">Ver después de /atelier craft →</a>
+  </p>
+</body>
+</html>

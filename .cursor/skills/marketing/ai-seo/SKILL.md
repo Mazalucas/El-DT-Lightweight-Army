@@ -453,7 +453,7 @@ For tactical guidance on SaaS product pages, blog content, comparison/alternativ
 
 ## Tool Integrations
 
-For implementation, see the [tools registry](../../tools/REGISTRY.md).
+For implementation, see the [tools registry](../../../../tools/REGISTRY.md).
 
 | Tool | Use For |
 |------|---------|

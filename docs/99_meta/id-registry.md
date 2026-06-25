@@ -5,7 +5,7 @@ type: reference
 status: canonical
 owner: dt-platform
 created: 2026-04-19
-updated: 2026-05-27
+updated: 2026-06-23
 tags:
   - documentation
   - ids
@@ -32,17 +32,20 @@ Antes de crear un documento con un prefijo nuevo, añadí una fila a esta tabla 
 
 | Prefijo (`DOMINIO`) | Descripción | Ejemplos |
 |---------------------|-------------|----------|
-| META | Meta-documentación, protocolo, políticas editoriales | DOC-META-001 |
-| GUIDE | Guías how-to del repositorio / DT | DOC-GUIDE-001 … DOC-GUIDE-003 |
-| OV | Overview, índices de capa, quickstart, portal `docs/README` | DOC-OV-001 … DOC-OV-009 (DOC-OV-004 = cerebro DT) |
+| META | Meta-documentación, protocolo, políticas editoriales | DOC-META-001 … DOC-META-002 |
+| GUIDE | Guías how-to del repositorio / DT | DOC-GUIDE-001 … DOC-GUIDE-008 |
+| OV | Overview, índices de capa, quickstart, portal `docs/README` | DOC-OV-001 … DOC-OV-010 (DOC-OV-004 = cerebro DT; DOC-OV-010 = índice de guías) |
 | OPS | Operaciones, runbooks en `06_operations` | DOC-OPS-001 |
 | CONCEPT | Conceptos en `01_concepts` | DOC-CONCEPT-001 |
-| REF | Referencia técnica en `03_reference` | DOC-REF-001 (sesión/roster) |
+| REF | Referencia técnica en `03_reference` | DOC-REF-001 … DOC-REF-008 |
 | ARCH | Arquitectura en `04_architecture` | DOC-ARCH-001 |
-| DEC | Decisiones / ADRs en `05_decisions` | DOC-DEC-001 |
+| DEC | Decisiones / ADRs en `05_decisions` | DOC-DEC-001 … DOC-DEC-004 |
+| DESIGN | Conceptos, guías y referencia Atelier | DOC-DESIGN-001 … |
 | GLOSS | Glosario en `07_glossary` | DOC-GLOSS-001 |
 
 **Convención:** `DOC-<DOMINIO>-<NNN>` con `NNN` numérico de al menos tres dígitos (001, 002, …). Mismo dominio puede tener muchos números.
+
+**Próximo ID libre:** `ruby scripts/sync-catalog.rb --next <DOMINIO>` (ej. `--next OV`). El catálogo `catalog.yaml` se **deriva** del frontmatter: `ruby scripts/sync-catalog.rb`.
 
 ## Related docs
 

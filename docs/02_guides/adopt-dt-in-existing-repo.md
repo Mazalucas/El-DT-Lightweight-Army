@@ -5,7 +5,7 @@ type: guide
 status: canonical
 owner: dt-platform
 created: 2026-04-19
-updated: 2026-05-27
+updated: 2026-06-23
 tags:
   - adoption
   - cursor
@@ -16,8 +16,10 @@ domain:
 summary: Cómo incorporar la plantilla DT (rules, commands, vitals, docs meta) en un proyecto que ya tiene historial y posiblemente su propia config de IDE.
 related:
   - DOC-GUIDE-001
+  - DOC-GUIDE-006
   - DOC-CONCEPT-001
   - DOC-META-001
+  - DOC-GUIDE-007
   - DOC-OV-004
 keywords:
   - merge
@@ -49,11 +51,12 @@ Integrar El DT sin romper flujos del equipo y manteniendo trazabilidad (`vitals/
 
 ## Modo drop-in (repo sin rules DT)
 
-1. Copiá desde el template: `.cursor/` **o** `.agent/` + `.antigravity/` (según IDE), `vitals/` (`config/commands-meta.yaml`, `config/roster.yaml`, `config/roles.yaml` vacíos, `ops/README.md`), `AGENTS.md`, y lo que necesités de `docs/99_meta/` y `scripts/`.
-2. Ritual: `/actualizar` → `/yo` (crea sesión local) → `/guardar` (ver `DOC-OV-004`).
-3. Ejecutá **`/setup-cursor`** o **`/setup-antigravity`** solo si querés **eliminar** la carpeta del otro IDE en este clon (acción destructiva: confirmar con el equipo).
-4. Registrá un primer pulso opcional en `vitals/pulse/entries/` y actualizá `vitals/pulse/current.md`.
-5. Paridad IDE: `./scripts/sync-commands-from-meta.sh` y `./scripts/sync-skills-parity.sh` tras cambiar meta o skills.
+1. Copiá desde el template: `.cursor/`, `.agent/` + `.antigravity/`, `vitals/` (`config/commands-meta.yaml`, `config/dt-upstream.example.md`, `config/roster.yaml`, `config/roles.yaml` vacíos, `ops/README.md`), `AGENTS.md`, `vitals/specs/dt-upstream-config.md`, y lo que necesités de `docs/99_meta/` y `scripts/`.
+2. Configurá upstream: `git remote add dt-upstream <url-repo-canónico-DT>` y copiá `dt-upstream.example.md` → `vitals/config/dt-upstream.md` con `mode: consumer` y `framework_version` del tag adoptado.
+3. Ritual primera vez: **`/bienvenida`** → **`/yo`** → `/guardar` cuando corresponda (ver `DOC-GUIDE-006`).
+4. Ritual diario: `/actualizar` → `/yo` → `/guardar` (ver `DOC-OV-004`).
+5. Registrá un primer pulso opcional en `vitals/pulse/entries/` y actualizá `vitals/pulse/current.md`.
+6. Paridad IDE (maintainers): `./scripts/sync-commands-from-meta.sh` y `./scripts/sync-skills-parity.sh` tras cambiar meta o skills.
 
 ## Adopción mínima (solo ritual Git)
 
@@ -64,7 +67,7 @@ Si el repo **no** necesita cuadernos personales ni pulse compartido aún, copiá
 | Rules `00`–`06`, `90` | `vitals/work/inbox/` (crear bajo demanda con `/yo`) |
 | `vitals/config/roster.yaml`, `roles.yaml` (vacíos) | Pulse entries hasta que el equipo los use |
 | `vitals/config/commands-meta.yaml` | Subagentes que no vais a invocar |
-| Skills `git-actualizar`, `git-guardar`, `dt-session` | `github-save-release` si no versionáis con tag |
+| Skills `git-actualizar`, `git-guardar`, `dt-session`, `dt-actualizar` | `github-save-release` si no versionáis con tag |
 | Commands/workflows de rutina + `AGENTS.md` | Duplicar los 20 subagentes si ya tenéis especialistas propios |
 
 Ritual igual: **`/actualizar` → `/yo` → trabajar → `/guardar`**. Tras editar `commands-meta.yaml`, corré `./scripts/sync-commands-from-meta.sh`.
@@ -95,5 +98,6 @@ Al copiar desde El DT, anotá el **tag o commit** del template en el README del 
 
 ## Related docs
 
+- [Actualizar framework DT](actualizar-framework-dt.md) (`DOC-GUIDE-007`)
 - [Configuración multi-IDE](ide-setup.md) (`DOC-GUIDE-001`)
 - [Vitals — concepto](../01_concepts/dt-vitals.md) (`DOC-CONCEPT-001`)

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>El DT · Pitch template · Atelier slide-deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --deck-bg: oklch(12% 0.012 55);
+      --deck-accent: oklch(78% 0.12 82);
+      --deck-text: oklch(96% 0.01 55);
+      --deck-text-muted: oklch(62% 0.02 55);
+      --deck-text-secondary: oklch(82% 0.015 55);
+      --deck-surface: oklch(100% 0 0 / 0.06);
+      --deck-surface-border: oklch(100% 0 0 / 0.12);
+      --deck-overlay: oklch(0% 0 0 / 0.72);
+      --deck-on-accent: oklch(16% 0.02 55);
+      --deck-font-display: "Cormorant Garamond", Georgia, serif;
+      --deck-font-body: "DM Sans", system-ui, sans-serif;
+      --deck-title-size: clamp(2.75rem, 6vw, 4.5rem);
+      --deck-heading-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      --deck-cover-size: clamp(2.5rem, 5.5vw, 4rem);
+      --deck-body-size: 1.1875rem;
+      --deck-label-size: 0.75rem;
+      --deck-padding-x: clamp(1.5rem, 6vw, 5rem);
+      --deck-padding-y: clamp(2rem, 5vw, 3.5rem);
+      --deck-radius: 10px;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --slide-dur: 0.65s;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--deck-font-body);
+      font-size: 1rem;
+      background: var(--deck-bg);
+      color: var(--deck-text);
+    }
+
+    .deck-chrome {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .deck-logo {
+      position: absolute;
+      top: 1.25rem;
+      left: var(--deck-padding-x);
+      font-family: var(--deck-font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--deck-text);
+    }
+
+    .deck-counter {
+      position: absolute;
+      bottom: 1.25rem;
+      left: var(--deck-padding-x);
+      font-size: var(--deck-label-size);
+      letter-spacing: 0.08em;
+      color: var(--deck-text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .deck-hint {
+      position: absolute;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: var(--deck-label-size);
+      color: var(--deck-text-muted);
+      opacity: 0.65;
+    }
+
+    .deck-brand {
+      position: absolute;
+      bottom: 1.25rem;
+      right: var(--deck-padding-x);
+      font-size: var(--deck-label-size);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--deck-accent);
+    }
+
+    .deck-progress-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: oklch(100% 0 0 / 0.08);
+    }
+
+    .deck-progress-fill {
+      height: 100%;
+      width: 100%;
+      background: var(--deck-accent);
+      transform-origin: left center;
+      transform: scaleX(0.0909);
+      transition: transform var(--slide-dur) var(--ease-out);
+    }
+
+    .deck-dots {
+      position: absolute;
+      top: 1.35rem;
+      right: var(--deck-padding-x);
+      display: flex;
+      gap: 0.35rem;
+      pointer-events: auto;
+    }
+
+    .deck-dots button {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      padding: 0;
+      background: oklch(100% 0 0 / 0.2);
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .deck-dots button.active {
+      background: var(--deck-accent);
+      transform: scale(1.25);
+    }
+
+    .deck-viewport {
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--deck-padding-y) var(--deck-padding-x);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(4%);
+      transition:
+        opacity var(--slide-dur) var(--ease-out),
+        transform var(--slide-dur) var(--ease-out),
+        visibility var(--slide-dur);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+      z-index: 2;
+    }
+
+    .slide.exit-left {
+      transform: translateX(-4%);
+      opacity: 0;
+    }
+
+    .slide-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.35;
+    }
+
+    .slide-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, oklch(12% 0.012 55 / 0.92), oklch(12% 0.012 55 / 0.55));
+    }
+
+    .slide-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .slide-content--wide { max-width: 1100px; }
+
+    .slide-content > * {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    .slide.active .slide-content > * {
+      animation: rise 0.7s var(--ease-out) forwards;
+    }
+
+    .slide.active .slide-content > *:nth-child(1) { animation-delay: 0.08s; }
+    .slide.active .slide-content > *:nth-child(2) { animation-delay: 0.16s; }
+    .slide.active .slide-content > *:nth-child(3) { animation-delay: 0.24s; }
+    .slide.active .slide-content > *:nth-child(4) { animation-delay: 0.32s; }
+    .slide.active .slide-content > *:nth-child(5) { animation-delay: 0.4s; }
+
+    @keyframes rise {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide, .slide-content > *, .deck-progress-fill { transition: none; animation: none; }
+      .slide.active .slide-content > * { opacity: 1; transform: none; }
+    }
+
+    .brief-label {
+      display: block;
+      font-size: var(--deck-label-size);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--deck-accent);
+      margin-bottom: 1rem;
+    }
+
+    .slide-cover h1 {
+      font-family: var(--deck-font-display);
+      font-size: var(--deck-cover-size);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 1rem;
+    }
+
+    .slide-cover .subtitle {
+      font-size: var(--deck-body-size);
+      color: var(--deck-text-muted);
+      max-width: 36ch;
+      margin: 0 auto 2rem;
+    }
+
+    .slide-cover .meta {
+      font-size: var(--deck-label-size);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--deck-text-secondary);
+    }
+
+    .slide-brief h2 {
+      font-family: var(--deck-font-display);
+      font-size: var(--deck-heading-size);
+      font-weight: 600;
+      margin: 0 0 1.25rem;
+      line-height: 1.15;
+    }
+
+    .slide-brief p {
+      font-size: var(--deck-body-size);
+      color: var(--deck-text-secondary);
+      line-height: 1.65;
+      max-width: 52ch;
+      margin: 0 auto;
+    }
+
+    .slide-brief p strong { color: var(--deck-text); }
+
+    .accent { color: var(--deck-accent); }
+
+    .slide-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+      text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      .slide-split { grid-template-columns: 1fr; text-align: center; }
+    }
+
+    .visual-panel {
+      aspect-ratio: 16/10;
+      border-radius: var(--deck-radius);
+      border: 1px solid var(--deck-surface-border);
+      background: var(--deck-surface);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .visual-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .visual-panel .play-badge {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: oklch(0% 0 0 / 0.25);
+    }
+
+    .play-badge span {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--deck-accent);
+      color: var(--deck-on-accent);
+      display: grid;
+      place-items: center;
+      font-size: 1.25rem;
+    }
+
+    .datos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .datos-grid { grid-template-columns: 1fr; }
+    }
+
+    .stat-card {
+      padding: 1.5rem 1.25rem;
+      background: var(--deck-surface);
+      border: 1px solid var(--deck-surface-border);
+      border-radius: var(--deck-radius);
+    }
+
+    .stat-card .num {
+      font-family: var(--deck-font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      color: var(--deck-accent);
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-card .lbl {
+      font-size: 0.9375rem;
+      color: var(--deck-text-muted);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .gallery-grid button {
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      border-radius: var(--deck-radius);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: var(--deck-surface);
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s var(--ease-out);
+    }
+
+    .gallery-grid button:hover img { transform: scale(1.04); }
+
+    .partner-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 3rem;
+      border: 1px solid var(--deck-surface-border);
+      border-radius: var(--deck-radius);
+      margin-top: 1.5rem;
+      font-family: var(--deck-font-display);
+      font-size: 2rem;
+      letter-spacing: 0.15em;
+    }
+
+    .closing h1 {
+      font-family: var(--deck-font-display);
+      font-size: var(--deck-title-size);
+      color: var(--deck-accent);
+      margin: 0 0 1rem;
+    }
+
+    .closing p {
+      font-size: var(--deck-body-size);
+      color: var(--deck-text-secondary);
+      margin: 0;
+    }
+
+    .closing a {
+      color: var(--deck-text);
+      text-decoration: none;
+      border-bottom: 1px solid var(--deck-accent);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--deck-overlay);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      cursor: zoom-out;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox-frame {
+      width: min(1100px, 92vw);
+      height: min(85vh, 720px);
+      border-radius: var(--deck-radius);
+      box-shadow: 0 24px 80px oklch(0% 0 0 / 0.5);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: oklch(16% 0.01 55);
+    }
+
+    .hub-link {
+      position: fixed;
+      top: 1.25rem;
+      right: calc(var(--deck-padding-x) + 8rem);
+      z-index: 110;
+      font-size: var(--deck-label-size);
+      color: var(--deck-text-muted);
+      text-decoration: none;
+      pointer-events: auto;
+    }
+
+    .hub-link:hover { color: var(--deck-text); }
+  </style>
+</head>
+<body>
+  <a class="hub-link" href="../index.html">← Preview hub</a>
+
+  <div class="deck-chrome" aria-hidden="true">
+    <div class="deck-progress-track"><div class="deck-progress-fill" id="progress"></div></div>
+    <span class="deck-logo">EL DT</span>
+    <div class="deck-dots" id="dots"></div>
+    <span class="deck-counter" id="counter">1 / 11</span>
+    <span class="deck-hint">← → · Espacio · Clic</span>
+    <span class="deck-brand">Atelier · slide-deck-html</span>
+  </div>
+
+  <main class="deck-viewport" id="deck">
+    <section class="slide slide-cover active" data-slide="0">
+      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1400&q=80')"></div>
+      <div class="slide-content">
+        <p class="brief-label">Propuesta comercial · Template DT</p>
+        <h1>Director Técnico con diseño que no parece IA</h1>
+        <p class="subtitle">Orquestación de agentes, vocabulario Impeccable y entrega en código real. Un archivo, F11, listo para compartir.</p>
+        <p class="meta">Jun 2026 · Confidencial</p>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="1">
+      <div class="slide-content slide-content--wide slide-split">
+        <div>
+          <span class="brief-label">Contexto</span>
+          <h2 class="slide-brief" style="font-family:var(--deck-font-display);font-size:var(--deck-heading-size);margin:0 0 1rem">Los equipos shippean UI generada, no diseñada</h2>
+          <p style="font-size:var(--deck-body-size);color:var(--deck-text-secondary);line-height:1.65;margin:0">
+            Mismo gradiente violeta, mismas fuentes, mismo copy. El agente no tiene palabras para <strong>jerarquía</strong>, <strong>restraint</strong> ni <strong>craft</strong>.
+          </p>
+        </div>
+        <div class="visual-panel">
+          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80" alt="Código en pantalla" width="800" height="500" />
+        </div>
+      </div>
+    </section>
+
+    <section class="slide slide-brief" data-slide="2">
+      <div class="slide-content">
+        <span class="brief-label">Problema</span>
+        <h2>Design skills genéricos no escalan en producción</h2>
+        <p>
+          Mockups desechables, handoffs rotos, detect manual tarde. Sin <span class="accent">design-context</span> unificado, cada sprint reinventa el sistema visual.
+        </p>
+      </div>
+    </section>
+
+    <section class="slide slide-brief" data-slide="3">
+      <div class="slide-content">
+        <span class="brief-label">Señales</span>
+        <h2>Por qué ahora</h2>
+        <div class="datos-grid">
+          <div class="stat-card"><div class="num">23</div><div class="lbl">Comandos de diseño compartidos agente ↔ humano</div></div>
+          <div class="stat-card"><div class="num">44</div><div class="lbl">Reglas determinísticas anti-slop en CI</div></div>
+          <div class="stat-card"><div class="num">21</div><div class="lbl">Subagentes especializados en el pipeline DT</div></div>
+          <div class="stat-card"><div class="num">1</div><div class="lbl">Archivo HTML compartible para pitch en vivo</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide slide-brief" data-slide="4">
+      <div class="slide-content">
+        <span class="brief-label">Mercado</span>
+        <h2>De vibe-code a producto con criterio</h2>
+        <p>
+          Impeccable demostró demanda por vocabulario de diseño en el harness. El DT lo integra con <span class="accent">reuse-first</span>, stack Firebase y ritmo de equipo (<code>/yo</code>, <code>/guardar</code>, pulse).
+        </p>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="5">
+      <div class="slide-content slide-content--wide slide-split">
+        <div class="visual-panel">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" alt="Dashboard analytics" width="800" height="500" />
+          <div class="play-badge"><span>▶</span></div>
+        </div>
+        <div>
+          <span class="brief-label">Solución</span>
+          <h2 style="font-family:var(--deck-font-display);font-size:var(--deck-heading-size);margin:0 0 1rem">Atelier = Impeccable + pack nativo DT</h2>
+          <p style="font-size:var(--deck-body-size);color:var(--deck-text-secondary);line-height:1.65;margin:0">
+            <code>/atelier craft</code> escribe UI en tu repo. <code>/atelier detect</code> en PR. Templates slide-deck, landings y dashboards en preview local.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide slide-brief" data-slide="6">
+      <div class="slide-content slide-content--wide">
+        <span class="brief-label">Propuesta</span>
+        <h2>Superficies listas para iterar</h2>
+        <p style="font-size:1rem;color:var(--deck-text-muted);margin:0">Landing brand · Product shell · Pitch fullscreen</p>
+        <div class="gallery-grid" id="gallery">
+          <button type="button" data-full="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=70" alt="Landing costa" width="400" height="300" /></button>
+          <button type="button" data-full="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=85"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=70" alt="Dashboard" width="400" height="300" /></button>
+          <button type="button" data-full="https://images.unsplash.com/photo-1516321318423-f06f85b504dc?w=1200&q=85"><img src="https://images.unsplash.com/photo-1516321318423-f06f85b504dc?w=400&q=70" alt="Presentación" width="400" height="300" /></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide slide-brief" data-slide="7">
+      <div class="slide-content">
+        <span class="brief-label">Compromiso</span>
+        <h2>Sync upstream sin perder identidad DT</h2>
+        <p>
+          Submodule Impeccable + overlays locales. Tu <code>.agents/design-context.md</code> manda sobre defaults del modelo. Actualizás con <code>/atelier actualizar</code>.
+        </p>
+      </div>
+    </section>
+
+    <section class="slide slide-brief" data-slide="8">
+      <div class="slide-content">
+        <span class="brief-label">Entregables</span>
+        <h2>Qué recibe el equipo</h2>
+        <p>
+          Skill compuesto, hooks Cursor, detector en CI, preview humano en <span class="accent">tools/atelier/preview/</span>, y este deck como plantilla pitch reutilizable.
+        </p>
+      </div>
+    </section>
+
+    <section class="slide slide-brief" data-slide="9">
+      <div class="slide-content">
+        <span class="brief-label">Stack</span>
+        <h2>Construido sobre Impeccable</h2>
+        <div class="partner-logo">IMPECCABLE</div>
+        <p style="margin-top:1.25rem;font-size:0.9375rem;color:var(--deck-text-muted)">Vocabulario upstream · Identidad y pipeline DT locales</p>
+      </div>
+    </section>
+
+    <section class="slide closing" data-slide="10">
+      <div class="slide-content">
+        <h1>¿Arrancamos el próximo sprint con craft?</h1>
+        <p><a href="mailto:equipo@el-dt.dev">equipo@el-dt.dev</a> · <a href="../index.html">Ver demos en preview</a></p>
+      </div>
+    </section>
+  </main>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-label="Imagen ampliada" hidden>
+    <div class="lightbox-frame" id="lightbox-frame"></div>
+  </div>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const total = slides.length;
+      const counter = document.getElementById("counter");
+      const progress = document.getElementById("progress");
+      const dotsRoot = document.getElementById("dots");
+      const lightbox = document.getElementById("lightbox");
+      const lightboxFrame = document.getElementById("lightbox-frame");
+      let current = 0;
+      let animating = false;
+
+      slides.forEach((_, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.title = "Slide " + (i + 1);
+        b.addEventListener("click", (e) => { e.stopPropagation(); go(i); });
+        dotsRoot.appendChild(b);
+      });
+
+      const dots = Array.from(dotsRoot.children);
+
+      function updateUI() {
+        counter.textContent = (current + 1) + " / " + total;
+        progress.style.transform = "scaleX(" + ((current + 1) / total) + ")";
+        dots.forEach((d, i) => d.classList.toggle("active", i === current));
+      }
+
+      function go(n) {
+        if (animating || n === current) return;
+        animating = true;
+        const prev = current;
+        const next = (n + total) % total;
+        slides[prev].classList.remove("active");
+        slides[prev].classList.add("exit-left");
+        slides[next].classList.add("active");
+        current = next;
+        updateUI();
+        setTimeout(() => {
+          slides[prev].classList.remove("exit-left");
+          animating = false;
+        }, 650);
+      }
+
+      function next() { go(current + 1); }
+      function prev() { go(current - 1); }
+
+      document.addEventListener("keydown", (e) => {
+        if (!lightbox.hidden) {
+          if (e.key === "Escape") closeLightbox();
+          return;
+        }
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+          e.preventDefault();
+          next();
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault();
+          prev();
+        } else if (e.key === "Home") {
+          go(0);
+        } else if (e.key === "End") {
+          go(total - 1);
+        }
+      });
+
+      document.getElementById("deck").addEventListener("click", (e) => {
+        if (e.target.closest("#gallery, .lightbox, .deck-dots, .hub-link")) return;
+        const x = e.clientX / window.innerWidth;
+        if (x > 0.55) next();
+        else if (x < 0.45) prev();
+      });
+
+      document.getElementById("gallery").addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-full]");
+        if (!btn) return;
+        e.stopPropagation();
+        lightboxFrame.style.backgroundImage = "url('" + btn.dataset.full + "')";
+        lightbox.hidden = false;
+        lightbox.classList.add("open");
+      });
+
+      function closeLightbox() {
+        lightbox.hidden = true;
+        lightbox.classList.remove("open");
+        lightboxFrame.style.backgroundImage = "";
+      }
+
+      lightbox.addEventListener("click", closeLightbox);
+
+      updateUI();
+    })();
+  </script>
+</body>
+</html>

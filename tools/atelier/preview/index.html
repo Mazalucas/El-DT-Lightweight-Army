@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atelier preview · El DT + Impeccable</title>
+  <link rel="stylesheet" href="preview.css" />
+</head>
+<body>
+  <nav class="site-nav">
+    <span class="logo">Atelier</span>
+    <div class="links">
+      <a href="#compare">Before / After</a>
+      <a href="#commands">Comandos</a>
+      <a href="#demos">Demos</a>
+      <a href="https://impeccable.style/" target="_blank" rel="noopener">Impeccable ↗</a>
+    </div>
+  </nav>
+
+  <header class="hero-showcase">
+    <p class="eyebrow">El DT · powered by Impeccable</p>
+    <h1>El vocabulario de diseño que le falta a tu agente</h1>
+    <p class="lede">
+      Misma promesa que <a href="https://impeccable.style/">impeccable.style</a>:
+      <strong>23 comandos</strong>, detect determinístico, craft en código real,
+      live mode y before/after visible. Atelier lo integra al pipeline DT.
+    </p>
+    <div class="btn-row">
+      <a class="btn btn-gold" href="demos/pitch-dt.html">Pitch DT · F11 fullscreen</a>
+      <a class="btn btn-gold" href="demos/landing-coastal.html">Landing craft</a>
+      <a class="btn" href="demos/dashboard-product.html">Dashboard product</a>
+      <a class="btn" href="demos/slop-before.html">Slop detect fixture</a>
+    </div>
+  </header>
+
+  <section class="section" id="compare">
+    <div class="section-head">
+      <h2>Desloppification en acción</h2>
+      <p>Lo que Impeccable vende en su home: el mismo hero, antes y después de <code>/atelier craft</code>.</p>
+    </div>
+    <div class="compare-wrap">
+      <div class="compare-tabs">
+        <button type="button" class="active" data-panel="panel-slop">Antes · AI slop</button>
+        <button type="button" data-panel="panel-craft">Después · /atelier craft</button>
+      </div>
+      <div class="compare-frame">
+        <div id="panel-slop" class="compare-panel active">
+          <div class="slop-hero">
+            <h3>Welcome to Our Hotel</h3>
+            <p>Book the best rooms at the best prices.</p>
+            <span class="slop-btn">Book Now</span>
+          </div>
+          <div class="slop-cards">
+            <div class="slop-card">
+              <div class="icon">✦</div>
+              <strong>Feature One</strong>
+              <p>Generic benefit text here.</p>
+            </div>
+            <div class="slop-card">
+              <div class="icon">⚡</div>
+              <strong>Feature Two</strong>
+              <p>Another card just like it.</p>
+            </div>
+            <div class="slop-card">
+              <div class="icon">🚀</div>
+              <strong>Feature Three</strong>
+              <p>Three column cliché.</p>
+            </div>
+          </div>
+        </div>
+        <div id="panel-craft" class="compare-panel">
+          <div class="craft-hero">
+            <div class="craft-visual" role="img" aria-label="Costa al atardecer"></div>
+            <div class="craft-copy">
+              <p class="eyebrow">Costa Norte</p>
+              <h3>Donde la costa olvida el tiempo</h3>
+              <p>Cuarenta suites sobre el mar. Tipografía editorial, un acento tierra, cero gradiente violeta.</p>
+              <span class="cta">Reservar estadía</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="compare-caption">
+        Probalo: <code>./scripts/atelier-detect.sh --no-config tools/atelier/preview/demos/slop-before.html</code>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="commands">
+    <div class="section-head">
+      <h2>The Language · 23 comandos</h2>
+      <p>Vocabulario compartido con tu agente. Misma tabla que Impeccable, prefijo <code>/atelier</code>.</p>
+    </div>
+    <div class="cmd-vocab">
+      <span class="cmd-chip highlight">craft</span>
+      <span class="cmd-chip highlight">polish</span>
+      <span class="cmd-chip">shape</span>
+      <span class="cmd-chip">critique</span>
+      <span class="cmd-chip">audit</span>
+      <span class="cmd-chip">bolder</span>
+      <span class="cmd-chip">quieter</span>
+      <span class="cmd-chip">distill</span>
+      <span class="cmd-chip">typeset</span>
+      <span class="cmd-chip">colorize</span>
+      <span class="cmd-chip">layout</span>
+      <span class="cmd-chip">animate</span>
+      <span class="cmd-chip">adapt</span>
+      <span class="cmd-chip">live</span>
+      <span class="cmd-chip">detect</span>
+      <span class="cmd-chip">init</span>
+      <span class="cmd-chip">document</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Live + Detect</h2>
+      <p>Dos pilares de la innovación Impeccable, disponibles en Atelier.</p>
+    </div>
+    <div class="dual-demo">
+      <div class="demo-card">
+        <header>Live mode · beta</header>
+        <div class="live-ui">
+          <div class="live-bar">
+            <span>h1</span>
+            <span>bolder ×3</span>
+            <span>polish</span>
+          </div>
+          <p>Pick element, 3 variants, Accept writes source.</p>
+          <div class="live-variants">
+            <span class="dot"></span> Variant 2 / 3 · HMR swap
+          </div>
+        </div>
+      </div>
+      <div class="demo-card">
+        <header>Detector · 44 reglas · sin LLM</header>
+        <div class="terminal">
+          <div class="cmd">$ ./scripts/atelier-detect.sh src/</div>
+          <div class="fail">✗ Hero.tsx gradient-text</div>
+          <div class="fail">✗ Card.tsx side-stripe-border</div>
+          <div class="fail">✗ Button.tsx overused-font</div>
+          <div class="ok">→ exit 1 · CI gate</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="demos">
+    <div class="section-head">
+      <h2>Demos completas</h2>
+      <p>Superficies Atelier navegables: brand, product, pitch y fixture detect. Un archivo HTML por demo, listo para compartir.</p>
+    </div>
+
+    <p class="demo-category-label">Pitch · slide-deck-html</p>
+    <div class="demo-grid">
+      <article class="demo-tile featured">
+        <span class="demo-tag">Standalone · 11 slides</span>
+        <h3>Pitch El DT</h3>
+        <p>Presentación interactiva fullscreen: teclado, clic, dots, progress, galería lightbox, transiciones. Template DT con framework Atelier.</p>
+        <ul class="demo-features">
+          <li>← → · Espacio · Home/End</li>
+          <li>CSS + JS inline en un solo archivo</li>
+          <li>F11 para proyector</li>
+        </ul>
+        <a class="btn btn-gold" href="demos/pitch-dt.html">Abrir pitch · F11</a>
+      </article>
+    </div>
+
+    <p class="demo-category-label">Brand · craft</p>
+    <div class="demo-grid">
+      <article class="demo-tile">
+        <span class="demo-tag">Landing hotel</span>
+        <h3>Costa Norte</h3>
+        <p>Hero editorial, suites, comedor, spa, testimonios, newsletter y footer. Post <code>/atelier craft</code>.</p>
+        <a class="btn btn-gold" href="demos/landing-coastal.html">Abrir landing</a>
+      </article>
+      <article class="demo-tile">
+        <span class="demo-tag">Detect fixture</span>
+        <h3>Slop intentional</h3>
+        <p>Página mala a propósito: gradiente, Inter, side-tabs, buzzwords. Para ver flags en CI.</p>
+        <a class="btn" href="demos/slop-before.html">Abrir slop</a>
+      </article>
+      <article class="demo-tile">
+        <span class="demo-tag">Swiss style</span>
+        <h3>Grid landing</h3>
+        <p>Variante tipográfica suiza: grid asimétrico, acento rojo, mock browser.</p>
+        <a class="btn" href="demos/landing-swiss.html">Abrir swiss</a>
+      </article>
+    </div>
+
+    <p class="demo-category-label">Product · shell</p>
+    <div class="demo-grid">
+      <article class="demo-tile">
+        <span class="demo-tag">Dashboard</span>
+        <h3>Atelier product</h3>
+        <p>KPIs, chart semanal, projects, activity log, command palette mock y sidebar team.</p>
+        <a class="btn" href="demos/dashboard-product.html">Abrir dashboard</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Local</h2>
+    </div>
+    <p class="mono-block">./tools/atelier/scripts/serve-preview.sh</p>
+  </section>
+
+  <footer class="site-footer">
+    <p>Upstream <a href="https://github.com/pbakaus/impeccable">Impeccable</a> · Sync <code>./tools/atelier/scripts/sync-from-impeccable.sh</code></p>
+  </footer>
+
+  <script src="preview.js"></script>
+</body>
+</html>

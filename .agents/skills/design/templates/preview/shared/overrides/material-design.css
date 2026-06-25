@@ -1,0 +1,4 @@
+/* Material — pitch scroll overrides */
+.doc-nav-cta { border-radius: 999px; }
+.doc-phase .ph-num { background: var(--ds-primary, var(--doc-accent)); }
+.doc-kicker { font-weight: 700; }

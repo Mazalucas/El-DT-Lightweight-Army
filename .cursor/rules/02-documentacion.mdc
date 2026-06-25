@@ -37,13 +37,32 @@ docs/
 
 **Vitals (telemetría y normativa del DT):** `vitals/INDEX.md` — pulse, memoria sugerida y specs canónicas; no sustituye `docs/`, es complementario para orquestación.
 
+## Qué cambió → dónde se documenta (árbol de decisión)
+
+Usá esta tabla para ubicar cada cambio en su capa sin dudar:
+
+| Si el cambio es… | Va en… | ID/registro |
+|------------------|--------|-------------|
+| Comportamiento del DT, reglas, pipeline | `docs/00_overview/` o regla en `.cursor/rules/` (cuerpo en `vitals/specs/rule-bodies/`) | `DOC-OV-*` |
+| Concepto / modelo mental / "qué es y por qué" | `docs/01_concepts/` | `DOC-CONCEPT-*` |
+| Cómo hacer X (setup, how-to) | `docs/02_guides/` | `DOC-GUIDE-*` |
+| Contrato estable (API, CLI, esquema, sesión) | `docs/03_reference/` + CHANGELOG | `DOC-REF-*` |
+| Componentes, límites, diagramas de sistema | `docs/04_architecture/` | `DOC-ARCH-*` |
+| Decisión con alternativas y consecuencias | `docs/05_decisions/` (ADR) | `DOC-DEC-*` |
+| Runbook, deploy, incidente, operación | `docs/06_operations/` | `DOC-OPS-*` |
+| Término, alias, sigla | `docs/07_glossary/` | `DOC-GLOSS-*` |
+| Detalle local de implementación | Comentario / JSDoc / docstring | — |
+| Evento de orquestación / telemetría del DT | `vitals/pulse/entries/` | `pulse_id` |
+
+Si dudás entre dos capas, elegí la de **mayor autoridad** (decision/policy > architecture > reference > guide > concept) y enlazá desde la otra.
+
 ## Obligaciones operativas
 
 1. **Fuente única:** un concepto → un documento canónico (`source_of_truth` y enlaces; no duplicar semántica).
 2. **Frontmatter YAML** en todo Markdown nuevo bajo `docs/` con campos mínimos: `id`, `title`, `type`, `status`, `owner`, `updated`, `tags`, `summary`, `related`, `priority`, `source_of_truth` (más los que aplique el protocolo).
-3. **IDs:** forma `DOC-<DOMINIO>-<NNN>` (ej. `DOC-AUTH-001`). Registrar prefijos nuevos en `docs/99_meta/id-registry.md` antes de acuñar un dominio nuevo.
+3. **IDs:** forma `DOC-<DOMINIO>-<NNN>` (ej. `DOC-AUTH-001`). Registrar prefijos nuevos en `docs/99_meta/id-registry.md` antes de acuñar un dominio nuevo. Para el próximo número libre: `ruby scripts/sync-catalog.rb --next <DOMINIO>`.
 4. **Plantillas:** `docs/99_meta/templates/` según `type` (concept, guide, reference, decision, runbook, etc.).
-5. **Catálogo:** mantener coherentes rutas relevantes con `docs/99_meta/catalog.yaml` cuando agregues docs indexados.
+5. **Catálogo:** `docs/99_meta/catalog.yaml` se **deriva** del frontmatter — corré `ruby scripts/sync-catalog.rb` tras agregar o mover docs (no lo edites a mano).
 6. **Naming de archivos:** semántico y estable (`jwt-refresh-flow.md`); evitar `final-v2`, `misc`.
 
 ## Tipos documentales

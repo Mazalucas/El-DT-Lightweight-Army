@@ -1,0 +1,36 @@
+# Atelier — guías por stack de implementación
+version: 1
+updated: "2026-06-13"
+
+stacks:
+  - id: html-tailwind
+    signals: [html, tailwind, vanilla]
+    default: true
+    notes: "Default when stack unspecified"
+  - id: react
+    signals: [react, cra, vite react]
+    libraries: [shadcn/ui, radix-ui, mui]
+  - id: nextjs
+    signals: [next.js, nextjs, next js]
+    libraries: [shadcn/ui, tailwind, @mui/material]
+  - id: shadcn
+    signals: [shadcn, shadcn/ui]
+    notes: "Customize tokens — never ship default theme unmodified"
+  - id: vue
+    signals: [vue, nuxt]
+    libraries: [nuxt ui, vuetify]
+  - id: carbon-react
+    signals: [carbon, @carbon/react]
+    design_system: carbon-design
+  - id: fluent-react
+    signals: [fluent, @fluentui/react-components]
+    design_system: fluent-design
+  - id: swiftui
+    signals: [swiftui, ios]
+    design_system: apple-hig
+  - id: compose
+    signals: [jetpack compose, android compose]
+    design_system: material-design
+  - id: react-native
+    signals: [react native, expo]
+    libraries: [react-native-paper]

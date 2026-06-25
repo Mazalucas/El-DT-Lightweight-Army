@@ -34,6 +34,7 @@ logs/
 # Vitals — local only (plantillas en repo; valores reales no viajan por Git)
 vitals/workspace.yaml
 vitals/ops/session.yaml
+vitals/ops/dt-upstream-state.md
 
 # Borradores personales temporales (si usás vitals/work/inbox/)
 vitals/work/inbox/**/draft-*
@@ -43,3 +44,17 @@ vitals/work/inbox/**/draft-*
 
 # Marketing — contexto por proyecto (skill product-marketing)
 .agents/product-marketing.md
+
+# Atelier — contexto de diseño unificado (skill design-context)
+.agents/design-context.md
+.agents/design-system/
+
+# Demos temporales con marca (Atelier) — no versionar en plantilla
+.cursor/skills/design/templates/preview/examples/
+.agent/skills/design/templates/preview/examples/
+
+# Generaciones locales (nunca en plantilla clonable)
+output/
+temporal/
+tools/**/node_modules/
+tools/**/out/

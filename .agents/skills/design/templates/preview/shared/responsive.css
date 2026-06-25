@@ -1,0 +1,65 @@
+/**
+ * Atelier — shared mobile burger primitives
+ * Surface-specific drawer behavior lives in each surface CSS.
+ */
+
+.atelier-mobile-overlay {
+  position: fixed;
+  inset: 44px 0 0;
+  background: rgba(2, 8, 23, 0.46);
+  z-index: 9;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.atelier-mobile-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.atelier-burger {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid currentColor;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.atelier-burger-lines {
+  width: 18px;
+  height: 14px;
+  display: grid;
+  align-content: space-between;
+}
+
+.atelier-burger-lines i {
+  display: block;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transform-origin: center;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.atelier-burger[aria-expanded="true"] .atelier-burger-lines i:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.atelier-burger[aria-expanded="true"] .atelier-burger-lines i:nth-child(2) {
+  opacity: 0;
+}
+
+.atelier-burger[aria-expanded="true"] .atelier-burger-lines i:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+body.atelier-mobile-lock {
+  overflow: hidden;
+}

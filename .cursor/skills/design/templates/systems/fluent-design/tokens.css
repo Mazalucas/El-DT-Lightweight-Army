@@ -1,0 +1,47 @@
+/**
+ * Fluent Design 2 — semantic tokens (Atelier template)
+ */
+:root {
+  --ds-font: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+
+  --ds-primary: #0078d4;
+  --ds-on-primary: #ffffff;
+  --ds-primary-hover: #106ebe;
+  --ds-accent: #0078d4;
+  --ds-surface: #faf9f8;
+  --ds-surface-card: #ffffff;
+  --ds-surface-secondary: #f3f2f1;
+  --ds-stroke: #edebe9;
+  --ds-stroke-strong: #c8c6c4;
+  --ds-text-primary: #242424;
+  --ds-text-secondary: #616161;
+  --ds-text-disabled: #a19f9d;
+
+  --ds-acrylic: rgba(255, 255, 255, 0.85);
+  --ds-blur: blur(30px);
+
+  --ds-radius-sm: 4px;
+  --ds-radius-md: 8px;
+  --ds-radius-lg: 12px;
+
+  --ds-shadow-2: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.14);
+  --ds-shadow-4: 0 0 2px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.14);
+
+  --ds-space-4: 16px;
+  --ds-space-5: 20px;
+  --ds-space-6: 24px;
+  --ds-space-7: 32px;
+  --ds-space-8: 48px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ds-surface: #1f1f1f;
+    --ds-surface-card: #292929;
+    --ds-surface-secondary: #141414;
+    --ds-text-primary: #ffffff;
+    --ds-text-secondary: #adadad;
+    --ds-stroke: #3d3d3d;
+    --ds-acrylic: rgba(32, 32, 32, 0.9);
+  }
+}

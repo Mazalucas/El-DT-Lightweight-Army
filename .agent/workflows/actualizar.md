@@ -1,11 +1,11 @@
 ---
-description: "[Rutina] Traer lo último del equipo desde GitHub."
+description: "[Rutina] Sincronizar tu proyecto y comprobar novedades del framework DT."
 dt_command: actualizar
 ---
 # /actualizar
 
 **Grupo:** Rutina del día a día
-**En una frase:** Traer lo último del equipo desde GitHub.
+**En una frase:** Sincronizar tu proyecto y comprobar novedades del framework DT.
 **Cuándo:** Al abrir el editor; antes de /guardar si estás behind.
 **Quién:** Cualquier operador del repo.
 

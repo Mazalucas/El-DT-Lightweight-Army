@@ -1,0 +1,59 @@
+# Manifiesto de reglas DT — metadata por regla (IDE-agnóstica).
+# Fuente única: el CUERPO vive en vitals/specs/rule-bodies/<stem>.body.md
+# El emisor (scripts/sync-ide) combina esta metadata con el cuerpo para
+# generar el frontmatter correcto en cada IDE. No editar rules a mano.
+version: 1
+updated: "2026-06-23"
+
+rules:
+  - stem: 00-orquestador-core
+    description: "Núcleo del Orquestador - Personalidad del DT y pipeline base"
+    alwaysApply: true
+  - stem: 01-protocolos-dt
+    description: "Protocolos obligatorios del DT - Cuestionar, alternativas, puntos ciegos"
+    alwaysApply: true
+  - stem: 02-documentacion
+    description: "Protocolo de documentación orientada a IA — capas docs/, metadata, IDs DOC-<DOMINIO>, canónico en 99_meta"
+    alwaysApply: true
+  - stem: 03-catalogo-subagentes
+    description: "Catálogo de subagentes - Qué existen y cuándo invocarlos"
+    alwaysApply: true
+  - stem: 04-recomendacion-herramientas
+    description: "Sugerir al usuario commands, workflows y subagentes pertinentes"
+    agent_description: "Sugerir al usuario workflows, skills y comandos pertinentes"
+    alwaysApply: true
+  - stem: 05-multi-project-git
+    description: "Resolver a qué proyecto o git_root aplica un pedido en workspaces multi-repo"
+    alwaysApply: true
+  - stem: 06-dt-colaboracion
+    description: "Colaboración multiusuario — sesión solo con /yo, identidad obligatoria en conversación"
+    alwaysApply: true
+  - stem: 07-orden-continuo
+    description: "Orden continuo - loop autónomo siempre activo que verifica y corrige el orden con dt-doctor"
+    alwaysApply: true
+  - stem: 08-stack-web-default
+    description: "Stack web canónico — Node + Firebase (soft default); propagar a subagentes en desarrollo web"
+    alwaysApply: true
+  - stem: 15-engineering-reuse
+    description: "Ingeniería reuse-first — discover before create, jerarquía de reutilización, entregable Qué reutilicé"
+    alwaysApply: true
+  - stem: 10-arquitectura-backend
+    description: "Convenciones de arquitectura backend, APIs, capas, manejo de errores"
+    globs: "**/backend/**/*, **/api/**/*, **/*.py, **/*.go, **/*.ts, **/server/**/*"
+    alwaysApply: false
+  - stem: 20-frontend-ui
+    description: "Convenciones de frontend, componentes, estado, accesibilidad"
+    globs: "**/*.tsx, **/*.vue, **/*.jsx, **/frontend/**/*, **/components/**/*"
+    alwaysApply: false
+  - stem: 30-testing
+    description: "Convenciones de testing, cobertura mínima, tipos de tests, mocks"
+    globs: "**/*.test.*, **/*.spec.*, **/tests/**/*, **/__tests__/**/*"
+    alwaysApply: false
+  - stem: 40-devops
+    description: "Convenciones DevOps — CI/CD, IaC, deploy Firebase, DRY en pipelines"
+    globs: "**/.github/workflows/**, **/Dockerfile*, **/docker-compose*, **/terraform/**, **/firebase.json, **/cloudbuild*"
+    alwaysApply: false
+  - stem: 90-seguridad-secrets
+    description: "Seguridad y manejo de secrets - nunca hardcodear credenciales"
+    globs: "**/.env*, **/config/**/*, **/*secrets*, **/*credentials*"
+    alwaysApply: false

@@ -1,0 +1,4 @@
+/* Apple HIG — pitch scroll */
+.doc-card, .doc-phase, .doc-kpi, .doc-team-member { border-radius: 12px; }
+.doc-hero h1 { font-weight: 700; letter-spacing: -0.04em; }
+.doc-nav { backdrop-filter: saturate(180%) blur(20px); }

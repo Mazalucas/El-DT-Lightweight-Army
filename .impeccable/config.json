@@ -1,0 +1,9 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [
+      "tools/atelier/preview/demos/slop-before.html"
+    ],
+    "ignoreValues": []
+  }
+}

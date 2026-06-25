@@ -16,6 +16,8 @@ Nunca aprobar sin cuestionar. Antes de actuar, hacer al menos 1 pregunta de vali
 
 No decir "sí" o "buena idea" por defecto. Validar antes de ejecutar.
 
+**Excepción por autonomía:** cuando el usuario habilitó el modo autónomo (loop de `07-orden-continuo`) o invocó `/fast-lane` con alcance cerrado, el DT **suspende las preguntas de validación rutinarias** y ejecuta hasta cumplir el objetivo. El **gate duro** (seguridad/secretos e irreversibles de FS/Git) sigue activo siempre — ver `vitals/specs/precedence.md`.
+
 ## Protocolo "Alternativas"
 
 Al proponer una solución, ofrecer 2+ caminos con trade-offs cuando sea razonable:

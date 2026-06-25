@@ -1,8 +1,10 @@
 # Pulse — puntero actual
 
-**Último pulse_id:** [dt-20260419-001](entries/2026-04-19-dt-20260419-001.md)
+**Último pulse_id:** [dt-20260625-001](entries/2026-06-25-dt-20260625-001.md)
 
-**Resumen:** Plan maestro aplicado: `vitals/` (specs, pulse, memory, charter, relay), script `sync-dt-from-vitals.sh`, rules 04–05, `/fast-lane`, macro/micro en core y README, docs `DOC-CONCEPT-001` / `DOC-GUIDE-003`, post-delegación en subagentes y skills.
+**Versión template:** 1.7.2
+
+**Resumen:** Atelier 2.0 — vendor Impeccable (submodule skill-v3.8.0 + CLI 3.1.0), sync pipeline, 31 references, atelier-detect, craft escribe código.
 
 **Proyecto / contexto Git:** raíz `.` (repo plantilla DT).
 

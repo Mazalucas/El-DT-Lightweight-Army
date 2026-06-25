@@ -1,21 +1,65 @@
 ![El DT — Technical Director: orchestrator core, 8-step workflow, and subagents](assets/el-dt-readme-banner.png)
 
-# El DT — Technical Director
+# El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.6.3**
+**v1.7.2**
 
-> Stop settling for an assistant that **only ships**. El DT is the framework that turns your AI into a **Technical Director**: it structures the conversation, **challenges you before production changes**, offers **alternatives with trade-offs**, and closes with **visible risks**.
+*Tu IA con equipo, criterio y herramientas — no un chat que dice “sí” a todo.*
 
-**Multi-IDE:** Cursor and Antigravity — [docs/02_guides/ide-setup.md](docs/02_guides/ide-setup.md) (`DOC-GUIDE-001`).
+**El DT** es un Director de Proyecto para tu IA: no solo ejecuta — **organiza el trabajo**, **te hace preguntas antes de avanzar**, **propone alternativas** y **te avisa de riesgos** antes de cerrar.
+
+Delega en **21 especialistas** (producto, diseño, marketing, documentación, calidad…) y trae herramientas listas para:
+
+- **Páginas web y productos digitales** — landings, dashboards, pantallas de login ([Atelier](#atelier--diseño-web-y-presentaciones))
+- **Presentaciones y pitches** — decks, slides, material para inversores ([Atelier](#atelier--diseño-web-y-presentaciones))
+- **Videos** — promos, explainers, motion graphics ([Remotion](#remotion--videos))
+- **Marketing** — copy, SEO, campañas, lanzamientos ([42 skills tácticas](#marketing--42-skills-tácticas))
+
+Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y más). **Empezá en 2 minutos:** [`/bienvenida`](#primera-vez) → [`/yo`](#ritual-del-día).
 
 ---
 
-## Cerebro del equipo — empezá acá
+## Índice
 
-Este repo es **memoria versionada + reglas** para que varias personas trabajen con la misma IA sin pisarse. La referencia técnica completa está en **[docs/00_overview/cerebro-equipo-mecanismos-dt.md](docs/00_overview/cerebro-equipo-mecanismos-dt.md)** (`DOC-OV-004`). La IA debe leer **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
+- [Empezá acá](#empezá-acá)
+- [Ritual del día](#ritual-del-día)
+- [Qué puede hacer El DT](#qué-puede-hacer-el-dt)
+- [Comandos principales](#comandos-principales)
+- [Atelier · Remotion · Marketing](#atelier--diseño-web-y-presentaciones)
+- [Quick setup (English)](#quick-setup-english)
+- [Para el equipo técnico](#para-el-equipo-técnico)
 
-### Ritual diario (regla de oro)
+---
+
+## Empezá acá
+
+| Si querés… | Hacé esto |
+|------------|-----------|
+| Usar El DT por primera vez | `/bienvenida` → `/yo` |
+| Trabajar en el día a día | `/actualizar` → `/yo` → trabajar → `/guardar` |
+| Una tarea grande, paso a paso | `/orquestar` |
+| Algo puntual ya definido | `/fast-lane` |
+| Diseñar una web, dashboard o presentación | `/atelier` |
+| Crear un video | `/remotion` |
+| Ver el equipo completo de especialistas | [Catálogo de 21](#catálogo-de-los-21-especialistas) |
+
+Este repo es **memoria compartida + reglas** para que varias personas trabajen con la misma IA sin pisarse. Guía humana: [cerebro del equipo](docs/00_overview/cerebro-equipo-mecanismos-dt.md). La IA lee **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
+
+### Primera vez {#primera-vez}
+
+```bash
+git clone <este-repo>
+cd El-DT-Lightweight-Army
+```
+
+En el chat: **`/bienvenida`** → **`/yo`** (ej. *"Soy Ana García, analista"*). Guía detallada: [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
+
+No hace falta `/actualizar` en un clone recién hecho — usalo cuando el remoto del producto o del template tenga novedades.
+
+---
+
+## Ritual del día {#ritual-del-día}
 
 ```text
 /actualizar  →  /yo  →  trabajar  →  /guardar
@@ -23,88 +67,157 @@ Este repo es **memoria versionada + reglas** para que varias personas trabajen c
 
 | Paso | Qué hace |
 |------|----------|
-| **`/actualizar`** | Baja cambios del equipo (`git pull --rebase`); **no** toca tu sesión local |
-| **`/yo`** | Decís quién sos hoy — la laptop no lo adivina |
-| **Trabajar** | `/orquestar`, `/fast-lane`, código, docs, pulse… |
-| **`/guardar`** | Subís a GitHub **sin** subir `session.yaml` ni secretos |
+| **`/actualizar`** | Sincronizar tu proyecto (`origin`) y avisar si hay release nuevo del framework DT |
+| **`/yo`** | Decir quién sos en esta computadora |
+| **Trabajar** | Pedir lo que necesites (`/orquestar`, diseño, video, docs…) |
+| **`/guardar`** | Subir tu trabajo al equipo (sin datos privados de tu PC) |
 
-Si **no tenés sesión** (`vitals/ops/session.yaml`), la IA te pedirá **`/yo`** antes de escribir en el repo. La sesión **solo se crea con `/yo`** (no copies archivos a mano).
-
-### Primera vez en esta máquina
-
-```bash
-git clone <este-repo>
-cd El-DT-Lightweight-Army
-```
-
-En el chat: **`/actualizar`** → **`/yo`** (ej. *"Soy Ana García, analista"*) — opcional **`/setup-cursor`** o **`/setup-antigravity`** si querés un solo IDE.
-
-### Git: qué va y qué no va al remoto
-
-| Path | ¿En Git? | Por qué |
-|------|----------|---------|
-| `vitals/ops/session.yaml` | **No** | Quién está en **esta** PC ahora |
-| `vitals/config/roster.yaml` | **Sí** | Equipo registrado |
-| `vitals/workspace.yaml` | **No** | Multi-repo local (plantilla: `.example`) |
-| `.env`, `*.credentials` | **No** | Secretos |
-| `.cursor/`, `.agent/`, `.agents/README.md`, `docs/`, skills | **Sí** | Comportamiento de la IA |
-| `.agents/product-marketing.md` | **No** | Contexto de producto local |
-
-### Commands (resumen)
-
-Fuente canónica de taglines y grupos: **[vitals/config/commands-meta.yaml](vitals/config/commands-meta.yaml)**
-
-| Grupo | Commands |
-|-------|----------|
-| **Rutina** | `/actualizar` · `/yo` · `/guardar` |
-| **Trabajo** | `/orquestar` · `/fast-lane` · `/cuestionar` · `/contexto` · `/prepr` |
-| **Framework** | `/setup-cursor` · `/setup-antigravity` · `/github-save-small` |
-
-En **Antigravity**, los de rutina están en [`.agent/workflows/`](.agent/workflows/) (`actualizar`, `yo`, `guardar`); la lógica vive en [`.agent/skills/`](.agent/skills/) (ver [.antigravity/rules.md](.antigravity/rules.md)).
+Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. Tu identidad en esta PC **no se sube a GitHub** — es privada.
 
 ### Tarjeta pegable al monitor
 
 ```text
-  actualizar → yo → trabajar → guardar
-  session.yaml = solo en tu PC
+  bienvenida → yo → trabajar → guardar
+  actualizar = proyecto + aviso si hay DT nuevo
+  actualizar-dt = cuando quieras incorporar el framework
+  tu identidad en esta PC = solo local
 ```
+
+---
+
+## Qué puede hacer El DT
+
+| Bloque | En pocas palabras |
+|--------|-------------------|
+| **Orquestación** | Clarifica qué querés, planifica, ejecuta y cierra señalando riesgos. Comando principal: `/orquestar`. |
+| **21 especialistas** | Producto, diseño, marketing, documentación, calidad… El DT elige quién ayuda según tu pedido. |
+| **Atelier (diseño)** | Landings, dashboards, login, presentaciones — con criterio estético y guardrails anti-“diseño genérico de IA”. |
+| **Videos y contenido** | Videos promocionales; marketing con copy, SEO, lanzamientos y campañas. |
+
+```mermaid
+flowchart TB
+  vos[Vos en el chat]
+  dt[El DT — orquestador]
+  esp[21 especialistas]
+  atelier[Atelier — webs y presentaciones]
+  video[Videos — Remotion]
+  mkt[Marketing — 42 skills]
+  vos --> dt
+  dt --> esp
+  esp --> atelier
+  esp --> video
+  esp --> mkt
+```
+
+### Los cinco protocolos
+
+El DT no es un ejecutor pasivo. Siempre aplica:
+
+1. **Validar antes de actuar** — te pregunta antes de cambios importantes.
+2. **Alternativas** — propone caminos con pros y contras.
+3. **Puntos ciegos** — riesgos y mejoras visibles al cerrar.
+4. **Conversacional** — diálogo, no informe unidireccional.
+5. **Orden** — objetivo → plan → ejecución → validación.
+
+Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc).
+
+---
+
+## Comandos principales
+
+| Comando | Para qué sirve |
+|---------|----------------|
+| **`/bienvenida`** | Primera vez — verificar que El DT está listo |
+| **`/actualizar`** | Sincronizar tu proyecto y avisar si hay DT nuevo |
+| **`/actualizar-dt`** | Incorporar release del framework DT (cuando /actualizar avise) |
+| **`/yo`** | Decir quién sos en esta máquina |
+| **`/guardar`** | Subir tu trabajo (sin secretos ni datos privados) |
+| **`/orquestar`** | Tarea grande — pipeline completo en 8 pasos |
+| **`/fast-lane`** | Algo puntual ya definido — menos preguntas rutinarias |
+| **`/cuestionar`** | Solo análisis — sin ejecutar |
+| **`/contexto`** | Mapa del repo cuando entrás o después de un pull grande |
+| **`/prepr`** | Preparar cambios como pull request |
+| **`/atelier`** | Diseñar webs, dashboards o presentaciones |
+| **`/remotion`** | Crear videos (promos, explainers, motion) |
+| **`/setup`** | Reparar configuración del editor tras un pull grande |
+
+Grupos completos y taglines: [commands-meta.yaml](vitals/config/commands-meta.yaml).
+
+---
+
+## Atelier — diseño web y presentaciones
+
+**Atelier** es la capacidad de diseño de El DT: landings, dashboards, flujos de login, pitches y decks — con selección de design system, tokens y revisión anti-slop.
+
+| Comando | Ejemplo |
+|---------|---------|
+| `/atelier init` | Crear contexto de diseño del proyecto |
+| `/atelier select [brief]` | Elegir estilo y sistema según tu pedido |
+| `/atelier detect [path]` | Detectar patrones genéricos de IA en el código |
+| `/atelier polish [target]` | Pasada final antes de entregar |
+
+Incluye **6 design systems** (Material, Apple HIG, Fluent, Carbon, Polaris, Atlassian), **5 lenguajes visuales** (Swiss, Bauhaus, minimalismo, neumorphism, glass) y biblioteca de plantillas.
+
+- Concepto: [Atelier en El DT](docs/01_concepts/design-atelier-el-dt.md)
+- Índice de skills: [.cursor/skills/design/README.md](.cursor/skills/design/README.md)
+- Plantillas: [.cursor/skills/design/templates/INDEX.md](.cursor/skills/design/templates/INDEX.md)
+
+Orquestador: **ui-designer** · Implementación en código: **frontend**.
+
+---
+
+## Remotion — videos
+
+**Remotion** convierte videos en composiciones React: promos, explainers, motion graphics, renders MP4.
+
+| Comando | Ejemplo |
+|---------|---------|
+| `/remotion init` | Arrancar un proyecto de video |
+| `/remotion promo 30s 9:16` | Video promocional vertical |
+
+Flujo típico: **marketing-strategist** (guion) → **remotion-producer** (composición y render).
+
+- Toolkit: [tools/remotion/](tools/remotion/)
+- Registro de tools: [tools/REGISTRY.md](tools/REGISTRY.md)
+
+---
+
+## Marketing — 42 skills tácticas
+
+**marketing-strategist** coordina **42 skills especializadas**: copy, SEO, ads, lanzamientos, email, pricing, CRO y más.
+
+- Índice completo: [.cursor/skills/marketing/README.md](.cursor/skills/marketing/README.md)
+- Contexto de producto (local): `.agents/product-marketing.md`
+
+[Ver listado completo de skills ↓](#marketing-strategist--42-skills-tácticas)
 
 ---
 
 ## Quick setup (English)
 
 1. **Clone** this repo (or **Use this template** on GitHub).
-2. **IDE setup** in chat: `/setup-cursor` or `/setup-antigravity` — see [ide-setup.md](docs/02_guides/ide-setup.md).
-3. **Daily ritual:** `/actualizar` → `/yo` (si no hay sesión; la IA también lo pide) → work → `/guardar`
-5. **Deep work:** `/orquestar` (full pipeline) or `/fast-lane` (closed scope)
+2. In chat: **`/bienvenida`** then **`/yo`** — see [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
+3. **Daily ritual:** `/actualizar` → `/yo` → work → `/guardar`
+4. **Design:** `/atelier` · **Video:** `/remotion` · **Deep work:** `/orquestar` or `/fast-lane`
+5. **Repair IDE drift:** `/setup` — see [ide-setup.md](docs/02_guides/ide-setup.md)
 
-Adopting El DT in an existing repo: [adopt-dt-in-existing-repo.md](docs/02_guides/adopt-dt-in-existing-repo.md) (`DOC-GUIDE-003`).
+Adopting El DT in an existing repo: [adopt-dt-in-existing-repo.md](docs/02_guides/adopt-dt-in-existing-repo.md).
 
----
-
-## Why it exists
-
-Models default to agreeableness. **El DT flips that:** clarity and validation first, execution second — **protocols**, **precedence** ([vitals/specs/precedence.md](vitals/specs/precedence.md)), and **Vitals** (pulse, opt-in memory, specs) without replacing your product `docs/`.
+Works in **Cursor**, **Antigravity**, **Claude Code**, **Codex** and **GitHub Copilot**.
 
 ---
 
-## The five protocols
+## Para el equipo técnico
 
-Detail: [`.cursor/rules/01-protocolos-dt.mdc`](.cursor/rules/01-protocolos-dt.mdc)
+### El DT mantiene el proyecto ordenado
 
-1. **No enabler** — Validate before high-impact actions.
-2. **Alternatives** — Multiple paths with trade-offs.
-3. **Blind spots** — Risks and reviewer flags on delivery.
-4. **Conversational** — Dialogue, not one-way reports.
-5. **Order** — Goal → Plan → Execution → Validation.
+Tras cambios importantes en documentación, reglas o estructura, El DT verifica que todo siga coherente (frontmatter, catálogo, enlaces, paridad entre editores). Motor: [`scripts/dt-doctor.sh`](scripts/dt-doctor.sh). Detalle: regla `07-orden-continuo` · [precedence](vitals/specs/precedence.md).
 
----
+### Orquestación — macro vs micro
 
-## Macro vs micro
+**Macro:** Clarificar → Planificar → Ejecutar → Entregar.
 
-**Macro:** Clarify → Plan and validate → Execute → Deliver ([`00-orquestador-core`](.cursor/rules/00-orquestador-core.mdc)).
-
-**Micro:** `/orquestar` = 8 steps (clarify … documentation closure).
+**Micro:** `/orquestar` = 8 pasos (clarificar … cierre documental).
 
 ```mermaid
 flowchart LR
@@ -116,11 +229,9 @@ flowchart LR
   req --> clarify --> gate --> planExec --> deliver
 ```
 
-Security and secrets **always** apply, including under `/fast-lane`.
+Seguridad y secretos **siempre** aplican, incluso bajo `/fast-lane`.
 
----
-
-## Vitals
+### Vitals
 
 | Layer | Path |
 |-------|------|
@@ -132,62 +243,65 @@ Security and secrets **always** apply, including under `/fast-lane`.
 
 | Script | Uso |
 |--------|-----|
-| [sync-dt-from-vitals.sh](scripts/sync-dt-from-vitals.sh) | Rules `04`–`05` desde `vitals/specs/rule-bodies/` |
-| [sync-commands-from-meta.sh](scripts/sync-commands-from-meta.sh) | Commands en Cursor + Antigravity desde `commands-meta.yaml` |
-| [sync-skills-parity.sh](scripts/sync-skills-parity.sh) | Skills `.cursor/skills` → `.agent/skills` (incl. árbol `marketing/*`) |
+| [dt-doctor.sh](scripts/dt-doctor.sh) | Verificador read-only del orden |
+| [sync-ide.sh](scripts/sync-ide.sh) | Emisor único multi-IDE (rules, skills, commands) |
+| [sync-catalog.rb](scripts/sync-catalog.rb) | Catálogo de docs derivado del frontmatter |
+| [sync-commands-from-meta.sh](scripts/sync-commands-from-meta.sh) | Commands desde `commands-meta.yaml` |
+| [sync-skills-parity.sh](scripts/sync-skills-parity.sh) | Skills `.cursor/skills` → `.agent/skills` |
 
 Detalle: [scripts/README.md](scripts/README.md).
 
----
+### Subagentes (21) — resumen por grupo
 
-## Subagentes (20)
+| Grupo | Especialistas | Ejemplos de uso |
+|-------|---------------|-----------------|
+| **Engineering** | arquitecto, frontend, devops, ui-designer, remotion-producer | APIs, UI, deploy, Atelier, video |
+| **Planning** | prd-creator, srd-creator, development-planner | PRD, specs técnicas, roadmap |
+| **Testing** | qa | Tests, edge cases |
+| **Design & UX** | ux-researcher | Personas, journey mapping |
+| **Product** | product-strategist, feedback-synthesizer, researcher | Priorización, research |
+| **Documentation** | doc | README, ADRs, docs por niveles |
+| **Marketing & Content** | content-creator, marketing-strategist, brand-guardian, growth-hacker, pitch-specialist, storytelling-specialist | Copy, campañas, pitch, narrativa |
+| **Operations** | operations-maintainer | Monitoreo, incidentes |
 
-El DT delega en **20 especialistas**. Cada uno tiene definición de agente en **Cursor** y skill de rol en **Antigravity** (y espejo en `.agent/skills/` para todos).
+Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigravity/Claude vía `sync-ide`). Reglas de delegación: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc).
 
-| IDE | Definición del subagente | Skill de rol | Skills tácticas extra |
-|-----|--------------------------|--------------|------------------------|
-| **Cursor** | [`.cursor/agents/{nombre}.md`](.cursor/agents/) | [`.cursor/skills/{nombre}/`](.cursor/skills/) cuando existe | Solo **marketing-strategist**: [`.cursor/skills/marketing/`](.cursor/skills/marketing/) |
-| **Antigravity** | Misma skill de rol | [`.agent/skills/{nombre}/SKILL.md`](.agent/skills/) | [`.agent/skills/marketing/`](.agent/skills/marketing/) |
+**Skills de rutina DT** (no son subagentes): `dt-setup`, `dt-session`, `git-actualizar`, `git-guardar`, `dt-actualizar`, `github-save-release`.
 
-Tras editar skills en Cursor: `./scripts/sync-skills-parity.sh`. Reglas de delegación: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc).
-
-### Catálogo de los 20 subagentes
+#### Catálogo de los 21 especialistas
 
 | # | Subagente | Grupo | Rol | Invocar cuando (keywords) | Agente (Cursor) | Skill de rol |
 |---|-----------|-------|-----|---------------------------|-----------------|--------------|
-| 1 | **arquitecto** | Engineering | Backend, APIs, arquitectura, patrones | `backend`, `api`, `database`, `server`, `arquitectura`, `SRD` | [agente](.cursor/agents/arquitecto.md) | [`.agent/skills/arquitecto/`](.agent/skills/arquitecto/) |
-| 2 | **frontend** | Engineering | UI, componentes, accesibilidad | `frontend`, `ui`, `ux`, `interface`, `client`, `componentes` | [agente](.cursor/agents/frontend.md) | [`.agent/skills/frontend/`](.agent/skills/frontend/) |
-| 3 | **devops** | Engineering | CI/CD, infra, deploy | `deploy`, `infrastructure`, `ci/cd`, `devops`, `pipelines` | [agente](.cursor/agents/devops.md) | [`.agent/skills/devops/`](.agent/skills/devops/) |
-| 4 | **ui-designer** | Engineering | Mockups, design systems, specs UI | `UI design`, `mockups`, `design specs`, `design systems` | [agente](.cursor/agents/ui-designer.md) | [`.agent/skills/ui-designer/`](.agent/skills/ui-designer/) |
-| 5 | **prd-creator** | Planning | PRD, visión de producto, user stories | `product idea`, `requirements`, `PRD` | [agente](.cursor/agents/prd-creator.md) | [`.agent/skills/prd-creator/`](.agent/skills/prd-creator/) |
-| 6 | **srd-creator** | Planning | SRD y specs técnicas desde PRD | `technical spec`, `SRD`, `PRD to technical` | [agente](.cursor/agents/srd-creator.md) | [`.agent/skills/srd-creator/`](.agent/skills/srd-creator/) |
-| 7 | **development-planner** | Planning | Fases, MVP, roadmap, timelines | `development plan`, `phases`, `MVP`, `roadmap` | [agente](.cursor/agents/development-planner.md) | [`.agent/skills/development-planner/`](.agent/skills/development-planner/) |
-| 8 | **qa** | Testing | Tests, edge cases, validación | `test`, `qa`, `quality`, `pruebas` | [agente](.cursor/agents/qa.md) | [`.agent/skills/qa/`](.agent/skills/qa/) |
-| 9 | **ux-researcher** | Design & UX | Personas, journey, research UX | `user research`, `personas`, `UX`, `journey mapping` | [agente](.cursor/agents/ux-researcher.md) | [`.agent/skills/ux-researcher/`](.agent/skills/ux-researcher/) |
-| 10 | **product-strategist** | Product | Priorización, roadmap de producto | `prioritization`, `roadmap`, `product strategy` | [agente](.cursor/agents/product-strategist.md) | [`.agent/skills/product-strategist/`](.agent/skills/product-strategist/) |
-| 11 | **feedback-synthesizer** | Product | Síntesis de feedback en insights | `feedback`, `synthesis`, `insights` | [agente](.cursor/agents/feedback-synthesizer.md) | [`.agent/skills/feedback-synthesizer/`](.agent/skills/feedback-synthesizer/) |
-| 12 | **researcher** | Product | Investigación y análisis de información | `research`, `analyze`, `investigate` | [agente](.cursor/agents/researcher.md) | [`.agent/skills/researcher/`](.agent/skills/researcher/) |
-| 13 | **doc** | Documentation | Docs por niveles, README, ADRs | `document`, `docs`, `readme`, `documentación` | [agente](.cursor/agents/doc.md) | [`.agent/skills/doc/`](.agent/skills/doc/) |
-| 14 | **content-creator** | Marketing & Content | Contenido multi-canal, SEO, brand | `content`, `copy` (contenido editorial) | [agente](.cursor/agents/content-creator.md) | [`.agent/skills/content-creator/`](.agent/skills/content-creator/) |
-| 15 | **marketing-strategist** | Marketing & Content | Estrategia + **42 skills tácticas** | `marketing`, `CRO`, `SEO`, `ads`, `campaigns`, `growth` | [agente](.cursor/agents/marketing-strategist.md) | [`.cursor/skills/marketing-strategist/`](.cursor/skills/marketing-strategist/) + [tácticas ↓](#marketing-strategist--42-skills-tácticas) |
-| 16 | **brand-guardian** | Marketing & Content | Marca y brand guidelines | `brand`, `brand compliance` | [agente](.cursor/agents/brand-guardian.md) | [`.agent/skills/brand-guardian/`](.agent/skills/brand-guardian/) |
-| 17 | **growth-hacker** | Marketing & Content | Experimentos y conversión | `growth`, `experiments`, `conversion` | [agente](.cursor/agents/growth-hacker.md) | [`.agent/skills/growth-hacker/`](.agent/skills/growth-hacker/) |
-| 18 | **pitch-specialist** | Marketing & Content | Pitch inversores y stakeholders | `pitch`, `presentation`, `investors` | [agente](.cursor/agents/pitch-specialist.md) | [`.agent/skills/pitch-specialist/`](.agent/skills/pitch-specialist/) |
-| 19 | **storytelling-specialist** | Marketing & Content | Narrativa y story arcs | `storytelling`, `narrative`, `story` | [agente](.cursor/agents/storytelling-specialist.md) | [`.agent/skills/storytelling-specialist/`](.agent/skills/storytelling-specialist/) |
-| 20 | **operations-maintainer** | Operations | Monitoreo, incidentes, mantenimiento | `operations`, `monitoring`, `incidentes` | [agente](.cursor/agents/operations-maintainer.md) | [`.agent/skills/operations-maintainer/`](.agent/skills/operations-maintainer/) |
+| 1 | **arquitecto** | Engineering | Backend, APIs, arquitectura, patrones | `backend`, `api`, `database`, `server`, `arquitectura`, `SRD` | [agente](.cursor/agents/arquitecto.md) | [`.cursor/skills/arquitecto/`](.cursor/skills/arquitecto/) |
+| 2 | **frontend** | Engineering | UI, componentes, accesibilidad | `frontend`, `ui`, `ux`, `interface`, `client`, `componentes` | [agente](.cursor/agents/frontend.md) | [`.cursor/skills/frontend/`](.cursor/skills/frontend/) |
+| 3 | **devops** | Engineering | CI/CD, infra, deploy | `deploy`, `infrastructure`, `ci/cd`, `devops`, `pipelines` | [agente](.cursor/agents/devops.md) | [`.cursor/skills/devops/`](.cursor/skills/devops/) |
+| 4 | **ui-designer** | Engineering | Orquestador **Atelier** + specs UI | `UI design`, `mockups`, `Atelier`, `landing`, `dashboard`, `design system` | [agente](.cursor/agents/ui-designer.md) | [`.cursor/skills/ui-designer/`](.cursor/skills/ui-designer/) |
+| 5 | **remotion-producer** | Engineering | Video programático **Remotion** | `Remotion`, `video programático`, `motion graphics`, `render MP4` | [agente](.cursor/agents/remotion-producer.md) | [`.cursor/skills/remotion-producer/`](.cursor/skills/remotion-producer/) |
+| 6 | **prd-creator** | Planning | PRD, visión de producto, user stories | `product idea`, `requirements`, `PRD` | [agente](.cursor/agents/prd-creator.md) | [`.agent/skills/prd-creator/`](.agent/skills/prd-creator/) |
+| 7 | **srd-creator** | Planning | SRD y specs técnicas desde PRD | `technical spec`, `SRD`, `PRD to technical` | [agente](.cursor/agents/srd-creator.md) | [`.agent/skills/srd-creator/`](.agent/skills/srd-creator/) |
+| 8 | **development-planner** | Planning | Fases, MVP, roadmap, timelines | `development plan`, `phases`, `MVP`, `roadmap` | [agente](.cursor/agents/development-planner.md) | [`.agent/skills/development-planner/`](.agent/skills/development-planner/) |
+| 9 | **qa** | Testing | Tests, edge cases, validación | `test`, `qa`, `quality`, `pruebas` | [agente](.cursor/agents/qa.md) | [`.cursor/skills/qa/`](.cursor/skills/qa/) |
+| 10 | **ux-researcher** | Design & UX | Personas, journey, research UX | `user research`, `personas`, `UX`, `journey mapping` | [agente](.cursor/agents/ux-researcher.md) | [`.agent/skills/ux-researcher/`](.agent/skills/ux-researcher/) |
+| 11 | **product-strategist** | Product | Priorización, roadmap de producto | `prioritization`, `roadmap`, `product strategy` | [agente](.cursor/agents/product-strategist.md) | [`.agent/skills/product-strategist/`](.agent/skills/product-strategist/) |
+| 12 | **feedback-synthesizer** | Product | Síntesis de feedback en insights | `feedback`, `synthesis`, `insights` | [agente](.cursor/agents/feedback-synthesizer.md) | [`.agent/skills/feedback-synthesizer/`](.agent/skills/feedback-synthesizer/) |
+| 13 | **researcher** | Product | Investigación y análisis de información | `research`, `analyze`, `investigate` | [agente](.cursor/agents/researcher.md) | [`.agent/skills/researcher/`](.agent/skills/researcher/) |
+| 14 | **doc** | Documentation | Docs por niveles, README, ADRs | `document`, `docs`, `readme`, `documentación` | [agente](.cursor/agents/doc.md) | [`.agent/skills/doc/`](.agent/skills/doc/) |
+| 15 | **content-creator** | Marketing & Content | Contenido multi-canal, SEO, brand | `content`, `copy` (contenido editorial) | [agente](.cursor/agents/content-creator.md) | [`.agent/skills/content-creator/`](.agent/skills/content-creator/) |
+| 16 | **marketing-strategist** | Marketing & Content | Estrategia + **42 skills tácticas** | `marketing`, `CRO`, `SEO`, `ads`, `campaigns`, `growth` | [agente](.cursor/agents/marketing-strategist.md) | [`.cursor/skills/marketing-strategist/`](.cursor/skills/marketing-strategist/) |
+| 17 | **brand-guardian** | Marketing & Content | Marca y brand guidelines | `brand`, `brand compliance` | [agente](.cursor/agents/brand-guardian.md) | [`.agent/skills/brand-guardian/`](.agent/skills/brand-guardian/) |
+| 18 | **growth-hacker** | Marketing & Content | Experimentos y conversión | `growth`, `experiments`, `conversion` | [agente](.cursor/agents/growth-hacker.md) | [`.agent/skills/growth-hacker/`](.agent/skills/growth-hacker/) |
+| 19 | **pitch-specialist** | Marketing & Content | Pitch inversores y stakeholders | `pitch`, `presentation`, `investors` | [agente](.cursor/agents/pitch-specialist.md) | [`.agent/skills/pitch-specialist/`](.agent/skills/pitch-specialist/) |
+| 20 | **storytelling-specialist** | Marketing & Content | Narrativa y story arcs | `storytelling`, `narrative`, `story` | [agente](.cursor/agents/storytelling-specialist.md) | [`.agent/skills/storytelling-specialist/`](.agent/skills/storytelling-specialist/) |
+| 21 | **operations-maintainer** | Operations | Monitoreo, incidentes, mantenimiento | `operations`, `monitoring`, `incidentes` | [agente](.cursor/agents/operations-maintainer.md) | [`.agent/skills/operations-maintainer/`](.agent/skills/operations-maintainer/) |
 
-**Skills de rutina DT** (no son subagentes): `dt-session`, `git-actualizar`, `git-guardar`, `github-save-release` en [`.cursor/skills/`](.cursor/skills/) — comandos `/yo`, `/actualizar`, `/guardar`, `/github-save-small`.
+#### Marketing strategist — 42 skills tácticas
 
-### Marketing strategist — 42 skills tácticas
+Origen: [marketingskills](https://github.com/coreyhaines31/marketingskills) v2. Contexto compartido: `.agents/product-marketing.md` (local).
 
-Único subagente con **pack de skills especializadas** (origen: [marketingskills](https://github.com/coreyhaines31/marketingskills) v2). Contexto compartido: `.agents/product-marketing.md` (local; skill `product-marketing`).
-
-| IDE | Orquestadora | Pack táctico (`SKILL.md` + `references/` + `evals/`) |
-|-----|--------------|------------------------------------------------------|
+| IDE | Orquestadora | Pack táctico |
+|-----|--------------|--------------|
 | **Cursor** | [`.cursor/skills/marketing-strategist/`](.cursor/skills/marketing-strategist/) | [`.cursor/skills/marketing/{skill}/`](.cursor/skills/marketing/) |
 | **Antigravity** | [`.agent/skills/marketing-strategist/`](.agent/skills/marketing-strategist/) | [`.agent/skills/marketing/{skill}/`](.agent/skills/marketing/) |
-
-Índice: [`.cursor/skills/marketing/README.md`](.cursor/skills/marketing/README.md)
 
 | Skill | Área |
 |-------|------|
@@ -234,37 +348,73 @@ Tras editar skills en Cursor: `./scripts/sync-skills-parity.sh`. Reglas de deleg
 | `social` | Redes sociales |
 | `video` | Video marketing (IA) |
 
----
+#### Atelier — detalle técnico
 
-## Project layout
+Atelier 2.0: **Impeccable vendoreado** + pack design/ nativo. Contexto: `.agents/design-context.md` (local).
+
+| IDE | Router | Pack táctico | Vendor |
+|-----|--------|--------------|--------|
+| **Cursor** | [`.cursor/skills/atelier/`](.cursor/skills/atelier/) | [`.cursor/skills/design/`](.cursor/skills/design/) | [`tools/atelier/`](tools/atelier/) |
+
+Motores: `ruby scripts/dt-design-select.rb` · `./scripts/atelier-detect.sh` (Impeccable CLI, 44+ reglas)
+
+Actualizar Impeccable: `./tools/atelier/scripts/sync-from-impeccable.sh --latest` → `./scripts/sync-ide.sh` (ver `DOC-GUIDE-008`)
+
+#### Remotion — detalle técnico
+
+Toolkit en **[`tools/remotion/`](tools/remotion/)** (starter + primitivas). Best practices vendor: **`remotion-best-practices`**.
+
+Actualizar vendor skill: `./tools/remotion/scripts/update-vendor-skills.sh` → `./scripts/sync-ide.sh`
+
+### Git: qué va y qué no va al remoto
+
+| Path | ¿En Git? | Por qué |
+|------|----------|---------|
+| `vitals/ops/session.yaml` | **No** | Quién está en **esta** PC ahora |
+| `vitals/config/roster.yaml` | **Sí** | Equipo registrado |
+| `vitals/workspace.yaml` | **No** | Multi-repo local (plantilla: `.example`) |
+| `.env`, `*.credentials` | **No** | Secretos |
+| `.agents/product-marketing.md` | **No** | Contexto de producto local |
+| `.agents/design-context.md` | **No** | Contexto de diseño local |
+| `.cursor/`, `.agent/`, `docs/`, skills | **Sí** | Comportamiento de la IA |
+
+### Project layout
 
 ```text
 README.md / AGENTS.md / VERSION
-.agents/                    # README + product-marketing.md (local)
-docs/                       # Portal DOC-META-001 — cerebro DOC-OV-004
+tools/                              # Arsenal reutilizable — tools/REGISTRY.md
+.agents/                            # Contexto local (product-marketing, design-context)
+docs/                               # Portal de documentación
 vitals/
-  config/                   # commands-meta.yaml, roster.yaml
-  ops/                      # README schema; session.yaml = local (/yo)
+  config/                           # commands-meta.yaml, roster.yaml, rules-manifest.yaml
+  specs/rule-bodies/                # Cuerpos de reglas (fuente única)
+  data/                             # Registries (design, engineering)
+  ops/                              # session.yaml = local (/yo)
   pulse/ memory/ specs/
-  work/inbox/{operator_id}/ # cuaderno personal opcional
+  work/inbox/{operator_id}/
 
-.cursor/                    # rules, commands, agents, skills (+ marketing/)
-.agent/                     # Antigravity: rules, workflows, skills (+ marketing/)
+.cursor/                            # rules, commands, agents, skills (canónico)
+.agent/                             # Antigravity: rules, workflows, skills
+.claude/ .codex/                    # Espejos generados — no editar a mano
+output/                             # Generaciones locales (gitignored)
 ```
 
----
+Multi-IDE: [ide-targets.yaml](vitals/config/ide-targets.yaml) · Guía: [ide-setup.md](docs/02_guides/ide-setup.md).
 
-## Customize
+### Personalización
 
-- **Rules:** `.cursor/rules/` for your stack.
-- **Commands:** edit `vitals/config/commands-meta.yaml` first, then `.cursor/commands/` and `.agent/workflows/`.
-- **Multi-project:** `vitals/workspace.yaml` from [workspace.yaml.example](vitals/workspace.yaml.example).
+1. **Reglas:** editar `vitals/specs/rule-bodies/<stem>.body.md` + `vitals/config/rules-manifest.yaml` → `./scripts/sync-ide.sh`
+2. **Commands:** editar `vitals/config/commands-meta.yaml` → `./scripts/sync-commands-from-meta.sh`
+3. **Skills:** canónico en `.cursor/skills/` → `./scripts/sync-ide.sh`
+4. **Multi-proyecto:** `vitals/workspace.yaml` desde [workspace.yaml.example](vitals/workspace.yaml.example)
+5. **Verificar:** `./scripts/dt-doctor.sh`
 
----
+### Documentation portal
 
-## Documentation portal
-
-[docs/README.md](docs/README.md) (`DOC-OV-001`) · Protocol: [docs/99_meta/protocolo-documentacion-ia.md](docs/99_meta/protocolo-documentacion-ia.md)
+- [docs/README.md](docs/README.md) — portal principal
+- [Atelier templates](docs/03_reference/atelier-templates-index.md)
+- [Tools registry](docs/03_reference/tools-registry.md)
+- [Protocolo documentación IA](docs/99_meta/protocolo-documentacion-ia.md)
 
 ---
 

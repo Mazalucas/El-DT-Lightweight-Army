@@ -1,26 +1,34 @@
 ---
 id: DOC-GUIDE-001
-title: Configuración multi-IDE — Cursor y Antigravity
+title: Configuración multi-IDE — Cursor, Antigravity, Claude, Codex, Copilot
 type: guide
 status: canonical
 owner: dt-platform
 created: 2026-04-19
-updated: 2026-04-20
+updated: 2026-06-23
 tags:
   - cursor
   - antigravity
+  - claude
+  - codex
+  - copilot
   - setup
 domain:
   - meta
-summary: Cómo ejecutar el setup del IDE al clonar o cambiar entre Cursor y Antigravity sin conflictos.
+summary: Registro multi-IDE, /bienvenida post-clone sin Ruby, y /setup repair para maintainers desde fuentes canónicas.
 related:
   - DOC-OV-001
   - DOC-GUIDE-003
+  - DOC-GUIDE-004
+  - DOC-GUIDE-006
   - DOC-CONCEPT-001
+  - DOC-DEC-001
 keywords:
-  - setup-cursor
-  - setup-antigravity
-  - IDE
+  - setup
+  - ide-targets
+  - sync-ide
+  - dt-doctor
+  - bienvenida
 priority: high
 intended_audience:
   - engineers
@@ -29,87 +37,72 @@ source_of_truth: true
 review_cycle_days: 90
 ---
 
-# Configuración multi-IDE: Cursor y Antigravity
+# Configuración multi-IDE
 
 ## Summary
 
-El DT (Director Técnico) soporta **Cursor** y **Antigravity**. El repositorio incluye configuración para ambos IDEs. Para evitar conflictos, ejecutá el comando de setup del IDE que vas a usar.
+El DT soporta **Cursor**, **Antigravity**, **Claude Code**, **Codex** y **GitHub Copilot**. Tras clonar, **`/bienvenida`** verifica la estructura (markdown, sin Ruby). **`/setup`** repara drift regenerando desde fuentes canónicas (requiere Ruby — maintainers).
 
 ## Purpose
 
-Evitar reglas o skills duplicadas o contradictorias al trabajar con un solo IDE.
+Una sola fuente de verdad por artefacto; todos los IDEs enabled conviven sin borrar carpetas.
 
 ## Scope
 
-**Cubre:** flujo de setup al clonar o al cambiar de IDE, restauración por git.  
-**No cubre:** instalación del IDE ni cuentas.
+**Cubre:** registro de IDEs, first-run post-clone, repair, verificación de orden.
+**No cubre:** instalación de cada IDE ni cuentas.
 
-## Cuándo ejecutar el setup
+## Registro de IDEs
 
-- **Al clonar** el repositorio por primera vez
-- **Al cambiar de IDE** (por ejemplo, pasás de Cursor a Antigravity)
+El set soportado vive en **`vitals/config/ide-targets.yaml`**. Stubs: Gemini CLI y Windsurf (`enabled: false`).
 
-## Comandos de setup
+| IDE | Entrada | Reglas | Skills | Notas |
+|-----|---------|--------|--------|-------|
+| Cursor | `.cursorrules` | `.cursor/rules/*.mdc` | `.cursor/skills/` (canónico) | Origen de skills |
+| Antigravity | `.antigravity/rules.md` | `.agent/rules/*.md` | `.agent/skills/` | Commands en `.agent/workflows/` |
+| Claude Code | `CLAUDE.md` (puntero) | `.claude/rules/*.md` | `.claude/skills/` | `.claude/{commands,agents,settings.json}` |
+| Codex | `AGENTS.md` | — | `.agents/skills/` | Comandos = skills |
+| GitHub Copilot | `.github/copilot-instructions.md` | — | — | Puntero a `AGENTS.md` |
 
-### Si usás Cursor
+## Post-clone: `/bienvenida`
 
-Ejecutá el comando `/setup-cursor` en el chat del agente.
+Skill `dt-setup` (modo first-run). El clone **ya trae** rules, commands y skills en Git — no hace falta correr scripts.
 
-**Qué hace:** Pone **`.cursorrules`** en modo solo Cursor (copiando `docs/99_meta/cursorrules.cursor.md`), elimina `.agent/` y `.antigravity/`, y deja solo `.cursor/` para rules/commands del DT.
+Ver [primer-setup-dt.md](primer-setup-dt.md) (`DOC-GUIDE-006`).
 
-### Si usás Antigravity
+## Repair: `/setup`
 
-Ejecutá el workflow `/setup-antigravity` en el chat del agente.
+Cuando hay drift (pull grande, edición de fuentes canónicas, paridad rota):
 
-**Qué hace:** Pone **`.cursorrules`** en modo solo Antigravity (copiando `docs/99_meta/cursorrules.antigravity.md`), elimina `.cursor/`, y deja solo `.agent/` y `.antigravity/`.
+```bash
+./scripts/sync-ide.sh
+./scripts/sync-commands-from-meta.sh
+./scripts/sync-skills-parity.sh
+ruby scripts/sync-catalog.rb
+./scripts/dt-doctor.sh
+```
 
-## `.cursorrules` y plantillas (multi-IDE vs un IDE)
+Detalle: `.cursor/skills/dt-setup/references/post-sync-pipeline.md`
 
-- **Repo completo (sin setup):** el **`.cursorrules`** en la raíz usa la plantilla **dual**: “si usás Cursor… / si usás Antigravity…”.
-- **Tras un setup:** el agente debe reemplazar **`.cursorrules`** por la plantilla que corresponda (archivos en **`docs/99_meta/`**):
-  - `cursorrules.dual.md` — ambos IDEs (referencia / restauración)
-  - `cursorrules.cursor.md` — foco Cursor
-  - `cursorrules.antigravity.md` — foco Antigravity
+## `.cursorrules` y plantillas
 
-Las plantillas viven bajo **`docs/99_meta/`** para que **no se pierdan** cuando se borra `.cursor/` o `.agent/`.
-
-## Advertencia
-
-**No ejecutes el setup sin intención explícita.** Los comandos eliminan carpetas del proyecto. La IA te pedirá confirmación antes de proceder.
-
-## Cómo restaurar
-
-Si ejecutaste el setup por error o querés volver a tener ambas configuraciones:
-
-- **Restaurar Antigravity** (después de setup-cursor): `git checkout .agent .antigravity`
-- **Restaurar Cursor** (después de setup-antigravity): `git checkout .cursor`
-- **Volver al texto dual de `.cursorrules`:** copiá `docs/99_meta/cursorrules.dual.md` a `.cursorrules` o `git checkout .cursorrules` si aún tenés el historial.
+Plantilla activa: **`docs/99_meta/cursorrules.dual.md`**. Las plantillas single-IDE (`cursorrules.cursor.md`, `cursorrules.antigravity.md`) están **deprecated**.
 
 ## Validación
 
-Tras el setup, solo debe existir la familia de carpetas del IDE elegido (tabla siguiente).
+Tras repair o edición de fuentes canónicas: **`./scripts/dt-doctor.sh`** en verde (regla `07-orden-continuo`).
 
-## Estructura según IDE
+## Fuentes canónicas → destinos
 
-| IDE | Carpetas activas |
-|-----|------------------|
-| Cursor | `.cursor/` (rules, commands, agents) + `vitals/` (compartido) |
-| Antigravity | `.agent/` (rules, skills, workflows) + `.antigravity/` (rules.md) + `vitals/` (compartido) |
-
-Tras editar `vitals/specs/rule-bodies/*.body.md`, ejecutá: `./scripts/sync-dt-from-vitals.sh` (rules `04` y `05`).
-
-Tras editar `vitals/config/commands-meta.yaml`, ejecutá: `./scripts/sync-commands-from-meta.sh` (commands de rutina en Cursor y workflows en Antigravity).
-
-**Antigravity:** la lógica ejecutable está en **`.agent/skills/`** (no lee `.cursor/skills/`). Mantener espejo al cambiar skills de Git/sesión. Ver `.antigravity/rules.md`.
-
-**Marketing (42 skills):** canónico en `.cursor/skills/marketing/`; espejo en `.agent/skills/marketing/` tras `./scripts/sync-skills-parity.sh`. Catálogo: [README raíz — Marketing strategist](../../README.md#marketing-strategist--42-skills).
-
-## Errores comunes
-
-- Ejecutar setup sin querer → usar `git checkout` según la sección de restauración.
+- **Reglas:** `vitals/specs/rule-bodies/` + `vitals/config/rules-manifest.yaml` → `./scripts/sync-ide.sh`
+- **Commands:** `vitals/config/commands-meta.yaml` → `./scripts/sync-commands-from-meta.sh`
+- **Skills:** `.cursor/skills/` → espejo vía `sync-skills-parity.sh` / `sync-ide.sh`
 
 ## Related docs
 
+- [Primer setup post-clone](primer-setup-dt.md) (`DOC-GUIDE-006`)
 - [Portal de documentación](../README.md) (`DOC-OV-001`)
+- [Usar El DT como base de un proyecto](usar-dt-como-base.md) (`DOC-GUIDE-004`)
 - [Adoptar El DT en un repo existente](adopt-dt-in-existing-repo.md) (`DOC-GUIDE-003`)
+- [ADR: Convergencia AGENTS.md + Skills](../05_decisions/adr-001-convergencia-agents-skills.md) (`DOC-DEC-001`)
 - [Vitals — concepto](../01_concepts/dt-vitals.md) (`DOC-CONCEPT-001`)

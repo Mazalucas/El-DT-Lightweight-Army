@@ -1,0 +1,9 @@
+{
+  "skill_name": "digital-minimalism",
+  "evals": [
+    {
+      "prompt": "Create minimal settings page",
+      "expected": ["one primary CTA", "omit documented", "not empty wireframe"]
+    }
+  ]
+}

@@ -1,0 +1,275 @@
+# Atelier — reglas por tipo de producto (seed; expandir en Fase 2)
+version: 1
+updated: "2026-06-13"
+
+industries:
+  - id: saas-b2b
+    signals: [saas, b2b, enterprise, workflow, productivity]
+    pattern: feature-rich-showcase
+    design_system: carbon-design
+    visual_overlay: [swiss-style, digital-minimalism]
+    palette_mood: neutral-blue
+    typography: IBM Plex Sans
+    avoid: [glassmorphism-full, neumorphism, purple gradients]
+  - id: fintech
+    signals: [fintech, banking, finance, payments, invoice, billing]
+    pattern: data-dense-dashboard
+    design_system: carbon-design
+    visual_overlay: [swiss-style, digital-minimalism]
+    palette_mood: trust-blue
+    typography: IBM Plex Sans
+    avoid: [glassmorphism, neumorphism, playful colors]
+    a11y: AA
+  - id: healthcare
+    signals: [healthcare, medical, clinic, pharmacy, mental health]
+    pattern: trust-authority
+    design_system: carbon-design
+    visual_overlay: [swiss-style, digital-minimalism]
+    palette_mood: calm-blue-green
+    avoid: [neumorphism, low contrast, glass without fallback]
+    a11y: AA
+  - id: ecommerce
+    signals: [ecommerce, e-commerce, shop, store, cart, checkout]
+    pattern: conversion-optimized
+    design_system: material-design
+    visual_overlay: [digital-minimalism]
+    palette_mood: brand-flexible
+    avoid: [dense dashboards on storefront]
+  - id: developer-tool
+    signals: [developer tool, ide, api, devtool, cli, github]
+    pattern: feature-rich-showcase
+    design_system: material-design
+    visual_overlay: [digital-minimalism, swiss-style]
+    palette_mood: dark-mode-friendly
+    typography: Geist, IBM Plex Mono
+  - id: ai-product
+    signals: [ai, chatbot, copilot, llm, agent, ml platform]
+    pattern: interactive-demo
+    design_system: material-design
+    visual_overlay: [digital-minimalism]
+    avoid: [ai purple gradient cliché, glass everything]
+  - id: creative-agency
+    signals: [agency, creative, portfolio, studio, awwwards]
+    pattern: storytelling-driven
+    visual_overlay: [bauhaus-style]
+    design_system: none
+    avoid: [generic minimal saas template]
+  - id: wellness-spa
+    signals: [spa, wellness, beauty, meditation, calm]
+    pattern: hero-centric
+    visual_overlay: [digital-minimalism, organic-soft]
+    palette_mood: soft-pink-sage
+    avoid: [harsh contrast, neon, dark cyber]
+  - id: education
+    signals: [education, learning, course, lms, school]
+    pattern: feature-rich-showcase
+    design_system: material-design
+    visual_overlay: [digital-minimalism]
+    a11y: AA
+  - id: gov-public
+    signals: [government, public sector, civic, municipal]
+    pattern: trust-authority
+    visual_overlay: [swiss-style, digital-minimalism]
+    design_system: carbon-design
+    a11y: AA
+    avoid: [decorative motion, glass, neumorphism]
+  - id: smart-home
+    signals: [smart home, iot, thermostat, device control]
+    pattern: minimal-direct
+    visual_overlay: [neumorphism-partial, digital-minimalism]
+    avoid: [neumorphism on forms, full glass UI]
+  - id: presentation
+    signals: [presentation, deck, pitch, slides, investor]
+    pattern: storytelling-driven
+    visual_overlay: [swiss-style, bauhaus-style]
+    design_system: none
+  - id: analytics-dashboard
+    signals: [dashboard, analytics, metrics, kpi, chart, reporting]
+    pattern: data-dense-dashboard
+    design_system: carbon-design
+    visual_overlay: [swiss-style, digital-minimalism]
+    avoid: [glassmorphism, decorative gradients]
+  - id: auth-onboarding
+    signals: [login, signup, register, auth, onboarding, activation]
+    pattern: minimal-direct
+    visual_overlay: [digital-minimalism]
+    avoid: [glass login cards, purple mesh hero]
+  - id: mobile-consumer
+    signals: [mobile app, ios app, android app, consumer app]
+    pattern: minimal-direct
+    design_system: apple-hig
+    visual_overlay: [digital-minimalism]
+  - id: marketplace
+    signals: [marketplace, p2p, two-sided, gig]
+    pattern: social-proof-focused
+    design_system: material-design
+    visual_overlay: [digital-minimalism]
+  - id: legal-services
+    signals: [legal, law firm, compliance, contract]
+    pattern: trust-authority
+    design_system: carbon-design
+    visual_overlay: [swiss-style]
+    a11y: AA
+  - id: gaming
+    signals: [gaming, game, esports, entertainment]
+    pattern: hero-centric
+    visual_overlay: [bauhaus-style, cyberpunk-adjacent]
+    avoid: [enterprise carbon look]
+  - id: restaurant-hospitality
+    signals: [restaurant, hotel, booking, reservation, hospitality]
+    pattern: hero-centric
+    visual_overlay: [digital-minimalism]
+    palette_mood: warm-earth
+  - id: startup-mvp
+    signals: [mvp, startup, early stage, v1]
+    pattern: minimal-direct
+    design_system: material-design
+    visual_overlay: [digital-minimalism]
+    stack_default: tailwind-shadcn
+  - id: cybersecurity
+    signals: [cybersecurity, security platform, soc, threat]
+    pattern: data-dense-dashboard
+    design_system: carbon-design
+    visual_overlay: [swiss-style, digital-minimalism]
+  - id: hr-recruiting
+    signals: [hr, recruiting, ats, hiring, talent]
+    pattern: feature-rich-showcase
+    design_system: material-design
+    visual_overlay: [digital-minimalism]
+  - id: real-estate
+    signals: [real estate, property, listings, realtor]
+    pattern: hero-centric
+    visual_overlay: [digital-minimalism]
+  - id: travel-booking
+    signals: [travel, flight, booking, trip, tourism]
+    pattern: conversion-optimized
+    design_system: material-design
+  - id: fitness
+    signals: [fitness, workout, gym, training app]
+    pattern: hero-centric
+    visual_overlay: [digital-minimalism]
+  - id: food-delivery
+    signals: [food delivery, delivery app, restaurant delivery]
+    pattern: conversion-optimized
+    design_system: material-design
+  - id: subscription-box
+    signals: [subscription box, recurring commerce]
+    pattern: social-proof-focused
+  - id: nonprofit
+    signals: [nonprofit, charity, donation, foundation]
+    pattern: storytelling-driven
+    visual_overlay: [swiss-style]
+  - id: news-media
+    signals: [news, media, magazine, editorial, journalism]
+    pattern: editorial-grid
+    visual_overlay: [swiss-style]
+  - id: podcast-audio
+    signals: [podcast, audio, streaming music]
+    pattern: hero-centric
+    visual_overlay: [dark-oled]
+  - id: photo-video-editor
+    signals: [photo editor, video editor, creative tool]
+    pattern: feature-rich-showcase
+    visual_overlay: [dark-oled]
+  - id: habit-tracker
+    signals: [habit tracker, routine, streak]
+    pattern: minimal-direct
+    visual_overlay: [digital-minimalism]
+  - id: personal-finance
+    signals: [personal finance, budget, expense tracker]
+    pattern: data-dense-dashboard
+    design_system: carbon-design
+    a11y: AA
+  - id: invoice-billing
+    signals: [invoice, billing, accounting tool]
+    pattern: data-dense-dashboard
+    design_system: carbon-design
+  - id: crm-sales
+    signals: [crm, sales, pipeline, deals]
+    pattern: data-dense-dashboard
+    design_system: fluent-design
+  - id: project-management
+    signals: [project management, kanban, tasks, sprint]
+    pattern: feature-rich-showcase
+    design_system: atlassian-design
+  - id: knowledge-base
+    signals: [wiki, knowledge base, documentation site, confluence-like]
+    pattern: feature-rich-showcase
+    design_system: atlassian-design
+  - id: micro-saas
+    signals: [micro saas, indie saas, solo founder tool]
+    pattern: minimal-direct
+    visual_overlay: [digital-minimalism]
+  - id: b2b-service
+    signals: [b2b service, consulting, agency b2b]
+    pattern: trust-authority
+    visual_overlay: [swiss-style]
+  - id: luxury-ecommerce
+    signals: [luxury, premium ecommerce, high-end retail]
+    pattern: hero-centric
+    visual_overlay: [soft-ui-evolution]
+  - id: veterinary
+    signals: [veterinary, vet clinic, pet health]
+    pattern: trust-authority
+    a11y: AA
+  - id: dental
+    signals: [dental, dentist, clinic booking]
+    pattern: trust-authority
+  - id: pharmacy
+    signals: [pharmacy, medication, prescription]
+    pattern: trust-authority
+    a11y: AA
+  - id: insurance
+    signals: [insurance, policy, claims]
+    pattern: trust-authority
+    design_system: carbon-design
+    a11y: AA
+  - id: web3-crypto
+    signals: [web3, crypto, nft, blockchain]
+    pattern: hero-centric
+    avoid: [generic glass purple gradient without brand]
+  - id: spatial-computing
+    signals: [spatial computing, vr, ar, vision pro]
+    pattern: minimal-direct
+    design_system: apple-hig
+    visual_overlay: [glassmorphism]
+  - id: dev-portfolio
+    signals: [developer portfolio, eng portfolio, github pages]
+    pattern: minimal-direct
+    visual_overlay: [digital-minimalism, swiss-style]
+  - id: designer-portfolio
+    signals: [designer portfolio, creative portfolio]
+    pattern: storytelling-driven
+    visual_overlay: [bauhaus-style]
+  - id: event-conference
+    signals: [event, conference, meetup, ticket]
+    pattern: hero-centric
+  - id: internal-tools
+    signals: [internal tool, admin panel, backoffice]
+    pattern: data-dense-dashboard
+    design_system: carbon-design
+  - id: customer-support
+    signals: [support, helpdesk, ticketing, zendesk-like]
+    pattern: feature-rich-showcase
+    design_system: atlassian-design
+  - id: email-saas
+    signals: [email tool, newsletter, mailchimp-like]
+    pattern: feature-rich-showcase
+  - id: form-builder
+    signals: [form builder, survey, typeform-like]
+    pattern: minimal-direct
+  - id: no-code
+    signals: [no-code, builder, drag and drop app]
+    pattern: feature-rich-showcase
+  - id: open-source
+    signals: [open source, oss, github project site]
+    pattern: feature-rich-showcase
+    visual_overlay: [swiss-style, digital-minimalism]
+  - id: documentation-dev
+    signals: [developer docs, api reference, technical documentation]
+    pattern: feature-rich-showcase
+    visual_overlay: [swiss-style, digital-minimalism]
+  - id: changelog-release
+    signals: [changelog, release notes, product updates]
+    pattern: minimal-direct
+    visual_overlay: [digital-minimalism]

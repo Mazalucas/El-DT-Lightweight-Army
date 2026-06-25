@@ -14,7 +14,8 @@ Lista completa de subagentes (inspirados en Agents examples). Al delegar, incluy
 | **arquitecto** | backend, api, database, server, arquitectura, patrones |
 | **frontend** | frontend, ui, ux, interface, client, componentes, accesibilidad |
 | **devops** | deploy, infrastructure, ci/cd, devops, pipelines |
-| **ui-designer** | UI design, mockups, design specs, design systems |
+| **ui-designer** | UI design, mockups, design specs, design systems — orquestador **Atelier** (+30 skills en `.cursor/skills/design/`) |
+| **remotion-producer** | Video programático con Remotion — composiciones React, motion, render (+ skill vendor `remotion-best-practices`) |
 
 ## Planning
 
@@ -71,6 +72,8 @@ Lista completa de subagentes (inspirados en Agents examples). Al delegar, incluy
 
 - backend, api, database, server → **arquitecto**
 - frontend, ui, ux, interface, client → **frontend** o **ui-designer**
+- landing, dashboard, mockup, design system, estética, atelier → **ui-designer** (+ `/atelier`)
+- remotion, video programático, motion graphics, composiciones, render MP4, npx remotion → **remotion-producer** (+ `/remotion`)
 - test, qa, quality → **qa**
 - document, docs, readme → **doc**
 - research, analyze, investigate → **researcher**
@@ -95,6 +98,18 @@ Al invocar un subagente, incluye en tu prompt:
 1. El contexto de la tarea
 2. El bloque: "Aplica los protocolos DT: ordenar, cuestionar, proponer alternativas, incluir Puntos ciegos / Mejoras detectadas en tu entrega."
 3. Qué formato de salida esperas
+4. **Bloque stack web** (cuando la tarea sea desarrollo web): stack objetivo o detectado en repo; productos Firebase concretos (Auth, Firestore, Functions, Hosting, Storage); frontend default Vite + React. Fuente: `vitals/data/engineering/web-stack.yaml` y regla `08-stack-web-default`.
+5. **Bloque ingeniería reuse** (cuando el subagente escriba o proponga código: `arquitecto`, `frontend`, `devops`, `qa`, `remotion-producer`):
+
+```text
+Bloque ingeniería reuse:
+- Skill: engineering-reuse (leer discover-before-create)
+- Jerarquía: repo existente > design system > framework > nuevo
+- Entregar sección "Qué reutilicé"
+- Diff mínimo; YAGNI
+```
+
+Fuente: regla `15-engineering-reuse` · `docs/03_reference/engineering-reuse-default.md` (`DOC-REF-006`).
 
 ## Un mensaje, varios agentes
 

@@ -1,0 +1,9 @@
+{
+  "skill_name": "design-read",
+  "evals": [
+    {
+      "prompt": "Build landing for B2B SaaS technical buyers",
+      "expected": ["Reading this as", "Dials", "V/M/D"]
+    }
+  ]
+}

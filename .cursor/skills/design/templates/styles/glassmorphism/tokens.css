@@ -1,0 +1,50 @@
+/**
+ * Atelier — Glassmorphism tokens
+ * Requires rich background behind glass surfaces.
+ */
+
+:root {
+  --color-bg-rich: linear-gradient(135deg, #1e3a5f 0%, #0f172a 50%, #312e81 100%);
+  --color-bg-image: url(""); /* set project hero photo */
+
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-bg-strong: rgba(255, 255, 255, 0.18);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-blur: 12px;
+  --glass-blur-nav: 16px;
+
+  --color-text-on-glass: #ffffff;
+  --color-text-muted-on-glass: rgba(255, 255, 255, 0.75);
+  --color-accent: #38bdf8;
+  --color-on-accent: #0f172a;
+
+  --font-sans: system-ui, -apple-system, "SF Pro Text", sans-serif;
+
+  --radius-glass: 16px;
+  --radius-glass-sm: 12px;
+
+  --duration: 250ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  :root {
+    --glass-bg: rgba(15, 23, 42, 0.85);
+    --glass-blur: 0px;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-bg: rgba(15, 23, 42, 0.92);
+    --glass-blur: 0px;
+  }
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-glass);
+}
