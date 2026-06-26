@@ -1,6 +1,8 @@
 # Cerebro App — webapp unificada (Firebase)
 
-SPA en la nube: auth Google, sync Meet vía Drive API, cerebro profesional, facturas, IA con BYOK.
+SPA en la nube: auth Google, sync Meet vía Drive API, cerebro profesional e IA con BYOK.
+
+**Copiloto in-app:** ver [`docs/CEREBRO.md`](docs/CEREBRO.md) — burbuja, `#/cerebro`, contexto vivo, ambient UI, planes confirmables.
 
 ## Requisitos producción
 
@@ -69,7 +71,6 @@ Guía: [`docs/02_guides/cerebro-app-deploy.md`](../../docs/02_guides/cerebro-app
 |------|--------|
 | `/` | Home / catálogo |
 | `/profesional` | Reuniones, pipeline, IA, todos |
-| `/facturas` | Facturas autónomo ES |
 | `/settings` | Google, carpetas Drive, API keys |
 
 ## API

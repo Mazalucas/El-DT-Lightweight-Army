@@ -20,7 +20,6 @@ import { buildNavContextFromRoute, createAppShell, updateAppShell } from './app/
 import { renderHome } from './app/home.js';
 import { renderSettings } from './app/settings.js';
 import { renderProfesional, renderMeetingDetail } from './app/profesional.js';
-import { renderFacturas } from './app/facturas.js';
 import { renderJoin } from './app/org-join.js';
 import { renderOrgAdmin } from './app/org-admin.js';
 import { renderOrgProfesional } from './app/org-profesional.js';
@@ -42,7 +41,6 @@ const LOADING_LABELS: Partial<Record<string, string>> = {
   profesional: 'Profesional',
   'profesional-meeting': 'Reunión',
   settings: 'Ajustes',
-  facturas: 'Facturas',
   assistant: 'Asistente',
   empresa: 'Empresa',
   org: 'Espacio org',
@@ -68,9 +66,6 @@ async function renderRouteContent(container: HTMLElement, parsed: ReturnType<typ
       break;
     case 'profesional-meeting':
       if (parsed.param) await renderMeetingDetail(container, parsed.param);
-      break;
-    case 'facturas':
-      await renderFacturas(container);
       break;
     case 'assistant':
       await renderAssistant(container);

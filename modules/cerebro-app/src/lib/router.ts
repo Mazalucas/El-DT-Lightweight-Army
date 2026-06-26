@@ -4,7 +4,6 @@ export type Route =
   | 'settings'
   | 'profesional'
   | 'profesional-meeting'
-  | 'facturas'
   | 'empresa'
   | 'assistant'
   | 'join'
@@ -64,7 +63,6 @@ export function parseRoute(): {
     const tab = normalizeProfTab(parts[1] as ProfTab | undefined);
     return { route: 'profesional', profTab: tab };
   }
-  if (head === 'facturas') return { route: 'facturas' };
   if (head === 'assistant') return { route: 'assistant' };
   if (head === 'empresa') return { route: 'empresa' };
   if (head === 'settings') return { route: 'settings', settingsTab, settingsSection };

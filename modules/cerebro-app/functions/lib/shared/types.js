@@ -16,11 +16,23 @@ export const DEFAULT_SETTINGS = {
         defaultProviderId: 'google_gemini',
         autoAnalyzeAfterSync: true,
     },
+    cerebro: {
+        proactiveLevel: 'subtle',
+        meetingReminderMinutes: 10,
+        chipMeetingMinutesMax: 90,
+    },
+    locale: {
+        timezoneSource: 'device',
+        timezone: 'America/Argentina/Buenos_Aires',
+    },
     syncSchedule: {
         enabled: false,
         hour: 8,
         minute: 0,
-        timezone: 'Europe/Madrid',
+        timezone: 'America/Argentina/Buenos_Aires',
+    },
+    syncPolicy: {
+        processLookbackDays: 30,
     },
     setupProgress: {},
 };

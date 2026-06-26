@@ -1,5 +1,6 @@
 import { decrypt, encrypt, keyHint } from '../lib/crypto.js';
-import { facturasRef, llmProviderRef } from '../lib/firebase.js';
+import { llmProviderRef } from '../lib/firebase.js';
+import { loadSettings } from '../lib/settings.js';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import OpenAI from 'openai';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,6 +9,7 @@ import { jobsCol } from '../lib/firebase.js';
 import { fullImportFromMirrors } from './reindex.js';
 import { applyAnalysisToStoreInMemory } from '../core/profesional/analysis-apply-store.js';
 import { loadStoreFromRepository, saveStoreToRepository, getStoreMeta, migrateStoreToNormalized } from './store-repository.js';
+import { isWithinProcessLookback, resolveProcessLookbackDays } from '../shared/sync-policy.js';
 const PROVIDER_DEFAULTS = {
     google_gemini: { label: 'Google Gemini', modelDefault: 'gemini-2.5-flash' },
     openai: { label: 'OpenAI', modelDefault: 'gpt-4o-mini' },
@@ -131,7 +133,18 @@ export async function applyAnalysisToStore(uid, analysis) {
 }
 export async function runAnalyzeBatch(uid, meetingIds) {
     const jobId = uuidv4();
-    const ids = meetingIds ?? (await listMeetings(uid)).filter((m) => m.analysisStatus === 'pending').map((m) => m.meetingId);
+    const settings = await loadSettings(uid);
+    const lookbackDays = resolveProcessLookbackDays(settings.syncPolicy);
+    const manifest = await listMeetings(uid);
+    const manifestById = new Map(manifest.map((m) => [m.meetingId, m]));
+    let ids = meetingIds ??
+        manifest.filter((m) => m.analysisStatus === 'pending').map((m) => m.meetingId);
+    if (lookbackDays > 0) {
+        ids = ids.filter((id) => {
+            const entry = manifestById.get(id);
+            return entry ? isWithinProcessLookback(entry, lookbackDays) : true;
+        });
+    }
     await jobsCol(uid).doc(jobId).set({
         id: jobId,
         type: 'analyze_batch',
@@ -181,17 +194,4 @@ export { getStoreMeta, migrateStoreToNormalized };
 export async function importMeetingsToStore(uid) {
     await fullImportFromMirrors(uid);
     return loadStore(uid);
-}
-const EMPTY_FACTURAS = {
-    emitter: { name: '', taxId: '', address: '' },
-    clients: [],
-    invoices: [],
-    lastInvoiceNumber: 0,
-};
-export async function loadFacturas(uid) {
-    const snap = await facturasRef(uid).get();
-    return snap.exists ? snap.data() : { ...EMPTY_FACTURAS };
-}
-export async function saveFacturas(uid, data) {
-    await facturasRef(uid).set(data);
 }

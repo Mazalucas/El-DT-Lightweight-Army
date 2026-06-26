@@ -55,7 +55,7 @@ export default function Login() {
           <span className="app-brand-text">Cerebro</span>
         </div>
         <h1>Tu segundo cerebro profesional</h1>
-        <p className="login-panel-desc">Reuniones, contactos, facturas y más — en la nube.</p>
+        <p className="login-panel-desc">Reuniones, contactos y más — en la nube.</p>
         {devMode ? (
           <p className="login-status muted">
             {emulators === null ? (

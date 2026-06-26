@@ -24,7 +24,7 @@ Sin sesión (`vitals/ops/session.yaml`), la IA pedirá **`/yo`** antes de escrib
 | ID | Tipo | Descripción | Arrancar |
 |----|------|-------------|----------|
 | `lucas-prime` | hub | Este repo (cerebro + DT) | Estás aquí |
-| [facturas-autonomo-es](modules/facturas-autonomo-es/) | tool | Facturas de autónomo en España — app local | **`/nueva-factura`** |
+| [facturas-autonomo-es](apps/README.md) | tool (local) | Facturas de autónomo — app local gitignored | **`/nueva-factura`** |
 | [recordatorios](modules/recordatorios/) | tool | Recordatorios con categorías, tags y captura chat | **`/recordatorios`** · captura **`/recordatorio`** |
 | [tools-hub](modules/tools-hub/) | hub | Índice local legacy | **`/tools-hub`** (dev) |
 | [cerebro-app](modules/cerebro-app/) | hub | **Webapp unificada (Firebase)** | **`/start`** |

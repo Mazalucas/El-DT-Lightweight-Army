@@ -26,7 +26,7 @@ export async function renderLogin(root: HTMLElement, onSuccess: () => void): Pro
 
   const desc = document.createElement('p');
   desc.className = 'login-panel-desc';
-  desc.textContent = 'Reuniones, contactos, facturas y más — en la nube.';
+  desc.textContent = 'Reuniones, contactos y más — en la nube.';
 
   panel.append(brand, h1, desc);
 

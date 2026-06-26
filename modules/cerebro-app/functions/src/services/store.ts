@@ -1,7 +1,7 @@
-import type { AnalysisPayload, CerebroStore, FacturasStore, LlmProviderId, LlmProviderMeta } from '../shared/types.js';
+import type { AnalysisPayload, CerebroStore, LlmProviderId, LlmProviderMeta } from '../shared/types.js';
 import { DEFAULT_SETTINGS } from '../shared/types.js';
 import { decrypt, encrypt, keyHint } from '../lib/crypto.js';
-import { facturasRef, llmProviderRef, storeRef } from '../lib/firebase.js';
+import { llmProviderRef, storeRef } from '../lib/firebase.js';
 import { loadSettings } from '../lib/settings.js';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import OpenAI from 'openai';
@@ -11,6 +11,7 @@ import { jobsCol } from '../lib/firebase.js';
 import { fullImportFromMirrors } from './reindex.js';
 import { applyAnalysisToStoreInMemory } from '../core/profesional/analysis-apply-store.js';
 import { loadStoreFromRepository, saveStoreToRepository, getStoreMeta, migrateStoreToNormalized } from './store-repository.js';
+import { isWithinProcessLookback, resolveProcessLookbackDays } from '../shared/sync-policy.js';
 
 const PROVIDER_DEFAULTS: Record<LlmProviderId, { label: string; modelDefault: string }> = {
   google_gemini: { label: 'Google Gemini', modelDefault: 'gemini-2.5-flash' },
@@ -141,7 +142,21 @@ export async function applyAnalysisToStore(uid: string, analysis: AnalysisPayloa
 
 export async function runAnalyzeBatch(uid: string, meetingIds?: string[]): Promise<string> {
   const jobId = uuidv4();
-  const ids = meetingIds ?? (await listMeetings(uid)).filter((m) => m.analysisStatus === 'pending').map((m) => m.meetingId);
+  const settings = await loadSettings(uid);
+  const lookbackDays = resolveProcessLookbackDays(settings.syncPolicy);
+  const manifest = await listMeetings(uid);
+  const manifestById = new Map(manifest.map((m) => [m.meetingId, m]));
+
+  let ids =
+    meetingIds ??
+    manifest.filter((m) => m.analysisStatus === 'pending').map((m) => m.meetingId);
+
+  if (lookbackDays > 0) {
+    ids = ids.filter((id) => {
+      const entry = manifestById.get(id);
+      return entry ? isWithinProcessLookback(entry, lookbackDays) : true;
+    });
+  }
   await jobsCol(uid).doc(jobId).set({
     id: jobId,
     type: 'analyze_batch',
@@ -200,20 +215,4 @@ export { getStoreMeta, migrateStoreToNormalized };
 export async function importMeetingsToStore(uid: string): Promise<CerebroStore> {
   await fullImportFromMirrors(uid);
   return loadStore(uid);
-}
-
-const EMPTY_FACTURAS: FacturasStore = {
-  emitter: { name: '', taxId: '', address: '' },
-  clients: [],
-  invoices: [],
-  lastInvoiceNumber: 0,
-};
-
-export async function loadFacturas(uid: string): Promise<FacturasStore> {
-  const snap = await facturasRef(uid).get();
-  return snap.exists ? (snap.data() as FacturasStore) : { ...EMPTY_FACTURAS };
-}
-
-export async function saveFacturas(uid: string, data: FacturasStore): Promise<void> {
-  await facturasRef(uid).set(data);
 }

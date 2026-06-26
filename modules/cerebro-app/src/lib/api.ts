@@ -5,8 +5,8 @@ import type {
   BoardView,
   CerebroStore,
   CreateTodoInput,
+  CalendarTodayView,
   DashboardView,
-  FacturasStore,
   GraphSnapshot,
   LlmProviderId,
   LlmProviderMeta,
@@ -54,13 +54,25 @@ export const api = {
 
   // --- Vistas por pantalla (una request por vista) ---
   getDashboardView: () => apiFetch<DashboardView>('/api/views/dashboard'),
-  getMeetingsView: (opts?: { limit?: number; offset?: number; q?: string; projectId?: string; teamId?: string }) => {
+  getCalendarToday: (timezone?: string) => {
+    const q = timezone ? `?timezone=${encodeURIComponent(timezone)}` : '';
+    return apiFetch<CalendarTodayView>(`/api/views/calendar/today${q}`);
+  },
+  getMeetingsView: (opts?: {
+    limit?: number;
+    offset?: number;
+    q?: string;
+    projectId?: string;
+    teamId?: string;
+    sort?: string;
+  }) => {
     const q = new URLSearchParams();
     q.set('limit', String(opts?.limit ?? 50));
     if (opts?.offset !== undefined) q.set('offset', String(opts.offset));
     if (opts?.q) q.set('q', opts.q);
     if (opts?.projectId) q.set('projectId', opts.projectId);
     if (opts?.teamId) q.set('teamId', opts.teamId);
+    if (opts?.sort) q.set('sort', opts.sort);
     const qs = q.toString();
     return apiFetch<MeetingsView>(`/api/views/meetings${qs ? `?${qs}` : ''}`);
   },
@@ -91,7 +103,7 @@ export const api = {
   // --- Vistas por pantalla (scope organización) ---
   getOrgMeetingsView: (
     orgId: string,
-    opts?: { limit?: number; offset?: number; q?: string; projectId?: string; teamId?: string },
+    opts?: { limit?: number; offset?: number; q?: string; projectId?: string; teamId?: string; sort?: string },
   ) => {
     const q = new URLSearchParams();
     q.set('limit', String(opts?.limit ?? 50));
@@ -99,6 +111,7 @@ export const api = {
     if (opts?.q) q.set('q', opts.q);
     if (opts?.projectId) q.set('projectId', opts.projectId);
     if (opts?.teamId) q.set('teamId', opts.teamId);
+    if (opts?.sort) q.set('sort', opts.sort);
     const qs = q.toString();
     return apiFetch<MeetingsView>(`/api/orgs/${orgId}/views/meetings${qs ? `?${qs}` : ''}`);
   },
@@ -113,8 +126,13 @@ export const api = {
   saveConfig: (patch: Partial<UserAppSettings>) =>
     apiFetch<UserAppSettings>('/api/config', { method: 'PUT', body: JSON.stringify(patch) }),
 
-  googleStatus: () => apiFetch<{ connected: boolean }>('/api/auth/status'),
+  googleStatus: () => apiFetch<{ connected: boolean; hasCalendarScope?: boolean }>('/api/auth/status'),
+  refreshGoogleTimezone: () =>
+    apiFetch<{ timezone: string; locale?: UserAppSettings['locale'] }>('/api/auth/google/refresh-timezone', {
+      method: 'POST',
+    }),
   googleStart: () => apiFetch<{ url: string }>('/api/auth/google/start'),
+  googleCalendarStart: () => apiFetch<{ url: string }>('/api/auth/google/calendar/start'),
   googleRevoke: () => apiFetch<{ ok: boolean }>('/api/auth/google/revoke', { method: 'POST' }),
   googlePickerConfig: () =>
     apiFetch<{ accessToken: string; apiKey?: string; appId: string; clientId: string }>(
@@ -249,6 +267,64 @@ export const api = {
     }
   },
 
+  cerebroStatus: () => apiFetch<{ ok: boolean; llmConfigured: boolean }>('/api/cerebro/status'),
+  cerebroContext: (clientContext: Record<string, unknown>, dismissed?: string[]) =>
+    apiFetch<import('@shared/cerebro-chat.js').CerebroContextResponse>('/api/cerebro/context', {
+      method: 'POST',
+      body: JSON.stringify({ clientContext, dismissedMomentKeys: dismissed }),
+    }),
+  cerebroChat: async (
+    message: string,
+    conversationId: string | undefined,
+    clientContext: Record<string, unknown>,
+    dismissedMomentKeys: string[] | undefined,
+    onEvent: (event: Record<string, unknown>) => void,
+  ): Promise<void> => {
+    const token = await getIdToken();
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    if (token) headers.set('Authorization', `Bearer ${token}`);
+    const res = await fetch('/api/cerebro/chat', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ message, conversationId, clientContext, dismissedMomentKeys }),
+    });
+    if (!res.ok) {
+      const err = (await res.json().catch(() => ({}))) as { error?: string };
+      throw new Error(err.error || `${res.status} ${res.statusText}`);
+    }
+    const reader = res.body?.getReader();
+    if (!reader) throw new Error('Sin stream de respuesta');
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() ?? '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          onEvent(JSON.parse(line.slice(6)) as Record<string, unknown>);
+        } catch {
+          /* ignore */
+        }
+      }
+    }
+  },
+
+  cerebroConversations: () =>
+    apiFetch<{
+      conversations: Array<{ id: string; title: string; updatedAt: string; createdAt?: string }>;
+    }>('/api/cerebro/conversations'),
+  deleteCerebroConversation: (id: string) =>
+    apiFetch<void>(`/api/cerebro/conversations/${encodeURIComponent(id)}`, { method: 'DELETE' }, [204]),
+  cerebroDismissMoment: (conversationId: string, momentKey: string) =>
+    apiFetch<{ ok: boolean }>('/api/cerebro/moments/dismiss', {
+      method: 'POST',
+      body: JSON.stringify({ conversationId, momentKey }),
+    }),
+
   listProviders: () => apiFetch<{ providers: LlmProviderMeta[] }>('/api/secrets/providers'),
   setProviderKey: (providerId: LlmProviderId, apiKey: string, modelDefault?: string) =>
     apiFetch<{ provider: LlmProviderMeta }>(`/api/secrets/providers/${providerId}`, {
@@ -268,15 +344,6 @@ export const api = {
       body: JSON.stringify({ meetingIds }),
     }),
   getJob: (jobId: string) => apiFetch<unknown>(`/api/ai/jobs/${jobId}`),
-
-  getInvoices: () => apiFetch<FacturasStore>('/api/invoices'),
-  saveInvoices: (data: FacturasStore) =>
-    apiFetch<{ ok: boolean }>('/api/invoices', { method: 'PUT', body: JSON.stringify(data) }),
-  exportInvoice: (fileName: string, mimeType: string, dataBase64: string) =>
-    apiFetch<{ ok: boolean; fileId: string }>('/api/invoices/export', {
-      method: 'POST',
-      body: JSON.stringify({ fileName, mimeType, dataBase64 }),
-    }),
 
   getSuggestions: () => apiFetch<{ suggestions: Suggestion[] }>('/api/catalog/suggestions'),
   getBoard: () => apiFetch<{ board: BoardSnapshot }>('/api/catalog/board'),
@@ -328,6 +395,34 @@ export const api = {
     apiFetch<{ store: CerebroStore }>(`/api/catalog/suggestions/${encodeURIComponent(id)}/accept-team`, {
       method: 'POST',
     }),
+  batchDismissSuggestions: (ids: string[]) =>
+    apiFetch<{ dismissed: number }>('/api/catalog/suggestions/batch/dismiss', {
+      method: 'POST',
+      body: JSON.stringify({ ids }),
+    }),
+  batchAcceptProjectSuggestions: (
+    ids: string[],
+    body?: { existingProjectId?: string; projectName?: string },
+  ) =>
+    apiFetch<{ accepted: number; skipped: number; undoSnapshots: import('@shared/types.js').SuggestionAcceptUndoSnapshot[] }>(
+      '/api/catalog/suggestions/batch/accept-project',
+      { method: 'POST', body: JSON.stringify({ ids, ...body }) },
+    ),
+  batchAcceptTeamSuggestions: (ids: string[]) =>
+    apiFetch<{ accepted: number; skipped: number; undoSnapshots: import('@shared/types.js').SuggestionAcceptUndoSnapshot[] }>(
+      '/api/catalog/suggestions/batch/accept-team',
+      { method: 'POST', body: JSON.stringify({ ids }) },
+    ),
+  restorePendingSuggestions: (ids: string[]) =>
+    apiFetch<{ restored: number }>('/api/catalog/suggestions/batch/restore', {
+      method: 'POST',
+      body: JSON.stringify({ ids }),
+    }),
+  revertSuggestionAccept: (snapshots: import('@shared/types.js').SuggestionAcceptUndoSnapshot[]) =>
+    apiFetch<{ reverted: number }>('/api/catalog/suggestions/batch/revert-accept', {
+      method: 'POST',
+      body: JSON.stringify({ snapshots }),
+    }),
   getProspectCandidates: (prospectId: string) =>
     apiFetch<{
       candidates: Array<{
@@ -355,6 +450,16 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ name }),
     }),
+  updateTeam: (id: string, patch: Record<string, unknown>) =>
+    apiFetch<{ store: CerebroStore }>(`/api/catalog/teams/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: JSON.stringify(patch),
+    }),
+  assignEmailToTeam: (teamId: string, email: string) =>
+    apiFetch<{ store: CerebroStore }>(`/api/catalog/teams/${encodeURIComponent(teamId)}/assign-email`, {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    }),
   deleteTeam: (id: string) => apiFetch<{ store: CerebroStore }>(`/api/catalog/teams/${id}`, { method: 'DELETE' }),
   createProject: (name: string) =>
     apiFetch<{ store: CerebroStore; project: { id: string; name: string } }>('/api/catalog/projects', {
@@ -373,15 +478,39 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ canonicalId, mergeIds }),
     }),
-  promoteProspect: (prospectId: string, email: string, displayName?: string) =>
+  promoteProspect: (
+    prospectId: string,
+    email: string,
+    displayName?: string,
+    enrichment?: import('@shared/types.js').ProspectResolveEnrichment,
+  ) =>
     apiFetch<{ store: CerebroStore }>(`/api/catalog/prospects/${prospectId}/promote`, {
       method: 'POST',
-      body: JSON.stringify({ email, displayName }),
+      body: JSON.stringify({ email, displayName, ...enrichment }),
     }),
-  linkProspect: (prospectId: string, personId: string) =>
+  linkProspect: (
+    prospectId: string,
+    personId: string,
+    enrichment?: import('@shared/types.js').ProspectResolveEnrichment,
+  ) =>
     apiFetch<{ store: CerebroStore }>(`/api/catalog/prospects/${prospectId}/link`, {
       method: 'POST',
-      body: JSON.stringify({ personId }),
+      body: JSON.stringify({ personId, ...enrichment }),
+    }),
+  dismissProspect: (prospectId: string) =>
+    apiFetch<{ store: CerebroStore }>(`/api/catalog/prospects/${prospectId}/dismiss`, {
+      method: 'POST',
+      body: JSON.stringify({}),
+    }),
+  dismissTeamEmailReassign: (personId: string, email: string) =>
+    apiFetch<{ store: CerebroStore }>('/api/catalog/maintenance/dismiss-team-email', {
+      method: 'POST',
+      body: JSON.stringify({ personId, email }),
+    }),
+  dismissMergeContact: (suggestionId: string) =>
+    apiFetch<{ store: CerebroStore }>('/api/catalog/maintenance/dismiss-merge', {
+      method: 'POST',
+      body: JSON.stringify({ suggestionId }),
     }),
   acceptTodosBatch: (todoIds: string[]) =>
     apiFetch<{ store: CerebroStore }>('/api/catalog/todos/accept-batch', {
@@ -500,15 +629,31 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ canonicalId, mergeIds }),
     }),
-  orgPromoteProspect: (orgId: string, prospectId: string, email: string, displayName?: string) =>
+  orgPromoteProspect: (
+    orgId: string,
+    prospectId: string,
+    email: string,
+    displayName?: string,
+    enrichment?: import('@shared/types.js').ProspectResolveEnrichment,
+  ) =>
     apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/prospects/${prospectId}/promote`, {
       method: 'POST',
-      body: JSON.stringify({ email, displayName }),
+      body: JSON.stringify({ email, displayName, ...enrichment }),
     }),
-  orgLinkProspect: (orgId: string, prospectId: string, personId: string) =>
+  orgLinkProspect: (
+    orgId: string,
+    prospectId: string,
+    personId: string,
+    enrichment?: import('@shared/types.js').ProspectResolveEnrichment,
+  ) =>
     apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/prospects/${prospectId}/link`, {
       method: 'POST',
-      body: JSON.stringify({ personId }),
+      body: JSON.stringify({ personId, ...enrichment }),
+    }),
+  orgDismissProspect: (orgId: string, prospectId: string) =>
+    apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/prospects/${prospectId}/dismiss`, {
+      method: 'POST',
+      body: JSON.stringify({}),
     }),
   orgUpdatePerson: (orgId: string, personId: string, patch: Record<string, unknown>) =>
     apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/people/${personId}`, {

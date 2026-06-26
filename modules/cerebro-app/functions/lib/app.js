@@ -6,12 +6,12 @@ import { authRouter, driveRouter, handleGoogleCallback } from './routes/auth.js'
 import { configRouter } from './routes/config.js';
 import { syncRouter, meetingsRouter, storeRouter } from './routes/sync.js';
 import { secretsRouter, aiRouter } from './routes/ai.js';
-import { invoicesRouter } from './routes/invoices.js';
 import { catalogRouter } from './routes/catalog.js';
 import { viewsRouter } from './routes/views.js';
 import { orgRouter } from './routes/org.js';
 import { adminRouter } from './routes/admin.js';
 import { assistantRouter } from './routes/assistant.js';
+import { cerebroRouter } from './routes/cerebro.js';
 export function createApp() {
     const app = express();
     app.use(cors({ origin: true }));
@@ -31,12 +31,12 @@ export function createApp() {
     app.use('/api/store', storeRouter);
     app.use('/api/secrets', secretsRouter);
     app.use('/api/ai', aiRouter);
-    app.use('/api/invoices', invoicesRouter);
     app.use('/api/catalog', catalogRouter);
     app.use('/api/views', viewsRouter);
     app.use('/api/orgs', orgRouter);
     app.use('/api/admin', adminRouter);
     app.use('/api/assistant', assistantRouter);
+    app.use('/api/cerebro', cerebroRouter);
     app.use((err, _req, res, _next) => {
         console.error(err);
         res.status(500).json({ error: err.message });

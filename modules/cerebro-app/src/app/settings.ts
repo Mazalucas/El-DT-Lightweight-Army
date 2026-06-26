@@ -307,37 +307,6 @@ export async function renderSettings(container: HTMLElement): Promise<void> {
     toast('Proveedor IA actualizado');
   });
 
-  // —— Módulos ——
-  const modulosCard = settingsCard({
-    id: 'modulos',
-    title: 'Módulos',
-    desc: 'Opciones de integración para apps auxiliares de Cerebro.',
-    iconName: 'receipt',
-  });
-
-  const facturasBlock = document.createElement('div');
-  facturasBlock.className = 'settings-subblock';
-  facturasBlock.innerHTML = `
-    <h3 class="settings-subblock-title">Facturas — export a Drive</h3>
-    <p class="muted settings-subblock-desc">Carpeta destino para PDFs o exports generados desde el módulo Facturas.</p>
-  `;
-  const factField = document.createElement('div');
-  factField.className = 'field';
-  factField.innerHTML = `<label for="facturas-folder">Folder ID destino</label><input id="facturas-folder" value="${escapeHtml(config.facturasExportFolderId ?? '')}" placeholder="ID de carpeta en Google Drive" />`;
-  facturasBlock.appendChild(factField);
-  facturasBlock.appendChild(
-    button('Guardar carpeta', {
-      size: 'sm',
-      onClick: async () => {
-        const facturasExportFolderId = (page.querySelector('#facturas-folder') as HTMLInputElement).value.trim();
-        await api.saveConfig({ facturasExportFolderId });
-        toast('Carpeta facturas guardada');
-      },
-    }),
-  );
-  modulosCard.body.appendChild(facturasBlock);
-  stack.appendChild(modulosCard.el);
-
   // —— Apariencia ——
   const appearanceCard = settingsCard({
     id: 'apariencia',
@@ -360,7 +329,7 @@ export async function renderSettings(container: HTMLElement): Promise<void> {
 
   page.append(summaryHost, stack);
 
-  container.replaceChildren(pageHeader('Ajustes', 'Configuración de Cerebro Profesional, IA y módulos.'), page);
+  container.replaceChildren(pageHeader('Ajustes', 'Configuración de Cerebro Profesional e IA.'), page);
 
   scrollToSettingsSection(sectionParam);
 }

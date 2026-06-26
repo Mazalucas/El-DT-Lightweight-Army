@@ -4,7 +4,10 @@ import { APP_VERSION } from '@shared/app-version.js';
 import { logout } from '../../lib/firebase.js';
 import { orgDisplayName, orgInitials } from '../../lib/org-branding.js';
 import { Icon } from '../ds.js';
-import { qk, useDashboard, useOrg, useOrgs } from '../hooks.js';
+import { GlobalSyncPanel } from '../components/SyncControls.js';
+import { CerebroAmbientLayer } from '../components/cerebro/CerebroAmbientLayer.js';
+import { CerebroShell } from '../components/cerebro/CerebroShell.js';
+import { qk, useDashboard, useDeviceTimezoneSync, useOrg, useOrgs } from '../hooks.js';
 import { api } from '../../lib/api.js';
 
 interface NavEntry {
@@ -25,9 +28,8 @@ function personalNav(badges: { tareas?: number; mantenimiento?: number }): NavEn
     { to: '/personas', label: 'Personas', icon: 'users', mobile: true },
     { to: '/proyectos', label: 'Proyectos', icon: 'folder' },
     { to: '/red', label: 'Red', icon: 'share' },
-    { to: '/asistente', label: 'Asistente', icon: 'brain' },
+    { to: '/cerebro', label: 'Cerebro', icon: 'brain' },
     { to: '/empresa', label: 'Empresa', icon: 'building' },
-    { to: '/facturas', label: 'Facturas', icon: 'receipt' },
     { to: '/mantenimiento', label: 'Mantenimiento', icon: 'inbox', badge: badges.mantenimiento },
     { to: '/ajustes', label: 'Ajustes', icon: 'settings', mobile: true },
   ];
@@ -55,12 +57,28 @@ function orgNav(orgId: string, isAdmin: boolean): NavEntry[] {
   return items;
 }
 
+const NAV_CEREBRO_TARGETS: Record<string, string> = {
+  '/': 'nav.hoy',
+  '/buscar': 'nav.buscar',
+  '/reuniones': 'nav.reuniones',
+  '/tareas': 'nav.tareas',
+  '/personas': 'nav.personas',
+  '/proyectos': 'nav.proyectos',
+  '/mantenimiento': 'nav.mantenimiento',
+  '/red': 'nav.red',
+  '/cerebro': 'nav.cerebro',
+  '/empresa': 'nav.empresa',
+  '/ajustes': 'nav.ajustes',
+};
+
 function NavEntryLink({ entry }: { entry: NavEntry }) {
+  const cerebroTarget = NAV_CEREBRO_TARGETS[entry.to];
   return (
     <NavLink
       to={entry.to}
       end={entry.end}
       className={({ isActive }) => `app-nav-link${isActive ? ' active' : ''}`}
+      data-cerebro-target={cerebroTarget}
     >
       <span className="nav-icon">
         <Icon name={entry.icon} />
@@ -136,6 +154,7 @@ async function doLogout() {
 }
 
 export default function AppShell() {
+  useDeviceTimezoneSync();
   const orgMatch = useMatch('/org/:orgId/*');
   const orgId = orgMatch?.params.orgId;
 
@@ -162,14 +181,17 @@ export default function AppShell() {
     <div className="app-layout">
       <header className="app-topbar">
         <Brand orgId={orgId} compact />
-        <button
-          type="button"
-          className="btn btn-ghost app-logout-btn app-topbar-logout"
-          aria-label="Salir"
-          onClick={() => void doLogout()}
-        >
-          <Icon name="logout" />
-        </button>
+        <div className="app-topbar-actions">
+          <GlobalSyncPanel compact />
+          <button
+            type="button"
+            className="btn btn-ghost app-logout-btn app-topbar-logout"
+            aria-label="Salir"
+            onClick={() => void doLogout()}
+          >
+            <Icon name="logout" />
+          </button>
+        </div>
       </header>
 
       <aside className="app-sidebar" aria-label="Navegación lateral">
@@ -190,6 +212,7 @@ export default function AppShell() {
             ))}
           </nav>
         </div>
+        <GlobalSyncPanel />
         <div className="app-sidebar-footer">
           <span className="app-version" title="Versión desplegada">
             v{APP_VERSION}
@@ -228,6 +251,8 @@ export default function AppShell() {
             </NavLink>
           ))}
       </nav>
+      <CerebroAmbientLayer />
+      <CerebroShell />
     </div>
   );
 }

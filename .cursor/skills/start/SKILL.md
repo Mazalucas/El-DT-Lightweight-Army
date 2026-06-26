@@ -38,8 +38,9 @@ Inicia **`cerebro-app`** — webapp unificada en el navegador (puerto dev **5190
 
 - `#/` — Home
 - `#/profesional` — Reuniones, pipeline, IA
-- `#/facturas` — Facturas autónomo
 - `#/settings` — Google OAuth, carpetas Drive, API keys
+
+Facturas autónomo: app local separada — **`/nueva-factura`** (`apps/facturas`, gitignored).
 
 ## Related
 

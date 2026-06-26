@@ -33,7 +33,6 @@ const SETTINGS_SECTION_LABELS: Record<string, string> = {
   profesional: 'Profesional',
   empresa: 'Empresa',
   ia: 'IA',
-  modulos: 'Módulos',
   apariencia: 'Apariencia',
 };
 
@@ -84,12 +83,8 @@ export function buildAssistantPageContext(opts?: {
         : 'Detalle de una reunión.';
       break;
     case 'assistant':
-      pageTitle = 'Asistente';
+      pageTitle = 'Cerebro';
       pageDescription = 'Chat completo con historial y sugerencias.';
-      break;
-    case 'facturas':
-      pageTitle = 'Facturas';
-      pageDescription = 'Módulo de facturación autónomo.';
       break;
     case 'empresa':
       pageTitle = orgName ? `Empresa · ${orgName}` : 'Empresa';
@@ -152,7 +147,7 @@ export function assistantWelcomeMessage(ctx: AssistantPageContext): string {
     return `${greeting} ¿Qué querés hacer hoy en tu cerebro?`;
   }
   if (ctx.route === 'settings' && ctx.settingsSection === 'ia') {
-    return `${greeting} Estás en Ajustes de IA. ¿Te ayudo a configurar el proveedor o a probar el asistente?`;
+    return `${greeting} Estás en Ajustes de IA. ¿Te ayudo a configurar el proveedor o a probar Cerebro?`;
   }
 
   return `${greeting} Estás en ${ctx.pageTitle}. ¿En qué te ayudo?`;

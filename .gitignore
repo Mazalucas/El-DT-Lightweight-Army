@@ -57,8 +57,8 @@ client_secret*.json
 modules/*/assets/local/
 modules/**/assets/local/**
 
-# Config local de ruta Google Drive (copiar desde assets/export-config.example.json)
-modules/facturas-autonomo-es/assets/local/export-config.json
+# App Facturas — proyecto local (no versionado; datos fiscales + código)
+apps/facturas/
 
 # Módulos — cola local de captura (chat → app)
 modules/*/.local/

@@ -19,6 +19,8 @@ import {
   toast,
 } from '../ds.js';
 import { qk, useSettings } from '../hooks.js';
+import { CerebroSettingsSection } from '../components/cerebro/CerebroSettingsSection.js';
+import { RegionalSettingsSection } from '../components/RegionalSettingsSection.js';
 
 /**
  * Puente legacy: monta el wizard de setup (vanilla TS) dentro de React.
@@ -110,7 +112,7 @@ function ProviderBlock({ provider, onChanged }: { provider: LlmProviderMeta; onC
       </div>
       {provider.keyHint ? <p className="muted provider-key-hint">Key: {provider.keyHint}</p> : null}
       <div className="provider-fields">
-        <Field label="API Key">
+        <Field label="API Key de IA" data-cerebro-target="settings.ai_provider">
           <input
             className="field-input"
             type="password"
@@ -150,7 +152,6 @@ export default function Ajustes() {
   const providers = useQuery({ queryKey: qk.providers, queryFn: api.listProviders });
   const [params] = useSearchParams();
   const [theme, setTheme] = useState<ThemePreference>(() => loadThemePreference());
-  const [facturasFolder, setFacturasFolder] = useState<string | null>(null);
   const googleToastShown = useRef(false);
 
   useEffect(() => {
@@ -162,6 +163,13 @@ export default function Ajustes() {
   }, [params, client]);
 
   useEffect(() => {
+    const section = params.get('section');
+    if (!section) return;
+    const el = document.getElementById(`settings-section-${section}`);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [params]);
+
+  useEffect(() => {
     syncThemeFromSettings(settings.data?.appearance?.theme);
   }, [settings.data?.appearance?.theme]);
 
@@ -171,15 +179,6 @@ export default function Ajustes() {
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: qk.settings });
       toast('Proveedor IA actualizado');
-    },
-    onError: (e) => toast(e instanceof Error ? e.message : 'Error', 'error'),
-  });
-
-  const saveFacturasFolder = useMutation({
-    mutationFn: () => api.saveConfig({ facturasExportFolderId: (facturasFolder ?? '').trim() }),
-    onSuccess: () => {
-      void client.invalidateQueries({ queryKey: qk.settings });
-      toast('Carpeta facturas guardada');
     },
     onError: (e) => toast(e instanceof Error ? e.message : 'Error', 'error'),
   });
@@ -197,12 +196,17 @@ export default function Ajustes() {
 
   return (
     <div>
-      <PageHeader title="Ajustes" desc="Configuración de Cerebro Profesional, IA y módulos." />
+      <PageHeader title="Ajustes" desc="Configuración de Cerebro Profesional e IA." />
 
       <div className="chip-row" style={{ marginBottom: 'var(--space-4)' }}>
         <Badge tone={googleConnected ? 'success' : 'warn'}>
           Google: {googleConnected ? 'Conectado' : 'Pendiente'}
         </Badge>
+        {googleConnected ? (
+          <Badge tone={google.data?.hasCalendarScope ? 'success' : 'default'}>
+            Calendar: {google.data?.hasCalendarScope ? 'Activo' : 'Pendiente'}
+          </Badge>
+        ) : null}
         <Badge tone={folderCount ? 'success' : 'warn'}>
           Carpetas: {folderCount ? `${folderCount} fuente${folderCount === 1 ? '' : 's'}` : 'Sin configurar'}
         </Badge>
@@ -210,6 +214,7 @@ export default function Ajustes() {
         <Badge tone={syncOn ? 'accent' : 'default'}>Sync automático: {syncOn ? 'Activo' : 'Manual'}</Badge>
       </div>
 
+      <div id="settings-section-profesional">
       <Section
         title="Cerebro Profesional"
         desc="Google Drive, carpetas de Notas de Gemini, prueba de fuentes y sincronización automática."
@@ -226,13 +231,17 @@ export default function Ajustes() {
           onConfigChange={() => void client.invalidateQueries({ queryKey: qk.settings })}
         />
       </Section>
+      </div>
 
+      <div id="settings-section-empresa">
       <Section title="Empresa" desc="Gestioná empresas, invitaciones y espacios compartidos.">
         <Link to="/empresa" className="btn btn-primary btn-sm">
           Ir a Empresa
         </Link>
       </Section>
+      </div>
 
+      <div id="settings-section-ia">
       <Section
         title="Inteligencia artificial"
         desc="Tus API keys se cifran en el servidor. Tras guardar, nunca se muestran completas."
@@ -261,15 +270,15 @@ export default function Ajustes() {
             <Icon name="brain" />
           </div>
           <div className="settings-ia-bridge-copy">
-            <strong>Esta API key alimenta el Asistente y las sugerencias</strong>
+            <strong>Esta API key alimenta Cerebro y las sugerencias</strong>
             <p className="muted">
               Sugerencias inteligentes, digest diario y chat usan tu key (BYOK). Sin key, la app funciona en modo
               básico.
             </p>
           </div>
           {iaReady ? (
-            <Link to="/asistente" className="btn btn-primary btn-sm">
-              Abrir asistente
+            <Link to="/cerebro" className="btn btn-primary btn-sm" data-cerebro-target="nav.cerebro">
+              Abrir Cerebro
             </Link>
           ) : (
             <Button variant="secondary" size="sm" disabled>
@@ -278,25 +287,27 @@ export default function Ajustes() {
           )}
         </div>
       </Section>
+      </div>
 
-      <Section title="Módulos" desc="Opciones de integración para apps auxiliares de Cerebro.">
-        <h3 className="settings-subblock-title">Facturas — export a Drive</h3>
-        <p className="muted settings-subblock-desc">
-          Carpeta destino para PDFs o exports generados desde el módulo Facturas.
-        </p>
-        <Field label="Folder ID destino">
-          <input
-            className="field-input"
-            placeholder="ID de carpeta en Google Drive"
-            value={facturasFolder ?? config.facturasExportFolderId ?? ''}
-            onChange={(e) => setFacturasFolder(e.target.value)}
-          />
-        </Field>
-        <Button size="sm" loading={saveFacturasFolder.isPending} onClick={() => saveFacturasFolder.mutate()}>
-          Guardar carpeta
-        </Button>
+      <div id="settings-section-cerebro">
+      <Section
+        title="Cerebro"
+        desc="Copiloto in-app: proactividad, avisos de reunión y chip de calendario."
+      >
+        <CerebroSettingsSection />
       </Section>
+      </div>
 
+      <div id="settings-section-regional">
+      <Section
+        title="Regional"
+        desc="Zona horaria para calendario, Cerebro y sincronización automática."
+      >
+        <RegionalSettingsSection />
+      </Section>
+      </div>
+
+      <div id="settings-section-apariencia">
       <Section title="Apariencia" desc="Tema de la interfaz en este dispositivo.">
         <Segmented
           ariaLabel="Tema"
@@ -315,6 +326,7 @@ export default function Ajustes() {
           }}
         />
       </Section>
+      </div>
     </div>
   );
 }

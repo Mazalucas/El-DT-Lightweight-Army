@@ -14,7 +14,7 @@ Alias de invocación: `/nueva-factura`, `/NuevaFactura`, "nueva factura".
 | Campo | Valor |
 |-------|--------|
 | ID catálogo | `facturas-autonomo-es` |
-| Path app | `modules/facturas-autonomo-es/src` |
+| Path app | `apps/facturas/src` |
 | Script | `scripts/dev-facturas-autonomo.sh` (desde raíz del repo) |
 
 ## Pasos (ejecutar en orden)
@@ -38,14 +38,14 @@ Alias de invocación: `/nueva-factura`, `/NuevaFactura`, "nueva factura".
    - Recordatorio: primera vez configura **Emisor** (NIF, IBAN…) en el modal; datos solo en IndexedDB local
    - **Exportar confirmada** → PDF/PNG en Google Drive (`Facturas/AAAA MM - MES/`)
    - Atajos: clientes guardados, emitir, PDF (imprimir), PNG descarga
-   - Doc: `modules/facturas-autonomo-es/README.md`
+   - Doc: `apps/facturas/README.md` (local; gitignored)
 
 ## Si falla
 
 | Error | Acción |
 |-------|--------|
 | `node` / `npm` no encontrado | Indicar instalar Node LTS |
-| `npm install` falla | Mostrar error; sugerir `cd modules/facturas-autonomo-es/src && npm install` manual |
+| `npm install` falla | Mostrar error; sugerir `cd apps/facturas/src && npm install` manual |
 | Puerto ocupado por otra app | Indicar URL alternativa de Vite o cerrar el otro proceso |
 | Falta `node_modules` | El script corre `npm install` automáticamente |
 

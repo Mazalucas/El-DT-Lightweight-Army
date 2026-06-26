@@ -19,14 +19,13 @@
 - **Path:** `.`
 - **Tags:** dt, brain, orchestration
 
-### `facturas-autonomo-es` — tool
+### `facturas-autonomo-es` — tool (local)
 
-- **Estado:** active
-- **Path:** `modules/facturas-autonomo-es`
+- **Estado:** local (gitignored)
+- **Path:** `apps/facturas` — ver [apps/README.md](../../apps/README.md)
 - **Dev:** **`/nueva-factura`** o `./scripts/dev-facturas-autonomo.sh`
 - **Tags:** facturas, autonomo, españa, fiscal
-- **Aliases:** facturas, autonomo, invoices-es
-- **Plantilla Excel:** `modules/facturas-autonomo-es/assets/templates/Modelo-fra-Lucas.xlsx`
+- **Nota:** separada de Cerebro App; no versionada en Git
 
 ### `recordatorios` — tool
 

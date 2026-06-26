@@ -24,18 +24,17 @@ modules:
   - id: facturas-autonomo-es
     kind: tool
     label: "Facturas autónomo (España)"
-    status: active
+    status: local
     location:
-      type: internal
-      path: modules/facturas-autonomo-es
+      type: external
+      path: apps/facturas
     tags: [facturas, autonomo, españa, fiscal, herramienta]
     aliases: [facturas, autonomo, invoices-es]
     entrypoints:
-      readme: README.md
+      readme: apps/README.md
       dev: "./scripts/dev-facturas-autonomo.sh"
       command: "/nueva-factura"
-      assets: assets/
-      requirements: docs/requisitos-factura-es.md
+    note: "App local gitignored — separada de cerebro-app"
     dependencies: []
 
   - id: cerebro-app

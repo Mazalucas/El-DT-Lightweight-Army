@@ -32,14 +32,6 @@ const TOOLS = [
     featured: false,
   },
   {
-    id: 'facturas',
-    iconName: 'receipt',
-    title: 'Facturas autónomo',
-    desc: 'Crear, emitir y exportar facturas a Google Drive.',
-    route: 'facturas' as const,
-    featured: false,
-  },
-  {
     id: 'settings',
     iconName: 'settings',
     title: 'Ajustes',

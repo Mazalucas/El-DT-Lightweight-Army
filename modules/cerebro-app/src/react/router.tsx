@@ -2,6 +2,8 @@ import { createHashRouter, Navigate, useParams, useSearchParams } from 'react-ro
 import type { ReactNode } from 'react';
 import { useAuth } from './auth.js';
 import AppShell from './shell/AppShell.js';
+import { SyncProvider } from './sync-context.js';
+import { CerebroProvider } from './components/cerebro/CerebroProvider.js';
 
 function Splash() {
   return (
@@ -48,19 +50,62 @@ function LegacySettingsRedirect() {
 }
 
 function lazyPage(loader: () => Promise<{ default: React.ComponentType }>) {
-  return async () => ({ Component: (await loader()).default });
+  return async () => {
+    try {
+      const { default: Component } = await loader();
+      return { Component, HydrateFallback: Splash };
+    } catch (err) {
+      if (isStaleChunkError(err)) reloadOnceForStaleChunk();
+      throw err;
+    }
+  };
 }
 
-export const router = createHashRouter([
+function RouteError() {
+  return (
+    <div className="app-splash" style={{ padding: '2rem' }}>
+      <p>No se pudo cargar esta pantalla.</p>
+      <button type="button" className="btn btn-secondary btn-sm" onClick={() => window.location.reload()}>
+        Recargar
+      </button>
+    </div>
+  );
+}
+
+function isStaleChunkError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return (
+    msg.includes('Failed to fetch dynamically imported module') ||
+    msg.includes('Importing a module script failed') ||
+    msg.includes('error loading dynamically imported module')
+  );
+}
+
+/** Tras un deploy, el HTML cacheado apunta a chunks viejos — recargar una vez. */
+function reloadOnceForStaleChunk(): void {
+  const key = 'cerebro-chunk-reload';
+  if (sessionStorage.getItem(key)) return;
+  sessionStorage.setItem(key, '1');
+  window.location.reload();
+}
+
+export const router = createHashRouter(
+  [
   {
     path: '/login',
     lazy: lazyPage(() => import('./pages/Login.js')),
+    errorElement: <RouteError />,
   },
   {
     path: '/',
+    errorElement: <RouteError />,
     element: (
       <RequireAuth>
-        <AppShell />
+        <SyncProvider>
+          <CerebroProvider>
+            <AppShell />
+          </CerebroProvider>
+        </SyncProvider>
       </RequireAuth>
     ),
     children: [
@@ -73,8 +118,8 @@ export const router = createHashRouter([
       { path: 'proyectos', lazy: lazyPage(() => import('./pages/ProyectosEquipos.js')) },
       { path: 'red', lazy: lazyPage(() => import('./pages/Red.js')) },
       { path: 'mantenimiento', lazy: lazyPage(() => import('./pages/Mantenimiento.js')) },
-      { path: 'asistente', lazy: lazyPage(() => import('./pages/Asistente.js')) },
-      { path: 'facturas', lazy: lazyPage(() => import('./pages/Facturas.js')) },
+      { path: 'cerebro', lazy: lazyPage(() => import('./pages/Cerebro.js')) },
+      { path: 'asistente', element: <Navigate to="/cerebro" replace /> },
       { path: 'empresa', lazy: lazyPage(() => import('./pages/Empresa.js')) },
       { path: 'join/:token', lazy: lazyPage(() => import('./pages/Join.js')) },
       { path: 'ajustes', lazy: lazyPage(() => import('./pages/Ajustes.js')) },
@@ -97,9 +142,10 @@ export const router = createHashRouter([
       { path: 'profesional', element: <Navigate to="/" replace /> },
       { path: 'profesional/:tab', element: <LegacyProfesionalRedirect /> },
       { path: 'meeting/:id', element: <LegacyMeetingRedirect /> },
-      { path: 'assistant', element: <Navigate to="/asistente" replace /> },
+      { path: 'assistant', element: <Navigate to="/cerebro" replace /> },
       { path: 'settings', element: <LegacySettingsRedirect /> },
       { path: '*', element: <Navigate to="/" replace /> },
     ],
   },
-]);
+  ],
+);

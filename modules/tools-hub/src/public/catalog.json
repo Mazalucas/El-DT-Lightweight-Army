@@ -7,7 +7,7 @@
       "kind": "module",
       "section": "tool",
       "category": "Herramienta",
-      "status": "active",
+      "status": "local",
       "tags": [
         "facturas",
         "autonomo",
@@ -32,7 +32,7 @@
         "url": "http://localhost:5173/",
         "port": 5173
       },
-      "searchText": "facturas-autonomo-es facturas autónomo (españa) tool tool crear, emitir y exportar facturas de autónomo en españa. facturas autonomo españa fiscal herramienta facturas autonomo invoices-es /nueva-factura modules/facturas-autonomo-es"
+      "searchText": "facturas-autonomo-es facturas autónomo (españa) tool local crear, emitir y exportar facturas de autónomo en españa. facturas autonomo españa fiscal herramienta facturas autonomo invoices-es /nueva-factura apps/facturas"
     },
     {
       "id": "recordatorios",

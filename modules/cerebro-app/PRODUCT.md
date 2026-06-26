@@ -6,11 +6,11 @@ product
 
 ## Users
 
-Lucas y operadores del DT que gestionan reuniones Meet, contactos, todos, recordatorios y facturas autónomo en sesiones largas (escritorio, noche o día).
+Lucas y operadores del DT que gestionan reuniones Meet, contactos, todos y recordatorios en sesiones largas (escritorio, noche o día).
 
 ## Product Purpose
 
-Cerebro App unifica el segundo cerebro profesional en una SPA cloud: sync Drive, store, IA BYOK y facturas. Éxito = confianza tipo Linear/Notion, densidad sin ruido, tareas completadas sin fricción.
+Cerebro App unifica el segundo cerebro profesional en una SPA cloud: sync Drive, store e IA BYOK. Éxito = confianza tipo Linear/Notion, densidad sin ruido, tareas completadas sin fricción.
 
 ## Brand Personality
 

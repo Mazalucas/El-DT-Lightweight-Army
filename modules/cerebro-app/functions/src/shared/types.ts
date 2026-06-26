@@ -22,6 +22,11 @@ export interface SyncScheduleConfig {
   lastRunSummary?: string;
 }
 
+export interface SyncPolicyConfig {
+  /** 0 = sin límite. Sync, import, contactos, tareas y análisis IA. */
+  processLookbackDays: number;
+}
+
 export interface SetupProgress {
   sharedInboxGuideDone?: boolean;
 }
@@ -31,14 +36,31 @@ export interface Team {
   name: string;
   color: string;
   tags?: string[];
+  emails?: string[];
 }
 
 export type ThemePreference = 'dark' | 'light' | 'system';
 
+/** Preferencias del copiloto in-app Cerebro (Ajustes → Cerebro). */
+export interface CerebroSettingsPrefs {
+  proactiveLevel: 'off' | 'subtle' | 'active';
+  meetingReminderMinutes: 10 | 15 | 30;
+  chipMeetingMinutesMax: 60 | 90 | 120;
+}
+
+export type TimezoneSource = 'device' | 'google_calendar' | 'manual';
+
+export interface LocaleSettings {
+  timezoneSource: TimezoneSource;
+  /** IANA: valor manual, cache de Google, o última TZ del dispositivo */
+  timezone: string;
+  /** Cache de calendars.get('primary').timeZone */
+  googleCalendarTimezone?: string;
+}
+
 export interface UserAppSettings {
   meetSources: MeetSourceConfig[];
   teams: Team[];
-  facturasExportFolderId?: string;
   appearance: {
     theme: ThemePreference;
   };
@@ -50,7 +72,10 @@ export interface UserAppSettings {
     defaultProviderId: string;
     autoAnalyzeAfterSync?: boolean;
   };
+  cerebro?: CerebroSettingsPrefs;
+  locale?: LocaleSettings;
   syncSchedule?: SyncScheduleConfig;
+  syncPolicy?: SyncPolicyConfig;
   setupProgress?: SetupProgress;
 }
 
@@ -71,11 +96,23 @@ export const DEFAULT_SETTINGS: UserAppSettings = {
     defaultProviderId: 'google_gemini',
     autoAnalyzeAfterSync: true,
   },
+  cerebro: {
+    proactiveLevel: 'subtle',
+    meetingReminderMinutes: 10,
+    chipMeetingMinutesMax: 90,
+  },
+  locale: {
+    timezoneSource: 'device',
+    timezone: 'America/Argentina/Buenos_Aires',
+  },
   syncSchedule: {
     enabled: false,
     hour: 8,
     minute: 0,
-    timezone: 'Europe/Madrid',
+    timezone: 'America/Argentina/Buenos_Aires',
+  },
+  syncPolicy: {
+    processLookbackDays: 30,
   },
   setupProgress: {},
 };
@@ -140,6 +177,8 @@ export interface Meeting {
   actionItems?: string[];
   bodyPreview?: string;
   updatedAt: string;
+  /** Última vez que el mirror/contenido se sincronizó desde Drive. */
+  lastSyncedAt?: string;
   driveFolderId?: string;
   teamId?: string;
   contributorUids?: string[];
@@ -224,6 +263,14 @@ export interface CerebroStore {
   meetings: Meeting[];
   people: Person[];
   prospects: PersonProspect[];
+  /** Claves normalizadas de nombres descartados como prospect (no reindexar). */
+  dismissedProspectKeys?: string[];
+  /** IDs de prospect descartados (huérfanos en reuniones). */
+  dismissedProspectIds?: string[];
+  /** Claves personId:email de reasignaciones de equipo descartadas. */
+  dismissedTeamEmailKeys?: string[];
+  /** IDs de sugerencias merge_contacts descartadas (merge-email-*, merge-name-*). */
+  dismissedMergeContactKeys?: string[];
   projects: Project[];
   teams: Team[];
   todos: MeetingTodo[];
@@ -246,6 +293,8 @@ export interface ManifestEntry {
   syncError?: string;
   contentHash?: string;
   driveFolderId?: string;
+  /** Google Drive modifiedTime — detectar cambios sin re-descargar todo. */
+  driveModifiedTime?: string;
 }
 
 export interface SyncProgress {
@@ -331,6 +380,8 @@ export interface ApiStatus {
   meetSourceCount: number;
   setupComplete: boolean;
   syncSchedule?: SyncScheduleConfig;
+  /** Mejor timestamp disponible (schedule, lastRun doc, progreso). */
+  lastSyncAt?: string;
 }
 
 export interface DriveFolderItem {
@@ -338,55 +389,6 @@ export interface DriveFolderItem {
   name: string;
   mimeType: string;
   modifiedTime?: string;
-}
-
-// Facturas
-export interface InvoiceClient {
-  id: string;
-  kind: 'company' | 'individual';
-  name: string;
-  taxId?: string;
-  address?: string;
-  email?: string;
-  currency?: string;
-}
-
-export interface InvoiceEmitter {
-  name: string;
-  taxId: string;
-  address: string;
-  email?: string;
-  phone?: string;
-  iban?: string;
-}
-
-export interface InvoiceLine {
-  description: string;
-  quantity: number;
-  unitPrice: number;
-}
-
-export interface InvoiceRecord {
-  id: string;
-  number: number;
-  series: string;
-  date: string;
-  clientId: string;
-  clientSnapshot: InvoiceClient;
-  emitterSnapshot: InvoiceEmitter;
-  lines: InvoiceLine[];
-  currency: string;
-  notes?: string;
-  status: 'draft' | 'issued';
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface FacturasStore {
-  emitter: InvoiceEmitter;
-  clients: InvoiceClient[];
-  invoices: InvoiceRecord[];
-  lastInvoiceNumber: number;
 }
 
 // --- Organizaciones (SaaS) ---
@@ -461,6 +463,7 @@ export type SuggestionKind =
   | 'link_prospect'
   | 'assign_project'
   | 'assign_team'
+  | 'reassign_team_email'
   | 'accept_todo'
   | 'review_meeting';
 
@@ -555,6 +558,36 @@ export interface SmartSuggestion {
   updatedAt: string;
 }
 
+export type MeetingPrepFactKind = 'same_people' | 'same_project' | 'recurring_series' | 'open_commitment';
+
+export interface MeetingPrepFact {
+  kind: MeetingPrepFactKind;
+  calendarEventId: string;
+  relatedMeetingIds?: string[];
+  relatedPersonIds?: string[];
+  relatedProjectIds?: string[];
+  relatedTodoIds?: string[];
+  /** Texto corto para el LLM; no es copy final de UI. */
+  summaryHint: string;
+}
+
+export type MeetingPrepEvidenceType = 'meeting' | 'person' | 'todo' | 'project';
+
+export interface MeetingPrepEvidence {
+  type: MeetingPrepEvidenceType;
+  id: string;
+  label: string;
+}
+
+export interface MeetingPrepInsight {
+  calendarEventId: string;
+  eventTitle: string;
+  eventStart: string;
+  headline: string;
+  bullets?: string[];
+  evidence: MeetingPrepEvidence[];
+}
+
 /** Resumen diario generado por LLM tras cada pipeline; alimenta la pantalla Hoy. */
 export interface DailyDigest {
   id: string;
@@ -564,6 +597,7 @@ export interface DailyDigest {
   summary: string;
   focus: string[];
   suggestionIds: string[];
+  meetingPrepInsights?: MeetingPrepInsight[];
 }
 
 // --- Vistas por pantalla (API /api/views) ---
@@ -591,6 +625,9 @@ export interface MeetingListItem {
   id: string;
   title: string;
   startedAt?: string;
+  /** Fecha efectiva para ordenar/mostrar (startedAt o inferida del archivo). */
+  displayDate?: string;
+  lastSyncedAt?: string;
   summary?: string;
   participants: string[];
   personIds: string[];
@@ -603,11 +640,19 @@ export interface MeetingListItem {
   openTodoCount: number;
 }
 
+export type MeetingSortKey =
+  | 'date_desc'
+  | 'date_asc'
+  | 'synced_desc'
+  | 'synced_asc'
+  | 'title_asc';
+
 export interface MeetingsView {
   meetings: MeetingListItem[];
   total: number;
   limit: number;
   offset: number;
+  sort: MeetingSortKey;
   projects: Project[];
   teams: Team[];
 }
@@ -664,11 +709,70 @@ export interface MaintenanceView {
   generatedAt: string;
 }
 
+/** Snapshot mínimo para deshacer un accept de sugerencia de mantenimiento. */
+export interface SuggestionAcceptUndoSnapshot {
+  suggestionId: string;
+  meetingId: string;
+  addedProjectId?: string;
+  addedTeamId?: string;
+}
+
+export interface DashboardDailyTodos {
+  overdue: MeetingTodo[];
+  today: MeetingTodo[];
+  noDate: MeetingTodo[];
+  suggested: MeetingTodo[];
+}
+
+export interface DashboardAttention {
+  maintenanceCount: number;
+  maintenancePreview: MaintenanceItem[];
+  meetingsNeedsReview: number;
+  overdueCount: number;
+  todayCount: number;
+  suggestedCount: number;
+  weekMeetingCount: number;
+  syncStale: boolean;
+}
+
+export type CalendarEventStatus = 'upcoming' | 'ongoing' | 'past';
+
+export interface CalendarEventItem {
+  id: string;
+  title: string;
+  startAt: string;
+  endAt: string;
+  allDay?: boolean;
+  location?: string;
+  meetLink?: string;
+  htmlLink?: string;
+  status?: CalendarEventStatus;
+  linkedMeetingId?: string;
+  attendeeEmails?: string[];
+  recurringEventId?: string;
+  /** RRULE crudo de Google Calendar. */
+  recurrence?: string[];
+  isRecurring?: boolean;
+}
+
+export interface CalendarTodayView {
+  date: string;
+  timezone: string;
+  hasCalendarAccess: boolean;
+  events: CalendarEventItem[];
+  nextEvent?: CalendarEventItem;
+  ongoingEvent?: CalendarEventItem;
+  eventCount: number;
+}
+
 export interface DashboardView {
   date: string;
   digest: DailyDigest | null;
   suggestions: SmartSuggestion[];
+  /** @deprecated use dailyTodos */
   dueTodos: MeetingTodo[];
+  dailyTodos: DashboardDailyTodos;
+  attention: DashboardAttention;
   openTodoCount: number;
   suggestedTodoCount: number;
   recentMeetings: MeetingListItem[];
@@ -681,6 +785,7 @@ export interface DashboardView {
   hasGoogleIntegration: boolean;
   hasLlmKey: boolean;
   lastSyncAt?: string;
+  meetingPrepInsights?: MeetingPrepInsight[];
 }
 
 // --- Graph ---
@@ -712,4 +817,6 @@ export interface GraphSnapshot {
   generatedAt: string;
   centerId?: string;
   depth?: number;
+  /** Nodo del operador actual (person:* por email de login o member:* en org). */
+  selfNodeId?: string;
 }

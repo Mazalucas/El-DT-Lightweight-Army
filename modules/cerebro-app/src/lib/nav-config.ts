@@ -76,7 +76,6 @@ const SETTINGS_CHILDREN: NavItemDef[] = [
   { id: 'set-profesional', label: 'Profesional', iconName: 'briefcase', href: '#/settings?section=profesional', settingsSectionMatch: 'profesional' },
   { id: 'set-empresa', label: 'Empresa', iconName: 'building', href: '#/settings?section=empresa', settingsSectionMatch: 'empresa' },
   { id: 'set-ia', label: 'IA', iconName: 'brain', href: '#/settings?section=ia', settingsSectionMatch: 'ia' },
-  { id: 'set-modulos', label: 'Módulos', iconName: 'receipt', href: '#/settings?section=modulos', settingsSectionMatch: 'modulos' },
   { id: 'set-apariencia', label: 'Apariencia', iconName: 'sun', href: '#/settings?section=apariencia', settingsSectionMatch: 'apariencia' },
 ];
 
@@ -115,7 +114,6 @@ export function buildNavTree(ctx: NavContext): NavItemDef[] {
       children: PROFESIONAL_CHILDREN,
     },
     empresaItem,
-    { id: 'facturas', label: 'Facturas', iconName: 'receipt', href: '#/facturas', routeMatch: 'facturas' },
     {
       id: 'settings',
       label: 'Ajustes',

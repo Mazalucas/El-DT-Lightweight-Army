@@ -1,11 +1,22 @@
+import { useEffect, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { browserTimezone, resolveClientTimezone } from '@shared/timezone.js';
 import { api } from '../lib/api.js';
+
+const DEVICE_SYNC_INTERVAL_MS = 5 * 60_000;
 
 /** Claves de query centralizadas — invalidar `['views']` refresca todas las vistas. */
 export const qk = {
   dashboard: ['views', 'dashboard'] as const,
-  meetings: (params?: { limit?: number; offset?: number; q?: string; projectId?: string; teamId?: string }) =>
-    ['views', 'meetings', params ?? {}] as const,
+  calendarToday: (timezone?: string) => ['views', 'calendar', 'today', timezone ?? ''] as const,
+  meetings: (params?: {
+    limit?: number;
+    offset?: number;
+    q?: string;
+    projectId?: string;
+    teamId?: string;
+    sort?: string;
+  }) => ['views', 'meetings', params ?? {}] as const,
   meeting: (id: string) => ['views', 'meeting', id] as const,
   meetingContent: (id: string) => ['views', 'meeting-content', id] as const,
   people: (q?: string) => ['views', 'people', q ?? ''] as const,
@@ -27,9 +38,10 @@ export const qk = {
   orgGraph: (id: string, opts?: Record<string, unknown>) => ['org', id, 'views', 'graph', opts ?? {}] as const,
   orgStore: (id: string) => ['org', id, 'store'] as const,
   orgHealth: (id: string) => ['org', id, 'health'] as const,
-  facturas: ['facturas'] as const,
   assistantStatus: ['assistant', 'status'] as const,
   assistantConversations: ['assistant', 'conversations'] as const,
+  cerebroStatus: ['cerebro', 'status'] as const,
+  cerebroConversations: ['cerebro', 'conversations'] as const,
 };
 
 const VIEW_STALE_MS = 30_000;
@@ -38,12 +50,24 @@ export function useDashboard() {
   return useQuery({ queryKey: qk.dashboard, queryFn: api.getDashboardView, staleTime: VIEW_STALE_MS });
 }
 
+export function useCalendarToday(enabled = true) {
+  const { data: settings } = useSettings();
+  const timezone = resolveClientTimezone(settings);
+  return useQuery({
+    queryKey: qk.calendarToday(timezone),
+    queryFn: () => api.getCalendarToday(timezone),
+    staleTime: 5 * 60_000,
+    enabled,
+  });
+}
+
 export function useMeetingsView(params?: {
   limit?: number;
   offset?: number;
   q?: string;
   projectId?: string;
   teamId?: string;
+  sort?: string;
 }) {
   return useQuery({
     queryKey: qk.meetings(params),
@@ -80,7 +104,12 @@ export function useBoardView() {
 }
 
 export function useMaintenanceView() {
-  return useQuery({ queryKey: qk.maintenance, queryFn: api.getMaintenanceView, staleTime: VIEW_STALE_MS });
+  return useQuery({
+    queryKey: qk.maintenance,
+    queryFn: api.getMaintenanceView,
+    staleTime: VIEW_STALE_MS,
+    placeholderData: (prev) => prev,
+  });
 }
 
 export function useGraph(opts?: { limit?: number; center?: string; depth?: number; types?: string[] }) {
@@ -106,6 +135,51 @@ export function useSyncProgress(polling: boolean) {
 
 export function useSettings() {
   return useQuery({ queryKey: qk.settings, queryFn: api.getConfig, staleTime: 60_000 });
+}
+
+/** Sincroniza TZ del dispositivo en Firestore cuando source es device (silencioso). */
+export function useDeviceTimezoneSync(): void {
+  const { data: settings } = useSettings();
+  const client = useQueryClient();
+
+  useEffect(() => {
+    if (!settings?.locale || settings.locale.timezoneSource !== 'device') return;
+
+    let cancelled = false;
+
+    const sync = () => {
+      if (cancelled) return;
+      const deviceTz = browserTimezone();
+      if (deviceTz === settings.locale!.timezone) return;
+      void api
+        .saveConfig({
+          locale: {
+            ...settings.locale!,
+            timezoneSource: 'device',
+            timezone: deviceTz,
+          },
+        })
+        .then(() => {
+          void client.invalidateQueries({ queryKey: qk.settings });
+          void client.invalidateQueries({ queryKey: ['views', 'calendar'] });
+        })
+        .catch(() => {});
+    };
+
+    sync();
+    window.addEventListener('focus', sync);
+    const interval = window.setInterval(sync, DEVICE_SYNC_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('focus', sync);
+      window.clearInterval(interval);
+    };
+  }, [settings?.locale, client]);
+}
+
+export function useEffectiveTimezone(): string {
+  const { data: settings } = useSettings();
+  return useMemo(() => resolveClientTimezone(settings), [settings]);
 }
 
 export function useOrgs() {
@@ -139,7 +213,7 @@ export function useOrgBoardView(orgId: string) {
 
 export function useOrgMeetingsView(
   orgId: string,
-  params?: { limit?: number; offset?: number; q?: string; projectId?: string; teamId?: string },
+  params?: { limit?: number; offset?: number; q?: string; projectId?: string; teamId?: string; sort?: string },
 ) {
   return useQuery({
     queryKey: [...qk.orgMeetings(orgId), params ?? {}],
@@ -166,7 +240,10 @@ export function useOrgPeopleView(orgId: string, q?: string) {
   });
 }
 
-export function useOrgGraph(orgId: string, opts?: { limit?: number; center?: string; depth?: number }) {
+export function useOrgGraph(
+  orgId: string,
+  opts?: { limit?: number; center?: string; depth?: number; memberUid?: string },
+) {
   return useQuery({
     queryKey: qk.orgGraph(orgId, opts as Record<string, unknown>),
     queryFn: () => api.getOrgGraph(orgId, opts),

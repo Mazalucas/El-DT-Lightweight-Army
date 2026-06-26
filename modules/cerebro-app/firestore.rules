@@ -90,10 +90,6 @@ service cloud.firestore {
         allow read: if isOwner(uid);
         allow write: if false;
       }
-
-      match /facturas/{doc} {
-        allow read, write: if isOwner(uid);
-      }
     }
 
     match /orgs/{orgId} {

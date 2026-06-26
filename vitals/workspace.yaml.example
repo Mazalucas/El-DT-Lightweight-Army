@@ -16,12 +16,9 @@ projects:
 
   - id: facturas-autonomo-es
     label: "Facturas autónomo (España)"
-    path: modules/facturas-autonomo-es
+    path: apps/facturas
     git_root: .
-    aliases:
-      - facturas
-      - autonomo
-      - invoices-es
+    note: "App local gitignored — no versionada"
 
   # - id: other-service
   #   label: "Proyecto externo"

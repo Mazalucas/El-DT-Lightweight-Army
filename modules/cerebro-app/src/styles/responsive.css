@@ -47,6 +47,10 @@
     height: 15px;
   }
 
+  .app-sync-panel--compact {
+    display: none;
+  }
+
   .app-sidebar {
     display: none;
   }
@@ -228,6 +232,10 @@
     overflow: hidden;
   }
 
+  body.graph-fullscreen-open {
+    overflow: hidden;
+  }
+
   .settings-nav {
     display: none;
   }
@@ -340,11 +348,18 @@
     word-break: break-all;
   }
 
-  /* Toast full width on mobile */
-  .toast {
+  /* Toast full width on mobile — sobre nav inferior + FAB Cerebro */
+  .toast-stack {
     left: var(--space-4);
     right: var(--space-4);
-    bottom: calc(56px + env(safe-area-inset-bottom, 0px) + var(--space-3));
+    bottom: calc(
+      56px + var(--space-4) + env(safe-area-inset-bottom, 0px) + var(--shell-fab-size) + var(--space-3)
+    );
+    max-width: none;
+    align-items: stretch;
+  }
+
+  .toast-stack .toast {
     max-width: none;
   }
 
@@ -352,11 +367,6 @@
   .markdown-preview {
     max-height: 50dvh;
     font-size: var(--text-xs);
-  }
-
-  /* Facturas layout already 1 col at 900px */
-  .facturas-layout {
-    gap: var(--space-6);
   }
 
   .page-section {
@@ -452,7 +462,7 @@
     width: 1rem;
     height: 2px;
     border-radius: 2px 2px 0 0;
-    background: var(--accent);
+    background: var(--signal-primary);
   }
 
   .nav-icon {
@@ -511,6 +521,19 @@
 
   .app-version {
     display: none;
+  }
+
+  .app-sync-panel-label,
+  .app-sync-panel-last,
+  .app-sync-panel .sync-progress-label {
+    display: none;
+  }
+
+  .app-sync-panel .btn {
+    width: 100%;
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+    font-size: 10px;
   }
 
   .app-main {

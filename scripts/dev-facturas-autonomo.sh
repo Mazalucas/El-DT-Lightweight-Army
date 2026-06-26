@@ -4,7 +4,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-APP="$ROOT/modules/facturas-autonomo-es/src"
+APP="$ROOT/apps/facturas/src"
 
 if [[ ! -f "$APP/package.json" ]]; then
   echo "dev-facturas-autonomo: no existe $APP/package.json" >&2
@@ -27,7 +27,7 @@ fi
 if command -v lsof >/dev/null 2>&1; then
   while read -r pid; do
     [[ -z "$pid" ]] && continue
-    if ps -p "$pid" -o args= 2>/dev/null | grep -q 'facturas-autonomo-es'; then
+    if ps -p "$pid" -o args= 2>/dev/null | grep -q 'apps/facturas'; then
       echo "dev-facturas-autonomo: cerrando instancia anterior en :5173 (pid $pid)"
       kill "$pid" 2>/dev/null || true
     fi

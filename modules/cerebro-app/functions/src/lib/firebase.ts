@@ -92,8 +92,8 @@ export function assistantConversationsCol(uid: string) {
   return userRef(uid).collection('assistant').doc('data').collection('conversations');
 }
 
-export function facturasRef(uid: string) {
-  return userRef(uid).collection('facturas').doc('main');
+export function cerebroPlansCol(uid: string) {
+  return userRef(uid).collection('cerebro').doc('data').collection('plans');
 }
 
 export function membershipRef(uid: string, orgId: string) {
