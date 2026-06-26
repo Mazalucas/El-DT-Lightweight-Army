@@ -18,10 +18,28 @@ Delega en **21 especialistas** (producto, diseño, marketing, documentación, ca
 
 Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y más). **Empezá en 2 minutos:** [`/bienvenida`](#primera-vez) → [`/yo`](#ritual-del-día).
 
+## Pitch en video {#pitch-en-video}
+
+<p align="center">
+  <video
+    src="https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/download/pitch-media/el-dt-pitch.mp4"
+    poster="assets/el-dt-pitch-poster.jpg"
+    controls
+    width="900"
+    playsinline>
+    <a href="assets/el-dt-pitch.mp4">
+      <img src="assets/el-dt-pitch-poster.jpg" alt="Ver el pitch de El DT (~7 min)" width="900" />
+    </a>
+  </video>
+</p>
+
+<p align="center"><sub>~7 min · qué es El DT, cómo funciona y para quién · <a href="assets/el-dt-pitch.mp4">Descargar / reproducir</a></sub></p>
+
 ---
 
 ## Índice
 
+- [Pitch en video](#pitch-en-video)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
 - [Qué puede hacer El DT](#qué-puede-hacer-el-dt)

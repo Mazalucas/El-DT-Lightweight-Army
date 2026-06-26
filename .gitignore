@@ -1,3 +1,6 @@
+# Video masters (demasiado pesados para Git; el README usa MP4 comprimido + release)
+assets/*.mov
+
 # Dependencies
 node_modules/
 __pycache__/
