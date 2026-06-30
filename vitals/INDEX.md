@@ -11,6 +11,7 @@ Usá este archivo para decidir **qué leer primero** y no inflar el contexto.
 | ¿Precedencia fast-lane vs no-cómplice vs seguridad? | [specs/precedence.md](specs/precedence.md) |
 | ¿Multi-repo / a qué proyecto aplica un pedido de Git? | [specs/multi-project.md](specs/multi-project.md) y [workspace.yaml.example](workspace.yaml.example) |
 | ¿Cuándo recomendar skills / commands al usuario? | [specs/proactive-tooling.md](specs/proactive-tooling.md) |
+| ¿Atelier / design skills / anti-slop? | [specs/design-skills-protocol.md](specs/design-skills-protocol.md) · `/atelier` · `DOC-DESIGN-001` |
 | ¿Referencias OpenClaw / ecosistema (diseño)? | [specs/references.md](specs/references.md) |
 | ¿Plantilla de handoff entre agentes? | [relay/handoff-template.md](relay/handoff-template.md) |
 | ¿Reglas sobre secretos en vitals? | [charter/no-secrets.md](charter/no-secrets.md) |
