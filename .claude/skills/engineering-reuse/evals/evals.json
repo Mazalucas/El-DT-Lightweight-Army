@@ -1,0 +1,17 @@
+{
+  "skill_name": "engineering-reuse",
+  "evals": [
+    {
+      "prompt": "Add export button to dashboard; repo already has Button in components/ui and useExport hook",
+      "expected": ["Qué reutilicé", "Button", "useExport", "extend", "no new ButtonExport"]
+    },
+    {
+      "prompt": "Create useFetchReports when useFetchData already handles generic GET with params",
+      "expected": ["extend", "useFetchData", "discover", "Qué reutilicé", "minimal diff"]
+    },
+    {
+      "prompt": "New GitHub workflow for deploy identical to existing firebase-deploy.yml",
+      "expected": ["reuse", "workflow", "extend", "matrix", "no duplicate pipeline"]
+    }
+  ]
+}

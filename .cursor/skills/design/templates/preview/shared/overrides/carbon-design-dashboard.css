@@ -1,0 +1,58 @@
+/* IBM Carbon — dashboard shell */
+.carbon-dash {
+  --tpl-sidebar-w: 256px;
+  --tpl-sidebar-bg: #161616;
+  --tpl-sidebar-brand: #f4f4f4;
+  --tpl-sidebar-link: #c6c6c6;
+  --tpl-sidebar-link-hover: #ffffff;
+  --tpl-sidebar-link-active: #ffffff;
+  --tpl-sidebar-hover: #262626;
+  --tpl-sidebar-active-bg: #393939;
+  --tpl-sidebar-border: #393939;
+  --tpl-sidebar-footer: #8d8d8d;
+  --tpl-radius-nav: 0;
+  --tpl-radius-sm: 0;
+  --tpl-radius-md: 0;
+  --tpl-radius-search: 0;
+  --tpl-radius-btn: 0;
+  --tpl-search-bg: #262626;
+  --tpl-border: #393939;
+  --tpl-bg: #f4f4f4;
+  --tpl-surface: #ffffff;
+  --tpl-surface-alt: #f4f4f4;
+  --tpl-text: #161616;
+  --tpl-text-muted: #525252;
+  --tpl-primary-subtle: #edf5ff;
+}
+
+.carbon-dash .tpl-sidebar .brand-mark {
+  border-radius: 0;
+}
+
+.carbon-dash .tpl-sidebar nav a.active {
+  background: #393939;
+  border-left: 3px solid #0f62fe;
+  padding-left: 9px;
+}
+
+.carbon-dash .tpl-btn-compact {
+  border-radius: 0;
+}
+
+.carbon-dash .tpl-kpi,
+.carbon-dash .tpl-panel,
+.carbon-dash .tpl-table-wrap {
+  border-radius: 0;
+}
+
+.carbon-dash .tpl-kpi .value {
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+}
+
+/* Mobile drawer — UI shell IBM */
+@media (max-width: 900px) {
+  .carbon-dash {
+    --atelier-drawer-radius: 0;
+    --atelier-drawer-edge: 3px solid var(--tpl-primary);
+  }
+}

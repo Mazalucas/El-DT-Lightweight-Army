@@ -5,6 +5,7 @@ import {
   getSyncProgress,
   listMeetings,
   markSyncStarting,
+  resolveLastSyncAt,
   runSync,
   scanDriveSources,
   getMirrorContent,
@@ -36,13 +37,14 @@ export const syncRouter = Router();
 syncRouter.get('/status', async (req: AuthedRequest, res) => {
   try {
     const uid = getUid(req);
-    const [meetings, progress, google, llm, store, settings] = await Promise.all([
+    const [meetings, progress, google, llm, store, settings, lastSyncAt] = await Promise.all([
       listMeetings(uid),
       getSyncProgress(uid),
       hasGoogleIntegration(uid),
       listLlmProviders(uid),
       loadStore(uid),
       loadSettings(uid),
+      resolveLastSyncAt(uid),
     ]);
     const status: ApiStatus = {
       hasFirebaseAuth: true,
@@ -55,6 +57,7 @@ syncRouter.get('/status', async (req: AuthedRequest, res) => {
       meetSourceCount: settings.meetSources.length,
       setupComplete: isSetupComplete(settings, google),
       syncSchedule: settings.syncSchedule,
+      lastSyncAt,
     };
     res.json(status);
   } catch (e) {

@@ -1,4 +1,5 @@
 import type { CerebroStore, StoreHealthMetrics } from '../shared/types.js';
+import { isLikelyPersonName } from '../core/profesional/person-name-clean.js';
 import { isValidContact } from '../core/profesional/merge-person-incremental.js';
 import { listActivePendingSuggestions } from './pending-suggestions.js';
 
@@ -56,7 +57,9 @@ export function computeStoreHealth(store: CerebroStore): StoreHealthMetrics {
     meetingsSynced,
     meetingsWithoutResolvedParticipants,
     staleParticipantLinks,
-    prospectsPending: store.prospects.filter((p) => !p.linkedPersonId).length,
+    prospectsPending: store.prospects.filter(
+      (p) => !p.linkedPersonId && isLikelyPersonName(p.displayName),
+    ).length,
     projectSuggestionsPending,
     teamSuggestionsPending,
     todosSuggested: store.todos.filter((t) => t.status === 'suggested').length,

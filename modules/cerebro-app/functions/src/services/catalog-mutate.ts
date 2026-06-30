@@ -1,13 +1,36 @@
-import type { CerebroStore, EmailSource, Person, Project, Team } from '../shared/types.js';
+import type {
+  CerebroStore,
+  EmailSource,
+  Person,
+  Project,
+  ProspectDismissUndoSnapshot,
+  Team,
+} from '../shared/types.js';
+import { normalizePersonNameKey } from '../core/profesional/person-name-clean.js';
+import {
+  applyProspectDismissInStore,
+  applyProspectRestoreInStore,
+  type ProspectDismissApplyResult,
+} from '../core/profesional/prospect-dismiss-store.js';
 import { slugId } from '../core/profesional/parse-mirror-md.js';
 import { isValidContact } from '../core/profesional/merge-person-incremental.js';
+import { normalizeTeamEmails } from '../core/profesional/team-email-index.js';
+import { rebuildGraphEdges } from './graph-edges.js';
 import { loadStore, saveStore } from './store.js';
+import {
+  isNormalizedStore,
+  persistMaintenanceDismissMeta,
+  persistProspectDismiss,
+  persistProspectRestore,
+} from './store-repository.js';
+import { mutateTodosInStore, todoMutationMeta } from './todo-persist.js';
 
 const TEAM_COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#06b6d4'];
 
 export type StoreAdapter = {
   load: () => Promise<CerebroStore>;
   save: (store: CerebroStore) => Promise<void>;
+  uid?: string;
 };
 
 export async function mutateStore(
@@ -23,6 +46,7 @@ export async function mutateStore(
 
 export function userStoreAdapter(uid: string): StoreAdapter {
   return {
+    uid,
     load: () => loadStore(uid),
     save: (store) => saveStore(uid, store),
   };
@@ -92,14 +116,66 @@ export async function createTeam(uid: string, name: string): Promise<{ store: Ce
 export async function updateTeam(
   uid: string,
   id: string,
-  patch: Partial<Pick<Team, 'name' | 'color'>>,
+  patch: Partial<Pick<Team, 'name' | 'color' | 'emails'>>,
 ): Promise<CerebroStore> {
   return withStore(uid, (s) => {
     const existing = s.teams.find((t) => t.id === id);
     if (!existing) throw new Error('Equipo no encontrado');
     const name = patch.name?.trim() ?? existing.name;
     if (!name) throw new Error('El nombre del equipo no puede estar vacío');
-    Object.assign(existing, patch, { name });
+    const emails = patch.emails ? normalizeTeamEmails(patch.emails) : existing.emails;
+    if (emails?.length) {
+      for (const t of s.teams) {
+        if (t.id === id) continue;
+        for (const e of emails) {
+          if ((t.emails ?? []).includes(e)) throw new Error(`Email ${e} ya está en equipo ${t.name}`);
+        }
+      }
+    }
+    Object.assign(existing, patch, { name, emails });
+    s.graphEdges = rebuildGraphEdges(s);
+  });
+}
+
+export async function assignEmailToTeam(uid: string, teamId: string, email: string): Promise<CerebroStore> {
+  const normalized = email.toLowerCase().trim();
+  if (!normalized.includes('@')) throw new Error('Email inválido');
+
+  return withStore(uid, (s) => {
+    const team = s.teams.find((t) => t.id === teamId);
+    if (!team) throw new Error('Equipo no encontrado');
+
+    for (const t of s.teams) {
+      if (t.id !== teamId && (t.emails ?? []).includes(normalized)) {
+        throw new Error(`Email ya asignado a equipo ${t.name}`);
+      }
+    }
+
+    team.emails = [...new Set([...(team.emails ?? []), normalized])];
+
+    const personIdsToRemove = new Set<string>();
+    for (const p of s.people) {
+      if (p.emails?.includes(normalized)) {
+        p.emails = p.emails.filter((e) => e !== normalized);
+        if (p.emailMeta) delete p.emailMeta[normalized];
+        if (!isValidContact(p)) personIdsToRemove.add(p.id);
+      }
+    }
+    if (personIdsToRemove.size) {
+      s.people = s.people.filter((p) => !personIdsToRemove.has(p.id));
+    }
+
+    for (const m of s.meetings) {
+      const emails = m.participantEmails ?? [];
+      if (!emails.some((e) => e.toLowerCase() === normalized)) continue;
+      m.teamIds = [...new Set([...m.teamIds, teamId])];
+      if (personIdsToRemove.size) {
+        m.personIds = m.personIds.filter((pid) => !personIdsToRemove.has(pid));
+      }
+      m.updatedAt = new Date().toISOString();
+    }
+
+    s.graphEdges = rebuildGraphEdges(s);
   });
 }
 
@@ -314,11 +390,33 @@ export async function mergePersonsIntoCanonical(
   return mergePersonsIntoCanonicalOnAdapter(userStoreAdapter(uid), canonicalId, mergeIds);
 }
 
+function applyPersonEnrichment(
+  person: Person,
+  enrichment?: { aliases?: string[]; teamIds?: string[]; projectIds?: string[] },
+): void {
+  if (!enrichment) return;
+  if (enrichment.teamIds?.length) {
+    person.teamIds = [...new Set([...person.teamIds, ...enrichment.teamIds])];
+  }
+  if (enrichment.projectIds?.length) {
+    person.projectIds = [...new Set([...(person.projectIds ?? []), ...enrichment.projectIds])];
+  }
+  if (enrichment.aliases?.length) {
+    const aliases = new Set(person.aliases);
+    for (const raw of enrichment.aliases) {
+      const alias = raw.trim();
+      if (alias && alias !== person.displayName) aliases.add(alias);
+    }
+    person.aliases = [...aliases];
+  }
+}
+
 export async function promoteProspectToContactOnAdapter(
   adapter: StoreAdapter,
   prospectId: string,
   email: string,
   displayName?: string,
+  enrichment?: { aliases?: string[]; teamIds?: string[]; projectIds?: string[] },
 ): Promise<{ store: CerebroStore; person: Person }> {
   const loaded = await adapter.load();
   const prospect = loaded.prospects.find((p) => p.id === prospectId);
@@ -327,13 +425,20 @@ export async function promoteProspectToContactOnAdapter(
   const name = displayName?.trim() || prospect.displayName;
   let person!: Person;
   const store = await mutateStore(adapter, (s) => {
-    person = createPersonInStore(s, name, email);
+    person = createPersonInStore(
+      s,
+      name,
+      email,
+      enrichment?.teamIds ?? [],
+      enrichment?.projectIds ?? [],
+    );
     const p = s.people.find((x) => x.id === person.id)!;
     const pr = s.prospects.find((x) => x.id === prospectId)!;
     const aliases = new Set(p.aliases);
     for (const a of pr.aliases) aliases.add(a);
     if (pr.displayName !== p.displayName) aliases.add(pr.displayName);
     p.aliases = [...aliases].filter((a) => a !== p.displayName);
+    applyPersonEnrichment(p, enrichment);
     for (const m of s.meetings) {
       if (!m.prospectIds?.includes(prospectId)) continue;
       m.personIds = [...new Set([...m.personIds, p.id])];
@@ -349,14 +454,16 @@ export async function promoteProspectToContact(
   prospectId: string,
   email: string,
   displayName?: string,
+  enrichment?: { aliases?: string[]; teamIds?: string[]; projectIds?: string[] },
 ): Promise<{ store: CerebroStore; person: Person }> {
-  return promoteProspectToContactOnAdapter(userStoreAdapter(uid), prospectId, email, displayName);
+  return promoteProspectToContactOnAdapter(userStoreAdapter(uid), prospectId, email, displayName, enrichment);
 }
 
 export async function linkProspectToContactOnAdapter(
   adapter: StoreAdapter,
   prospectId: string,
   personId: string,
+  enrichment?: { aliases?: string[]; teamIds?: string[]; projectIds?: string[] },
 ): Promise<CerebroStore> {
   return mutateStore(adapter, (s) => {
     const prospect = s.prospects.find((p) => p.id === prospectId);
@@ -368,6 +475,7 @@ export async function linkProspectToContactOnAdapter(
     aliases.add(prospect.displayName);
     for (const a of prospect.aliases) aliases.add(a);
     person.aliases = [...aliases].filter((a) => a !== person.displayName);
+    applyPersonEnrichment(person, enrichment);
     for (const m of s.meetings) {
       if (!m.prospectIds?.includes(prospectId)) continue;
       m.personIds = [...new Set([...m.personIds, personId])];
@@ -381,40 +489,161 @@ export async function linkProspectToContact(
   uid: string,
   prospectId: string,
   personId: string,
+  enrichment?: { aliases?: string[]; teamIds?: string[]; projectIds?: string[] },
 ): Promise<CerebroStore> {
-  return linkProspectToContactOnAdapter(userStoreAdapter(uid), prospectId, personId);
+  return linkProspectToContactOnAdapter(userStoreAdapter(uid), prospectId, personId, enrichment);
 }
 
-export async function acceptTodosBatchOnAdapter(adapter: StoreAdapter, todoIds: string[]): Promise<CerebroStore> {
-  return mutateStore(adapter, (s) => {
-    const set = new Set(todoIds);
-    const now = new Date().toISOString();
-    for (const t of s.todos) {
-      if (set.has(t.id) && t.status === 'suggested') {
-        t.status = 'open';
-        t.updatedAt = now;
-      }
-    }
+export { applyProspectDismissInStore, applyProspectRestoreInStore, type ProspectDismissApplyResult };
+
+export function applyTeamEmailReassignDismissInStore(
+  store: CerebroStore,
+  personId: string,
+  email: string,
+): void {
+  const key = `${personId}:${email.toLowerCase().trim()}`;
+  store.dismissedTeamEmailKeys = [...new Set([...(store.dismissedTeamEmailKeys ?? []), key])];
+  store.savedAt = new Date().toISOString();
+}
+
+export function applyMergeContactDismissInStore(store: CerebroStore, suggestionId: string): void {
+  const id = suggestionId.trim();
+  if (!id.startsWith('merge-email-') && !id.startsWith('merge-name-')) {
+    throw new Error('Sugerencia de unificación no válida');
+  }
+  store.dismissedMergeContactKeys = [...new Set([...(store.dismissedMergeContactKeys ?? []), id])];
+  store.savedAt = new Date().toISOString();
+}
+
+export async function dismissProspectOnAdapter(
+  adapter: StoreAdapter,
+  prospectId: string,
+): Promise<{ store: CerebroStore; undoSnapshot: ProspectDismissUndoSnapshot }> {
+  const store = await adapter.load();
+  const { undoSnapshot } = applyProspectDismissInStore(store, prospectId);
+  await adapter.save(store);
+  return { store, undoSnapshot };
+}
+
+export async function restoreProspectDismissOnAdapter(
+  adapter: StoreAdapter,
+  snapshot: ProspectDismissUndoSnapshot,
+): Promise<CerebroStore> {
+  const store = await adapter.load();
+  applyProspectRestoreInStore(store, snapshot);
+  await adapter.save(store);
+  return store;
+}
+
+export async function dismissProspect(
+  uid: string,
+  prospectId: string,
+): Promise<{ store: CerebroStore; undoSnapshot: ProspectDismissUndoSnapshot }> {
+  const store = await loadStore(uid);
+  const { affectedMeetingIds, undoSnapshot } = applyProspectDismissInStore(store, prospectId);
+
+  if (await isNormalizedStore(uid)) {
+    await persistProspectDismiss(uid, store, prospectId, affectedMeetingIds);
+  } else {
+    await saveStore(uid, store);
+  }
+  const fresh = await loadStore(uid);
+  return { store: fresh, undoSnapshot };
+}
+
+export async function restoreProspectDismiss(
+  uid: string,
+  snapshot: ProspectDismissUndoSnapshot,
+): Promise<CerebroStore> {
+  const store = await loadStore(uid);
+  applyProspectRestoreInStore(store, snapshot);
+
+  if (await isNormalizedStore(uid)) {
+    await persistProspectRestore(uid, store, snapshot);
+  } else {
+    await saveStore(uid, store);
+  }
+  return loadStore(uid);
+}
+
+export async function dismissTeamEmailReassign(
+  uid: string,
+  personId: string,
+  email: string,
+): Promise<CerebroStore> {
+  const store = await loadStore(uid);
+  applyTeamEmailReassignDismissInStore(store, personId, email);
+
+  if (await isNormalizedStore(uid)) {
+    await persistMaintenanceDismissMeta(uid, store);
+  } else {
+    await saveStore(uid, store);
+  }
+  return store;
+}
+
+export async function dismissMergeContactSuggestion(uid: string, suggestionId: string): Promise<CerebroStore> {
+  const store = await loadStore(uid);
+  applyMergeContactDismissInStore(store, suggestionId);
+
+  if (await isNormalizedStore(uid)) {
+    await persistMaintenanceDismissMeta(uid, store);
+  } else {
+    await saveStore(uid, store);
+  }
+  return store;
+}
+
+export async function dismissMergeContactOnAdapter(adapter: StoreAdapter, suggestionId: string): Promise<CerebroStore> {
+  return mutateStore(adapter, (store) => {
+    applyMergeContactDismissInStore(store, suggestionId);
   });
 }
 
-export async function dismissTodosBatchOnAdapter(adapter: StoreAdapter, todoIds: string[]): Promise<CerebroStore> {
-  return mutateStore(adapter, (s) => {
-    const set = new Set(todoIds);
-    const now = new Date().toISOString();
-    for (const t of s.todos) {
-      if (set.has(t.id) && t.status === 'suggested') {
-        t.status = 'dismissed';
-        t.updatedAt = now;
+export async function acceptTodosBatchOnAdapter(adapter: StoreAdapter, todoIds: string[]) {
+  const updated: import('../shared/types.js').MeetingTodo[] = [];
+  const store = await mutateTodosInStore(
+    adapter,
+    (s) => {
+      const set = new Set(todoIds);
+      const now = new Date().toISOString();
+      for (const t of s.todos) {
+        if (set.has(t.id) && t.status === 'suggested') {
+          t.status = 'open';
+          t.updatedAt = now;
+          updated.push({ ...t });
+        }
       }
-    }
-  });
+    },
+    () => todoIds,
+  );
+  return { todos: updated, meta: todoMutationMeta(store) };
 }
 
-export async function acceptTodosBatch(uid: string, todoIds: string[]): Promise<CerebroStore> {
+export async function dismissTodosBatchOnAdapter(adapter: StoreAdapter, todoIds: string[]) {
+  const updated: import('../shared/types.js').MeetingTodo[] = [];
+  const store = await mutateTodosInStore(
+    adapter,
+    (s) => {
+      const set = new Set(todoIds);
+      const now = new Date().toISOString();
+      for (const t of s.todos) {
+        if (set.has(t.id) && t.status === 'suggested') {
+          t.status = 'dismissed';
+          t.updatedAt = now;
+          updated.push({ ...t });
+        }
+      }
+    },
+    () => todoIds,
+  );
+  return { todos: updated, meta: todoMutationMeta(store) };
+}
+
+export async function acceptTodosBatch(uid: string, todoIds: string[]) {
   return acceptTodosBatchOnAdapter(userStoreAdapter(uid), todoIds);
 }
 
-export async function dismissTodosBatch(uid: string, todoIds: string[]): Promise<CerebroStore> {
+export async function dismissTodosBatch(uid: string, todoIds: string[]) {
   return dismissTodosBatchOnAdapter(userStoreAdapter(uid), todoIds);
 }

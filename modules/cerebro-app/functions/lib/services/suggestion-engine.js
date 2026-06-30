@@ -8,6 +8,7 @@
  * una acción de un click. Sin API key, no genera nada (modo básico).
  */
 import { v4 as uuidv4 } from 'uuid';
+import { sortMeetingsByRecency } from '../domain/meeting-sort.js';
 import { digestsCol, smartSuggestionsCol } from '../lib/firebase.js';
 import { stripUndefined } from '../lib/firestore-utils.js';
 import { callUserLlmJson, userHasLlmKey } from './llm-service.js';
@@ -15,6 +16,12 @@ import { getMirrorContent } from './sync.js';
 import { loadStore, saveStore } from './store.js';
 import { listSmartSuggestions, saveSmartSuggestions } from './smart-suggestions.js';
 import { materializeSmartTodoCandidatesInStore, } from '../core/profesional/meeting-todos-store.js';
+import { filterDailyTodos } from '../shared/filter-daily-todos.js';
+import { getUserFirstName, getUserEmail } from '../lib/auth-middleware.js';
+import { getCalendarTodayView } from './calendar.service.js';
+import { loadSettings } from '../lib/settings.js';
+import { resolveUserTimezone } from '../shared/timezone.js';
+import { buildMeetingPrepFacts, buildTemplateMeetingPrepInsights, } from '../domain/meeting-prep-insights.service.js';
 const MAX_SUGGESTIONS = 8;
 const RECENT_MEETING_WINDOW_DAYS = 14;
 const MAX_RECENT_MEETINGS = 8;
@@ -35,10 +42,7 @@ function daysAgo(n) {
 }
 function recentMeetings(store) {
     const cutoff = daysAgo(RECENT_MEETING_WINDOW_DAYS).toISOString();
-    return [...store.meetings]
-        .filter((m) => m.startedAt && m.startedAt >= cutoff)
-        .sort((a, b) => (b.startedAt ?? '').localeCompare(a.startedAt ?? ''))
-        .slice(0, MAX_RECENT_MEETINGS);
+    return sortMeetingsByRecency(store.meetings.filter((m) => m.startedAt && m.startedAt >= cutoff)).slice(0, MAX_RECENT_MEETINGS);
 }
 function coolingRelationships(store) {
     const byPerson = new Map();
@@ -273,10 +277,12 @@ export async function runSuggestionEngine(uid) {
 }
 // --- Digest diario ---
 const DIGEST_SYSTEM = `Sos el asistente diario de Cerebro. Generás un digest corto y útil en español rioplatense.
+El headline debe empezar con "Buen día, {nombre}:" usando el nombre del usuario provisto.
+
 Respondé SOLO con JSON válido:
 {
-  "headline": "una frase con lo más importante de hoy",
-  "summary": "2-3 frases con el estado general: reuniones recientes, tareas, focos",
+  "headline": "Buen día, Nombre: lo más importante de hoy en una frase",
+  "summary": "2-3 frases con el estado general: agenda, tareas, reuniones recientes",
   "focus": ["3 a 5 bullets concretos de en qué enfocarse hoy"]
 }
 No inventes datos. Si hay poco que decir, sé breve.`;
@@ -284,37 +290,79 @@ export async function generateDailyDigest(uid) {
     if (!(await userHasLlmKey(uid)))
         return null;
     const store = await loadStore(uid);
-    const suggestions = await listSmartSuggestions(uid, { status: 'pending', limit: 5 });
+    const settings = await loadSettings(uid);
+    const tz = resolveUserTimezone(settings);
+    const [suggestions, firstName, calendarToday, operatorEmail] = await Promise.all([
+        listSmartSuggestions(uid, { status: 'pending', limit: 5 }),
+        getUserFirstName(uid),
+        getCalendarTodayView(uid, { store, timezone: tz }).catch(() => null),
+        getUserEmail(uid),
+    ]);
     const today = new Date().toISOString().slice(0, 10);
-    const dueTodos = store.todos.filter((t) => t.status === 'open' && t.dueAt && t.dueAt.slice(0, 10) <= today);
+    const daily = filterDailyTodos(store.todos);
+    const suggestedTodos = store.todos.filter((t) => t.status === 'suggested').slice(0, 8);
     const meetings = recentMeetings(store).slice(0, 5);
+    const upcomingEvents = calendarToday?.hasCalendarAccess && calendarToday.events.length
+        ? calendarToday.events.filter((ev) => ev.status !== 'past')
+        : [];
+    const prepFacts = calendarToday && upcomingEvents.length
+        ? buildMeetingPrepFacts(calendarToday, store, operatorEmail)
+        : [];
     const lines = [];
+    lines.push(`Usuario: ${firstName}`);
     lines.push(`Fecha: ${today}`);
-    lines.push(`Tareas que vencen hoy o vencidas: ${dueTodos.length}`);
-    for (const t of dueTodos.slice(0, 10))
-        lines.push(`- "${t.text}" (vence ${t.dueAt?.slice(0, 10)})`);
+    lines.push(`Tareas vencidas: ${daily.overdue.length}`);
+    for (const t of daily.overdue.slice(0, 6))
+        lines.push(`- VENCIDA: "${t.text}" (${t.dueAt?.slice(0, 10)})`);
+    lines.push(`Tareas para hoy: ${daily.today.length}`);
+    for (const t of daily.today.slice(0, 6))
+        lines.push(`- HOY: "${t.text}"`);
+    lines.push(`Tareas sugeridas de reuniones (sin aceptar): ${suggestedTodos.length}`);
+    for (const t of suggestedTodos.slice(0, 6)) {
+        lines.push(`- SUGERIDA: "${t.text}"${t.meetingTitle ? ` (${t.meetingTitle})` : ''}`);
+    }
     lines.push(`Tareas abiertas en total: ${store.todos.filter((t) => t.status === 'open').length}`);
     lines.push('');
-    lines.push('Reuniones recientes:');
-    for (const m of meetings)
-        lines.push(`- ${m.title} (${m.startedAt?.slice(0, 10)})${m.summary ? `: ${m.summary.slice(0, 200)}` : ''}`);
+    if (upcomingEvents.length) {
+        lines.push('Agenda de hoy (Google Calendar):');
+        for (const e of upcomingEvents.slice(0, 8)) {
+            const time = e.allDay ? 'Todo el día' : new Date(e.startAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            const attendees = e.attendeeEmails?.length ? ` · invitados: ${e.attendeeEmails.join(', ')}` : '';
+            const series = e.isRecurring ? ' · recurrente' : '';
+            lines.push(`- [eventId: ${e.id}] ${time} ${e.title}${e.meetLink ? ' [Meet]' : ''}${attendees}${series}`);
+        }
+        lines.push('');
+    }
+    if (prepFacts.length) {
+        lines.push(`Eventos con contexto de preparación detectado: ${prepFacts.length} (la UI calcula chips en vivo).`);
+        lines.push('');
+    }
+    lines.push('Reuniones recientes (notas Meet):');
+    for (const m of meetings) {
+        const openTodos = store.todos.filter((t) => t.meetingId === m.id && (t.status === 'open' || t.status === 'suggested')).length;
+        lines.push(`- ${m.title} (${m.startedAt?.slice(0, 10)})${openTodos ? ` · ${openTodos} tareas` : ''}${m.summary ? `: ${m.summary.slice(0, 160)}` : ''}`);
+    }
     lines.push('');
-    lines.push('Sugerencias top del motor:');
+    lines.push('Sugerencias inteligentes top:');
     for (const s of suggestions)
         lines.push(`- [${s.kind}] ${s.title} — ${s.reason}`);
-    const raw = await callUserLlmJson(uid, lines.join('\n'), {
-        systemInstruction: DIGEST_SYSTEM,
-        temperature: 0.4,
-    });
-    let parsed;
+    let parsed = {};
     try {
+        const raw = await callUserLlmJson(uid, lines.join('\n'), {
+            systemInstruction: DIGEST_SYSTEM,
+            temperature: 0.35,
+        });
         parsed = JSON.parse(raw.replace(/^```json?\s*|\s*```$/g, '').trim());
     }
-    catch {
+    catch (e) {
+        console.error(`[intelligence] digest LLM falló para ${uid}:`, e);
         return null;
     }
     if (!parsed.headline || !parsed.summary)
         return null;
+    const meetingPrepInsights = prepFacts.length && upcomingEvents.length
+        ? buildTemplateMeetingPrepInsights(prepFacts, upcomingEvents, store)
+        : [];
     const digest = {
         id: today,
         date: today,
@@ -323,8 +371,12 @@ export async function generateDailyDigest(uid) {
         summary: parsed.summary.slice(0, 1000),
         focus: (parsed.focus ?? []).slice(0, 5).map((f) => String(f).slice(0, 200)),
         suggestionIds: suggestions.map((s) => s.id),
+        meetingPrepInsights: meetingPrepInsights.length ? meetingPrepInsights : undefined,
     };
     await digestsCol(uid).doc(today).set(stripUndefined(digest));
+    if (prepFacts.length) {
+        console.info(`[intelligence] meeting prep insights uid=${uid} facts=${prepFacts.length} insights=${meetingPrepInsights.length}`);
+    }
     return digest;
 }
 /** Embeddings + engine + digest en secuencia; errores se loguean sin romper el pipeline. */

@@ -47,6 +47,8 @@ export interface CerebroSettingsPrefs {
   proactiveLevel: 'off' | 'subtle' | 'active';
   meetingReminderMinutes: 10 | 15 | 30;
   chipMeetingMinutesMax: 60 | 90 | 120;
+  /** UI viva: optimistic elements, dnd-kit, entity effects from Cerebro. */
+  liveElements?: boolean;
 }
 
 export type TimezoneSource = 'device' | 'google_calendar' | 'manual';
@@ -254,6 +256,15 @@ export interface BoardCounts {
   open: number;
   done: number;
   suggestions: number;
+}
+
+/** Respuesta mínima de mutaciones de tareas (Camino A / Cerebro Elements). */
+export interface TodoMutationResult {
+  todo?: MeetingTodo;
+  todos?: MeetingTodo[];
+  meta?: { counts: BoardCounts };
+  /** Compat rollout — omitido cuando el cliente no lo necesita. */
+  store?: CerebroStore;
 }
 
 export interface BoardSnapshot {
@@ -590,12 +601,23 @@ export interface MeetingPrepEvidence {
   label: string;
 }
 
+/** Chip determinístico de un hecho de preparación (1 fact = 1 chip). */
+export interface MeetingPrepFactChip {
+  kind: MeetingPrepFactKind;
+  label: string;
+  evidence: MeetingPrepEvidence[];
+}
+
 export interface MeetingPrepInsight {
   calendarEventId: string;
   eventTitle: string;
   eventStart: string;
-  headline: string;
+  /** @deprecated UI usa factChips; mantener por digests legacy en Firestore. */
+  headline?: string;
+  /** @deprecated UI usa factChips. */
   bullets?: string[];
+  /** Chips determinísticos — fuente principal para UI. */
+  factChips?: MeetingPrepFactChip[];
   evidence: MeetingPrepEvidence[];
 }
 
@@ -726,6 +748,14 @@ export interface SuggestionAcceptUndoSnapshot {
   meetingId: string;
   addedProjectId?: string;
   addedTeamId?: string;
+}
+
+/** Snapshot para deshacer el descarte de un prospect (restaura prospect y meta dismissed). */
+export interface ProspectDismissUndoSnapshot {
+  prospectId: string;
+  prospect?: PersonProspect;
+  meetingIds: string[];
+  dismissedKeysAdded: string[];
 }
 
 export interface DashboardDailyTodos {

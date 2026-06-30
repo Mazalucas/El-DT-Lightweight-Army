@@ -1,5 +1,6 @@
 import type { CerebroStore } from '../shared/types.js';
 import { normalizePersonNameKey } from '../core/profesional/person-name-clean.js';
+import { isProspectDismissed, isProspectIdDismissed } from '../core/profesional/prospect-dismiss.js';
 import { slugId } from '../core/profesional/parse-mirror-md.js';
 import { ensurePendingSuggestions } from './pending-suggestions.js';
 
@@ -27,14 +28,22 @@ export function mergeMemberStoreIntoOrg(
         ...existing,
         ...m,
         personIds: [...new Set([...existing.personIds, ...m.personIds])],
-        prospectIds: [...new Set([...(existing.prospectIds ?? []), ...(m.prospectIds ?? [])])],
+        prospectIds: [...new Set([...(existing.prospectIds ?? []), ...(m.prospectIds ?? [])])].filter(
+          (id) => !isProspectIdDismissed(orgStore, id) && !isProspectIdDismissed(personal, id),
+        ),
         teamIds: [...new Set([...existing.teamIds, ...m.teamIds])],
         projectIds: [...new Set([...existing.projectIds, ...m.projectIds])],
         contributorUids: [...new Set([...(existing.contributorUids ?? []), ...contributorUids])],
       };
       merged++;
     } else {
-      orgStore.meetings.push({ ...m, contributorUids });
+      orgStore.meetings.push({
+        ...m,
+        contributorUids,
+        prospectIds: (m.prospectIds ?? []).filter(
+          (id) => !isProspectIdDismissed(orgStore, id) && !isProspectIdDismissed(personal, id),
+        ),
+      });
       if (m.docId) meetingByDoc.set(m.docId, orgStore.meetings.length - 1);
     }
   }
@@ -65,6 +74,7 @@ export function mergeMemberStoreIntoOrg(
   const prospectsByName = new Map<string, number>();
   orgStore.prospects.forEach((pr, i) => prospectsByName.set(normalizePersonNameKey(pr.displayName), i));
   for (const pr of personal.prospects) {
+    if (isProspectDismissed(personal, pr) || isProspectDismissed(orgStore, pr)) continue;
     const key = normalizePersonNameKey(pr.displayName);
     const idx = prospectsByName.get(key);
     if (idx !== undefined) {
@@ -106,6 +116,12 @@ export function mergeMemberStoreIntoOrg(
   }
 
   const pendingIds = new Set((orgStore.pendingSuggestions ?? []).map((s) => s.id));
+  for (const s of orgStore.pendingSuggestions ?? []) {
+    if (s.status === 'dismissed' || s.status === 'accepted') pendingIds.add(s.id);
+  }
+  for (const s of personal.pendingSuggestions ?? []) {
+    if (s.status === 'dismissed' || s.status === 'accepted') pendingIds.add(s.id);
+  }
   for (const s of personal.pendingSuggestions ?? []) {
     if (s.status === 'pending' && !pendingIds.has(s.id)) {
       orgStore.pendingSuggestions!.push(s);

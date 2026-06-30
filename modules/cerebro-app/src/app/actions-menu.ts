@@ -1,6 +1,7 @@
 import { api } from '../lib/api.js';
 import type { SyncProgress, SyncProgressResponse } from '@shared/types.js';
 import {
+  formatSyncCompletionToast,
   formatSyncProgressStatus,
   hideSyncProgressUi,
   startBackgroundSync,
@@ -109,8 +110,9 @@ async function runAction(action: PipelineAction, ctx: ActionsMenuContext): Promi
       break;
     }
     case 'sync': {
-      await runSyncWithProgress(ctx);
-      toast('Sincronización completada');
+      const result = await runSyncWithProgress(ctx);
+      const { message, type } = formatSyncCompletionToast(result);
+      toast(message, type);
       break;
     }
     case 'import': {
@@ -167,7 +169,8 @@ export async function runPipelineNow(ctx: ActionsMenuContext): Promise<void> {
     );
     hideSyncProgressUi(ctx.progressUi);
     ctx.setStatus(formatSyncProgressStatus(result));
-    toast('Pipeline completado');
+    const { message, type } = formatSyncCompletionToast(result);
+    toast(message, type);
     if (result.result?.analysisJobId) {
       const jobId = result.result.analysisJobId;
       const poll = setInterval(async () => {

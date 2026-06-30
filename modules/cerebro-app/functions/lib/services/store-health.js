@@ -1,3 +1,4 @@
+import { isLikelyPersonName } from '../core/profesional/person-name-clean.js';
 import { isValidContact } from '../core/profesional/merge-person-incremental.js';
 import { listActivePendingSuggestions } from './pending-suggestions.js';
 function isUuidProjectId(id) {
@@ -45,7 +46,7 @@ export function computeStoreHealth(store) {
         meetingsSynced,
         meetingsWithoutResolvedParticipants,
         staleParticipantLinks,
-        prospectsPending: store.prospects.filter((p) => !p.linkedPersonId).length,
+        prospectsPending: store.prospects.filter((p) => !p.linkedPersonId && isLikelyPersonName(p.displayName)).length,
         projectSuggestionsPending,
         teamSuggestionsPending,
         todosSuggested: store.todos.filter((t) => t.status === 'suggested').length,

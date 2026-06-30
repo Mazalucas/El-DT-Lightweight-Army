@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getUid } from '../lib/auth-middleware.js';
-import { getSyncProgress, listMeetings, markSyncStarting, runSync, scanDriveSources, getMirrorContent, } from '../services/sync.js';
+import { getSyncProgress, listMeetings, markSyncStarting, resolveLastSyncAt, runSync, scanDriveSources, getMirrorContent, } from '../services/sync.js';
 import { hasGoogleIntegration } from '../services/google.js';
 import { meetingsCol } from '../lib/firebase.js';
 import { importMeetingsToStore, loadStore, listLlmProviders } from '../services/store.js';
@@ -25,13 +25,14 @@ export const syncRouter = Router();
 syncRouter.get('/status', async (req, res) => {
     try {
         const uid = getUid(req);
-        const [meetings, progress, google, llm, store, settings] = await Promise.all([
+        const [meetings, progress, google, llm, store, settings, lastSyncAt] = await Promise.all([
             listMeetings(uid),
             getSyncProgress(uid),
             hasGoogleIntegration(uid),
             listLlmProviders(uid),
             loadStore(uid),
             loadSettings(uid),
+            resolveLastSyncAt(uid),
         ]);
         const status = {
             hasFirebaseAuth: true,
@@ -44,6 +45,7 @@ syncRouter.get('/status', async (req, res) => {
             meetSourceCount: settings.meetSources.length,
             setupComplete: isSetupComplete(settings, google),
             syncSchedule: settings.syncSchedule,
+            lastSyncAt,
         };
         res.json(status);
     }

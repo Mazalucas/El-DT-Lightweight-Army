@@ -1,16 +1,9 @@
 import { Link, useParams } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
 import { api } from '../../../lib/api.js';
 import { orgDisplayName } from '../../../lib/org-branding.js';
-import { Button, ErrorState, formatDate, PageHeader, Section, Skeleton, toast } from '../../ds.js';
-import {
-  useInvalidateViews,
-  useOrg,
-  useOrgBoardView,
-  useOrgHealth,
-  useOrgMeetingsView,
-  useOrgMembers,
-} from '../../hooks.js';
+import { Button, ErrorState, formatDate, PageHeader, Section, Skeleton } from '../../ds.js';
+import { useOrg, useOrgBoardView, useOrgHealth, useOrgMeetingsView, useOrgMembers } from '../../hooks.js';
+import { useEntityMutation } from '../../lib/entity-action/use-entity-mutation.js';
 
 export default function OrgResumen() {
   const { orgId = '' } = useParams();
@@ -19,16 +12,17 @@ export default function OrgResumen() {
   const board = useOrgBoardView(orgId);
   const members = useOrgMembers(orgId);
   const meetings = useOrgMeetingsView(orgId, { limit: 5 });
-  const invalidate = useInvalidateViews();
+  const { useEntityMutate } = useEntityMutation();
 
-  const ingest = useMutation({
-    mutationFn: () => api.ingestOrg(orgId),
-    onSuccess: (r) => {
-      invalidate();
-      toast(`Datos aportados: ${r.merged} reuniones fusionadas`);
+  const ingest = useEntityMutate(
+    `org-ingest:${orgId}`,
+    () => api.ingestOrg(orgId),
+    {
+      success: (r) => `Datos aportados: ${r.merged} reuniones fusionadas`,
+      error: 'Error al aportar datos',
     },
-    onError: (e) => toast(e instanceof Error ? e.message : 'Error', 'error'),
-  });
+    { orgId },
+  );
 
   if (org.isPending) return <Skeleton lines={8} />;
   if (org.error) return <ErrorState error={org.error} retry={() => void org.refetch()} />;
@@ -43,28 +37,28 @@ export default function OrgResumen() {
         title={orgDisplayName(org.data.org)}
         desc="Espacio compartido — datos agregados de todos los miembros."
         actions={
-          <Button variant="secondary" size="sm" loading={ingest.isPending} onClick={() => ingest.mutate()}>
+          <Button variant="secondary" size="sm" loading={ingest.isPending} onClick={() => ingest.run()}>
             Aportar mis datos
           </Button>
         }
       />
 
-      <div className="kpi-grid">
-        <Link to={`/org/${orgId}/reuniones`} className="kpi-card">
-          <span className="kpi-value">{h?.meetingsTotal ?? '—'}</span>
-          <span className="kpi-label">Reuniones</span>
+      <div className="stat-strip">
+        <Link to={`/org/${orgId}/reuniones`} className="stat-strip-item">
+          <span className="stat-strip-value">{h?.meetingsTotal ?? '—'}</span>
+          <span className="stat-strip-label">Reuniones</span>
         </Link>
-        <Link to={`/org/${orgId}/personas`} className="kpi-card">
-          <span className="kpi-value">{h?.contactsCount ?? '—'}</span>
-          <span className="kpi-label">Contactos</span>
+        <Link to={`/org/${orgId}/personas`} className="stat-strip-item">
+          <span className="stat-strip-value">{h?.contactsCount ?? '—'}</span>
+          <span className="stat-strip-label">Contactos</span>
         </Link>
-        <Link to={`/org/${orgId}/tareas`} className="kpi-card">
-          <span className="kpi-value">{openTodos}</span>
-          <span className="kpi-label">Tareas abiertas</span>
+        <Link to={`/org/${orgId}/tareas`} className="stat-strip-item">
+          <span className="stat-strip-value">{openTodos}</span>
+          <span className="stat-strip-label">Tareas abiertas</span>
         </Link>
-        <Link to={`/org/${orgId}/tareas`} className="kpi-card">
-          <span className="kpi-value">{suggested}</span>
-          <span className="kpi-label">Sugeridas</span>
+        <Link to={`/org/${orgId}/tareas`} className="stat-strip-item">
+          <span className="stat-strip-value">{suggested}</span>
+          <span className="stat-strip-label">Sugeridas</span>
         </Link>
       </div>
 

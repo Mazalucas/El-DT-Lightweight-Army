@@ -3,7 +3,7 @@ import type { ParsedMirrorMd } from './parse-mirror-md.js';
 import {
   cleanChipPersonName,
   displayNameFromEmail,
-  normalizePersonNameKey,
+  isLikelyPersonName,
 } from './person-name-clean.js';
 import { participantsFromSourceFile } from './participants-from-source.js';
 
@@ -26,19 +26,9 @@ export function buildCanonicalParticipantNames(
 
   const fromYamlAndTitle = [...parsed.participants, ...participantsFromSourceFile(sourceFile)]
     .map((n) => cleanChipPersonName(n))
-    .filter(isLikelyParticipantName);
+    .filter((n) => n.length >= 2 && isLikelyPersonName(n));
 
   return [...new Set(fromYamlAndTitle)];
-}
-
-function isLikelyParticipantName(name: string): boolean {
-  const trimmed = name.trim();
-  if (trimmed.length < 2) return false;
-  const words = trimmed.split(/\s+/).filter(Boolean);
-  if (words.length >= 2) return true;
-  const key = normalizePersonNameKey(trimmed);
-  if (key.length < 3) return false;
-  return /^[A-ZÁÉÍÓÚÑ]/.test(trimmed);
 }
 
 /** IDs de contacto reales para una reunión (email primero; corrige personIds huérfanos). */

@@ -1,0 +1,42 @@
+/**
+ * Atelier — Bauhaus Style tokens (adapted)
+ * Primary geometry, bold blocks, limited palette.
+ */
+
+:root {
+  --color-primary-red: #e53935;
+  --color-primary-blue: #1e88e5;
+  --color-primary-yellow: #fdd835;
+  --color-black: #212121;
+  --color-white: #fafafa;
+  --color-bg: var(--color-white);
+  --color-surface: #ffffff;
+  --color-text: var(--color-black);
+  --color-text-muted: #424242;
+  --color-accent: var(--color-primary-blue);
+  --color-on-accent: #ffffff;
+  --color-on-red: #ffffff;
+  --color-on-blue: #ffffff;
+  --color-on-yellow: var(--color-black);
+  --color-on-black: #ffffff;
+
+  --font-display: "Space Grotesk", "Futura", "Arial Black", sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+
+  --text-display: clamp(2.75rem, 6vw, 4.5rem);
+  --text-h1: 2rem;
+  --text-body: 1.0625rem;
+  --weight-bold: 700;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-full: 0; /* prefer sharp corners */
+
+  --space-block: 1.5rem;
+  --space-section: 4rem;
+
+  --shape-circle: 9999px;
+  --shape-square: 0;
+  --duration: 180ms;
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+}

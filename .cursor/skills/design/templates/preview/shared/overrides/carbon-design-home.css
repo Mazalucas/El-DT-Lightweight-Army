@@ -1,0 +1,19 @@
+/* Carbon — homepage marketing */
+.carbon-home .tpl-nav { background: var(--tpl-text); color: var(--tpl-on-primary); border: none; }
+.carbon-home .tpl-nav .brand, .carbon-home .tpl-nav .links a { color: #f4f4f4; }
+.carbon-home .tpl-nav .links a:hover { color: #fff; }
+.carbon-home .tpl-btn-primary { border-radius: 0; }
+.carbon-home .tpl-feature-card, .carbon-home .tpl-metric, .carbon-home .tpl-hero-visual { border-radius: 0; }
+.carbon-home .tpl-hero .tag { border-radius: 0; }
+
+@media (max-width: 900px) {
+  .carbon-home .tpl-nav .atelier-burger { color: #f4f4f4; }
+  .carbon-home .tpl-nav .links.atelier-nav-drawer {
+    background: #161616;
+    color: #f4f4f4;
+    border-left: 3px solid var(--tpl-primary);
+    border-radius: 0;
+  }
+  .carbon-home .tpl-nav .links a { color: #c6c6c6; }
+  .carbon-home .tpl-nav .links a:hover { color: #fff; background: #262626; }
+}

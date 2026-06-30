@@ -27,8 +27,10 @@ description: "[Rutina] Commit y push del trabajo del operador — excluye sessio
 3. Stage selectivo (preferir lo tocado en la sesión):
    - `vitals/` (excepto paths excluidos)
    - `docs/`, `.cursor/`, `.agent/`, `README.md`, `AGENTS.md`, `VERSION` si aplican
-4. **Versión:** si cambiaron `VERSION`, rules `00–06`, `vitals/specs/`, `vitals/config/commands-meta.yaml` o commands/skills de rutina → bump **patch** en `VERSION` (semver del template).
-5. Mensaje de commit (español, una línea + cuerpo breve):
+4. **Versión:** si cambiaron `VERSION`, rules (`00–07`, `10/20/30/90`), `vitals/specs/`, `vitals/config/` (incl. `rules-manifest.yaml`, `ide-targets.yaml`, `commands-meta.yaml`) o commands/skills de rutina → bump **patch** en `VERSION` (semver del template).
+5. **Telemetría (orden continuo):** si bumpeaste `VERSION` o cambió normativa del DT → actualizá `vitals/pulse/current.md` para que mencione el `VERSION` nuevo y un resumen de una línea (y, si corresponde, un entry en `vitals/pulse/entries/`). Esto mantiene `dt-doctor` en verde (chequeo de frescura de pulse).
+6. **Orden antes de commitear:** corré `./scripts/dt-doctor.sh`; si hay ERRORES, regenerá artefactos (`ruby scripts/sync-catalog.rb`, `./scripts/sync-ide.sh`, `./scripts/sync-commands-from-meta.sh`) hasta dejarlo en verde.
+7. Mensaje de commit (español, una línea + cuerpo breve):
 
    ```text
    dt({operator_id}): {resumen corto}
@@ -38,8 +40,8 @@ description: "[Rutina] Commit y push del trabajo del operador — excluye sessio
    Versión template: {VERSION}
    ```
 
-6. Commit solo si hay cambios staged.
-7. `git push origin HEAD` — si falla (non-fast-forward), indicar `/actualizar`, resolver, reintentar. **No** `push --force` en main/master.
+8. Commit solo si hay cambios staged.
+9. `git push origin HEAD` — si falla (non-fast-forward), indicar `/actualizar`, resolver, reintentar. **No** `push --force` en main/master.
 
 ## Entrega
 

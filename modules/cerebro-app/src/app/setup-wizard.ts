@@ -1,5 +1,7 @@
+import { resolveClientTimezone } from '@shared/timezone.js';
 import { api } from '../lib/api.js';
 import type { MeetSourceConfig, UserAppSettings } from '@shared/types.js';
+import { PROCESS_LOOKBACK_PRESETS, processLookbackLabel } from '@shared/sync-policy.js';
 import { toast, escapeHtml } from '../lib/ui.js';
 import { badge, button, btnRow, section } from '../ui/primitives.js';
 import { svgEl } from '../ui/icons.js';
@@ -211,10 +213,11 @@ function renderStepPanel(stepId: string, panel: HTMLElement, ctx: SetupWizardCon
       break;
     }
     case 'schedule': {
-      const tz = config.syncSchedule?.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const effectiveTz = resolveClientTimezone(config);
       const hour = config.syncSchedule?.hour ?? 8;
       const minute = config.syncSchedule?.minute ?? 0;
       const enabled = config.syncSchedule?.enabled ?? false;
+      const lookbackDays = config.syncPolicy?.processLookbackDays ?? 30;
 
       const grid = document.createElement('div');
       grid.className = 'grid-2';
@@ -223,9 +226,28 @@ function renderStepPanel(stepId: string, panel: HTMLElement, ctx: SetupWizardCon
           <label><input type="checkbox" id="sw-schedule-enabled" ${enabled ? 'checked' : ''} /> Sincronizar automáticamente cada día</label>
         </div>
         <div class="field"><label for="sw-hour">Hora</label><input type="time" id="sw-hour" value="${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}" /></div>
-        <div class="field"><label for="sw-tz">Zona horaria</label><input id="sw-tz" value="${escapeHtml(tz)}" /></div>
+        <div class="field">
+          <label for="sw-lookback">Procesar reuniones de los últimos</label>
+          <select id="sw-lookback">
+            ${PROCESS_LOOKBACK_PRESETS.map(
+              (days) =>
+                `<option value="${days}"${lookbackDays === days ? ' selected' : ''}>${escapeHtml(processLookbackLabel(days))}</option>`,
+            ).join('')}
+          </select>
+        </div>
       `;
       panel.appendChild(grid);
+
+      const tzHint = document.createElement('p');
+      tzHint.className = 'muted';
+      tzHint.innerHTML = `Zona horaria: <strong>${escapeHtml(effectiveTz)}</strong> — <a href="#/settings?section=regional">configurar en Ajustes → Regional</a>`;
+      panel.appendChild(tzHint);
+
+      const lookbackHint = document.createElement('p');
+      lookbackHint.className = 'muted';
+      lookbackHint.textContent =
+        'Aplica al sync manual y automático: descarga de notas, contactos, tareas y análisis IA. Las reuniones más antiguas siguen indexadas pero no se procesan.';
+      panel.appendChild(lookbackHint);
 
       if (config.syncSchedule?.lastRunAt) {
         const last = document.createElement('p');
@@ -249,10 +271,16 @@ function renderStepPanel(stepId: string, panel: HTMLElement, ctx: SetupWizardCon
                 enabled: (panel.querySelector('#sw-schedule-enabled') as HTMLInputElement).checked,
                 hour: h ?? 8,
                 minute: m ?? 0,
-                timezone: (panel.querySelector('#sw-tz') as HTMLInputElement).value.trim() || tz,
+                timezone: config.syncSchedule?.timezone ?? effectiveTz,
                 lastRunAt: config.syncSchedule?.lastRunAt,
                 lastRunStatus: config.syncSchedule?.lastRunStatus,
                 lastRunSummary: config.syncSchedule?.lastRunSummary,
+              },
+              syncPolicy: {
+                processLookbackDays: parseInt(
+                  (panel.querySelector('#sw-lookback') as HTMLSelectElement).value,
+                  10,
+                ),
               },
               ai: {
                 ...config.ai,

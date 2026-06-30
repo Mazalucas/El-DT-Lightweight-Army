@@ -1,5 +1,6 @@
 import { parse as parseYaml } from 'yaml';
 import { coerceStringArray } from '../../lib/text-coerce.js';
+import { isLikelyPersonName } from './person-name-clean.js';
 
 export interface MirrorInvitee {
   name?: string;
@@ -90,7 +91,7 @@ export function enrichParsedFromBody(parsed: ParsedMirrorMd): ParsedMirrorMd {
       parsed.participants = section[1]
         .split(/\n|,|•|·/)
         .map((s) => s.replace(/^\s*[-*]\s*/, '').trim())
-        .filter((s) => s.length > 1 && s.length < 80 && !s.includes('@'));
+        .filter((s) => s.length > 1 && s.length < 80 && !s.includes('@') && isLikelyPersonName(s));
     }
   }
 

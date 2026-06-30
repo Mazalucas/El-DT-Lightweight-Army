@@ -24,6 +24,7 @@ import {
   db,
 } from '../lib/firebase.js';
 import { stripUndefined } from '../lib/firestore-utils.js';
+import { mergeDismissedMaintenanceMeta } from '../core/profesional/prospect-dismiss.js';
 import { rebuildGraphEdges } from './graph-edges.js';
 import { loadStore } from './store.js';
 import { hydrateCerebroStore, persistCerebroStore } from './store-persist.js';
@@ -173,6 +174,7 @@ export async function loadOrgStore(orgId: string, uid?: string): Promise<Cerebro
   const members = await listOrgMembers(orgId);
   for (const member of members) {
     const personal = await loadStore(member.uid);
+    mergeDismissedMaintenanceMeta(overlay, personal);
     mergeMemberStoreIntoOrg(overlay, personal, member.uid);
   }
   overlay.graphEdges = rebuildGraphEdges(overlay, { includeMembers: true, members });

@@ -16,6 +16,17 @@ export function createApp() {
     const app = express();
     app.use(cors({ origin: true }));
     app.use(express.json({ limit: '15mb' }));
+    if (process.env.FUNCTIONS_EMULATOR === 'true') {
+        app.use((req, res, next) => {
+            const started = Date.now();
+            const line = `${req.method} ${req.url}`;
+            res.on('finish', () => {
+                const uid = req.uid;
+                console.log(`[api] ${line} → ${res.statusCode} ${Date.now() - started}ms uid=${uid ?? '-'}`);
+            });
+            next();
+        });
+    }
     app.get('/api/health', (_req, res) => {
         res.json({ ok: true, service: 'cerebro-app', version: APP_VERSION });
     });

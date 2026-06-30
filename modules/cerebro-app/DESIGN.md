@@ -1,37 +1,34 @@
-# Design — Cerebro App
+# Cerebro App — Design System
 
-## Theme
+Register: **product** · Metaphor: **Signal / Surface / Silence**
 
-Dual: `dark` | `light` | `system` (prefers-color-scheme). Default: `system`.
+Canonical context: [`.agents/design-context.md`](../../.agents/design-context.md)
 
-## Color (OKLCH, restrained)
+## Tokens
 
-- Brand hue: ~195 (teal-cyan)
-- Accent shared: `oklch(0.58 0.11 195)` dark actions / `oklch(0.50 0.12 195)` light actions
-- Dark bg: `oklch(0.13 0.012 250)` — not pure black
-- Light bg: `oklch(0.97 0.008 250)` — off-white tinted, NOT cream
-- Sidebar: one step darker/cooler than content surface
+Source: [`src/styles/tokens.css`](src/styles/tokens.css)
 
-## Typography
+- **Silence:** `--bg-canvas`, `--fg-primary`, `--fg-muted`, `--border-default`
+- **Surface:** `--surface-work`, `--surface-hover`, `--kanban-column-bg`
+- **Signal:** `--signal-primary`, `--signal-secondary`, `--signal-bg`, `--briefing-bg`, `--insight-bg`
 
-- Family: IBM Plex Sans, system-ui, sans-serif
-- Scale (rem): xs 0.75, sm 0.875, base 1, lg 1.125, xl 1.25, 2xl 1.5
-- Line height: 1.5 body, 1.25 headings
-- No fluid clamp on product headings
+Legacy aliases (`--bg`, `--accent`, `--ink`) remain for gradual migration.
 
-## Spacing & radius
+## Style entry
 
-- Space: 4px base — 1=4, 2=8, 3=12, 4=16, 5=20, 6=24, 8=32
-- Radius: sm 6px, md 8px, lg 10px
+[`src/styles/index.css`](src/styles/index.css) — orchestrator for split component layers + signal tier.
 
-## Motion
+## Tiers
 
-150–200ms ease-out. No page-load orchestration. Reduced motion → instant/crossfade.
+| Tier | Examples |
+|------|----------|
+| Signal | `.hoy-briefing`, `.hoy-meeting-prep`, `.smart-suggestion--signal`, `.hoy-attention-bar` |
+| Surface | `.kanban-*`, `.graph-panel`, `.dash-panel` |
+| Silence | `.stat-strip`, `.maintenance-item`, `.app-nav-link` |
 
-## Z-index
+## Rules
 
-dropdown 100, sticky 200, modal-backdrop 300, modal 400, toast 500
-
-## Components
-
-Button (primary/secondary/ghost/danger), Badge, Field, Table, Section, PageHeader, SegmentedControl, Skeleton, EmptyState, Toast, AppShell.
+- No `border-left` accent stripes on cards
+- Signal color only on Signal tier + primary CTA
+- IBM Plex Sans only; `--text-signal-xl` for briefing headlines
+- Light/dark parity via `data-theme`

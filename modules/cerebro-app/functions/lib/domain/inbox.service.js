@@ -2,7 +2,7 @@ import { loadStoreFromRepository } from '../services/store-repository.js';
 import { getSuggestions } from '../services/suggestions-graph.js';
 import { acceptProjectSuggestionOnAdapter, acceptTeamSuggestionOnAdapter, dismissSuggestionOnAdapter, } from '../services/pending-suggestions.js';
 import { acceptTodosBatch, dismissTodosBatch, userStoreAdapter } from '../services/catalog-mutate.js';
-import { completeTodosBatch, createTodo, updateTodo, } from './todos.service.js';
+import { completeTodosBatch, createTodo, moveTodo, updateTodo, } from './todos.service.js';
 export async function listSuggestions(uid) {
     return getSuggestions(uid);
 }
@@ -33,6 +33,9 @@ export async function createTodoForUser(uid, input) {
 }
 export async function updateTodoForUser(uid, todoId, patch) {
     return updateTodo(uid, todoId, patch);
+}
+export async function moveTodoForUser(uid, todoId, input) {
+    return moveTodo(uid, todoId, input);
 }
 export async function completeTodos(uid, todoIds) {
     return completeTodosBatch(uid, todoIds);

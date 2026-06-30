@@ -10,6 +10,9 @@
 #   ./scripts/deploy-cerebro-app.sh --with-storage # incluye storage (requiere Console)
 set -euo pipefail
 
+# Node 20+ en macOS: firebase-tools puede fallar a firebase.googleapis.com vía IPv6 (ETIMEDOUT).
+export NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--dns-result-order=ipv4first"
+
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 APP="$ROOT/modules/cerebro-app"
 PROJECT="cerebro-prime-a0729"
@@ -76,6 +79,11 @@ while [[ $# -gt 0 ]]; do
     --prepare-only) PREPARE_ONLY=true ;;
     --skip-build) SKIP_BUILD=true ;;
     --no-bump) NO_BUMP=true ;;
+    --functions--no-bump)
+      TARGET="functions"
+      NO_BUMP=true
+      yellow "Nota: usá --functions --no-bump (con espacio). Interpretado igual."
+      ;;
     -h|--help) usage; exit 0 ;;
     *)
       red "Opción desconocida: $1"

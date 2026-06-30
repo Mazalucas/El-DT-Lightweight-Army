@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { isDevEmulatorMode, loginDev, loginWithGoogle } from '../../lib/firebase.js';
 import { checkEmulatorsReady } from '../../lib/emulator-status.js';
+import { devLog } from '../../lib/dev-log.js';
 import { useAuth } from '../auth.js';
 import { Badge, Button, Icon, toast } from '../ds.js';
 
@@ -20,6 +21,7 @@ export default function Login() {
 
   async function handleLogin() {
     setBusy(true);
+    devLog('auth', 'Login: click entrar');
     try {
       if (devMode) {
         const check = await checkEmulatorsReady();
@@ -31,6 +33,7 @@ export default function Login() {
       } else {
         await loginWithGoogle();
       }
+      devLog('auth', 'Login: OK, navegando a /');
       navigate('/', { replace: true });
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Error al iniciar sesión';

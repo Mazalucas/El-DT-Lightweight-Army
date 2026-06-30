@@ -10,7 +10,8 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "serve": "npm run build && firebase emulators:start --only functions",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test": "npm run build && node --test lib/shared/timezone.test.js lib/domain/meeting-prep-insights.service.test.js lib/core/profesional/person-name-clean.test.js lib/core/profesional/prospect-dismiss-undo.test.js lib/services/calendar-date.test.js lib/services/pending-suggestions-store.test.js lib/services/pipeline-catchup.test.js lib/services/prospect-dismiss.test.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.0",

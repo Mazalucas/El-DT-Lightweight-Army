@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getUid } from '../lib/auth-middleware.js';
-import { getBoardView, getDashboardView, getMaintenanceView, getMeetingDetailView, getMeetingsView, getPeopleView, } from '../domain/views.service.js';
+import { getBoardView, getDashboardView, getCalendarToday, getMaintenanceView, getMeetingDetailView, getMeetingsView, getPeopleView, } from '../domain/views.service.js';
 import { getSmartSuggestion, setSmartSuggestionStatus } from '../services/smart-suggestions.js';
 import { runIntelligence } from '../services/suggestion-engine.js';
 import { searchCatalog } from '../domain/search.service.js';
@@ -15,6 +15,16 @@ viewsRouter.get('/dashboard', async (req, res, next) => {
         next(e);
     }
 });
+viewsRouter.get('/calendar/today', async (req, res, next) => {
+    try {
+        const uid = getUid(req);
+        const timezone = typeof req.query.timezone === 'string' ? req.query.timezone : undefined;
+        res.json(await getCalendarToday(uid, timezone));
+    }
+    catch (e) {
+        next(e);
+    }
+});
 viewsRouter.get('/meetings', async (req, res, next) => {
     try {
         const uid = getUid(req);
@@ -24,6 +34,7 @@ viewsRouter.get('/meetings', async (req, res, next) => {
             q: typeof req.query.q === 'string' ? req.query.q : undefined,
             projectId: typeof req.query.projectId === 'string' ? req.query.projectId : undefined,
             teamId: typeof req.query.teamId === 'string' ? req.query.teamId : undefined,
+            sort: typeof req.query.sort === 'string' ? req.query.sort : undefined,
         }));
     }
     catch (e) {

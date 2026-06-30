@@ -3,6 +3,23 @@ const DEFAULT_LIMIT = 120;
 function nodeId(type, id) {
     return `${type}:${id}`;
 }
+/** Resuelve el nodo del operador: member en org o person por email de login. */
+export function resolveSelfNodeId(store, opts) {
+    const memberUid = opts?.memberUid?.trim();
+    if (memberUid && opts?.members?.some((m) => m.uid === memberUid)) {
+        return nodeId('member', memberUid);
+    }
+    const email = opts?.userEmail?.toLowerCase().trim();
+    if (!email)
+        return undefined;
+    for (const p of store.people) {
+        for (const e of p.emails ?? []) {
+            if (e.toLowerCase().trim() === email)
+                return nodeId('person', p.id);
+        }
+    }
+    return undefined;
+}
 export function rebuildGraphEdges(store, opts) {
     const now = new Date().toISOString();
     const edges = [];
@@ -107,7 +124,12 @@ export function buildGraphSnapshot(store, opts) {
         addNode({ id: nodeId('project', pr.id), type: 'project', label: pr.name });
     }
     for (const t of store.teams) {
-        addNode({ id: nodeId('team', t.id), type: 'team', label: t.name });
+        addNode({
+            id: nodeId('team', t.id),
+            type: 'team',
+            label: t.name,
+            meta: t.emails?.length ? { emails: t.emails } : undefined,
+        });
     }
     for (const t of store.todos.filter((x) => x.status !== 'dismissed').slice(0, 40)) {
         addNode({ id: nodeId('todo', t.id), type: 'todo', label: truncateString(t.text, 36) ?? 'Tarea' });
@@ -122,6 +144,11 @@ export function buildGraphSnapshot(store, opts) {
             });
         }
     }
+    const selfNodeId = resolveSelfNodeId(store, {
+        userEmail: opts?.userEmail,
+        memberUid: opts?.memberUid,
+        members: opts?.members,
+    });
     let activeIds = new Set();
     if (opts?.center && allNodes.has(opts.center)) {
         activeIds.add(opts.center);
@@ -140,7 +167,13 @@ export function buildGraphSnapshot(store, opts) {
         }
     }
     else {
-        activeIds = new Set([...allNodes.keys()].slice(0, limit));
+        const allKeys = [...allNodes.keys()];
+        const priority = new Set();
+        if (selfNodeId && allNodes.has(selfNodeId))
+            priority.add(selfNodeId);
+        const rest = allKeys.filter((k) => !priority.has(k));
+        const picked = [...priority, ...rest.slice(0, Math.max(0, limit - priority.size))];
+        activeIds = new Set(picked);
     }
     const typeFilter = opts?.types?.length ? new Set(opts.types) : null;
     const nodes = [...allNodes.values()]
@@ -154,5 +187,6 @@ export function buildGraphSnapshot(store, opts) {
         generatedAt: new Date().toISOString(),
         centerId: opts?.center,
         depth: opts?.depth,
+        selfNodeId,
     };
 }

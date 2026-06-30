@@ -68,20 +68,47 @@ export async function renderOrgProfesional(
       onStore: (s) => {
         store = s;
       },
-      moveTodo: async (todoId, status) => (await api.orgMoveTodo(orgId, todoId, { status })).store,
-      createTodo: (input) => api.orgCreateTodo(orgId, input),
-      updateTodo: (todoId, patch) => api.orgUpdateTodo(orgId, todoId, patch).then((r) => r.store),
-      acceptTodo: async (todoId) => (await api.orgAcceptTodosBatch(orgId, [todoId])).store,
-      dismissTodo: async (todoId) => (await api.orgDismissTodosBatch(orgId, [todoId])).store,
-      completeTodo: async (todoId) => (await api.orgCompleteTodosBatch(orgId, [todoId])).store,
-      reopenTodo: async (todoId) => (await api.orgReopenTodosBatch(orgId, [todoId])).store,
+      moveTodo: async (todoId, status) => {
+        await api.orgMoveTodo(orgId, todoId, { status });
+        return api.getOrgStore(orgId);
+      },
+      createTodo: async (input) => {
+        const { todo } = await api.orgCreateTodo(orgId, input);
+        return { store: await api.getOrgStore(orgId), todo };
+      },
+      updateTodo: async (todoId, patch) => {
+        await api.orgUpdateTodo(orgId, todoId, patch);
+        return api.getOrgStore(orgId);
+      },
+      acceptTodo: async (todoId) => {
+        await api.orgAcceptTodosBatch(orgId, [todoId]);
+        return api.getOrgStore(orgId);
+      },
+      dismissTodo: async (todoId) => {
+        await api.orgDismissTodosBatch(orgId, [todoId]);
+        return api.getOrgStore(orgId);
+      },
+      completeTodo: async (todoId) => {
+        await api.orgCompleteTodosBatch(orgId, [todoId]);
+        return api.getOrgStore(orgId);
+      },
+      reopenTodo: async (todoId) => {
+        await api.orgReopenTodosBatch(orgId, [todoId]);
+        return api.getOrgStore(orgId);
+      },
       inbox: {
         scope: 'org',
         dismissSuggestion: async (id) => (await api.orgDismissSuggestion(orgId, id)).store,
         acceptProject: async (id, opts) => (await api.orgAcceptProjectSuggestion(orgId, id, opts)).store,
         acceptTeam: async (id) => (await api.orgAcceptTeamSuggestion(orgId, id)).store,
-        acceptTodo: async (todoId) => (await api.orgAcceptTodosBatch(orgId, [todoId])).store,
-        dismissTodo: async (todoId) => (await api.orgDismissTodosBatch(orgId, [todoId])).store,
+        acceptTodo: async (todoId) => {
+          await api.orgAcceptTodosBatch(orgId, [todoId]);
+          return api.getOrgStore(orgId);
+        },
+        dismissTodo: async (todoId) => {
+          await api.orgDismissTodosBatch(orgId, [todoId]);
+          return api.getOrgStore(orgId);
+        },
         mergePeople: async (canonicalId, mergeIds) =>
           (await api.orgMergePeople(orgId, canonicalId, mergeIds)).store,
         promoteProspect: async (prospectId, email, displayName) =>
@@ -329,12 +356,14 @@ export async function renderOrgProfesional(
         onNavigate: (tab) => navigate('org', undefined, { orgId, profTab: tab }),
         onMeeting: (id) => navigate('profesional-meeting', id),
         onTodoAccept: async (t) => {
-          store = (await api.orgAcceptTodosBatch(orgId, [t.id])).store;
+          await api.orgAcceptTodosBatch(orgId, [t.id]);
+          store = await api.getOrgStore(orgId);
           paintDashboard();
           toast('Tarea aceptada');
         },
         onTodoDismiss: async (t) => {
-          store = (await api.orgDismissTodosBatch(orgId, [t.id])).store;
+          await api.orgDismissTodosBatch(orgId, [t.id]);
+          store = await api.getOrgStore(orgId);
           paintDashboard();
         },
       },

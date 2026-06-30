@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import type { MeetingsView } from '@shared/types.js';
+import type { MeetingSortKey, MeetingsView } from '@shared/types.js';
+import { MEETING_SORT_OPTIONS } from '@shared/recency-sort.js';
 import { Badge, Button, DataTable, EmptyState, ErrorState, formatDate, Skeleton } from '../ds.js';
 
 const PAGE_SIZE = 50;
@@ -13,6 +14,7 @@ export interface MeetingsQueryParams {
   q?: string;
   projectId?: string;
   teamId?: string;
+  sort?: MeetingSortKey;
 }
 
 export interface MeetingsQueryResult {
@@ -26,6 +28,28 @@ function AnalysisBadge({ status }: { status: string }): ReactNode {
   if (status === 'analyzed') return <Badge tone="success">Analizada</Badge>;
   if (status === 'needs_review') return <Badge tone="warn">Revisar</Badge>;
   return <Badge>Pendiente</Badge>;
+}
+
+function sortMetaLabel(sort: MeetingSortKey): string {
+  return MEETING_SORT_OPTIONS.find((o) => o.value === sort)?.label ?? 'Fecha reunión (más reciente)';
+}
+
+function dateColumnHeader(sort: MeetingSortKey): string {
+  if (sort === 'synced_desc') return 'Sincronizada ↓';
+  if (sort === 'synced_asc') return 'Sincronizada ↑';
+  if (sort === 'date_asc') return 'Fecha ↑';
+  if (sort === 'title_asc') return 'Fecha';
+  return 'Fecha ↓';
+}
+
+function meetingDateCell(
+  m: MeetingsView['meetings'][number],
+  sort: MeetingSortKey,
+): ReactNode {
+  if (sort === 'synced_desc' || sort === 'synced_asc') {
+    return formatDate(m.lastSyncedAt ?? m.displayDate ?? m.startedAt);
+  }
+  return formatDate(m.displayDate ?? m.startedAt);
 }
 
 /**
@@ -46,16 +70,20 @@ export function MeetingsExplorer({
   const [search, setSearch] = useState('');
   const [projectId, setProjectId] = useState('');
   const [teamId, setTeamId] = useState('');
+  const [sort, setSort] = useState<MeetingSortKey>('date_desc');
   const [visibleLimit, setVisibleLimit] = useState(PAGE_SIZE);
   const navigate = useNavigate();
 
   const { data, isPending, error, refetch } = useMeetings({
     limit: visibleLimit,
     offset: 0,
+    sort,
     ...(search ? { q: search } : {}),
     ...(projectId ? { projectId } : {}),
     ...(teamId ? { teamId } : {}),
   });
+
+  const activeSort = data?.sort ?? sort;
 
   function resetFilters() {
     setVisibleLimit(PAGE_SIZE);
@@ -88,6 +116,21 @@ export function MeetingsExplorer({
         <Button variant="secondary" size="sm" onClick={() => applySearch(q.trim())}>
           Buscar
         </Button>
+        <select
+          className="field-input field-input--sm"
+          value={sort}
+          onChange={(e) => {
+            setSort(e.target.value as MeetingSortKey);
+            resetFilters();
+          }}
+          aria-label="Ordenar reuniones"
+        >
+          {MEETING_SORT_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
         <select
           className="field-input field-input--sm"
           value={projectId}
@@ -152,10 +195,10 @@ export function MeetingsExplorer({
       ) : (
         <>
           <p className="meta meetings-list-meta">
-            {total} reunión{total === 1 ? '' : 'es'} · orden: más reciente primero
+            {total} reunión{total === 1 ? '' : 'es'} · {sortMetaLabel(activeSort)}
             {shown < total ? ` · mostrando ${shown}` : ''}
           </p>
-          <DataTable headers={['Reunión', 'Fecha ↓', 'Participantes', 'Tareas', 'Análisis']}>
+          <DataTable headers={['Reunión', dateColumnHeader(activeSort), 'Participantes', 'Tareas', 'Análisis']}>
             {data.meetings.map((m) => (
               <tr
                 key={m.id}
@@ -171,7 +214,7 @@ export function MeetingsExplorer({
                     m.title
                   )}
                 </td>
-                <td className="row-meta">{formatDate(m.startedAt)}</td>
+                <td className="row-meta">{meetingDateCell(m, activeSort)}</td>
                 <td className="row-meta">
                   {m.participants.slice(0, 3).join(', ')}
                   {m.participants.length > 3 ? ` +${m.participants.length - 3}` : ''}
@@ -207,7 +250,7 @@ export function MeetingsExplorer({
                     setVisibleLimit((prev) => Math.min(prev + PAGE_SIZE, total || prev + PAGE_SIZE, MAX_MEETINGS))
                   }
                 >
-                  Cargar {Math.min(PAGE_SIZE, (total || shown + PAGE_SIZE) - shown)} más antiguas
+                  Cargar {Math.min(PAGE_SIZE, (total || shown + PAGE_SIZE) - shown)} más
                 </Button>
               </div>
             </div>

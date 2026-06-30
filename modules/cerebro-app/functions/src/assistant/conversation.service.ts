@@ -59,3 +59,23 @@ export async function appendMessages(
 export async function deleteConversation(uid: string, id: string): Promise<void> {
   await assistantConversationsCol(uid).doc(id).delete();
 }
+
+export async function updateConversationMetadata(
+  uid: string,
+  conversationId: string,
+  patch: Partial<import('./types.js').AssistantConversationMetadata>,
+): Promise<void> {
+  const ref = assistantConversationsCol(uid).doc(conversationId);
+  const snap = await ref.get();
+  if (!snap.exists) return;
+  const existing = snap.data() as AssistantConversation;
+  const metadata = { ...existing.metadata, ...patch };
+  await ref.set(
+    {
+      ...existing,
+      metadata,
+      updatedAt: new Date().toISOString(),
+    },
+    { merge: true },
+  );
+}

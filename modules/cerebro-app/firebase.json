@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "cerebro-prime-a0729",
     "public": "src/dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
@@ -7,6 +8,10 @@
       { "source": "**", "destination": "/index.html" }
     ],
     "headers": [
+      {
+        "source": "/index.html",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }]
+      },
       {
         "source": "/assets/**",
         "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }]
@@ -23,6 +28,7 @@
     {
       "source": "functions",
       "codebase": "default",
+      "disallowLegacyRuntimeConfig": true,
       "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log", "*.local"],
       "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"]
     }

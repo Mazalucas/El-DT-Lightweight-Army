@@ -1,178 +1,69 @@
 import { useMemo, useState } from 'react';
-import type { PeopleView, PersonListItem } from '@shared/types.js';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { Badge, Button, DataTable, EmptyState, Field, Modal, formatDate, toast } from '../ds.js';
-import { useInvalidateViews } from '../hooks.js';
+import type { PeopleView, PersonListItem, ProspectDismissUndoSnapshot, ProspectResolveEnrichment } from '@shared/types.js';
+import { Badge, Button, DataTable, EmptyState, formatDate } from '../ds.js';
+import { PersonEntityModal, ProspectResolvePanel } from './PersonEntityPanel.js';
+import type { MaintenanceItem } from '@shared/types.js';
+import { AsyncActionButton } from './AsyncActionButton.js';
+import { useActionQueue } from '../lib/action-queue/ActionQueueProvider.js';
+import { buildProspectDismissEnqueue } from '../lib/prospect-dismiss-queue.js';
 
 export interface PeopleActions {
   updatePerson: (id: string, patch: Record<string, unknown>) => Promise<unknown>;
-  promoteProspect: (id: string, email: string, displayName?: string) => Promise<unknown>;
-  linkProspect: (prospectId: string, personId: string) => Promise<unknown>;
+  promoteProspect: (
+    id: string,
+    email: string,
+    displayName?: string,
+    enrichment?: ProspectResolveEnrichment,
+  ) => Promise<unknown>;
+  linkProspect: (
+    prospectId: string,
+    personId: string,
+    enrichment?: ProspectResolveEnrichment,
+  ) => Promise<unknown>;
+  dismissProspect: (prospectId: string) => Promise<unknown>;
+  restoreProspectDismiss?: (snapshot: ProspectDismissUndoSnapshot) => Promise<unknown>;
   getProspectCandidates: (prospectId: string) => Promise<{
     candidates: Array<{ personId: string; displayName: string; emails: string[]; score: number; sharedMeetings: number }>;
   }>;
-}
-
-function EditPersonModal({
-  person,
-  actions,
-  onClose,
-}: {
-  person: PersonListItem;
-  actions: PeopleActions;
-  onClose: () => void;
-}) {
-  const invalidate = useInvalidateViews();
-  const [name, setName] = useState(person.displayName);
-  const [emails, setEmails] = useState(person.emails.join(', '));
-
-  const save = useMutation({
-    mutationFn: () =>
-      actions.updatePerson(person.id, {
-        displayName: name.trim(),
-        emails: emails
-          .split(',')
-          .map((e) => e.trim())
-          .filter(Boolean),
-      }),
-    onSuccess: () => {
-      invalidate();
-      toast('Contacto actualizado');
-      onClose();
-    },
-    onError: (e) => toast(e instanceof Error ? e.message : 'Error', 'error'),
-  });
-
-  return (
-    <Modal
-      title="Editar contacto"
-      onClose={onClose}
-      footer={
-        <div className="btn-row">
-          <Button variant="ghost" onClick={onClose}>
-            Cancelar
-          </Button>
-          <Button loading={save.isPending} onClick={() => save.mutate()}>
-            Guardar
-          </Button>
-        </div>
-      }
-    >
-      <Field label="Nombre">
-        <input className="field-input" value={name} onChange={(e) => setName(e.target.value)} />
-      </Field>
-      <Field label="Emails" hint="Separados por coma">
-        <input className="field-input" value={emails} onChange={(e) => setEmails(e.target.value)} />
-      </Field>
-    </Modal>
-  );
-}
-
-function ProspectModal({
-  prospect,
-  actions,
-  onClose,
-}: {
-  prospect: PersonListItem;
-  actions: PeopleActions;
-  onClose: () => void;
-}) {
-  const invalidate = useInvalidateViews();
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState(prospect.displayName);
-
-  const candidates = useQuery({
-    queryKey: ['prospect-candidates', prospect.id],
-    queryFn: () => actions.getProspectCandidates(prospect.id),
-  });
-
-  const promote = useMutation({
-    mutationFn: () => actions.promoteProspect(prospect.id, email.trim(), name.trim() || undefined),
-    onSuccess: () => {
-      invalidate();
-      toast('Prospect promovido a contacto');
-      onClose();
-    },
-    onError: (e) => toast(e instanceof Error ? e.message : 'Error', 'error'),
-  });
-
-  const link = useMutation({
-    mutationFn: (personId: string) => actions.linkProspect(prospect.id, personId),
-    onSuccess: () => {
-      invalidate();
-      toast('Prospect vinculado al contacto');
-      onClose();
-    },
-    onError: (e) => toast(e instanceof Error ? e.message : 'Error', 'error'),
-  });
-
-  return (
-    <Modal title={`Confirmar identidad: ${prospect.displayName}`} onClose={onClose}>
-      <p className="muted" style={{ marginTop: 0 }}>
-        Detectado en {prospect.meetingCount} reuniones sin email confirmado. Vinculalo a un contacto
-        existente o convertilo en contacto nuevo.
-      </p>
-
-      {candidates.data?.candidates.length ? (
-        <div className="list-stack" style={{ marginBottom: 'var(--space-4)' }}>
-          <strong>¿Es alguno de estos contactos?</strong>
-          {candidates.data.candidates.slice(0, 5).map((c) => (
-            <div key={c.personId} className="smart-suggestion">
-              <div className="smart-suggestion-title">{c.displayName}</div>
-              <p className="smart-suggestion-reason">
-                {c.emails[0] ?? 'sin email'} · {c.sharedMeetings} reuniones compartidas
-              </p>
-              <div className="smart-suggestion-actions">
-                <Button size="sm" variant="secondary" disabled={link.isPending} onClick={() => link.mutate(c.personId)}>
-                  Es la misma persona
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : null}
-
-      <strong>Crear contacto nuevo</strong>
-      <Field label="Nombre">
-        <input className="field-input" value={name} onChange={(e) => setName(e.target.value)} />
-      </Field>
-      <Field label="Email">
-        <input
-          className="field-input"
-          type="email"
-          value={email}
-          placeholder="nombre@empresa.com"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </Field>
-      <div className="btn-row">
-        <Button
-          loading={promote.isPending}
-          disabled={!email.trim()}
-          onClick={() => promote.mutate()}
-        >
-          Crear contacto
-        </Button>
-      </div>
-    </Modal>
-  );
+  mergePeople?: (canonicalId: string, mergeIds: string[]) => Promise<unknown>;
+  createTeam?: (name: string) => Promise<{ id: string; name: string; color?: string }>;
+  createProject?: (name: string) => Promise<{ id: string; name: string; tags?: string[] }>;
+  assignEmailToTeam?: (teamId: string, email: string) => Promise<unknown>;
+  updateTeam?: (id: string, patch: Record<string, unknown>) => Promise<unknown>;
 }
 
 export function PeopleDirectory({
   view,
   actions,
+  maintenanceItems,
   initialQuery,
   initialFilter,
 }: {
   view: PeopleView;
   actions: PeopleActions;
+  maintenanceItems?: MaintenanceItem[];
   initialQuery?: string;
   initialFilter?: 'all' | 'confirmed' | 'inferred';
 }) {
   const [q, setQ] = useState(initialQuery ?? '');
   const [filter, setFilter] = useState<'all' | 'confirmed' | 'inferred'>(initialFilter ?? 'all');
   const [editing, setEditing] = useState<PersonListItem | null>(null);
-  const [resolving, setResolving] = useState<PersonListItem | null>(null);
+  const [resolvingId, setResolvingId] = useState<string | null>(null);
+  const [resolvingSnapshot, setResolvingSnapshot] = useState<PersonListItem | null>(null);
+  const queue = useActionQueue();
+
+  const dismissProspect = (prospect: PersonListItem) => {
+    if (queue.isProspectPending(prospect.id)) return;
+    if (!actions.restoreProspectDismiss) return;
+    queue.enqueue(
+      buildProspectDismissEnqueue({
+        prospectId: prospect.id,
+        displayName: prospect.displayName,
+        dismiss: () => actions.dismissProspect(prospect.id) as Promise<import('../lib/prospect-dismiss-queue.js').ProspectDismissApiResult>,
+        restore: actions.restoreProspectDismiss,
+      }),
+    );
+  };
 
   const teamsById = useMemo(() => new Map(view.teams.map((t) => [t.id, t.name])), [view.teams]);
 
@@ -187,6 +78,23 @@ export function PeopleDirectory({
   });
 
   const inferredCount = view.people.filter((p) => p.kind === 'prospect').length;
+
+  const resolvingLive = useMemo(() => {
+    if (!resolvingId) return null;
+    return view.people.find((p) => p.kind === 'prospect' && p.id === resolvingId) ?? null;
+  }, [resolvingId, view.people]);
+
+  const resolving = resolvingLive ?? resolvingSnapshot;
+
+  const openResolve = (prospect: PersonListItem) => {
+    setResolvingId(prospect.id);
+    setResolvingSnapshot(prospect);
+  };
+
+  const closeResolve = () => {
+    setResolvingId(null);
+    setResolvingSnapshot(null);
+  };
 
   return (
     <div>
@@ -211,51 +119,90 @@ export function PeopleDirectory({
         </select>
       </div>
 
-      {!filtered.length ? (
+      {resolvingId && resolving ? (
+        <ProspectResolvePanel
+          prospect={resolving}
+          view={view}
+          actions={actions}
+          onBack={closeResolve}
+        />
+      ) : !filtered.length ? (
         <EmptyState
           title="Sin personas"
           desc={q ? 'Probá con otra búsqueda.' : 'Sincronizá reuniones para detectar contactos automáticamente.'}
         />
       ) : (
         <DataTable headers={['Persona', 'Email', 'Equipos', 'Reuniones', 'Última reunión', '']}>
-          {filtered.map((p) => (
-            <tr key={`${p.kind}-${p.id}`}>
-              <td>
-                <span className="row-title-link">{p.displayName}</span>{' '}
-                {p.kind === 'prospect' ? (
-                  <Badge tone="warn">Por confirmar</Badge>
-                ) : null}
-              </td>
-              <td className="row-meta">{p.emails[0] ?? '—'}</td>
-              <td className="row-meta">
-                {p.teamIds.map((id) => teamsById.get(id)).filter(Boolean).join(', ') || '—'}
-              </td>
-              <td className="row-meta">{p.meetingCount}</td>
-              <td className="row-meta">
-                {p.lastMeetingAt ? (
-                  <span title={p.lastMeetingTitle}>{formatDate(p.lastMeetingAt)}</span>
-                ) : (
-                  '—'
-                )}
-              </td>
-              <td>
-                {p.kind === 'prospect' ? (
-                  <Button size="sm" variant="secondary" onClick={() => setResolving(p)}>
-                    Confirmar
-                  </Button>
-                ) : (
-                  <Button size="sm" variant="ghost" onClick={() => setEditing(p)}>
-                    Editar
-                  </Button>
-                )}
-              </td>
-            </tr>
-          ))}
+          {filtered.map((p) => {
+            const prospectPending = p.kind === 'prospect' && queue.isProspectPending(p.id);
+            return (
+              <tr
+                key={`${p.kind}-${p.id}`}
+                className={prospectPending ? 'people-row--pending' : undefined}
+              >
+                <td>
+                  <span className="row-title-link">{p.displayName}</span>{' '}
+                  {p.kind === 'prospect' ? (
+                    prospectPending ? (
+                      <Badge tone="default">Procesando…</Badge>
+                    ) : (
+                      <Badge tone="warn">Por confirmar</Badge>
+                    )
+                  ) : null}
+                </td>
+                <td className="row-meta">{p.emails[0] ?? '—'}</td>
+                <td className="row-meta">
+                  {p.teamIds.map((id) => teamsById.get(id)).filter(Boolean).join(', ') || '—'}
+                </td>
+                <td className="row-meta">{p.meetingCount}</td>
+                <td className="row-meta">
+                  {p.lastMeetingAt ? (
+                    <span title={p.lastMeetingTitle}>{formatDate(p.lastMeetingAt)}</span>
+                  ) : (
+                    '—'
+                  )}
+                </td>
+                <td>
+                  {p.kind === 'prospect' ? (
+                    <div className="btn-row btn-row--inline">
+                      <AsyncActionButton
+                        variant="secondary"
+                        pending={prospectPending}
+                        disabled={prospectPending}
+                        onClick={() => openResolve(p)}
+                      >
+                        Confirmar
+                      </AsyncActionButton>
+                      <AsyncActionButton
+                        variant="ghost"
+                        pending={queue.isPending(`prospect:dismiss:${p.id}`) || prospectPending}
+                        disabled={prospectPending}
+                        onClick={() => dismissProspect(p)}
+                      >
+                        Descartar
+                      </AsyncActionButton>
+                    </div>
+                  ) : (
+                    <Button size="sm" variant="ghost" onClick={() => setEditing(p)}>
+                      Editar
+                    </Button>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </DataTable>
       )}
 
-      {editing ? <EditPersonModal person={editing} actions={actions} onClose={() => setEditing(null)} /> : null}
-      {resolving ? <ProspectModal prospect={resolving} actions={actions} onClose={() => setResolving(null)} /> : null}
+      {editing ? (
+        <PersonEntityModal
+          person={editing}
+          view={view}
+          actions={actions}
+          maintenanceItems={maintenanceItems}
+          onClose={() => setEditing(null)}
+        />
+      ) : null}
     </div>
   );
 }

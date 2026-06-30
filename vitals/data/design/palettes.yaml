@@ -1,0 +1,61 @@
+# Atelier — paletas por mood (seed)
+version: 1
+updated: "2026-06-13"
+
+palettes:
+  neutral-blue:
+    primary: "#0f62fe"
+    secondary: "#393939"
+    background: "#f4f4f4"
+    text: "#161616"
+  trust-blue:
+    primary: "#0043ce"
+    secondary: "#525252"
+    background: "#ffffff"
+    text: "#161616"
+    cta: "#0f62fe"
+  calm-blue-green:
+    primary: "#007d79"
+    secondary: "#4589ff"
+    background: "#f4f4f4"
+    text: "#161616"
+  soft-pink-sage:
+    primary: "#E8B4B8"
+    secondary: "#A8D5BA"
+    background: "#FFF5F5"
+    text: "#2D3436"
+    cta: "#D4AF37"
+  dark-mode-friendly:
+    primary: "#78a9ff"
+    background: "#161616"
+    surface: "#262626"
+    text: "#f4f4f4"
+  warm-earth:
+    primary: "#8B4513"
+    secondary: "#D4A574"
+    background: "#FAF7F2"
+    text: "#2C1810"
+  brand-flexible:
+    note: "Derive from design-context brand colors"
+
+typography_pairs:
+  - id: ibm-plex
+    heading: "IBM Plex Sans"
+    body: "IBM Plex Sans"
+    mood: enterprise-trust
+  - id: geist-inter-alt
+    heading: "Geist"
+    body: "Geist"
+    mood: modern-saas
+  - id: cormorant-montserrat
+    heading: "Cormorant Garamond"
+    body: "Montserrat"
+    mood: luxury-wellness
+  - id: space-grotesk
+    heading: "Space Grotesk"
+    body: "DM Sans"
+    mood: creative-geometric
+  - id: sf-system
+    heading: "SF Pro"
+    body: "SF Pro"
+    mood: apple-native

@@ -5,7 +5,7 @@ type: overview
 status: canonical
 owner: dt-platform
 created: 2026-05-27
-updated: 2026-05-27
+updated: 2026-06-25
 tags:
   - dt
   - evolution
@@ -18,6 +18,7 @@ tags:
   - brain
   - faq
   - checklist
+  - bienvenida
 domain:
   - meta
 summary: Referencia completa del repo como cerebro colaborativo — qué se commitea, sesiones, commands, multi-IDE y filosofía de trabajo con la IA.
@@ -25,6 +26,7 @@ related:
   - DOC-OV-001
   - DOC-CONCEPT-001
   - DOC-GUIDE-003
+  - DOC-GUIDE-006
   - DOC-META-001
   - DOC-OPS-001
 keywords:
@@ -89,9 +91,8 @@ sequenceDiagram
   participant V as vitals/ docs/
   participant G as GitHub
 
-  U->>IA: /actualizar
-  IA->>G: pull --rebase
-  IA->>IA: reset session.yaml (local)
+  U->>IA: /bienvenida (primera vez) o /actualizar (día a día)
+  IA->>G: pull --rebase (solo /actualizar)
   U->>IA: /yo
   IA->>V: session local + roster (Git si nuevo)
   loop Durante el día
@@ -102,7 +103,9 @@ sequenceDiagram
   IA->>G: commit + push (sin session.yaml)
 ```
 
-**Regla de oro:** `actualizar` → (`yo` si no hay sesión) → trabajar → `guardar`. La IA **pide `/yo`** en conversación si falta sesión (rule `06-dt-colaboracion`).
+**Regla de oro (día a día):** `actualizar` → (`yo` si no hay sesión) → trabajar → `guardar`.
+
+**Post-clone:** `bienvenida` → `yo` → trabajar → `guardar` — ver [primer-setup-dt.md](../02_guides/primer-setup-dt.md) (`DOC-GUIDE-006`).
 
 ---
 
@@ -126,7 +129,7 @@ Fuente: [`.gitignore`](../../.gitignore).
 
 ### Primera vez en una máquina
 
-En el chat: **`/actualizar`** → **`/yo`** con nombre y rol reales. **`/yo` crea** `vitals/ops/session.yaml` (sin plantilla con placeholders en el repo).
+En el chat: **`/bienvenida`** → **`/yo`** con nombre y rol reales. **`/yo` crea** `vitals/ops/session.yaml` (sin plantilla con placeholders en el repo). No hace falta `/actualizar` en un clone recién hecho.
 
 ### Por qué `session.yaml` no se commitea
 
@@ -196,8 +199,11 @@ Regla: [`.cursor/rules/06-dt-colaboracion.mdc`](../../.cursor/rules/06-dt-colabo
 |-----|---------------------|--------|-------|
 | **Cursor** | `.cursor/commands/*.md` | `.cursor/skills/` | `.cursor/rules/*.mdc` |
 | **Antigravity** | `.agent/workflows/*.md` | `.agent/skills/` | `.agent/rules/` |
+| **Claude Code** | `.claude/commands/*.md` | `.claude/skills/` | `.claude/rules/*.md` |
+| **Codex** | — (skills) | `.agents/skills/` | — |
+| **GitHub Copilot** | — | — | `.github/copilot-instructions.md` |
 
-Setup: `/setup-cursor` o `/setup-antigravity` — [ide-setup.md](../02_guides/ide-setup.md).
+Post-clone: **`/bienvenida`** · Repair: **`/setup`** — [ide-setup.md](../02_guides/ide-setup.md) · [primer-setup-dt.md](../02_guides/primer-setup-dt.md).
 
 ### Fuente canónica de commands
 
@@ -252,15 +258,27 @@ skill: git-guardar
 
 ## 6. Commands de rutina
 
+### `/bienvenida`
+
+| | |
+|--|--|
+| **Skill** | `dt-setup` (modo first-run) |
+| **Cuándo** | Justo después de clonar o abrir el DT por primera vez |
+| **Qué hace** | Checklist markdown — verifica estructura multi-IDE; **no** requiere Ruby |
+| **Después** | Recordar **`/yo`** |
+
 ### `/actualizar`
 
 | | |
 |--|--|
 | **Skill** | `git-actualizar` |
 | **Cuándo** | Al abrir el editor; antes de `/guardar` si estás behind |
-| **Qué hace** | `git fetch` + `git pull --rebase` solo |
+| **Fase A** | `git fetch` + `git pull --rebase` de **origin** (proyecto/equipo) |
+| **Fase B** | Consulta `dt-upstream` vía skill Markdown — compara `framework_version`; **solo avisa** (ofrece `/actualizar-dt`) |
 | **Efecto local** | **No** crea ni modifica `session.yaml` |
 | **Después** | Reportar novedades; si no hay sesión, recordar **`/yo`** |
+
+Guía: [actualizar-framework-dt.md](../02_guides/actualizar-framework-dt.md) (`DOC-GUIDE-007`).
 
 ### `/yo`
 
@@ -302,8 +320,9 @@ Versión template: <VERSION>
 | `/cuestionar` | work | No |
 | `/contexto` | work | No |
 | `/prepr` | work | Recomendado |
-| `/setup-cursor` | framework | No |
-| `/setup-antigravity` | framework | No |
+| `/setup` | framework | No |
+| `/bootstrap` | framework | Sí (recomendado) |
+| `/actualizar-dt` | framework | Recomendado |
 | `/github-save-small` | framework | Sí |
 
 Listado completo y taglines: `vitals/config/commands-meta.yaml`.
@@ -331,6 +350,8 @@ Listado completo y taglines: `vitals/config/commands-meta.yaml`.
 | v1.5 | Sesión local, `/actualizar` `/yo` `/guardar`, `commands-meta`, DOC-OV-004 |
 | v1.5.1 | Sync multi-IDE, sesión solo con `/yo`, `github-save-release` |
 | v1.5.2 | `/actualizar` solo Git; rule identidad en conversación; sin pre-commit |
+| v1.7.0 | **Orden continuo + multi-IDE inclusivo:** fuente única total (`rule-bodies/` + `rules-manifest.yaml`), `ide-targets.yaml`, `dt-doctor`, catálogo derivado (`sync-catalog`), emisor único `sync-ide` (Cursor, Antigravity, Claude, Codex, Copilot), regla `07-orden-continuo` (loop autónomo), `/setup` no destructivo, `/bootstrap` |
+| v1.7.2 | **Upstream DT:** Fase B en `/actualizar`, `/actualizar-dt`, config `dt-upstream.md`, instrucciones Markdown en skills, DOC-GUIDE-007 |
 
 Reutilizar en otro proyecto: [adopt-dt-in-existing-repo.md](../02_guides/adopt-dt-in-existing-repo.md).
 
@@ -390,11 +411,13 @@ Entrada en `commands-meta.yaml` + `sync-commands-from-meta.sh` y `sync-skills-pa
 
 ## 13. Checklist de jornada
 
-### Al abrir (5 min)
+### Post-clone (primera vez)
 
-- [ ] `/actualizar`
+- [ ] `/bienvenida`
 - [ ] `/yo`
 - [ ] Confirmar que la IA muestra tu nombre y rol
+
+### Al abrir (día a día)
 
 ### Durante el día
 

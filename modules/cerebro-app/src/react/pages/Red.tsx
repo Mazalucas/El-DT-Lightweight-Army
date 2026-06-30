@@ -1,14 +1,38 @@
 import { useMemo, useState } from 'react';
-import { ErrorState, PageHeader, Section, Skeleton, formatDate } from '../ds.js';
-import { useGraph, usePeopleView } from '../hooks.js';
+import { api } from '../../lib/api.js';
+import { ErrorState, Icon, PageHeader, Section, Skeleton, formatDate } from '../ds.js';
+import { useGraph, useMaintenanceView, usePeopleView } from '../hooks.js';
 import { GraphPanel } from '../components/GraphPanel.js';
+import { useEntityLifecycleStore } from '../lib/entity-action/entity-lifecycle-store.js';
+import type { PeopleActions } from '../components/PeopleDirectory.js';
+import type { NodeBadge } from '../components/graph/GraphSidepanel.js';
 
 const DAYS_30 = 30 * 86400000;
 
+const graphPeopleActions: PeopleActions = {
+  updatePerson: (id, patch) => api.updatePerson(id, patch),
+  promoteProspect: (id, email, displayName, enrichment) =>
+    api.promoteProspect(id, email, displayName, enrichment),
+  linkProspect: (prospectId, personId, enrichment) =>
+    api.linkProspect(prospectId, personId, enrichment),
+  dismissProspect: (prospectId) => api.dismissProspect(prospectId),
+  restoreProspectDismiss: (snapshot) => api.restoreProspectDismiss(snapshot),
+  getProspectCandidates: (prospectId) => api.getProspectCandidates(prospectId),
+  mergePeople: (canonicalId, mergeIds) => api.mergePeople(canonicalId, mergeIds),
+  createTeam: (name) => api.createTeam(name).then((r) => r.team),
+  createProject: (name) => api.createProject(name).then((r) => r.project),
+  assignEmailToTeam: (teamId, email) => api.assignEmailToTeam(teamId, email),
+  updateTeam: (id, patch) => api.updateTeam(id, patch),
+};
+
 export default function Red() {
   const [center, setCenter] = useState<string | undefined>(undefined);
-  const graph = useGraph(center ? { center, depth: 2 } : undefined);
+  const [limit, setLimit] = useState(120);
+  const [graphFullscreen, setGraphFullscreen] = useState(false);
+  const focusedEntity = useEntityLifecycleStore((s) => s.focusedEntity);
+  const graph = useGraph(center ? { center, depth: 2, limit } : { limit });
   const people = usePeopleView();
+  const maintenance = useMaintenanceView();
 
   const insights = useMemo(() => {
     if (!graph.data || !people.data) return null;
@@ -40,11 +64,36 @@ export default function Red() {
     return { topConnected, cooling };
   }, [graph.data, people.data]);
 
+  const nodeBadges = useMemo(() => {
+    const badges = new Map<string, NodeBadge>();
+    if (!insights) return badges;
+    for (const p of insights.topConnected) {
+      badges.set(p.id, { kind: 'hub' });
+    }
+    for (const p of insights.cooling) {
+      badges.set(`person:${p.id}`, { kind: 'cooling' });
+    }
+    return badges;
+  }, [insights]);
+
   return (
     <div>
       <PageHeader
         title="Red"
         desc="Quién se conecta con quién a través de tus reuniones — con insights accionables."
+        actions={
+          graph.data && !graph.isPending ? (
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={() => setGraphFullscreen(true)}
+              aria-label="Abrir red en pantalla completa"
+            >
+              <Icon name="maximize" />
+              <span style={{ marginLeft: 'var(--space-1)' }}>Pantalla completa</span>
+            </button>
+          ) : null
+        }
       />
 
       {graph.isPending ? (
@@ -60,7 +109,19 @@ export default function Red() {
               </button>
             </div>
           ) : null}
-          <GraphPanel graph={graph.data.graph} onNodeClick={(id) => setCenter(id)} />
+          <GraphPanel
+            graph={graph.data.graph}
+            onExploreNode={(id) => setCenter(id)}
+            nodeBadges={nodeBadges}
+            limit={limit}
+            onLimitChange={setLimit}
+            peopleView={people.data}
+            peopleActions={graphPeopleActions}
+            maintenanceItems={maintenance.data?.items}
+            fullscreen={graphFullscreen}
+            onFullscreenChange={setGraphFullscreen}
+            focusEntityRef={focusedEntity}
+          />
         </>
       )}
 

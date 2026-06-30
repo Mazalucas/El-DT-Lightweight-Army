@@ -1,5 +1,5 @@
 import type { docs_v1 } from 'googleapis';
-import { cleanChipPersonName } from './person-name-clean.js';
+import { cleanChipPersonName, isLikelyPersonName } from './person-name-clean.js';
 
 const SECTION_ALIASES: Record<string, string> = {
   participantes: 'Participantes',
@@ -213,7 +213,7 @@ function parseParticipantsList(block: string): string[] {
   return block
     .split(/\n|,|•|·|–|-/)
     .map((s) => s.replace(/^\s*[-*]\s*/, '').trim())
-    .filter((s) => s.length > 1 && s.length < 80 && !EMAIL_RE.test(s));
+    .filter((s) => s.length > 1 && s.length < 80 && !EMAIL_RE.test(s) && isLikelyPersonName(s));
 }
 
 function extractMentionedEmails(text: string): string[] {

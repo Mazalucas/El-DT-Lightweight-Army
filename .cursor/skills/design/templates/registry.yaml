@@ -1,0 +1,147 @@
+# Atelier — registro de templates (design systems + estilos visuales)
+# Contrato IA: Markdown-only — ver templates/PROTOCOL.md
+version: 3
+updated: "2026-06-23"
+
+base_path: .cursor/skills/design/templates
+protocol: .cursor/skills/design/templates/PROTOCOL.md
+placeholders_md: .cursor/skills/design/templates/shared/placeholders.md
+placeholders_yaml: vitals/data/design/template-placeholders.yaml
+
+# Plantillas canónicas por DESIGN SYSTEM (prioridad)
+systems:
+  material-design:
+    id: material-design
+    label: Material Design 3 Expressive
+    surfaces: [homepage, presentation, dashboard-saas]
+    files:
+      tokens: systems/material-design/tokens.css
+      homepage: systems/material-design/homepage.md
+      presentation: systems/material-design/presentation.md
+      dashboard_saas: systems/material-design/dashboard-saas.md
+
+  apple-hig:
+    id: apple-hig
+    label: Apple Human Interface Guidelines
+    surfaces: [homepage, presentation, dashboard-saas]
+    files:
+      tokens: systems/apple-hig/tokens.css
+      homepage: systems/apple-hig/homepage.md
+      presentation: systems/apple-hig/presentation.md
+      dashboard_saas: systems/apple-hig/dashboard-saas.md
+
+  fluent-design:
+    id: fluent-design
+    label: Fluent Design 2
+    surfaces: [homepage, presentation, dashboard-saas]
+    files:
+      tokens: systems/fluent-design/tokens.css
+      homepage: systems/fluent-design/homepage.md
+      presentation: systems/fluent-design/presentation.md
+      dashboard_saas: systems/fluent-design/dashboard-saas.md
+
+  carbon-design:
+    id: carbon-design
+    label: IBM Carbon
+    surfaces: [homepage, presentation, dashboard-saas]
+    files:
+      tokens: systems/carbon-design/tokens.css
+      homepage: systems/carbon-design/homepage.md
+      presentation: systems/carbon-design/presentation.md
+      dashboard_saas: systems/carbon-design/dashboard-saas.md
+
+  polaris-design:
+    id: polaris-design
+    label: Shopify Polaris
+    surfaces: [homepage, presentation, dashboard-saas]
+    files:
+      tokens: systems/polaris-design/tokens.css
+      homepage: systems/polaris-design/homepage.md
+      presentation: systems/polaris-design/presentation.md
+      dashboard_saas: systems/polaris-design/dashboard-saas.md
+
+  atlassian-design:
+    id: atlassian-design
+    label: Atlassian Design System
+    surfaces: [homepage, presentation, dashboard-saas]
+    files:
+      tokens: systems/atlassian-design/tokens.css
+      homepage: systems/atlassian-design/homepage.md
+      presentation: systems/atlassian-design/presentation.md
+      dashboard_saas: systems/atlassian-design/dashboard-saas.md
+
+# Overlays visuales
+styles:
+  swiss-style:
+    id: swiss-style
+    label: Swiss / International Typographic
+    surfaces: [landing, product-shell]
+    files:
+      tokens: styles/swiss-style/tokens.css
+      landing: styles/swiss-style/landing.md
+      product_shell: styles/swiss-style/product-shell.md
+    pairing_systems: [carbon-design, material-design, none]
+
+  bauhaus-style:
+    id: bauhaus-style
+    label: Bauhaus (adapted)
+    surfaces: [landing, product-shell]
+    files:
+      tokens: styles/bauhaus-style/tokens.css
+      landing: styles/bauhaus-style/landing.md
+      product_shell: styles/bauhaus-style/product-shell.md
+
+  digital-minimalism:
+    id: digital-minimalism
+    label: Digital Minimalism
+    surfaces: [landing, product-shell, auth]
+    files:
+      tokens: styles/digital-minimalism/tokens.css
+      landing: styles/digital-minimalism/landing.md
+      product_shell: styles/digital-minimalism/product-shell.md
+      auth: styles/digital-minimalism/auth.md
+    slop_risk: high
+
+  neumorphism:
+    id: neumorphism
+    label: Neumorphism (partial)
+    surfaces: [controls, product-shell]
+    max_ui_percent: 20
+    files:
+      tokens: styles/neumorphism/tokens.css
+      controls: styles/neumorphism/controls.md
+      product_shell: styles/neumorphism/product-shell.md
+
+  glassmorphism:
+    id: glassmorphism
+    label: Glassmorphism (controlled)
+    surfaces: [landing, product-shell, nav-overlay]
+    max_ui_percent: 30
+    files:
+      tokens: styles/glassmorphism/tokens.css
+      landing: styles/glassmorphism/landing.md
+      product_shell: styles/glassmorphism/product-shell.md
+      nav_overlay: styles/glassmorphism/nav-overlay.md
+
+# Frameworks (estructura agnóstica de DS — tokens desde manual de marca)
+frameworks:
+  slide-deck-html:
+    id: slide-deck-html
+    label: Slide deck HTML (fullscreen)
+    surfaces: [slide-deck]
+    requires_brand_manual: true
+    files:
+      tokens: frameworks/slide-deck-html/tokens.css
+      presentation: frameworks/slide-deck-html/presentation.md
+      surface: shared/surface-slide-deck.md
+      preview: preview/pages/slide-deck-framework-presentation.html
+    skill: frameworks/slide-deck-html/SKILL.md
+
+usage:
+  agent_read_order:
+    - templates/PROTOCOL.md
+    - templates/shared/placeholders.md
+    - one system folder OR one style folder (markdown only)
+  primary_templates: systems
+  never_load_all_systems: true
+  no_script_generation: true

@@ -1,0 +1,65 @@
+{
+  "skill_name": "anti-slop",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review my landing page hero — it has a purple gradient background, Inter font, and three feature columns with emoji icons.",
+      "expected_output": "Should flag multiple slop patterns: SLOP001 purple gradient, SLOP002 Inter, SLOP013 three-column cliché, SLOP009 emoji icons. Should reference checklist and suggest concrete alternatives (solid brand color, SVG icons, asymmetric layout). Should recommend running dt-design-detect.sh if code exists.",
+      "assertions": [
+        "Flags purple gradient as AI slop",
+        "Flags Inter without justification",
+        "Flags three-column feature grid cliché",
+        "Flags emoji as icons",
+        "Suggests concrete alternatives",
+        "References design-context anti-patterns if applicable"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run anti-slop on src/components/Hero.tsx",
+      "expected_output": "Should invoke or instruct running ./scripts/dt-design-detect.sh on the path. Should parse SLOP/A11Y rule IDs and map to fixes. Should produce structured report with verdict.",
+      "assertions": [
+        "References dt-design-detect.sh",
+        "Uses structured report format",
+        "Maps rule IDs to fixes",
+        "Includes pre-delivery checklist items"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Our brand guide requires Inter and a purple gradient. Is that ok?",
+      "expected_output": "Should defer to brand-guardian for brand book validation. Should recommend documenting exceptions in design-context approved exceptions section. Should not blanket-approve without written exception.",
+      "assertions": [
+        "Mentions brand-guardian or brand validation",
+        "Recommends documenting exception in design-context",
+        "Does not dismiss slop concerns entirely"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Implement the CSS fixes for the slop issues you found.",
+      "expected_output": "Should DEFER to frontend for implementation. May summarize required fixes but not write production component code as primary output.",
+      "assertions": [
+        "Defers to frontend skill",
+        "Does not implement full component code as primary deliverable"
+      ],
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Pre-handoff check for fintech dashboard — glass cards on all widgets, neumorphic buttons, bounce animations on charts.",
+      "expected_output": "Should flag glass quota exceeded, neumorphism a11y risk for fintech, bounce easing (SLOP006). Should cite a11y strict mode. Verdict should be fix-first.",
+      "assertions": [
+        "Flags glassmorphism overuse",
+        "Flags neumorphism on functional UI",
+        "Flags bounce easing",
+        "Mentions fintech a11y requirements",
+        "Verdict is fix-first not ship"
+      ],
+      "files": []
+    }
+  ]
+}

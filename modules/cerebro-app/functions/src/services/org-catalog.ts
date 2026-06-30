@@ -14,6 +14,9 @@ import {
   deleteProjectOnAdapter,
   deleteTeamOnAdapter,
   dismissTodosBatchOnAdapter,
+  dismissProspectOnAdapter,
+  dismissMergeContactOnAdapter,
+  restoreProspectDismissOnAdapter,
   linkProspectToContactOnAdapter,
   mergePersonsIntoCanonicalOnAdapter,
   promoteProspectToContactOnAdapter,
@@ -23,6 +26,9 @@ import {
 import {
   acceptProjectSuggestionOnAdapter,
   acceptTeamSuggestionOnAdapter,
+  batchAcceptProjectSuggestionsOnAdapter,
+  batchAcceptTeamSuggestionsOnAdapter,
+  batchDismissSuggestionsOnAdapter,
   dismissSuggestionOnAdapter,
 } from './pending-suggestions.js';
 import { loadOrgStore, requireOrgRole, saveOrgStore } from './org.js';
@@ -58,9 +64,10 @@ export async function promoteProspectToContactForOrg(
   prospectId: string,
   email: string,
   displayName?: string,
+  enrichment?: { aliases?: string[]; teamIds?: string[]; projectIds?: string[] },
 ) {
   return withOrgCatalog(orgId, uid, () =>
-    promoteProspectToContactOnAdapter(orgAdapter(orgId), prospectId, email, displayName),
+    promoteProspectToContactOnAdapter(orgAdapter(orgId), prospectId, email, displayName, enrichment),
   );
 }
 
@@ -69,10 +76,27 @@ export async function linkProspectToContactForOrg(
   uid: string,
   prospectId: string,
   personId: string,
+  enrichment?: { aliases?: string[]; teamIds?: string[]; projectIds?: string[] },
 ) {
   return withOrgCatalog(orgId, uid, () =>
-    linkProspectToContactOnAdapter(orgAdapter(orgId), prospectId, personId),
+    linkProspectToContactOnAdapter(orgAdapter(orgId), prospectId, personId, enrichment),
   );
+}
+
+export async function dismissProspectForOrg(orgId: string, uid: string, prospectId: string) {
+  return withOrgCatalog(orgId, uid, () => dismissProspectOnAdapter(orgAdapter(orgId), prospectId));
+}
+
+export async function restoreProspectDismissForOrg(
+  orgId: string,
+  uid: string,
+  snapshot: import('../shared/types.js').ProspectDismissUndoSnapshot,
+) {
+  return withOrgCatalog(orgId, uid, () => restoreProspectDismissOnAdapter(orgAdapter(orgId), snapshot));
+}
+
+export async function dismissMergeContactForOrg(orgId: string, uid: string, suggestionId: string) {
+  return withOrgCatalog(orgId, uid, () => dismissMergeContactOnAdapter(orgAdapter(orgId), suggestionId));
 }
 
 export async function updatePersonForOrg(
@@ -125,6 +149,25 @@ export async function acceptProjectSuggestionForOrg(
 
 export async function acceptTeamSuggestionForOrg(orgId: string, uid: string, suggestionId: string) {
   return withOrgCatalog(orgId, uid, () => acceptTeamSuggestionOnAdapter(orgAdapter(orgId), suggestionId));
+}
+
+export async function batchDismissSuggestionsForOrg(orgId: string, uid: string, ids: string[]) {
+  return withOrgCatalog(orgId, uid, () => batchDismissSuggestionsOnAdapter(orgAdapter(orgId), ids));
+}
+
+export async function batchAcceptProjectSuggestionsForOrg(
+  orgId: string,
+  uid: string,
+  ids: string[],
+  opts?: { existingProjectId?: string; projectName?: string },
+) {
+  return withOrgCatalog(orgId, uid, () =>
+    batchAcceptProjectSuggestionsOnAdapter(orgAdapter(orgId), ids, opts),
+  );
+}
+
+export async function batchAcceptTeamSuggestionsForOrg(orgId: string, uid: string, ids: string[]) {
+  return withOrgCatalog(orgId, uid, () => batchAcceptTeamSuggestionsOnAdapter(orgAdapter(orgId), ids));
 }
 
 export async function getBoardSnapshotForOrg(orgId: string, uid: string) {

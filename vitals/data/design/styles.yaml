@@ -1,0 +1,54 @@
+# Atelier — estilos visuales (subset prioritario)
+version: 1
+updated: "2026-06-13"
+
+styles:
+  - id: swiss-style
+    name: Swiss / International Typographic
+    best_for: [b2b, fintech, enterprise, editorial, dashboards]
+    slop_risk: medium
+    a11y: excellent
+  - id: bauhaus-style
+    name: Bauhaus (adapted)
+    best_for: [creative, education, landing impact, portfolios]
+    slop_risk: low-medium
+    a11y: good
+  - id: digital-minimalism
+    name: Digital Minimalism
+    best_for: [productivity, saas, writing tools, mvps]
+    slop_risk: high
+    a11y: excellent
+    note: "Default IA slop — require explicit exclusions in design-context"
+  - id: neumorphism
+    name: Neumorphism (partial only)
+    best_for: [iot toggles, smart home controls, prototypes]
+    slop_risk: medium
+    a11y: poor
+    max_ui_percent: 20
+  - id: glassmorphism
+    name: Glassmorphism / materials
+    best_for: [media apps, spatial ui, native os chrome]
+    slop_risk: very-high
+    a11y: fair
+    max_ui_percent: 30
+  - id: soft-ui-evolution
+    name: Soft UI Evolution
+    best_for: [wellness, beauty, premium services]
+    slop_risk: medium
+  - id: brutalism
+    name: Neubrutalism / Industrial
+    best_for: [gen-z brands, creative dev portfolios]
+    slop_risk: low
+  - id: bento-grid
+    name: Bento Box Grid
+    best_for: [feature pages, dashboards, product marketing]
+    slop_risk: medium
+  - id: dark-oled
+    name: Dark Mode OLED
+    best_for: [coding tools, night apps, media]
+    slop_risk: medium
+  - id: ai-native-ui
+    name: AI-Native UI
+    best_for: [chatbots, copilots, agent products]
+    slop_risk: very-high
+    avoid_defaults: [purple gradient mesh, glass chat bubbles]

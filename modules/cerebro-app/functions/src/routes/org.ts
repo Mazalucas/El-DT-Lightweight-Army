@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import type { AuthedRequest } from '../lib/auth-middleware.js';
-import { getUid } from '../lib/auth-middleware.js';
+import { getUid, getUserEmail } from '../lib/auth-middleware.js';
 import type { OrgJoinPolicy, OrgRole, OrgBranding } from '../shared/types.js';
 import {
   acceptOrgInvite,
@@ -30,6 +30,9 @@ import {
   deleteProjectForOrg,
   deleteTeamForOrg,
   dismissTodosBatchForOrg,
+  dismissProspectForOrg,
+  dismissMergeContactForOrg,
+  restoreProspectDismissForOrg,
   getBoardSnapshotForOrg,
   linkProspectToContactForOrg,
   mergePersonsIntoCanonicalForOrg,
@@ -184,13 +187,20 @@ orgRouter.post('/:orgId/catalog/people/merge', async (req, res, next) => {
 orgRouter.post('/:orgId/catalog/prospects/:id/promote', async (req, res, next) => {
   try {
     const uid = getUid(req as AuthedRequest);
-    const { email, displayName } = req.body as { email?: string; displayName?: string };
+    const { email, displayName, aliases, teamIds, projectIds } = req.body as {
+      email?: string;
+      displayName?: string;
+      aliases?: string[];
+      teamIds?: string[];
+      projectIds?: string[];
+    };
     const result = await promoteProspectToContactForOrg(
       req.params.orgId!,
       uid,
       req.params.id!,
       email ?? '',
       displayName,
+      { aliases, teamIds, projectIds },
     );
     res.json(result);
   } catch (e) {
@@ -201,8 +211,55 @@ orgRouter.post('/:orgId/catalog/prospects/:id/promote', async (req, res, next) =
 orgRouter.post('/:orgId/catalog/prospects/:id/link', async (req, res, next) => {
   try {
     const uid = getUid(req as AuthedRequest);
-    const { personId } = req.body as { personId?: string };
-    const store = await linkProspectToContactForOrg(req.params.orgId!, uid, req.params.id!, personId ?? '');
+    const { personId, aliases, teamIds, projectIds } = req.body as {
+      personId?: string;
+      aliases?: string[];
+      teamIds?: string[];
+      projectIds?: string[];
+    };
+    const store = await linkProspectToContactForOrg(
+      req.params.orgId!,
+      uid,
+      req.params.id!,
+      personId ?? '',
+      { aliases, teamIds, projectIds },
+    );
+    res.json({ store });
+  } catch (e) {
+    next(e);
+  }
+});
+
+orgRouter.post('/:orgId/catalog/prospects/:id/dismiss', async (req, res, next) => {
+  try {
+    const uid = getUid(req as AuthedRequest);
+    const result = await dismissProspectForOrg(req.params.orgId!, uid, req.params.id!);
+    res.json(result);
+  } catch (e) {
+    next(e);
+  }
+});
+
+orgRouter.post('/:orgId/catalog/prospects/restore-dismiss', async (req, res, next) => {
+  try {
+    const uid = getUid(req as AuthedRequest);
+    const { snapshot } = req.body as { snapshot?: import('../shared/types.js').ProspectDismissUndoSnapshot };
+    if (!snapshot?.prospectId) {
+      res.status(400).json({ error: 'snapshot requerido' });
+      return;
+    }
+    const store = await restoreProspectDismissForOrg(req.params.orgId!, uid, snapshot);
+    res.json({ store });
+  } catch (e) {
+    next(e);
+  }
+});
+
+orgRouter.post('/:orgId/catalog/maintenance/dismiss-merge', async (req, res, next) => {
+  try {
+    const uid = getUid(req as AuthedRequest);
+    const { suggestionId } = req.body as { suggestionId?: string };
+    const store = await dismissMergeContactForOrg(req.params.orgId!, uid, suggestionId ?? '');
     res.json({ store });
   } catch (e) {
     next(e);
@@ -242,8 +299,8 @@ orgRouter.post('/:orgId/catalog/todos', async (req, res, next) => {
 orgRouter.patch('/:orgId/catalog/todos/:id', async (req, res, next) => {
   try {
     const uid = getUid(req as AuthedRequest);
-    const store = await updateTodoForOrg(req.params.orgId!, uid, req.params.id!, req.body as UpdateTodoInput);
-    res.json({ store });
+    const result = await updateTodoForOrg(req.params.orgId!, uid, req.params.id!, req.body as UpdateTodoInput);
+    res.json(result);
   } catch (e) {
     next(e);
   }
@@ -252,8 +309,8 @@ orgRouter.patch('/:orgId/catalog/todos/:id', async (req, res, next) => {
 orgRouter.post('/:orgId/catalog/todos/:id/move', async (req, res, next) => {
   try {
     const uid = getUid(req as AuthedRequest);
-    const store = await moveTodoForOrg(req.params.orgId!, uid, req.params.id!, req.body as MoveTodoInput);
-    res.json({ store });
+    const result = await moveTodoForOrg(req.params.orgId!, uid, req.params.id!, req.body as MoveTodoInput);
+    res.json(result);
   } catch (e) {
     next(e);
   }
@@ -263,8 +320,8 @@ orgRouter.post('/:orgId/catalog/todos/complete-batch', async (req, res, next) =>
   try {
     const uid = getUid(req as AuthedRequest);
     const { todoIds } = req.body as { todoIds?: string[] };
-    const store = await completeTodosBatchForOrg(req.params.orgId!, uid, todoIds ?? []);
-    res.json({ store });
+    const result = await completeTodosBatchForOrg(req.params.orgId!, uid, todoIds ?? []);
+    res.json(result);
   } catch (e) {
     next(e);
   }
@@ -274,8 +331,8 @@ orgRouter.post('/:orgId/catalog/todos/reopen-batch', async (req, res, next) => {
   try {
     const uid = getUid(req as AuthedRequest);
     const { todoIds } = req.body as { todoIds?: string[] };
-    const store = await reopenTodosBatchForOrg(req.params.orgId!, uid, todoIds ?? []);
-    res.json({ store });
+    const result = await reopenTodosBatchForOrg(req.params.orgId!, uid, todoIds ?? []);
+    res.json(result);
   } catch (e) {
     next(e);
   }
@@ -285,8 +342,8 @@ orgRouter.post('/:orgId/catalog/todos/accept-batch', async (req, res, next) => {
   try {
     const uid = getUid(req as AuthedRequest);
     const { todoIds } = req.body as { todoIds?: string[] };
-    const store = await acceptTodosBatchForOrg(req.params.orgId!, uid, todoIds ?? []);
-    res.json({ store });
+    const result = await acceptTodosBatchForOrg(req.params.orgId!, uid, todoIds ?? []);
+    res.json(result);
   } catch (e) {
     next(e);
   }
@@ -296,8 +353,8 @@ orgRouter.post('/:orgId/catalog/todos/dismiss-batch', async (req, res, next) => 
   try {
     const uid = getUid(req as AuthedRequest);
     const { todoIds } = req.body as { todoIds?: string[] };
-    const store = await dismissTodosBatchForOrg(req.params.orgId!, uid, todoIds ?? []);
-    res.json({ store });
+    const result = await dismissTodosBatchForOrg(req.params.orgId!, uid, todoIds ?? []);
+    res.json(result);
   } catch (e) {
     next(e);
   }
@@ -435,7 +492,15 @@ orgRouter.get('/:orgId/graph', async (req, res, next) => {
     const memberUid = typeof req.query.memberUid === 'string' ? req.query.memberUid : undefined;
     const filteredMembers = memberUid ? members.filter((m) => m.uid === memberUid) : members;
     res.json({
-      graph: buildGraphFromStore(store, { limit, center, depth, types, members: filteredMembers }),
+      graph: buildGraphFromStore(store, {
+        limit,
+        center,
+        depth,
+        types,
+        members: filteredMembers,
+        memberUid: memberUid ?? uid,
+        userEmail: await getUserEmail(uid),
+      }),
     });
   } catch (e) {
     next(e);
@@ -455,6 +520,7 @@ orgRouter.get('/:orgId/views/meetings', async (req, res, next) => {
       q: typeof req.query.q === 'string' ? req.query.q : undefined,
       projectId: typeof req.query.projectId === 'string' ? req.query.projectId : undefined,
       teamId: typeof req.query.teamId === 'string' ? req.query.teamId : undefined,
+      sort: typeof req.query.sort === 'string' ? req.query.sort : undefined,
     });
     res.json(view);
   } catch (e) {

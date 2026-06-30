@@ -1,26 +1,24 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
 import { api } from '../../lib/api.js';
-import { Badge, Button, ErrorState, formatDate, PageHeader, Section, Skeleton, toast } from '../ds.js';
-import { useInvalidateViews, useMeetingContent, useMeetingDetail } from '../hooks.js';
+import { Badge, Button, ErrorState, formatDate, PageHeader, Section, Skeleton } from '../ds.js';
+import { useMeetingContent, useMeetingDetail } from '../hooks.js';
 import { TodoList } from '../components/TodoItem.js';
+import { MarkdownContent } from '../components/MarkdownContent.js';
+import { useEntityMutation } from '../lib/entity-action/use-entity-mutation.js';
 
 export default function ReunionDetalle() {
   const { id = '' } = useParams();
   const { data, isPending, error, refetch } = useMeetingDetail(id);
   const [showContent, setShowContent] = useState(false);
   const content = useMeetingContent(id, showContent);
-  const invalidate = useInvalidateViews();
+  const { useEntityMutate } = useEntityMutation();
 
-  const analyze = useMutation({
-    mutationFn: () => api.analyzeMeeting(id),
-    onSuccess: () => {
-      invalidate();
-      toast('Análisis IA completado');
-    },
-    onError: (e) => toast(e instanceof Error ? e.message : 'Error al analizar', 'error'),
-  });
+  const analyze = useEntityMutate(
+    `analyze-meeting:${id}`,
+    () => api.analyzeMeeting(id),
+    { success: 'Análisis IA completado', error: 'Error al analizar' },
+  );
 
   if (isPending) return <Skeleton lines={8} />;
   if (error) return <ErrorState error={error} retry={() => void refetch()} />;
@@ -28,7 +26,7 @@ export default function ReunionDetalle() {
   const { meeting, todos, people, prospects, projects, teams } = data;
 
   return (
-    <div>
+    <div data-cerebro-entity={`meeting:${meeting.id}`}>
       <PageHeader
         title={meeting.title}
         desc={`${formatDate(meeting.startedAt)} · ${meeting.participants.length} participantes`}
@@ -41,7 +39,7 @@ export default function ReunionDetalle() {
               variant="secondary"
               size="sm"
               loading={analyze.isPending}
-              onClick={() => analyze.mutate()}
+              onClick={() => analyze.run()}
             >
               {meeting.analysisStatus === 'analyzed' ? 'Re-analizar con IA' : 'Analizar con IA'}
             </Button>
@@ -69,7 +67,7 @@ export default function ReunionDetalle() {
 
       {meeting.summary ? (
         <Section title="Resumen">
-          <p className="md-content">{meeting.summary}</p>
+          <MarkdownContent content={meeting.summary} />
         </Section>
       ) : null}
 
@@ -81,12 +79,17 @@ export default function ReunionDetalle() {
         {people.length || prospects.length ? (
           <div className="chip-row">
             {people.map((p) => (
-              <Link key={p.id} to={`/personas?q=${encodeURIComponent(p.displayName)}`} className="badge badge-accent">
+              <Link
+                key={p.id}
+                to={`/personas?q=${encodeURIComponent(p.displayName)}`}
+                className="badge badge-accent"
+                data-cerebro-entity={`person:${p.id}`}
+              >
                 {p.displayName}
               </Link>
             ))}
             {prospects.map((p) => (
-              <span key={p.id} className="badge" title="Detectado en notas, sin email confirmado">
+              <span key={p.id} className="badge" title="Detectado en notas, sin email confirmado" data-cerebro-entity={`prospect:${p.id}`}>
                 {p.displayName} ?
               </span>
             ))}
@@ -116,7 +119,7 @@ export default function ReunionDetalle() {
         ) : content.error ? (
           <p className="muted">No se pudo cargar el contenido ({String(content.error)}).</p>
         ) : (
-          <div className="md-content">{content.data.content.replace(/^---[\s\S]*?---\n/, '')}</div>
+          <MarkdownContent content={content.data.content.replace(/^---[\s\S]*?---\n/, '')} />
         )}
       </Section>
     </div>

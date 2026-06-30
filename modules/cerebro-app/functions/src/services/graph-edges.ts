@@ -7,6 +7,25 @@ function nodeId(type: string, id: string): string {
   return `${type}:${id}`;
 }
 
+/** Resuelve el nodo del operador: member en org o person por email de login. */
+export function resolveSelfNodeId(
+  store: CerebroStore,
+  opts?: { userEmail?: string; memberUid?: string; members?: OrgMember[] },
+): string | undefined {
+  const memberUid = opts?.memberUid?.trim();
+  if (memberUid && opts?.members?.some((m) => m.uid === memberUid)) {
+    return nodeId('member', memberUid);
+  }
+  const email = opts?.userEmail?.toLowerCase().trim();
+  if (!email) return undefined;
+  for (const p of store.people) {
+    for (const e of p.emails ?? []) {
+      if (e.toLowerCase().trim() === email) return nodeId('person', p.id);
+    }
+  }
+  return undefined;
+}
+
 export function rebuildGraphEdges(
   store: CerebroStore,
   opts?: { includeMembers?: boolean; members?: OrgMember[] },
@@ -98,6 +117,8 @@ export function buildGraphSnapshot(
     depth?: number;
     types?: string[];
     members?: OrgMember[];
+    userEmail?: string;
+    memberUid?: string;
   },
 ): GraphSnapshot {
   const limit = opts?.limit ?? DEFAULT_LIMIT;
@@ -131,7 +152,12 @@ export function buildGraphSnapshot(
     addNode({ id: nodeId('project', pr.id), type: 'project', label: pr.name });
   }
   for (const t of store.teams) {
-    addNode({ id: nodeId('team', t.id), type: 'team', label: t.name });
+    addNode({
+      id: nodeId('team', t.id),
+      type: 'team',
+      label: t.name,
+      meta: t.emails?.length ? { emails: t.emails } : undefined,
+    });
   }
   for (const t of store.todos.filter((x) => x.status !== 'dismissed').slice(0, 40)) {
     addNode({ id: nodeId('todo', t.id), type: 'todo', label: truncateString(t.text, 36) ?? 'Tarea' });
@@ -147,6 +173,12 @@ export function buildGraphSnapshot(
     }
   }
 
+  const selfNodeId = resolveSelfNodeId(store, {
+    userEmail: opts?.userEmail,
+    memberUid: opts?.memberUid,
+    members: opts?.members,
+  });
+
   let activeIds = new Set<string>();
   if (opts?.center && allNodes.has(opts.center)) {
     activeIds.add(opts.center);
@@ -161,7 +193,12 @@ export function buildGraphSnapshot(
       frontier = next;
     }
   } else {
-    activeIds = new Set([...allNodes.keys()].slice(0, limit));
+    const allKeys = [...allNodes.keys()];
+    const priority = new Set<string>();
+    if (selfNodeId && allNodes.has(selfNodeId)) priority.add(selfNodeId);
+    const rest = allKeys.filter((k) => !priority.has(k));
+    const picked = [...priority, ...rest.slice(0, Math.max(0, limit - priority.size))];
+    activeIds = new Set(picked);
   }
 
   const typeFilter = opts?.types?.length ? new Set(opts.types) : null;
@@ -180,5 +217,6 @@ export function buildGraphSnapshot(
     generatedAt: new Date().toISOString(),
     centerId: opts?.center,
     depth: opts?.depth,
+    selfNodeId,
   };
 }

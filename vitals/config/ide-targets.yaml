@@ -1,0 +1,96 @@
+# Registro declarativo de destinos IDE.
+# Agregar soporte para un IDE = agregar una entrada acá (no reescribir scripts).
+# El emisor scripts/sync-ide.rb recorre este registro y emite cada destino
+# desde las fuentes canónicas: rule-bodies/ + rules-manifest.yaml + SKILL.md + commands-meta.yaml
+version: 1
+updated: "2026-06-13"
+
+# Formatos de frontmatter para reglas:
+#   cursor → ---\n description, [globs], alwaysApply \n---
+#   agent  → ---\n description, [globs], [alwaysApply] \n---   (Antigravity / Claude)
+targets:
+  cursor:
+    label: "Cursor"
+    enabled: true
+    entry: .cursorrules
+    rules:
+      dir: .cursor/rules
+      ext: .mdc
+      frontmatter: cursor
+    commands_dir: .cursor/commands
+    skills_dir: .cursor/skills          # fuente canónica de skills
+    agents_dir: .cursor/agents
+    receives_skills: false              # es el origen, no destino
+    canonical_skills: true
+
+  antigravity:
+    label: "Antigravity"
+    enabled: true
+    entry: .antigravity/rules.md
+    rules:
+      dir: .agent/rules
+      ext: .md
+      frontmatter: agent
+    commands_dir: .agent/workflows
+    skills_dir: .agent/skills
+    receives_skills: true
+
+  codex:
+    label: "Codex"
+    enabled: true
+    entry: AGENTS.md                    # Codex lee AGENTS.md en la raíz
+    skills_dir: .agents/skills          # Codex busca skills en .agents/skills/<name>/SKILL.md
+    receives_skills: true
+    pointer:
+      file: AGENTS.md
+      mode: keep                        # AGENTS.md ya existe y es canónico; no se sobreescribe
+    notes: "Sin carpeta de commands propia; los comandos se expresan como skills."
+
+  claude:
+    label: "Claude Code"
+    enabled: true
+    entry: CLAUDE.md
+    rules:
+      dir: .claude/rules
+      ext: .md
+      frontmatter: agent
+    commands_dir: .claude/commands
+    skills_dir: .claude/skills
+    agents_dir: .claude/agents
+    receives_skills: true
+    mirror_commands: true
+    mirror_agents: true
+    pointer:
+      file: CLAUDE.md
+      mode: generate                    # puntero generado a AGENTS.md
+      points_to: AGENTS.md
+    settings: .claude/settings.json
+
+  copilot:
+    label: "GitHub Copilot"
+    enabled: true
+    entry: .github/copilot-instructions.md
+    receives_skills: false
+    pointer:
+      file: .github/copilot-instructions.md
+      mode: generate                    # puntero generado a AGENTS.md
+      points_to: AGENTS.md
+    notes: "Un solo archivo de instrucciones; puntero a AGENTS.md."
+
+  # Stubs fáciles de activar (fase 2): poner enabled: true.
+  gemini:
+    label: "Gemini CLI"
+    enabled: false
+    entry: GEMINI.md
+    pointer:
+      file: GEMINI.md
+      mode: generate
+      points_to: AGENTS.md
+  windsurf:
+    label: "Windsurf"
+    enabled: false
+    entry: .windsurfrules
+    pointer:
+      file: .windsurfrules
+      mode: generate
+      points_to: AGENTS.md

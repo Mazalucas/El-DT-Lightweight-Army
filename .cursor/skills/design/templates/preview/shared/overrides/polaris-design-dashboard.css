@@ -1,0 +1,38 @@
+/* Shopify Polaris — dashboard */
+.polaris-dash {
+  --tpl-sidebar-w: 240px;
+  --tpl-sidebar-bg: #f6f6f7;
+  --tpl-radius-nav: 8px;
+  --tpl-radius-md: 12px;
+  --tpl-radius-search: 8px;
+  --tpl-radius-btn: 8px;
+  --tpl-primary: #008060;
+  --tpl-on-primary: #ffffff;
+  --tpl-primary-subtle: #f1f8f5;
+  --tpl-border: #e1e3e5;
+  --tpl-bg: #f6f6f7;
+  --tpl-surface: #ffffff;
+}
+
+.polaris-dash .brand-mark {
+  background: #008060;
+  border-radius: 8px;
+}
+
+.polaris-dash .tpl-topbar .tpl-btn-primary.tpl-btn-compact {
+  background: #008060;
+}
+
+.polaris-dash .tpl-topbar .tpl-btn-primary.tpl-btn-compact:hover {
+  background: #006e52;
+}
+
+.polaris-dash .tpl-kpi .value {
+  color: #202223;
+}
+
+@media (max-width: 900px) {
+  .polaris-dash .tpl-sidebar.atelier-sidebar-drawer {
+    border-radius: 0 16px 16px 0;
+  }
+}

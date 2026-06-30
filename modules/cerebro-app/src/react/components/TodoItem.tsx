@@ -1,9 +1,7 @@
 import type { MeetingTodo } from '@shared/types.js';
-import { useMutation } from '@tanstack/react-query';
-import { api } from '../../lib/api.js';
 import { formatDueHint } from '../../lib/todo-daily.js';
-import { Button, toast } from '../ds.js';
-import { useInvalidateViews } from '../hooks.js';
+import { AsyncActionButton } from './AsyncActionButton.js';
+import { useTodoEntityAction } from '../lib/entity-action/use-todo-entity-action.js';
 
 function isOverdue(t: MeetingTodo): boolean {
   if (!t.dueAt || t.status !== 'open') return false;
@@ -17,23 +15,14 @@ export function TodoItem({
   todo,
   showDue = true,
   readonly = false,
+  orgId,
 }: {
   todo: MeetingTodo;
   showDue?: boolean;
-  /** Sin acciones — para scopes donde las mutaciones personales no aplican (org). */
   readonly?: boolean;
+  orgId?: string;
 }) {
-  const invalidate = useInvalidateViews();
-
-  const mutate = useMutation({
-    mutationFn: async (action: 'done' | 'accept' | 'dismiss') => {
-      if (action === 'done') await api.completeTodosBatch([todo.id]);
-      if (action === 'accept') await api.acceptTodosBatch([todo.id]);
-      if (action === 'dismiss') await api.dismissTodosBatch([todo.id]);
-    },
-    onSuccess: invalidate,
-    onError: (e) => toast(e instanceof Error ? e.message : 'Error', 'error'),
-  });
+  const { runAction, isActionPending } = useTodoEntityAction(todo, orgId);
 
   const overdue = isOverdue(todo);
   const dueHint = showDue && todo.dueAt ? formatDueHint(todo.dueAt) : '';
@@ -41,14 +30,15 @@ export function TodoItem({
   return (
     <li
       className={`todo-item${todo.status === 'suggested' ? ' todo-item--suggested' : ''}${overdue ? ' todo-item--overdue' : ''}`}
+      data-cerebro-entity={`todo:${todo.id}`}
     >
       {todo.status === 'open' && !readonly ? (
         <button
           type="button"
           className="todo-check"
           aria-label="Marcar hecho"
-          disabled={mutate.isPending}
-          onClick={() => mutate.mutate('done')}
+          disabled={isActionPending('done')}
+          onClick={() => runAction('done')}
         />
       ) : null}
       <div className="dash-todo-body">
@@ -60,12 +50,12 @@ export function TodoItem({
       </div>
       {todo.status === 'suggested' && !readonly ? (
         <div className="todo-actions">
-          <Button variant="secondary" size="sm" disabled={mutate.isPending} onClick={() => mutate.mutate('accept')}>
+          <AsyncActionButton pending={isActionPending('accept')} onClick={() => runAction('accept')}>
             Aceptar
-          </Button>
-          <Button variant="ghost" size="sm" disabled={mutate.isPending} onClick={() => mutate.mutate('dismiss')}>
+          </AsyncActionButton>
+          <AsyncActionButton variant="ghost" pending={isActionPending('dismiss')} onClick={() => runAction('dismiss')}>
             Descartar
-          </Button>
+          </AsyncActionButton>
         </div>
       ) : null}
     </li>
@@ -77,23 +67,21 @@ export function TodoList({
   empty,
   showDue,
   readonly,
+  orgId,
 }: {
   todos: MeetingTodo[];
-  empty: string;
+  empty?: string;
   showDue?: boolean;
   readonly?: boolean;
+  orgId?: string;
 }) {
   if (!todos.length) {
-    return (
-      <ul className="todo-list">
-        <li className="dash-empty muted">{empty}</li>
-      </ul>
-    );
+    return empty ? <p className="muted">{empty}</p> : null;
   }
   return (
     <ul className="todo-list">
       {todos.map((t) => (
-        <TodoItem key={t.id} todo={t} showDue={showDue} readonly={readonly} />
+        <TodoItem key={t.id} todo={t} showDue={showDue} readonly={readonly} orgId={orgId} />
       ))}
     </ul>
   );

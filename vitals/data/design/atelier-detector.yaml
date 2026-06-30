@@ -1,0 +1,17 @@
+# Atelier detector config — maps to Impeccable .impeccable/config.json schema.
+# See: https://github.com/pbakaus/impeccable (detector section)
+
+hook:
+  enabled: true
+  # auditLog: vitals/work/atelier-hook-audit.ndjson
+
+detector:
+  ignoreRules: []
+  ignoreFiles:
+    - tools/atelier/preview/demos/slop-before.html
+  ignoreValues: []
+  designSystem:
+    enabled: true
+
+# Project-local overrides: .agents/design-context.md anti-patterns section
+# Inline waivers in UI files: impeccable-disable rule-id: reason

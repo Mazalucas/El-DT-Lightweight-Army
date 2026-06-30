@@ -1,11 +1,46 @@
-import type { PipelineRunResult, SyncScheduleConfig } from '../shared/types.js';
+import type { PipelineRunResult, SyncScheduleConfig, UserAppSettings } from '../shared/types.js';
 import { syncLastRunRef } from '../lib/firebase.js';
 import { stripUndefined } from '../lib/firestore-utils.js';
 import { loadSettings, saveSettings } from '../lib/settings.js';
+import { resolveUserTimezone } from '../shared/timezone.js';
+import { resolveProcessLookbackDays } from '../shared/sync-policy.js';
 import { hasGoogleIntegration } from './google.js';
 import { loadStore, listLlmProviders, runAnalyzeBatch } from './store.js';
 import { fullImportFromMirrors } from './reindex.js';
-import { markSyncStarting, runSync, updateSyncProgress } from './sync.js';
+import { resolveAnalysisMeetingIds, resolveImportMeetingIds } from './pipeline-catchup.js';
+import { listMeetings, markSyncStarting, runSync, updateSyncProgress } from './sync.js';
+
+async function persistLastSyncTimestamp(
+  uid: string,
+  settings: UserAppSettings,
+  summary: { synced: number; imported: number; errors: number },
+): Promise<string> {
+  const finishedAt = new Date().toISOString();
+  const resolvedTz = resolveUserTimezone(settings);
+  await saveSettings(uid, {
+    syncSchedule: {
+      ...settings.syncSchedule,
+      enabled: settings.syncSchedule?.enabled ?? false,
+      hour: settings.syncSchedule?.hour ?? 8,
+      minute: settings.syncSchedule?.minute ?? 0,
+      timezone: resolvedTz,
+      lastRunAt: finishedAt,
+      lastRunStatus: summary.errors > 0 ? 'partial' : 'ok',
+      lastRunSummary: `Sync ${summary.synced} · Import ${summary.imported}`,
+    },
+  });
+  return finishedAt;
+}
+
+async function finalizeStoreGraph(uid: string) {
+  const { loadStore, saveStore } = await import('./store.js');
+  const { rebuildGraphEdges } = await import('./graph-edges.js');
+  const { computeStoreHealth } = await import('./store-health.js');
+  const store = await loadStore(uid);
+  store.graphEdges = rebuildGraphEdges(store);
+  await saveStore(uid, store);
+  return { store, health: computeStoreHealth(store) };
+}
 
 export async function runFullPipeline(
   uid: string,
@@ -30,28 +65,67 @@ export async function runFullPipeline(
 
     const settings = await loadSettings(uid);
     if (!settings.meetSources.length) throw new Error('Sin carpetas Meet configuradas');
+    const lookbackDays = resolveProcessLookbackDays(settings.syncPolicy);
 
     await updateSyncProgress(uid, { phase: 'pipeline', current: 1, total: 5, done: false, currentTitle: 'Sincronizando…' });
     const syncResult = await runSync(uid, options?.limit, { finalizeProgress: false, skipInitialProgress: true });
     messages.push(...syncResult.messages);
 
-    await updateSyncProgress(uid, {
-      phase: 'reindex',
-      current: 2,
-      total: 5,
-      done: false,
-      currentTitle: 'Extrayendo contactos y reuniones…',
+    let importResult: Awaited<ReturnType<typeof fullImportFromMirrors>> | undefined;
+    let store = await loadStore(uid);
+    const manifest = await listMeetings(uid);
+    const importIds = resolveImportMeetingIds(
+      manifest,
+      store,
+      syncResult.syncedMeetingIds,
+      lookbackDays,
+    );
+
+    if (importIds.length > 0) {
+      await updateSyncProgress(uid, {
+        phase: 'reindex',
+        current: 2,
+        total: 5,
+        done: false,
+        currentTitle: 'Extrayendo contactos y reuniones…',
+      });
+      importResult = await fullImportFromMirrors(uid, { meetingIds: importIds });
+      const { store: afterImport, health } = await finalizeStoreGraph(uid);
+      if (syncResult.synced === 0) {
+        messages.push(
+          `Import catch-up: ${importResult.meetings} reunión(es) desde mirrors (${importIds.length} candidata(s)).`,
+        );
+      } else {
+        messages.push(
+          `Importadas ${importResult.meetings} reuniones · ${importResult.people} contactos · ${importResult.prospects} prospects · ${importResult.todosSynced} todos · ${health.projectSuggestionsPending} sugerencias de proyecto.`,
+        );
+      }
+      store = afterImport;
+    } else {
+      messages.push('Import omitido: store al día con mirrors sincronizados en ventana.');
+    }
+
+    store = await loadStore(uid);
+    const syncFinishedAt = await persistLastSyncTimestamp(uid, settings, {
+      synced: syncResult.synced,
+      imported: importResult?.meetings ?? 0,
+      errors: syncResult.errors,
     });
-    const importResult = await fullImportFromMirrors(uid);
-    const { loadStore, saveStore } = await import('./store.js');
-    const { rebuildGraphEdges } = await import('./graph-edges.js');
-    const { computeStoreHealth } = await import('./store-health.js');
-    const afterImport = await loadStore(uid);
-    afterImport.graphEdges = rebuildGraphEdges(afterImport);
-    await saveStore(uid, afterImport);
-    const health = computeStoreHealth(afterImport);
-    messages.push(
-      `Importadas ${importResult.meetings} reuniones · ${importResult.people} contactos · ${importResult.prospects} prospects · ${importResult.todosSynced} todos · ${health.projectSuggestionsPending} sugerencias de proyecto.`,
+    await syncLastRunRef(uid).set(
+      stripUndefined({
+        startedAt,
+        finishedAt: syncFinishedAt,
+        status: syncResult.errors > 0 ? 'partial' : 'ok',
+        summary: `Sync ${syncResult.synced} · Import ${importResult?.meetings ?? 0}`,
+        result: {
+          scanned: syncResult.scanned,
+          synced: syncResult.synced,
+          skipped: syncResult.skipped,
+          errors: syncResult.errors,
+          imported: store.meetings.length,
+          messages,
+        },
+      }),
     );
 
     const { listUserMemberships, ingestMemberStoreToOrg } = await import('./org.js');
@@ -66,12 +140,22 @@ export async function runFullPipeline(
       }
     }
 
-    const store = await loadStore(uid);
+    store = await loadStore(uid);
+    const refreshedManifest = await listMeetings(uid);
+    const analysisIds = resolveAnalysisMeetingIds(
+      refreshedManifest,
+      syncResult.syncedMeetingIds,
+      lookbackDays,
+    );
 
     let analysisJobId: string | undefined;
     const llm = await listLlmProviders(uid);
     const hasLlm = llm.some((p) => p.keyHint);
-    const runAnalysis = !options?.skipAnalysis && settings.ai.autoAnalyzeAfterSync !== false && hasLlm;
+    const runAnalysis =
+      analysisIds.length > 0 &&
+      !options?.skipAnalysis &&
+      settings.ai.autoAnalyzeAfterSync !== false &&
+      hasLlm;
 
     if (runAnalysis) {
       await updateSyncProgress(uid, {
@@ -81,14 +165,24 @@ export async function runFullPipeline(
         done: false,
         currentTitle: 'Analizando con IA…',
       });
-      analysisJobId = await runAnalyzeBatch(uid);
-      messages.push(`Análisis IA iniciado (job ${analysisJobId}).`);
-      // El Suggestion Engine corre al terminar el batch (ver runAnalyzeBatch).
-    } else if (hasLlm) {
-      // Sin batch de análisis pero con key: regenerar sugerencias y digest igual.
+      try {
+        analysisJobId = await runAnalyzeBatch(uid, analysisIds);
+        if (syncResult.synced === 0 && analysisIds.length > 0) {
+          messages.push(`Análisis IA catch-up iniciado (${analysisIds.length} pendiente(s), job ${analysisJobId}).`);
+        } else {
+          messages.push(`Análisis IA iniciado (job ${analysisJobId}).`);
+        }
+      } catch (e) {
+        messages.push(`Análisis IA omitido: ${e instanceof Error ? e.message : String(e)}`);
+      }
+    } else if (hasLlm && (syncResult.synced > 0 || analysisIds.length > 0)) {
       const { runIntelligence } = await import('./suggestion-engine.js');
       void runIntelligence(uid).catch((e) => console.error('[pipeline] intelligence falló:', e));
       messages.push('Sugerencias inteligentes en regeneración.');
+    } else if (hasLlm) {
+      messages.push('IA omitida: no hay reuniones pendientes de análisis en ventana.');
+    } else if (analysisIds.length > 0) {
+      messages.push(`IA pendiente: ${analysisIds.length} reunión(es) sin analizar — configurá API key en Ajustes.`);
     } else {
       messages.push('IA omitida: sin API key configurada — modo básico sin sugerencias ni digest.');
     }
@@ -112,17 +206,6 @@ export async function runFullPipeline(
         result,
       }),
     );
-
-    if (settings.syncSchedule) {
-      await saveSettings(uid, {
-        syncSchedule: {
-          ...settings.syncSchedule,
-          lastRunAt: new Date().toISOString(),
-          lastRunStatus: syncResult.errors > 0 ? 'partial' : 'ok',
-          lastRunSummary: `Sync ${result.synced} · Import ${result.imported}`,
-        },
-      });
-    }
 
     await updateSyncProgress(uid, {
       phase: 'idle',

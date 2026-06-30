@@ -8,6 +8,16 @@ import { loadSettings } from '../lib/settings.js';
 import { fetchDocParsed, fetchDrivePermissions, getGoogleClient } from './google.js';
 import { buildMarkdownBody } from '../core/profesional/doc-to-parsed.js';
 import type { ParsedDocContent } from '../core/profesional/doc-to-parsed.js';
+import { parseDateFromMeetFilename } from '../shared/parse-meet-filename.js';
+import { resolveMeetingStartedAt } from '../shared/meeting-dates.js';
+import { pickLatestIso } from '../shared/recency-sort.js';
+import {
+  filterByProcessLookback,
+  isWithinProcessLookback,
+  processLookbackLabel,
+  resolveProcessLookbackDays,
+  sortByMeetingDateDesc,
+} from '../shared/sync-policy.js';
 
 function meetingIdFromDocId(docId: string): string {
   return crypto.createHash('sha256').update(docId).digest('hex').slice(0, 16);
@@ -19,19 +29,93 @@ export function progressTitle(value: unknown): string {
   return typeof value === 'string' ? value : String(value);
 }
 
-function parseMeetTitle(name: string): { title: string; startedAt?: string } {
-  const base = name.replace(/\s*-\s*Notas de Gemini\s*$/i, '').replace(/\.[^.]+$/, '');
-  const m = base.match(/^(\d{4}-\d{2}-\d{2})\s+(.+)$/);
-  if (m) return { startedAt: m[1], title: m[2]!.trim() };
-  return { title: base.trim() };
-}
-
 function scoreEntry(e: ManifestEntry): number {
   let score = 0;
   if (e.syncStatus === 'synced') score += 4;
   if (e.lastSyncedAt) score += 2;
   if (e.teamId) score += 1;
   return score;
+}
+
+type DriveFileMeta = {
+  id?: string | null;
+  name?: string | null;
+  mimeType?: string | null;
+  modifiedTime?: string | null;
+  createdTime?: string | null;
+};
+
+/** Combina metadata de Drive con manifest existente — no resetea reuniones ya sincronizadas. */
+function mergeDriveFileWithExisting(
+  file: DriveFileMeta,
+  source: { driveFolderId: string; teamId?: string },
+  existing?: ManifestEntry,
+): ManifestEntry {
+  const docId = file.mimeType === 'application/vnd.google-apps.document' ? file.id ?? undefined : undefined;
+  const fileId = file.id ?? '';
+  const meetingId = docId
+    ? meetingIdFromDocId(docId)
+    : crypto.createHash('sha256').update(fileId).digest('hex').slice(0, 16);
+  const parsed = parseDateFromMeetFilename(file.name ?? 'Reunión');
+  const resolvedStartedAt = parsed.startedAt ?? existing?.startedAt;
+  const driveModifiedTime = file.modifiedTime ?? file.createdTime ?? undefined;
+
+  const scanFields = stripUndefined({
+    meetingId,
+    docId,
+    driveFileId: file.id ?? undefined,
+    sourceFile: file.name ?? '',
+    title: parsed.title || existing?.title || 'Reunión',
+    startedAt: resolvedStartedAt,
+    timezone: parsed.timezone ?? existing?.timezone,
+    teamId: source.teamId,
+    driveFolderId: source.driveFolderId,
+    driveModifiedTime: file.modifiedTime ?? file.createdTime ?? undefined,
+  });
+
+  if (!existing) {
+    return stripUndefined({
+      ...scanFields,
+      syncStatus: 'discovered' as const,
+      analysisStatus: 'pending' as const,
+    });
+  }
+
+  const driveChanged =
+    Boolean(driveModifiedTime) &&
+    (!existing.driveModifiedTime || driveModifiedTime !== existing.driveModifiedTime);
+  const needsResync =
+    existing.syncStatus === 'synced' &&
+    driveChanged &&
+    Boolean(existing.driveModifiedTime);
+
+  if (existing.syncStatus === 'synced' && !needsResync) {
+    return stripUndefined({
+      ...existing,
+      ...scanFields,
+      syncStatus: 'synced' as const,
+      analysisStatus: existing.analysisStatus,
+      lastSyncedAt: existing.lastSyncedAt,
+      contentHash: existing.contentHash,
+      driveModifiedTime: driveModifiedTime ?? existing.driveModifiedTime,
+    });
+  }
+
+  if (needsResync) {
+    const resetAnalysis =
+      existing.analysisStatus === 'analyzed' || existing.analysisStatus === 'needs_review';
+    return stripUndefined({
+      ...existing,
+      ...scanFields,
+      syncStatus: 'content_pending' as const,
+      analysisStatus: resetAnalysis ? ('pending' as const) : existing.analysisStatus,
+    });
+  }
+
+  return stripUndefined({
+    ...existing,
+    ...scanFields,
+  });
 }
 
 /** Unifica entradas que apuntan al mismo Google Doc (docId). */
@@ -84,8 +168,57 @@ function consolidateByDocId(entries: ManifestEntry[]): { entries: ManifestEntry[
 export async function markSyncStarting(uid: string, initial: Partial<SyncProgress>): Promise<string> {
   const startedAt = initial.startedAt ?? new Date().toISOString();
   await syncRef(uid).set(stripUndefined({ ...initial, startedAt, done: false }), { merge: true });
-  await syncRef(uid).update({ error: FieldValue.delete(), result: FieldValue.delete() });
+  await syncRef(uid).update({
+    error: FieldValue.delete(),
+    result: FieldValue.delete(),
+    finishedAt: FieldValue.delete(),
+  });
   return startedAt;
+}
+
+const MIRROR_CHECK_BATCH = 25;
+
+async function mirrorExists(uid: string, meetingId: string): Promise<boolean> {
+  const [exists] = await bucket.file(mirrorPath(uid, meetingId)).exists();
+  return exists;
+}
+
+/** Manifest synced pero sin archivo en Storage → forzar re-descarga. */
+async function flagMissingMirrorsForResync(
+  uid: string,
+  entries: ManifestEntry[],
+  lookbackDays: number,
+): Promise<number> {
+  const candidates = entries.filter(
+    (e) => e.syncStatus === 'synced' && isWithinProcessLookback(e, lookbackDays),
+  );
+  let flagged = 0;
+
+  for (let i = 0; i < candidates.length; i += MIRROR_CHECK_BATCH) {
+    const batch = candidates.slice(i, i + MIRROR_CHECK_BATCH);
+    const checked = await Promise.all(
+      batch.map(async (entry) => ({
+        entry,
+        exists: await mirrorExists(uid, entry.meetingId),
+      })),
+    );
+
+    for (const { entry, exists } of checked) {
+      if (exists) continue;
+      flagged++;
+      entry.syncStatus = 'content_pending';
+      await meetingsCol(uid).doc(entry.meetingId).set(
+        {
+          syncStatus: 'content_pending',
+          syncError: FieldValue.delete(),
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true },
+      );
+    }
+  }
+
+  return flagged;
 }
 
 export async function updateSyncProgress(uid: string, patch: Partial<SyncProgress>): Promise<void> {
@@ -101,6 +234,9 @@ export async function scanDriveSources(uid: string): Promise<{ scanned: number; 
   const settings = await loadSettings(uid);
   const auth = await getGoogleClient(uid);
   const drive = google.drive({ version: 'v3', auth: auth as never });
+  const existingList = await listMeetings(uid);
+  const existingByMeetingId = new Map(existingList.map((e) => [e.meetingId, e]));
+  const existingByDocId = new Map(existingList.filter((e) => e.docId).map((e) => [e.docId!, e]));
   const rawEntries: ManifestEntry[] = [];
 
   for (const source of settings.meetSources) {
@@ -116,22 +252,15 @@ export async function scanDriveSources(uid: string): Promise<{ scanned: number; 
         includeItemsFromAllDrives: true,
       });
       for (const f of res.data.files ?? []) {
-        const docId = f.mimeType === 'application/vnd.google-apps.document' ? f.id! : undefined;
-        const meetingId = docId ? meetingIdFromDocId(docId) : crypto.createHash('sha256').update(f.id!).digest('hex').slice(0, 16);
-        const parsed = parseMeetTitle(f.name ?? 'Reunión');
+        if (!f.id) continue;
+        const docId = f.mimeType === 'application/vnd.google-apps.document' ? f.id : undefined;
+        const meetingId = docId
+          ? meetingIdFromDocId(docId)
+          : crypto.createHash('sha256').update(f.id).digest('hex').slice(0, 16);
+        const existing =
+          (docId ? existingByDocId.get(docId) : undefined) ?? existingByMeetingId.get(meetingId);
         rawEntries.push(
-          stripUndefined({
-            meetingId,
-            docId,
-            driveFileId: f.id ?? undefined,
-            sourceFile: f.name ?? '',
-            title: parsed.title,
-            startedAt: parsed.startedAt,
-            teamId: source.teamId,
-            syncStatus: 'discovered',
-            analysisStatus: 'pending',
-            driveFolderId: source.driveFolderId,
-          }),
+          mergeDriveFileWithExisting(f, { driveFolderId: source.driveFolderId, teamId: source.teamId }, existing),
         );
       }
       pageToken = res.data.nextPageToken ?? undefined;
@@ -153,7 +282,14 @@ export async function runSync(
   uid: string,
   limit?: number,
   options?: { finalizeProgress?: boolean; skipInitialProgress?: boolean },
-): Promise<{ scanned: number; synced: number; skipped: number; errors: number; messages: string[] }> {
+): Promise<{
+  scanned: number;
+  synced: number;
+  skipped: number;
+  errors: number;
+  messages: string[];
+  syncedMeetingIds: string[];
+}> {
   const startedAt = new Date().toISOString();
   if (!options?.skipInitialProgress) {
     await markSyncStarting(uid, {
@@ -166,22 +302,43 @@ export async function runSync(
   }
 
   try {
+    const settings = await loadSettings(uid);
+    const lookbackDays = resolveProcessLookbackDays(settings.syncPolicy);
     const { entries, merged } = await scanDriveSources(uid);
-    const pending = entries.filter((e) => e.syncStatus !== 'synced');
+    const missingMirrors = await flagMissingMirrorsForResync(uid, entries, lookbackDays);
+    const pendingRaw = entries.filter((e) => e.syncStatus !== 'synced');
+    const { inWindow: inLookback, skipped: outsideLookback } = filterByProcessLookback(
+      pendingRaw,
+      lookbackDays,
+    );
+    const pending = sortByMeetingDateDesc(inLookback);
     const toProcess = limit ? pending.slice(0, limit) : pending;
     const total = toProcess.length;
     let synced = 0;
     let skipped = 0;
     let errors = 0;
+    const syncedMeetingIds: string[] = [];
     const messages = [`Índice: ${entries.length} archivos.`];
     if (merged > 0) messages.push(`${merged} duplicado(s) unificado(s) por docId.`);
+    if (missingMirrors > 0) {
+      messages.push(`${missingMirrors} reunión(es) sin mirror — marcadas para re-descarga.`);
+    }
+    if (lookbackDays > 0) {
+      messages.push(`Ventana de procesamiento: ${processLookbackLabel(lookbackDays)}.`);
+    }
+    if (outsideLookback > 0) {
+      messages.push(
+        `${outsideLookback} reunión(es) fuera de ventana (${processLookbackLabel(lookbackDays)}) — omitidas del sync.`,
+      );
+    }
+    if (total === 0) messages.push('Sin reuniones nuevas o modificadas para sincronizar.');
 
     await updateSyncProgress(uid, {
       phase: 'sync',
       current: 0,
       total,
       done: false,
-      currentTitle: toProcess[0] ? progressTitle(toProcess[0].title) : undefined,
+      currentTitle: toProcess[0] ? progressTitle(toProcess[0].title) : 'Sin cambios en Drive',
     });
 
     for (let i = 0; i < toProcess.length; i++) {
@@ -224,12 +381,14 @@ export async function runSync(
               syncStatus: 'synced',
               lastSyncedAt: new Date().toISOString(),
               contentHash,
+              driveModifiedTime: entry.driveModifiedTime,
               bodyPreview: body.slice(0, 400),
               updatedAt: new Date().toISOString(),
             }),
             { merge: true },
           );
         synced++;
+        syncedMeetingIds.push(entry.meetingId);
       } catch (e) {
         errors++;
         const msg = e instanceof Error ? e.message : String(e);
@@ -240,7 +399,7 @@ export async function runSync(
       }
     }
 
-    const result = { scanned: entries.length, synced, skipped, errors, messages };
+    const result = { scanned: entries.length, synced, skipped, errors, messages, syncedMeetingIds };
     if (options?.finalizeProgress !== false) {
       await updateSyncProgress(uid, {
         phase: 'idle',
@@ -271,16 +430,23 @@ function buildMirrorMarkdown(
   sharedWith: Array<{ email: string; name?: string; role?: string; type?: string }>,
   parsedDoc?: ParsedDocContent,
 ): string {
+  const startedAt = resolveMeetingStartedAt({
+    startedAt: entry.startedAt,
+    sourceFile: entry.sourceFile,
+    title: entry.title,
+    timezone: entry.timezone,
+  });
   const fm = stripUndefined({
     meetingId: entry.meetingId,
     docId: entry.docId,
     sourceFile: entry.sourceFile,
     title: entry.title,
-    startedAt: entry.startedAt,
+    startedAt,
+    timezone: entry.timezone,
     teamId: entry.teamId,
-    syncedAt: new Date().toISOString(),
     contentHash,
     syncVersion: 3,
+    syncedAt: new Date().toISOString(),
     participants: parsedDoc?.participants.length ? parsedDoc.participants : undefined,
     invitees: parsedDoc?.invitees.length ? parsedDoc.invitees : undefined,
     mentionedEmails: parsedDoc?.mentionedEmails.length ? parsedDoc.mentionedEmails : undefined,
@@ -299,8 +465,11 @@ export interface ResyncMirrorsOptions {
 export async function resyncAllSyncedMirrors(
   uid: string,
   options?: ResyncMirrorsOptions,
-): Promise<{ updated: number; errors: number; total: number }> {
-  const entries = (await listMeetings(uid)).filter((e) => e.syncStatus === 'synced' && e.docId);
+): Promise<{ updated: number; errors: number; total: number; skippedOutsideWindow?: number }> {
+  const settings = await loadSettings(uid);
+  const lookbackDays = resolveProcessLookbackDays(settings.syncPolicy);
+  const allSynced = (await listMeetings(uid)).filter((e) => e.syncStatus === 'synced' && e.docId);
+  const { inWindow: entries, skipped: skippedOutsideWindow } = filterByProcessLookback(allSynced, lookbackDays);
   let updated = 0;
   let errors = 0;
 
@@ -315,14 +484,15 @@ export async function resyncAllSyncedMirrors(
       const md = buildMirrorMarkdown(entry, body, contentHash, sharedWith, parsedDoc);
       const file = bucket.file(mirrorPath(uid, entry.meetingId));
       await file.save(md, { contentType: 'text/markdown', metadata: { cacheControl: 'private' } });
-      await meetingsCol(uid).doc(entry.meetingId).set(
-        stripUndefined({
-          contentHash,
-          lastSyncedAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        }),
-        { merge: true },
-      );
+        await meetingsCol(uid).doc(entry.meetingId).set(
+          stripUndefined({
+            contentHash,
+            lastSyncedAt: new Date().toISOString(),
+            driveModifiedTime: entry.driveModifiedTime,
+            updatedAt: new Date().toISOString(),
+          }),
+          { merge: true },
+        );
       updated++;
     } catch (e) {
       errors++;
@@ -330,7 +500,7 @@ export async function resyncAllSyncedMirrors(
     }
   }
 
-  return { updated, errors, total: entries.length };
+  return { updated, errors, total: entries.length, skippedOutsideWindow };
 }
 
 export async function getMirrorContent(uid: string, meetingId: string): Promise<string | null> {
@@ -350,4 +520,17 @@ export async function listMeetings(uid: string): Promise<ManifestEntry[]> {
     const snap = await meetingsCol(uid).limit(500).get();
     return snap.docs.map((d) => d.data() as ManifestEntry);
   }
+}
+
+/** Timestamp canónico de última sync manual o programada (varias fuentes en Firestore). */
+export async function resolveLastSyncAt(uid: string): Promise<string | undefined> {
+  const { syncLastRunRef } = await import('../lib/firebase.js');
+  const { loadSettings } = await import('../lib/settings.js');
+  const [settings, lastRunSnap, progress] = await Promise.all([
+    loadSettings(uid),
+    syncLastRunRef(uid).get(),
+    getSyncProgress(uid),
+  ]);
+  const lastRun = lastRunSnap.data() as { finishedAt?: string } | undefined;
+  return pickLatestIso(settings.syncSchedule?.lastRunAt, lastRun?.finishedAt, progress?.finishedAt);
 }

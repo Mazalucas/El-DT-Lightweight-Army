@@ -95,5 +95,9 @@ export async function hydrateCerebroStore(data, opts) {
         todos: data.todos ?? [],
         pendingSuggestions: data.pendingSuggestions ?? [],
         graphEdges: data.graphEdges ?? [],
+        dismissedProspectKeys: data.dismissedProspectKeys,
+        dismissedProspectIds: data.dismissedProspectIds,
+        dismissedTeamEmailKeys: data.dismissedTeamEmailKeys,
+        dismissedMergeContactKeys: data.dismissedMergeContactKeys,
     };
 }

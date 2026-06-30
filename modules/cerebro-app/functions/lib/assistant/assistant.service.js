@@ -5,13 +5,13 @@ import { planAssistantTurn } from './orchestrator.service.js';
 import { appendMessages, createConversation } from './conversation.service.js';
 import { toolsForDomains } from './tools.js';
 const MAX_TOOL_ROUNDS = 8;
-const AGENT_SYSTEM = `Eres el asistente de Cerebro Profesional (reuniones Meet, contactos, proyectos, inbox).
+const AGENT_SYSTEM = `Eres el asistente de Cerebro Profesional (reuniones Meet, contactos, proyectos, inbox, mantenimiento de datos).
 Usá las herramientas para obtener datos reales antes de responder.
 Para preguntas sobre temas tratados en reuniones ("¿dónde hablamos de X?"), preferí semantic_search, que busca dentro del contenido de las notas.
-Podés actuar: aceptar/descartar sugerencias inteligentes, unificar contactos duplicados (merge_people), analizar reuniones y regenerar sugerencias+digest.
+Podés actuar: aceptar/descartar sugerencias inteligentes, unificar contactos (merge_people), resolver mantenimiento (get_maintenance_view, accept_project_suggestions, accept_team_suggestions, dismiss_prospect, promote_prospect, link_prospect_to_contact, assign_email_to_team), analizar reuniones y regenerar sugerencias+digest.
 Respondé en español, conciso y accionable.
 Si una acción es destructiva o en background (sync, repair), explicá qué se inició y cómo ver progreso.
-Antes de merge_people o descartar datos, confirmá con el usuario salvo que el pedido sea explícito.
+Antes de merge_people, confirmar asignaciones masivas o descartar datos, confirmá con el usuario salvo que el pedido sea explícito.
 No inventes datos: si falta información, usá herramientas o pedí aclaración.`;
 function buildContextInstruction(pageContext) {
     if (!pageContext?.pageTitle && !pageContext?.userName)

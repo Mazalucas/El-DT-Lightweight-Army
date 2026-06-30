@@ -1,0 +1,183 @@
+/**
+ * Material Design 3 Expressive — semantic tokens (Atelier)
+ * Ref: MaterialExpressiveTheme · expressiveLightColorScheme · MotionScheme.expressive
+ * Seed: brand blue (alta croma) — no purple M2/MUI default
+ * @see https://developer.android.com/develop/ui/compose/designsystems/material3
+ */
+
+:root {
+  /* —— Typography (Roboto Flex + emphasized scale) —— */
+  --ds-font: "Roboto Flex", "Roboto", system-ui, sans-serif;
+  --ds-font-brand: "Roboto Flex", "Roboto", system-ui, sans-serif;
+
+  --ds-type-display-lg: 700 3.5625rem/4rem var(--ds-font-brand);
+  --ds-type-display-lg-em: 800 3.5625rem/4rem var(--ds-font-brand);
+  --ds-type-headline-lg: 400 2rem/2.5rem var(--ds-font);
+  --ds-type-headline-lg-em: 600 2rem/2.5rem var(--ds-font);
+  --ds-type-headline-md-em: 600 1.75rem/2.25rem var(--ds-font);
+  --ds-type-title-lg-em: 500 1.375rem/1.75rem var(--ds-font);
+  --ds-type-body-lg: 400 1rem/1.5rem var(--ds-font);
+  --ds-type-body-md: 400 0.875rem/1.25rem var(--ds-font);
+  --ds-type-label-lg-em: 600 0.875rem/1.25rem var(--ds-font);
+
+  /* —— Expressive color (light) — higher chroma containers —— */
+  --ds-primary: #005db8;
+  --ds-on-primary: #ffffff;
+  --ds-primary-container: #d4e3ff;
+  --ds-on-primary-container: #001c3a;
+
+  --ds-secondary: #535f70;
+  --ds-on-secondary: #ffffff;
+  --ds-secondary-container: #d7e3f8;
+  --ds-on-secondary-container: #101c2b;
+
+  --ds-tertiary: #6b5778;
+  --ds-on-tertiary: #ffffff;
+  --ds-tertiary-container: #f4daff;
+  --ds-on-tertiary-container: #251431;
+
+  --ds-error: #ba1a1a;
+  --ds-on-error: #ffffff;
+
+  --ds-surface: #fdfcff;
+  --ds-surface-dim: #d8dae0;
+  --ds-surface-bright: #fdfcff;
+  --ds-surface-container-lowest: #ffffff;
+  --ds-surface-container-low: #f3f4f9;
+  --ds-surface-container: #edeef3;
+  --ds-surface-container-high: #e8e9ee;
+  --ds-surface-container-highest: #e2e3e8;
+
+  --ds-on-surface: #1a1c1e;
+  --ds-on-surface-variant: #43474e;
+  --ds-outline: #73777f;
+  --ds-outline-variant: #c3c7cf;
+
+  /* —— Shape scale (10 steps + increased + full) —— */
+  --ds-shape-extra-small: 4px;
+  --ds-shape-small: 8px;
+  --ds-shape-medium: 12px;
+  --ds-shape-large: 16px;
+  --ds-shape-extra-large: 28px;
+  --ds-shape-small-increased: 10px;
+  --ds-shape-medium-increased: 16px;
+  --ds-shape-large-increased: 24px;
+  --ds-shape-extra-large-increased: 32px;
+  --ds-shape-full: 9999px;
+
+  /* Legacy aliases */
+  --ds-radius-xs: var(--ds-shape-extra-small);
+  --ds-radius-sm: var(--ds-shape-small);
+  --ds-radius-md: var(--ds-shape-medium);
+  --ds-radius-lg: var(--ds-shape-large);
+  --ds-radius-xl: var(--ds-shape-extra-large);
+  --ds-radius-full: var(--ds-shape-full);
+
+  /* —— Motion (expressive spring approximations) —— */
+  --ds-motion-fast: 150ms cubic-bezier(0.2, 0, 0, 1);
+  --ds-motion-standard: 250ms cubic-bezier(0.2, 0, 0, 1);
+  --ds-motion-emphasized: 400ms cubic-bezier(0.3, 0, 0.8, 0.15);
+  --ds-motion-spring: 500ms cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --ds-space-1: 4px;
+  --ds-space-2: 8px;
+  --ds-space-3: 12px;
+  --ds-space-4: 16px;
+  --ds-space-5: 24px;
+  --ds-space-6: 32px;
+  --ds-space-7: 48px;
+  --ds-space-8: 64px;
+
+  /* Elevation via tonal surface, not arbitrary shadow */
+  --ds-elevation-1: none;
+  --ds-elevation-2: none;
+  --ds-elevation-3: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ds-primary: #a8c8ff;
+    --ds-on-primary: #003062;
+    --ds-primary-container: #004787;
+    --ds-on-primary-container: #d4e3ff;
+
+    --ds-secondary: #bbc7db;
+    --ds-on-secondary: #253140;
+    --ds-secondary-container: #3b4858;
+    --ds-on-secondary-container: #d7e3f8;
+
+    --ds-tertiary: #d8bee8;
+    --ds-on-tertiary: #3c2948;
+    --ds-tertiary-container: #543f5f;
+    --ds-on-tertiary-container: #f4daff;
+
+    --ds-surface: #111418;
+    --ds-surface-dim: #111418;
+    --ds-surface-container-lowest: #0c0e12;
+    --ds-surface-container-low: #1a1c1e;
+    --ds-surface-container: #1e2022;
+    --ds-surface-container-high: #282a2c;
+    --ds-surface-container-highest: #333538;
+
+    --ds-on-surface: #e2e2e6;
+    --ds-on-surface-variant: #c3c7cf;
+    --ds-outline: #8d9199;
+    --ds-outline-variant: #43474e;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ds-motion-fast: 0ms;
+    --ds-motion-standard: 0ms;
+    --ds-motion-emphasized: 0ms;
+    --ds-motion-spring: 0ms;
+  }
+}
+
+/* Component tokens */
+.m3-filled-button {
+  font: var(--ds-type-label-lg-em);
+  background: var(--ds-primary);
+  color: var(--ds-on-primary);
+  border: none;
+  padding: 0.625rem 1.5rem;
+  border-radius: var(--ds-shape-full);
+  transition: filter var(--ds-motion-standard), transform var(--ds-motion-spring), box-shadow var(--ds-motion-standard);
+}
+.m3-filled-button:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--ds-primary) 70%, transparent);
+}
+.m3-tonal-button {
+  font: var(--ds-type-label-lg-em);
+  background: var(--ds-secondary-container);
+  color: var(--ds-on-secondary-container);
+  border: none;
+  padding: 0.625rem 1.5rem;
+  border-radius: var(--ds-shape-full);
+}
+.m3-outlined-button {
+  font: var(--ds-type-label-lg-em);
+  background: transparent;
+  color: var(--ds-primary);
+  border: 1px solid var(--ds-outline);
+  padding: 0.5625rem 1.4375rem;
+  border-radius: var(--ds-shape-full);
+}
+.m3-fab {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--ds-shape-large-increased);
+  background: var(--ds-tertiary-container);
+  color: var(--ds-on-tertiary-container);
+  border: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  font-size: 1.5rem;
+  transition: border-radius var(--ds-motion-spring), transform var(--ds-motion-spring);
+}
+.m3-fab:hover { border-radius: var(--ds-shape-medium); transform: scale(1.04); }

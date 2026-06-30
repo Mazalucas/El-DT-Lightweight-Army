@@ -1,0 +1,45 @@
+# Stack web canónico del DT — fuente de verdad para desarrollo web
+version: 1
+updated: "2026-06-23"
+mode: soft_default  # respeta repo existente; no empuja migración
+
+mandatory:
+  runtime: node        # Node.js LTS
+  platform: firebase   # ecosistema completo
+
+firebase:
+  auth: Firebase Auth
+  database: Firestore  # Realtime DB solo si el caso lo exige
+  backend: Cloud Functions for Firebase (Node)
+  hosting: Firebase Hosting / App Hosting
+  storage: Cloud Storage
+  secrets: Firebase Secrets
+
+frontend:
+  default: vite + react
+  allowed: [react, vite, vite+react]
+  bundler_preference: vite
+
+precedence:
+  - user_explicit_opt_out
+  - existing_repo_stack
+  - local_engineering_context  # .agents/engineering-stack.md
+  - dt_default
+
+escalation:
+  - id: cloud_run
+    when: "Workers pesados, contenedores, o APIs de larga duración"
+    note: "Cloud Run + Firestore sigue siendo Firebase-friendly"
+  - id: sql
+    when: "Requisitos relacionales estrictos"
+    note: "Solo con opt-out explícito; documentar trade-offs"
+
+exceptions:
+  - id: atelier_ecosystem_lock
+    note: "Shopify/Polaris, Atlassian, Microsoft — Atelier lock-in prevalece en UI"
+  - id: remotion
+    note: "Video programático con Remotion — React sin backend DB Firebase obligatorio"
+
+delegation_snippet: |
+  Stack DT (soft default): Node + Firebase (Auth, Firestore, Functions, Hosting, Storage).
+  Frontend: Vite + React salvo indicación contraria. Respetar stack del repo si ya existe.

@@ -1,0 +1,27 @@
+# Seguridad y Secrets
+
+## Regla principal
+
+**Nunca** hardcodear API keys, passwords, tokens o credenciales en el código.
+
+## Prácticas
+
+- Usar variables de entorno para secrets
+- Archivos `.env` en `.gitignore`; usar `.env.example` como plantilla sin valores reales
+- En producción: usar secret managers (Firebase Secrets, AWS Secrets Manager, etc.)
+- Stack Firebase: ver `vitals/data/engineering/web-stack.yaml` y regla `08-stack-web-default`
+
+## Configuración
+
+- Separar config por entorno (dev, staging, prod)
+- No commitear archivos con valores sensibles
+
+## Ejemplo
+
+```bash
+# .env.example (versionado)
+API_KEY=your_key_here
+DB_URL=your_db_url
+
+# .env (no versionado, valores reales)
+```

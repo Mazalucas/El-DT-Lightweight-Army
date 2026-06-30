@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { browserTimezone, resolveClientTimezone } from '@shared/timezone.js';
 import { api } from '../lib/api.js';
+import { useAuth } from './auth.js';
 
 const DEVICE_SYNC_INTERVAL_MS = 5 * 60_000;
 
@@ -134,7 +135,13 @@ export function useSyncProgress(polling: boolean) {
 }
 
 export function useSettings() {
-  return useQuery({ queryKey: qk.settings, queryFn: api.getConfig, staleTime: 60_000 });
+  const { user, ready } = useAuth();
+  return useQuery({
+    queryKey: qk.settings,
+    queryFn: api.getConfig,
+    staleTime: 60_000,
+    enabled: ready && !!user,
+  });
 }
 
 /** Sincroniza TZ del dispositivo en Firestore cuando source es device (silencioso). */

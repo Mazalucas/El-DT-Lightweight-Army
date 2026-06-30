@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Badge, ErrorState, formatDate, PageHeader, Section, Skeleton } from '../../ds.js';
 import { useOrgMeetingDetail } from '../../hooks.js';
 import { TodoList } from '../../components/TodoItem.js';
+import { MarkdownContent } from '../../components/MarkdownContent.js';
 
 export default function OrgReunionDetalle() {
   const { orgId = '', id = '' } = useParams();
@@ -37,7 +38,7 @@ export default function OrgReunionDetalle() {
 
       {meeting.summary ? (
         <Section title="Resumen">
-          <p className="md-content">{meeting.summary}</p>
+          <MarkdownContent content={meeting.summary} />
         </Section>
       ) : null}
 

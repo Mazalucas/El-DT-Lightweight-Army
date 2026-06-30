@@ -1,4 +1,5 @@
 import { getIdToken } from './firebase.js';
+import { devLog, devWarn } from './dev-log.js';
 import type {
   ApiStatus,
   BoardSnapshot,
@@ -36,17 +37,29 @@ async function apiFetch<T>(
   init: RequestInit = {},
   acceptStatuses: number[] = [],
 ): Promise<T> {
+  const started = performance.now();
+  devLog('api', `→ ${init.method ?? 'GET'} ${path}`);
   const token = await getIdToken();
   const headers = new Headers(init.headers);
   headers.set('Content-Type', 'application/json');
   if (token) headers.set('Authorization', `Bearer ${token}`);
-  const res = await fetch(path, { ...init, headers });
-  if (!res.ok && !acceptStatuses.includes(res.status)) {
-    const err = (await res.json().catch(() => ({}))) as { error?: string; message?: string };
-    throw new Error(err.error || err.message || `${res.status} ${res.statusText}`);
+  try {
+    const res = await fetch(path, { ...init, headers });
+    const ms = Math.round(performance.now() - started);
+    if (!res.ok && !acceptStatuses.includes(res.status)) {
+      const err = (await res.json().catch(() => ({}))) as { error?: string; message?: string };
+      const message = err.error || err.message || `${res.status} ${res.statusText}`;
+      devWarn('api', `← ${res.status} ${path} (${ms}ms)`, message);
+      throw new Error(message);
+    }
+    devLog('api', `← ${res.status} ${path} (${ms}ms)`);
+    if (res.status === 204) return {} as T;
+    return res.json() as Promise<T>;
+  } catch (e) {
+    const ms = Math.round(performance.now() - started);
+    devWarn('api', `✗ ${path} (${ms}ms)`, e instanceof Error ? e.message : e);
+    throw e;
   }
-  if (res.status === 204) return {} as T;
-  return res.json() as Promise<T>;
 }
 
 export const api = {
@@ -348,27 +361,27 @@ export const api = {
   getSuggestions: () => apiFetch<{ suggestions: Suggestion[] }>('/api/catalog/suggestions'),
   getBoard: () => apiFetch<{ board: BoardSnapshot }>('/api/catalog/board'),
   createTodo: (input: CreateTodoInput) =>
-    apiFetch<{ store: CerebroStore; todo: MeetingTodo }>('/api/catalog/todos', {
+    apiFetch<{ todo: MeetingTodo; meta?: { counts: import('@shared/types.js').BoardCounts } }>('/api/catalog/todos', {
       method: 'POST',
       body: JSON.stringify(input),
     }),
   updateTodo: (id: string, patch: UpdateTodoInput) =>
-    apiFetch<{ store: CerebroStore }>(`/api/catalog/todos/${encodeURIComponent(id)}`, {
+    apiFetch<import('@shared/types.js').TodoMutationResult>(`/api/catalog/todos/${encodeURIComponent(id)}`, {
       method: 'PATCH',
       body: JSON.stringify(patch),
     }),
   moveTodo: (id: string, input: MoveTodoInput) =>
-    apiFetch<{ store: CerebroStore }>(`/api/catalog/todos/${encodeURIComponent(id)}/move`, {
+    apiFetch<import('@shared/types.js').TodoMutationResult>(`/api/catalog/todos/${encodeURIComponent(id)}/move`, {
       method: 'POST',
       body: JSON.stringify(input),
     }),
   completeTodosBatch: (todoIds: string[]) =>
-    apiFetch<{ store: CerebroStore }>('/api/catalog/todos/complete-batch', {
+    apiFetch<import('@shared/types.js').TodoMutationResult>('/api/catalog/todos/complete-batch', {
       method: 'POST',
       body: JSON.stringify({ todoIds }),
     }),
   reopenTodosBatch: (todoIds: string[]) =>
-    apiFetch<{ store: CerebroStore }>('/api/catalog/todos/reopen-batch', {
+    apiFetch<import('@shared/types.js').TodoMutationResult>('/api/catalog/todos/reopen-batch', {
       method: 'POST',
       body: JSON.stringify({ todoIds }),
     }),
@@ -498,9 +511,17 @@ export const api = {
       body: JSON.stringify({ personId, ...enrichment }),
     }),
   dismissProspect: (prospectId: string) =>
-    apiFetch<{ store: CerebroStore }>(`/api/catalog/prospects/${prospectId}/dismiss`, {
+    apiFetch<{ store: CerebroStore; undoSnapshot: import('@shared/types.js').ProspectDismissUndoSnapshot }>(
+      `/api/catalog/prospects/${prospectId}/dismiss`,
+      {
+        method: 'POST',
+        body: JSON.stringify({}),
+      },
+    ),
+  restoreProspectDismiss: (snapshot: import('@shared/types.js').ProspectDismissUndoSnapshot) =>
+    apiFetch<{ store: CerebroStore }>('/api/catalog/prospects/restore-dismiss', {
       method: 'POST',
-      body: JSON.stringify({}),
+      body: JSON.stringify({ snapshot }),
     }),
   dismissTeamEmailReassign: (personId: string, email: string) =>
     apiFetch<{ store: CerebroStore }>('/api/catalog/maintenance/dismiss-team-email', {
@@ -513,12 +534,12 @@ export const api = {
       body: JSON.stringify({ suggestionId }),
     }),
   acceptTodosBatch: (todoIds: string[]) =>
-    apiFetch<{ store: CerebroStore }>('/api/catalog/todos/accept-batch', {
+    apiFetch<import('@shared/types.js').TodoMutationResult>('/api/catalog/todos/accept-batch', {
       method: 'POST',
       body: JSON.stringify({ todoIds }),
     }),
   dismissTodosBatch: (todoIds: string[]) =>
-    apiFetch<{ store: CerebroStore }>('/api/catalog/todos/dismiss-batch', {
+    apiFetch<import('@shared/types.js').TodoMutationResult>('/api/catalog/todos/dismiss-batch', {
       method: 'POST',
       body: JSON.stringify({ todoIds }),
     }),
@@ -558,30 +579,30 @@ export const api = {
   getOrgSuggestions: (orgId: string) => apiFetch<{ suggestions: Suggestion[] }>(`/api/orgs/${orgId}/suggestions`),
   getOrgBoard: (orgId: string) => apiFetch<{ board: BoardSnapshot }>(`/api/orgs/${orgId}/catalog/board`),
   orgCreateTodo: (orgId: string, input: CreateTodoInput) =>
-    apiFetch<{ store: CerebroStore; todo: MeetingTodo }>(`/api/orgs/${orgId}/catalog/todos`, {
-      method: 'POST',
-      body: JSON.stringify(input),
-    }),
+    apiFetch<{ todo: MeetingTodo; meta?: { counts: import('@shared/types.js').BoardCounts } }>(
+      `/api/orgs/${orgId}/catalog/todos`,
+      { method: 'POST', body: JSON.stringify(input) },
+    ),
   orgUpdateTodo: (orgId: string, id: string, patch: UpdateTodoInput) =>
-    apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/todos/${encodeURIComponent(id)}`, {
-      method: 'PATCH',
-      body: JSON.stringify(patch),
-    }),
+    apiFetch<import('@shared/types.js').TodoMutationResult>(
+      `/api/orgs/${orgId}/catalog/todos/${encodeURIComponent(id)}`,
+      { method: 'PATCH', body: JSON.stringify(patch) },
+    ),
   orgMoveTodo: (orgId: string, id: string, input: MoveTodoInput) =>
-    apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/todos/${encodeURIComponent(id)}/move`, {
-      method: 'POST',
-      body: JSON.stringify(input),
-    }),
+    apiFetch<import('@shared/types.js').TodoMutationResult>(
+      `/api/orgs/${orgId}/catalog/todos/${encodeURIComponent(id)}/move`,
+      { method: 'POST', body: JSON.stringify(input) },
+    ),
   orgCompleteTodosBatch: (orgId: string, todoIds: string[]) =>
-    apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/todos/complete-batch`, {
-      method: 'POST',
-      body: JSON.stringify({ todoIds }),
-    }),
+    apiFetch<import('@shared/types.js').TodoMutationResult>(
+      `/api/orgs/${orgId}/catalog/todos/complete-batch`,
+      { method: 'POST', body: JSON.stringify({ todoIds }) },
+    ),
   orgReopenTodosBatch: (orgId: string, todoIds: string[]) =>
-    apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/todos/reopen-batch`, {
-      method: 'POST',
-      body: JSON.stringify({ todoIds }),
-    }),
+    apiFetch<import('@shared/types.js').TodoMutationResult>(
+      `/api/orgs/${orgId}/catalog/todos/reopen-batch`,
+      { method: 'POST', body: JSON.stringify({ todoIds }) },
+    ),
   getOrgHealth: (orgId: string) => apiFetch<{ health: StoreHealthMetrics }>(`/api/orgs/${orgId}/health`),
   getOrgGraph: (
     orgId: string,
@@ -651,9 +672,20 @@ export const api = {
       body: JSON.stringify({ personId, ...enrichment }),
     }),
   orgDismissProspect: (orgId: string, prospectId: string) =>
-    apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/prospects/${prospectId}/dismiss`, {
+    apiFetch<{
+      store: CerebroStore;
+      undoSnapshot: import('@shared/types.js').ProspectDismissUndoSnapshot;
+    }>(`/api/orgs/${orgId}/catalog/prospects/${prospectId}/dismiss`, {
       method: 'POST',
       body: JSON.stringify({}),
+    }),
+  orgRestoreProspectDismiss: (
+    orgId: string,
+    snapshot: import('@shared/types.js').ProspectDismissUndoSnapshot,
+  ) =>
+    apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/prospects/restore-dismiss`, {
+      method: 'POST',
+      body: JSON.stringify({ snapshot }),
     }),
   orgUpdatePerson: (orgId: string, personId: string, patch: Record<string, unknown>) =>
     apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/people/${personId}`, {
@@ -661,15 +693,15 @@ export const api = {
       body: JSON.stringify(patch),
     }),
   orgAcceptTodosBatch: (orgId: string, todoIds: string[]) =>
-    apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/todos/accept-batch`, {
-      method: 'POST',
-      body: JSON.stringify({ todoIds }),
-    }),
+    apiFetch<import('@shared/types.js').TodoMutationResult>(
+      `/api/orgs/${orgId}/catalog/todos/accept-batch`,
+      { method: 'POST', body: JSON.stringify({ todoIds }) },
+    ),
   orgDismissTodosBatch: (orgId: string, todoIds: string[]) =>
-    apiFetch<{ store: CerebroStore }>(`/api/orgs/${orgId}/catalog/todos/dismiss-batch`, {
-      method: 'POST',
-      body: JSON.stringify({ todoIds }),
-    }),
+    apiFetch<import('@shared/types.js').TodoMutationResult>(
+      `/api/orgs/${orgId}/catalog/todos/dismiss-batch`,
+      { method: 'POST', body: JSON.stringify({ todoIds }) },
+    ),
   orgCreateTeam: (orgId: string, name: string) =>
     apiFetch<{ store: CerebroStore; team: { id: string; name: string } }>(`/api/orgs/${orgId}/catalog/teams`, {
       method: 'POST',

@@ -25,3 +25,18 @@ export function getUid(req: AuthedRequest): string {
   if (!req.uid) throw new Error('Missing uid');
   return req.uid;
 }
+
+export async function getUserEmail(uid: string): Promise<string> {
+  const user = await getAuth().getUser(uid);
+  return (user.email ?? '').toLowerCase();
+}
+
+/** Primer nombre para saludo en digest/dashboard. */
+export async function getUserFirstName(uid: string): Promise<string> {
+  const user = await getAuth().getUser(uid);
+  const fromDisplay = user.displayName?.trim().split(/\s+/)[0];
+  if (fromDisplay) return fromDisplay;
+  const emailLocal = user.email?.split('@')[0]?.replace(/[._-]+/g, ' ').trim().split(/\s+/)[0];
+  if (emailLocal) return emailLocal.charAt(0).toUpperCase() + emailLocal.slice(1);
+  return 'ahí';
+}

@@ -116,7 +116,7 @@ cd modules/cerebro-app && npm run deploy:hosting
 
 1. Abrir https://cerebro-prime-a0729.web.app → **Entrar con Google**
 2. **Ajustes → Cerebro Profesional — Setup** (wizard 5 pasos)
-3. Conectar Google, carpetas Meet, Apps Script inbox (ver [DOC-GUIDE-012](cerebro-meet-apps-script.md))
+3. Conectar Google, carpetas Meet, Apps Script inbox (ver [DOC-GUIDE-014](cerebro-meet-apps-script.md))
 4. Configurar API key IA (Gemini u OpenAI) y automatización diaria (paso 5)
 5. **Profesional** → **Sincronizar ahora** (pipeline completo)
 6. Org multi-miembro: ingest + repair + grafo — ver [cerebro-app-org-graph.md](cerebro-app-org-graph.md) (`DOC-GUIDE-013`)

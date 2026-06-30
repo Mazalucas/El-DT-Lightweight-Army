@@ -1,0 +1,4 @@
+/* Atlassian — pitch scroll */
+.doc-nav-cta { border-radius: 3px; }
+.doc-sec-label::before { content: "◆ "; font-size: 0.65em; }
+.doc-kicker { border-radius: 3px; letter-spacing: 0.12em; }

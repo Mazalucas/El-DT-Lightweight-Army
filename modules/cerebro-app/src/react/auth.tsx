@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { User } from 'firebase/auth';
 import { watchAuth } from '../lib/firebase.js';
+import { devLog } from '../lib/dev-log.js';
 
 interface AuthState {
   user: User | null;
@@ -13,7 +14,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>({ user: null, ready: false });
 
   useEffect(() => {
-    return watchAuth((user) => setState({ user, ready: true }));
+    devLog('auth', 'watchAuth: suscribiendo…');
+    return watchAuth((user) => {
+      devLog('auth', user ? `sesión: ${user.uid}` : 'sin sesión', { email: user?.email ?? null });
+      setState({ user, ready: true });
+    });
   }, []);
 
   return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;

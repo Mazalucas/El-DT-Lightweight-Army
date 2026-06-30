@@ -1,4 +1,5 @@
 import type { BoardSnapshot, CerebroStore, CreateTodoInput, MeetingTodo, UpdateTodoInput } from '@shared/types.js';
+import { sortTodosByRecency } from '@shared/recency-sort.js';
 import { escapeHtml, toast } from '../lib/ui.js';
 import { button, emptyState, section, segmentedControl } from '../ui/primitives.js';
 import { openModal } from '../ui/modal.js';
@@ -35,12 +36,7 @@ const COLUMN_DEFS: { id: KanbanColumnId; title: string; status: MeetingTodo['sta
 const SUGGESTION_PAGE_SIZE = 25;
 
 function sortTodos(todos: MeetingTodo[]): MeetingTodo[] {
-  return [...todos].sort((a, b) => {
-    const pa = a.boardPosition ?? 0;
-    const pb = b.boardPosition ?? 0;
-    if (pa !== pb) return pa - pb;
-    return (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
-  });
+  return sortTodosByRecency(todos);
 }
 
 function matchesFilters(todo: MeetingTodo, filters: BoardFilters): boolean {

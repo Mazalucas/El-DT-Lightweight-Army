@@ -10,6 +10,7 @@ import { acceptTodosBatch, dismissTodosBatch, userStoreAdapter } from '../servic
 import {
   completeTodosBatch,
   createTodo,
+  moveTodo,
   updateTodo,
 } from './todos.service.js';
 
@@ -58,6 +59,14 @@ export async function createTodoForUser(uid: string, input: CreateTodoInput) {
 
 export async function updateTodoForUser(uid: string, todoId: string, patch: UpdateTodoInput) {
   return updateTodo(uid, todoId, patch);
+}
+
+export async function moveTodoForUser(
+  uid: string,
+  todoId: string,
+  input: { status: MeetingTodo['status']; boardPosition?: number },
+) {
+  return moveTodo(uid, todoId, input);
 }
 
 export async function completeTodos(uid: string, todoIds: string[]) {

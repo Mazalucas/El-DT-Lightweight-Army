@@ -1,0 +1,40 @@
+/**
+ * Atelier — Neumorphism tokens (partial use only)
+ * Single base tone; dual shadows for extruded/pressed.
+ */
+
+:root {
+  --color-base: #e0e0e0;
+  --color-base-dark: #bebebe;
+  --color-base-light: #ffffff;
+  --color-text: #4a4a4a;
+  --color-text-muted: #7a7a7a;
+  --color-accent: #6c63ff;
+  --color-on-accent: #ffffff;
+
+  --font-sans: "Nunito", "Poppins", system-ui, sans-serif;
+
+  --shadow-extruded: 8px 8px 16px var(--color-base-dark), -8px -8px 16px var(--color-base-light);
+  --shadow-pressed: inset 4px 4px 8px var(--color-base-dark), inset -4px -4px 8px var(--color-base-light);
+  --shadow-flat-border: 1px solid rgba(0, 0, 0, 0.08); /* a11y fallback */
+
+  --radius-control: 12px;
+  --radius-pill: 9999px;
+
+  --duration: 200ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-base: #2d2d2d;
+    --color-base-dark: #1a1a1a;
+    --color-base-light: #3d3d3d;
+    --color-text: #e0e0e0;
+  }
+}
+
+/* WCAG: add border on interactive when contrast fails */
+.neu-interactive:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}

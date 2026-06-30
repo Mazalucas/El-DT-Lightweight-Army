@@ -1,0 +1,29 @@
+# Engineering stack — contexto local del proyecto
+
+> Copiar a `.agents/engineering-stack.md` y ajustar. Archivo **local** (como `design-context.md`); no commitear decisiones sensibles del cliente.
+
+Referencia canónica del framework: `docs/03_reference/web-stack-default.md` (`DOC-REF-005`).
+
+## Stack confirmado
+
+- **Backend**: Cloud Functions for Firebase (Node 20)
+- **Auth**: Firebase Auth
+- **Base de datos**: Firestore
+- **Hosting**: Firebase Hosting
+- **Storage**: Cloud Storage
+- **Frontend**: Vite + React
+- **UI library**: (ej. shadcn/ui, MUI — opcional)
+
+## Opt-outs
+
+- (ej. No usar Realtime Database)
+- (ej. Cloud Run para worker X)
+
+## Notas de integración
+
+- Secrets: Firebase Secrets (no `.env` en producción)
+- Reglas Firestore: `firestore.rules` versionado en repo
+
+## Señales detectadas en repo
+
+- (Completar al bootstrap: qué archivos confirman el stack)

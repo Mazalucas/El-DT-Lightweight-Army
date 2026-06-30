@@ -325,11 +325,13 @@ Output: Ready-to-publish video
 
 ## Tool Integrations
 
+For the tools catalog, see [`tools/REGISTRY.md`](../../../../../../tools/REGISTRY.md).
+
 | Tool | Type | MCP | Guide |
 |------|------|:---:|-------|
-| **HeyGen** | AI avatars | Yes | [heygen.md](../../tools/integrations/heygen.md) |
-| **Hyperframes** | Programmatic video | - | [hyperframes.md](../../tools/integrations/hyperframes.md) |
-| **Remotion** | Programmatic video | - | [remotion.dev](https://www.remotion.dev/docs) |
+| **Remotion** | Programmatic video (React) | - | [`tools/remotion/README.md`](../../../../../../tools/remotion/README.md) · subagente `remotion-producer` |
+| **HeyGen** | AI avatars | Yes | [heygen.md](../../../../../../tools/integrations/heygen.md) (stub) |
+| **Hyperframes** | Programmatic video | - | [hyperframes.md](../../../../../../tools/integrations/hyperframes.md) (stub) |
 | **Runway** | AI generation | - | [runwayml.com/docs](https://docs.dev.runwayml.com) |
 
 ---

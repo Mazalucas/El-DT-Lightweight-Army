@@ -3,6 +3,7 @@ export type AssistantDomain =
   | 'meetings'
   | 'contacts'
   | 'inbox'
+  | 'maintenance'
   | 'sync'
   | 'graph'
   | 'actions';
@@ -21,12 +22,20 @@ export interface AssistantMessage {
   toolCalls?: Array<{ name: string; args: Record<string, unknown>; result?: unknown }>;
 }
 
+export interface AssistantConversationMetadata {
+  focusTopic?: string;
+  dismissedMoments?: string[];
+  pendingPlanId?: string;
+  sessionArtifacts?: Record<string, string>;
+}
+
 export interface AssistantConversation {
   id: string;
   title: string;
   messages: AssistantMessage[];
   createdAt: string;
   updatedAt: string;
+  metadata?: AssistantConversationMetadata;
 }
 
 export type AssistantPageContext = {

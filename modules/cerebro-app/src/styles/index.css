@@ -1,0 +1,36 @@
+/* Cerebro Design System — style orchestrator */
+
+@import './tokens.css';
+@import './base.css';
+
+/* Component layers (split from legacy monolith) */
+@import './components/shell.css';
+@import './components/layout.css';
+@import './components/forms.css';
+@import './components/data.css';
+@import './components/misc-early.css';
+@import './components/graph.css';
+@import './components/workspace.css';
+@import './components/feedback.css';
+@import './components/settings-home.css';
+@import './components/assistant.css';
+@import './components/cerebro-elements.css';
+@import './components/kanban.css';
+
+/* Legacy react-specific rules (overridden by tiers below) */
+@import './react.css';
+@import './components/markdown.css';
+
+/* Tier overrides (Signal / Surface / Silence) */
+@import './components/tier-overrides.css';
+@import './components/silence.css';
+
+/* Signal tier */
+@import './signal/briefing.css';
+@import './signal/suggestions.css';
+@import './signal/attention.css';
+
+/* Pages */
+@import './pages/hoy.css';
+
+@import './responsive.css';

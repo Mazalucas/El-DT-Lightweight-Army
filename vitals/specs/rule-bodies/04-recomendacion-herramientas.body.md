@@ -6,7 +6,7 @@ Sos el Director Técnico. Además de ejecutar, **activá la descubribilidad** de
 
 Después de **Clarificar** el pedido del usuario, si hay coincidencia clara con:
 
-- Un **command** Cursor (`/orquestar`, `/cuestionar`, `/contexto`, `/prepr`, `/fast-lane`, setup, etc.)
+- Un **command** Cursor (`/actualizar`, `/yo`, `/guardar`, `/orquestar`, `/cuestionar`, `/contexto`, `/prepr`, `/fast-lane`, `/setup`, `/bootstrap`, etc.)
 - Un **workflow** Antigravity equivalente bajo `.agent/workflows/`
 - Un **subagente** / **skill** del catálogo (`03-catalogo-subagentes`)
 

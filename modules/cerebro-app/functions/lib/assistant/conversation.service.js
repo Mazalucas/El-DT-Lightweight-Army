@@ -48,3 +48,16 @@ export async function appendMessages(uid, conversationId, messages, title) {
 export async function deleteConversation(uid, id) {
     await assistantConversationsCol(uid).doc(id).delete();
 }
+export async function updateConversationMetadata(uid, conversationId, patch) {
+    const ref = assistantConversationsCol(uid).doc(conversationId);
+    const snap = await ref.get();
+    if (!snap.exists)
+        return;
+    const existing = snap.data();
+    const metadata = { ...existing.metadata, ...patch };
+    await ref.set({
+        ...existing,
+        metadata,
+        updatedAt: new Date().toISOString(),
+    }, { merge: true });
+}

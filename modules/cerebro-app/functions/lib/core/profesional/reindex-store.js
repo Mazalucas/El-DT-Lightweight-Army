@@ -6,6 +6,10 @@ import { buildCanonicalParticipantNames, resolveMeetingPersonIds } from './meeti
 import { collectParticipantEmails } from './meeting-participation.js';
 import { ProspectResolver } from './prospect-resolver.js';
 import { collectSignalsFromMirror, PersonResolver, extractTranscriptSection } from './resolve-person.js';
+import { isLikelyPersonName } from './person-name-clean.js';
+import { buildTeamEmailIndex } from './team-email-index.js';
+import { parseDateFromMeetFilename } from '../../shared/parse-meet-filename.js';
+import { enrichMeetingRecord, resolveMeetingStartedAt } from '../../shared/meeting-dates.js';
 function indexPeopleByEmail(people) {
     const map = new Map();
     for (const p of people) {
@@ -51,11 +55,12 @@ export function reindexStoreFromMirrors(store, files) {
     const { people: seeded, idRemap: preRemap } = consolidatePeopleRecords(withEmail);
     const resolver = new PersonResolver(seeded);
     const existingProspects = store.prospects;
-    const prospectResolver = new ProspectResolver(existingProspects.filter((p) => !p.linkedPersonId));
+    const prospectResolver = new ProspectResolver(existingProspects.filter((p) => !p.linkedPersonId), store.dismissedProspectKeys ?? [], store.dismissedProspectIds ?? []);
     const projectsMap = new Map();
     for (const p of store.projects)
         projectsMap.set(p.id, p);
     ensurePendingSuggestions(store);
+    const teamEmailIndex = buildTeamEmailIndex(teams);
     const meetingsById = new Map(store.meetings.map((m) => [m.id, m]));
     let meetingCount = 0;
     const writtenMeetingIds = new Set();
@@ -65,8 +70,16 @@ export function reindexStoreFromMirrors(store, files) {
         const meetingId = String(fm.meetingId ?? file.id);
         const title = String(fm.title ?? meetingId);
         const sourceFile = String(fm.sourceFile ?? '');
+        const existing = meetingsById.get(meetingId);
         const participantEmails = collectParticipantEmails(parsed);
-        const seenAt = typeof fm.startedAt === 'string' ? fm.startedAt : new Date().toISOString();
+        const parsedFromFile = sourceFile ? parseDateFromMeetFilename(sourceFile) : { title: '' };
+        const startedAtFromFm = typeof fm.startedAt === 'string' ? fm.startedAt : undefined;
+        const draftStartedAt = startedAtFromFm ?? existing?.startedAt ?? parsedFromFile.startedAt;
+        const seenAt = resolveMeetingStartedAt({
+            startedAt: draftStartedAt,
+            sourceFile,
+            title,
+        }) ?? new Date().toISOString();
         const participantNames = buildCanonicalParticipantNames(parsed, sourceFile);
         const signals = collectSignalsFromMirror({
             participants: parsed.participants,
@@ -79,8 +92,19 @@ export function reindexStoreFromMirrors(store, files) {
         });
         const personIds = [];
         const prospectIds = [];
+        const teamIdsFromEmails = [];
+        const tagTeamEmail = (rawEmail) => {
+            const teamId = teamEmailIndex.get(rawEmail.toLowerCase().trim());
+            if (!teamId)
+                return false;
+            if (!teamIdsFromEmails.includes(teamId))
+                teamIdsFromEmails.push(teamId);
+            return true;
+        };
         for (const signal of signals) {
             if (signal.email) {
+                if (tagTeamEmail(signal.email))
+                    continue;
                 const id = resolver.resolve(signal);
                 if (id && !personIds.includes(id))
                     personIds.push(id);
@@ -92,6 +116,8 @@ export function reindexStoreFromMirrors(store, files) {
             }
         }
         for (const email of participantEmails) {
+            if (tagTeamEmail(email))
+                continue;
             const id = resolver.resolve({ email, source: 'invite', seenAt });
             if (id && !personIds.includes(id))
                 personIds.push(id);
@@ -99,17 +125,16 @@ export function reindexStoreFromMirrors(store, files) {
         const projectIds = resolveProjectIdsForMeeting(store, meetingId, title, projectsMap);
         const fromFm = typeof fm.teamId === 'string' ? [String(fm.teamId)] : [];
         const inferred = inferTeams(title, teams);
-        const existing = meetingsById.get(meetingId);
         const teamIds = existing?.teamIds?.length
-            ? [...new Set([...existing.teamIds, ...fromFm, ...inferred])]
-            : [...new Set([...fromFm, ...inferred])];
-        const meeting = {
+            ? [...new Set([...existing.teamIds, ...fromFm, ...inferred, ...teamIdsFromEmails])]
+            : [...new Set([...fromFm, ...inferred, ...teamIdsFromEmails])];
+        const meeting = enrichMeetingRecord({
             id: meetingId,
             docId: typeof fm.docId === 'string' ? fm.docId : undefined,
-            sourceFile: String(fm.sourceFile ?? ''),
+            sourceFile,
             title,
-            startedAt: typeof fm.startedAt === 'string' ? fm.startedAt : undefined,
-            timezone: typeof fm.timezone === 'string' ? fm.timezone : undefined,
+            startedAt: startedAtFromFm ?? existing?.startedAt ?? parsedFromFile.startedAt,
+            timezone: typeof fm.timezone === 'string' ? fm.timezone : existing?.timezone ?? parsedFromFile.timezone,
             summary: parsed.summary ?? existing?.summary,
             participants: participantNames,
             participantEmails,
@@ -120,8 +145,11 @@ export function reindexStoreFromMirrors(store, files) {
             syncStatus: 'synced',
             analysisStatus: existing?.analysisStatus ?? 'pending',
             bodyPreview: buildSearchPreview(parsed.body) || existing?.bodyPreview,
-            updatedAt: new Date().toISOString(),
-        };
+            lastSyncedAt: typeof fm.syncedAt === 'string'
+                ? fm.syncedAt
+                : existing?.lastSyncedAt,
+            updatedAt: existing?.updatedAt ?? new Date().toISOString(),
+        });
         meetingsById.set(meetingId, meeting);
         writtenMeetingIds.add(meetingId);
         meetingCount++;
@@ -190,7 +218,15 @@ export function reindexStoreFromMirrors(store, files) {
         return { ...meeting, personIds, updatedAt: new Date().toISOString() };
     });
     const linkedProspects = existingProspects.filter((p) => p.linkedPersonId);
-    const activeProspects = prospectResolver.getAll();
+    const activeProspects = prospectResolver.getAll().filter((p) => isLikelyPersonName(p.displayName));
+    const validProspectIds = new Set([
+        ...linkedProspects.map((p) => p.id),
+        ...activeProspects.map((p) => p.id),
+    ]);
+    meetings = meetings.map((meeting) => ({
+        ...meeting,
+        prospectIds: (meeting.prospectIds ?? []).filter((id) => validProspectIds.has(id)),
+    }));
     store.meetings = meetings;
     store.people = finalPeople;
     store.prospects = [...linkedProspects, ...activeProspects];

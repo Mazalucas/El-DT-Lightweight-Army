@@ -19,6 +19,7 @@ import {
   updateToolRunCard,
 } from './assistant-tool-ui.js';
 import { escapeHtml, formatDate } from './ui.js';
+import { setMarkdownContent } from './render-markdown.js';
 import { icon } from '../ui/icons.js';
 import { button, emptyState } from '../ui/primitives.js';
 
@@ -200,8 +201,8 @@ export function createAssistantChatSession(opts: AssistantChatSessionOptions): A
       }
 
       const body = document.createElement('div');
-      body.className = 'assistant-bubble-body';
-      body.textContent = msg.content;
+      body.className = 'assistant-bubble-body md-content';
+      setMarkdownContent(body, msg.content);
       row.appendChild(body);
       threadEl.appendChild(row);
     });
@@ -336,7 +337,7 @@ export function createAssistantChatSession(opts: AssistantChatSessionOptions): A
     streamBubble.innerHTML = `
       <div class="assistant-bubble-meta">Asistente</div>
       <div class="assistant-bubble-tools-panel" data-stream-tools></div>
-      <div class="assistant-bubble-body" data-stream-body></div>
+      <div class="assistant-bubble-body md-content" data-stream-body></div>
     `;
     threadEl.appendChild(streamBubble);
     const streamBody = streamBubble.querySelector('[data-stream-body]') as HTMLElement;
@@ -381,7 +382,7 @@ export function createAssistantChatSession(opts: AssistantChatSessionOptions): A
           }
         } else if (event.type === 'text' && event.delta) {
           fullReply += event.delta;
-          streamBody.textContent = fullReply;
+          setMarkdownContent(streamBody, fullReply);
           threadEl.scrollTop = threadEl.scrollHeight;
         } else if (event.type === 'done') {
           activeConversationId = event.conversationId;
@@ -389,7 +390,7 @@ export function createAssistantChatSession(opts: AssistantChatSessionOptions): A
           setStatus('Listo', 'ok');
           if (!fullReply && event.message) {
             fullReply = event.message;
-            streamBody.textContent = fullReply;
+            setMarkdownContent(streamBody, fullReply);
           }
         } else if (event.type === 'error') {
           setStatus(event.message ?? 'Error', 'warn');

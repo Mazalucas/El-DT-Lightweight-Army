@@ -3,11 +3,46 @@ import { google } from 'googleapis';
 import { decrypt, encrypt } from '../lib/crypto.js';
 import { googleIntegrationRef } from '../lib/firebase.js';
 import { buildMarkdownBody, googleDocToParsed } from '../core/profesional/doc-to-parsed.js';
-const SCOPES = [
+const DRIVE_SCOPES = [
     'https://www.googleapis.com/auth/documents.readonly',
     'https://www.googleapis.com/auth/drive.readonly',
     'https://www.googleapis.com/auth/drive.file',
 ];
+export const CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
+export const SCOPES = [...DRIVE_SCOPES, CALENDAR_SCOPE];
+export function getStoredScopes(data) {
+    return data?.scopes?.length ? data.scopes : DRIVE_SCOPES;
+}
+export function hasCalendarScopeFromData(data) {
+    return getStoredScopes(data).includes(CALENDAR_SCOPE);
+}
+export async function hasCalendarScope(uid) {
+    const snap = await googleIntegrationRef(uid).get();
+    if (!snap.exists)
+        return false;
+    return hasCalendarScopeFromData(snap.data());
+}
+export function getAuthUrl(state, opts) {
+    const client = getOAuthClient();
+    const scopes = opts?.includeCalendar === false ? DRIVE_SCOPES : SCOPES;
+    return client.generateAuthUrl({
+        access_type: 'offline',
+        scope: scopes,
+        include_granted_scopes: opts?.incremental ?? false,
+        prompt: 'consent',
+        state,
+    });
+}
+export function getCalendarAuthUrl(state) {
+    const client = getOAuthClient();
+    return client.generateAuthUrl({
+        access_type: 'offline',
+        scope: [...DRIVE_SCOPES, CALENDAR_SCOPE],
+        include_granted_scopes: true,
+        prompt: 'consent',
+        state,
+    });
+}
 export function getOAuthClient(redirectUri) {
     const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID;
     const clientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
@@ -16,15 +51,6 @@ export function getOAuthClient(redirectUri) {
     }
     const appUrl = process.env.APP_URL || 'http://localhost:5190';
     return new google.auth.OAuth2(clientId, clientSecret, redirectUri || `${appUrl}/api/auth/google/callback`);
-}
-export function getAuthUrl(state) {
-    const client = getOAuthClient();
-    return client.generateAuthUrl({
-        access_type: 'offline',
-        scope: SCOPES,
-        prompt: 'consent',
-        state,
-    });
 }
 export async function exchangeCode(code) {
     const client = getOAuthClient();
@@ -35,15 +61,20 @@ export async function exchangeCode(code) {
         expiryDate: tokens.expiry_date ?? undefined,
     };
 }
-export async function saveGoogleTokens(uid, tokens) {
+export async function saveGoogleTokens(uid, tokens, opts) {
     const existing = await googleIntegrationRef(uid).get();
-    const prev = existing.exists ? existing.data() : {};
+    const prev = existing.exists
+        ? existing.data()
+        : {};
+    const mergedScopes = opts?.scopes?.length
+        ? [...new Set([...getStoredScopes(prev), ...opts.scopes])]
+        : SCOPES;
     const payload = {
         encryptedAccess: encrypt(tokens.accessToken),
         encryptedRefresh: tokens.refreshToken ? encrypt(tokens.refreshToken) : prev.encryptedRefresh,
         expiryDate: tokens.expiryDate ?? null,
         connectedAt: new Date().toISOString(),
-        scopes: SCOPES,
+        scopes: mergedScopes,
     };
     await googleIntegrationRef(uid).set(payload, { merge: true });
 }

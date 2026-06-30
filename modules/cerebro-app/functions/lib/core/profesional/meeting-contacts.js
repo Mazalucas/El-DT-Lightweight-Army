@@ -1,4 +1,4 @@
-import { cleanChipPersonName, displayNameFromEmail, normalizePersonNameKey, } from './person-name-clean.js';
+import { cleanChipPersonName, displayNameFromEmail, isLikelyPersonName, } from './person-name-clean.js';
 import { participantsFromSourceFile } from './participants-from-source.js';
 /** Nombres canónicos de asistentes: invitees con email primero; si no, heurística del mirror. */
 export function buildCanonicalParticipantNames(parsed, sourceFile) {
@@ -15,20 +15,8 @@ export function buildCanonicalParticipantNames(parsed, sourceFile) {
     }
     const fromYamlAndTitle = [...parsed.participants, ...participantsFromSourceFile(sourceFile)]
         .map((n) => cleanChipPersonName(n))
-        .filter(isLikelyParticipantName);
+        .filter((n) => n.length >= 2 && isLikelyPersonName(n));
     return [...new Set(fromYamlAndTitle)];
-}
-function isLikelyParticipantName(name) {
-    const trimmed = name.trim();
-    if (trimmed.length < 2)
-        return false;
-    const words = trimmed.split(/\s+/).filter(Boolean);
-    if (words.length >= 2)
-        return true;
-    const key = normalizePersonNameKey(trimmed);
-    if (key.length < 3)
-        return false;
-    return /^[A-ZÁÉÍÓÚÑ]/.test(trimmed);
 }
 /** IDs de contacto reales para una reunión (email primero; corrige personIds huérfanos). */
 export function resolveMeetingPersonIds(meeting, people) {

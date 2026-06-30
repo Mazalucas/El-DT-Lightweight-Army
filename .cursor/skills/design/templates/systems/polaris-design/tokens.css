@@ -1,0 +1,30 @@
+/**
+ * Shopify Polaris — semantic tokens (Atelier template)
+ */
+:root {
+  --ds-font: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, sans-serif;
+
+  --ds-primary: #008060;
+  --ds-primary-hover: #006e52;
+  --ds-primary-pressed: #005e46;
+  --ds-on-primary: #ffffff;
+  --ds-surface: #f1f1f1;
+  --ds-surface-card: #ffffff;
+  --ds-surface-nav: #ebebeb;
+  --ds-border: #e3e3e3;
+  --ds-border-strong: #c9cccf;
+  --ds-text: #303030;
+  --ds-text-secondary: #616161;
+  --ds-text-subdued: #8a8a8a;
+  --ds-critical: #d82c0d;
+  --ds-highlight: #fef3cd;
+
+  --ds-radius-sm: 8px;
+  --ds-radius-md: 12px;
+  --ds-shadow-card: 0 1px 0 rgba(0, 0, 0, 0.05);
+
+  --ds-space-4: 16px;
+  --ds-space-5: 20px;
+  --ds-space-6: 24px;
+  --ds-space-8: 32px;
+}

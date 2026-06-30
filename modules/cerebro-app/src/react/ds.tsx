@@ -7,6 +7,7 @@ import { useEffect, useId, type ReactNode } from 'react';
 import { icon } from '../ui/icons.js';
 
 export { toast, formatDate, initials } from '../lib/ui.js';
+export type { ToastOptions, ToastUndoAction } from '../lib/ui.js';
 
 export function Icon({ name, className }: { name: string; className?: string }) {
   return (

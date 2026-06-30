@@ -4,10 +4,13 @@ import * as contacts from '../domain/contacts.service.js';
 import * as inbox from '../domain/inbox.service.js';
 import * as sync from '../domain/sync.service.js';
 import * as graph from '../domain/graph.service.js';
+import * as maintenance from '../domain/maintenance.service.js';
 import * as search from '../domain/search.service.js';
 import { semanticSearchMeetings } from '../services/embeddings.js';
 import { getSmartSuggestion, listSmartSuggestions, setSmartSuggestionStatus } from '../services/smart-suggestions.js';
 import { mergePersonsIntoCanonical } from '../services/catalog-mutate.js';
+import { executeCerebroProviderTool, CEREBRO_PROVIDER_TOOL_NAMES } from '../cerebro/providers/index.js';
+import { emitTodoEffect, emitTodoEntityCard, emitTodosEffect } from './tool-context.js';
 import { compactToolResult } from './compact-tool-result.js';
 export const ASSISTANT_TOOLS = [
     {
@@ -166,6 +169,122 @@ export const ASSISTANT_TOOLS = [
         },
     },
     {
+        name: 'get_maintenance_view',
+        description: 'Lista ítems de mantenimiento de datos: duplicados, prospects, asignaciones proyecto/equipo, emails de equipo mal ubicados, reuniones con análisis a revisar.',
+        parameters: { type: 'object', properties: {} },
+    },
+    {
+        name: 'accept_project_suggestions',
+        description: 'Confirma asignaciones de reuniones a un proyecto (una o varias sugerencias por id).',
+        parameters: {
+            type: 'object',
+            properties: {
+                suggestionIds: { type: 'array', items: { type: 'string' } },
+                projectName: { type: 'string', description: 'Nombre del proyecto si se crea uno nuevo' },
+                existingProjectId: { type: 'string', description: 'Id de proyecto existente para vincular' },
+            },
+            required: ['suggestionIds'],
+        },
+    },
+    {
+        name: 'accept_team_suggestions',
+        description: 'Confirma asignaciones de reuniones a un equipo (una o varias sugerencias por id).',
+        parameters: {
+            type: 'object',
+            properties: {
+                suggestionIds: { type: 'array', items: { type: 'string' } },
+            },
+            required: ['suggestionIds'],
+        },
+    },
+    {
+        name: 'batch_dismiss_suggestions',
+        description: 'Descarta varias sugerencias de mantenimiento/inbox por ids.',
+        parameters: {
+            type: 'object',
+            properties: {
+                suggestionIds: { type: 'array', items: { type: 'string' } },
+            },
+            required: ['suggestionIds'],
+        },
+    },
+    {
+        name: 'dismiss_prospect',
+        description: 'Descarta un prospect (persona inferida sin email confirmado) por id.',
+        parameters: {
+            type: 'object',
+            properties: { prospectId: { type: 'string' } },
+            required: ['prospectId'],
+        },
+    },
+    {
+        name: 'promote_prospect',
+        description: 'Promueve un prospect a contacto confirmado con email.',
+        parameters: {
+            type: 'object',
+            properties: {
+                prospectId: { type: 'string' },
+                email: { type: 'string' },
+                displayName: { type: 'string' },
+            },
+            required: ['prospectId', 'email'],
+        },
+    },
+    {
+        name: 'link_prospect_to_contact',
+        description: 'Vincula un prospect a un contacto existente.',
+        parameters: {
+            type: 'object',
+            properties: {
+                prospectId: { type: 'string' },
+                personId: { type: 'string' },
+            },
+            required: ['prospectId', 'personId'],
+        },
+    },
+    {
+        name: 'get_prospect_link_candidates',
+        description: 'Lista contactos candidatos para vincular un prospect (scores de coincidencia).',
+        parameters: {
+            type: 'object',
+            properties: { prospectId: { type: 'string' } },
+            required: ['prospectId'],
+        },
+    },
+    {
+        name: 'assign_email_to_team',
+        description: 'Mueve un email de contacto al equipo indicado (mantenimiento reassign_team_email).',
+        parameters: {
+            type: 'object',
+            properties: {
+                teamId: { type: 'string' },
+                email: { type: 'string' },
+            },
+            required: ['teamId', 'email'],
+        },
+    },
+    {
+        name: 'dismiss_team_email_reassign',
+        description: 'Descarta la sugerencia de mover un email de equipo mal ubicado en un contacto.',
+        parameters: {
+            type: 'object',
+            properties: {
+                personId: { type: 'string' },
+                email: { type: 'string' },
+            },
+            required: ['personId', 'email'],
+        },
+    },
+    {
+        name: 'create_team',
+        description: 'Crea un equipo nuevo (útil al resolver emails de equipo en mantenimiento).',
+        parameters: {
+            type: 'object',
+            properties: { name: { type: 'string' } },
+            required: ['name'],
+        },
+    },
+    {
         name: 'accept_todos',
         description: 'Acepta tareas por ids.',
         parameters: {
@@ -205,6 +324,35 @@ export const ASSISTANT_TOOLS = [
                 notes: { type: 'string' },
             },
             required: ['todoId'],
+        },
+    },
+    {
+        name: 'move_todo',
+        description: 'Mueve una tarea a otra columna del tablero (suggested, open, done).',
+        parameters: {
+            type: 'object',
+            properties: {
+                todoId: { type: 'string' },
+                status: { type: 'string', enum: ['suggested', 'open', 'done', 'dismissed'] },
+                boardPosition: { type: 'number' },
+            },
+            required: ['todoId', 'status'],
+        },
+    },
+    {
+        name: 'highlight_entity',
+        description: 'Resalta una entidad visible en la UI (tarea, persona, etc.) con pulse/spotlight.',
+        parameters: {
+            type: 'object',
+            properties: {
+                kind: {
+                    type: 'string',
+                    enum: ['todo', 'person', 'prospect', 'project', 'team', 'meeting'],
+                },
+                id: { type: 'string' },
+                message: { type: 'string' },
+            },
+            required: ['kind', 'id'],
         },
     },
     {
@@ -286,8 +434,96 @@ export const ASSISTANT_TOOLS = [
         description: 'Regenera las sugerencias inteligentes y el digest diario con los datos actuales.',
         parameters: { type: 'object', properties: {} },
     },
+    {
+        name: 'list_ui_targets',
+        description: 'Lista targets de UI disponibles para guide_user (catálogo cerrado).',
+        parameters: {
+            type: 'object',
+            properties: {
+                query: { type: 'string', description: 'Búsqueda opcional por keyword' },
+            },
+        },
+    },
+    {
+        name: 'guide_user',
+        description: 'Resalta un elemento de la UI (spotlight/pulse) o navega. Solo targetId del catálogo.',
+        parameters: {
+            type: 'object',
+            properties: {
+                targetId: { type: 'string' },
+                action: {
+                    type: 'string',
+                    enum: ['spotlight', 'pulse', 'navigate', 'navigate_and_spotlight', 'clear'],
+                },
+                message: { type: 'string', description: 'Tooltip corto para el usuario' },
+            },
+            required: ['targetId'],
+        },
+    },
+    {
+        name: 'get_calendar_today',
+        description: 'Eventos de Google Calendar para una fecha. Default: hoy. Usá date="mañana" o "tomorrow" para el día siguiente, o YYYY-MM-DD.',
+        parameters: {
+            type: 'object',
+            properties: {
+                timezone: { type: 'string' },
+                date: {
+                    type: 'string',
+                    description: 'Fecha: omitir o "hoy"/"today" (default), "mañana"/"tomorrow", o YYYY-MM-DD',
+                },
+            },
+        },
+    },
+    {
+        name: 'propose_action_plan',
+        description: 'Propone un plan de acción multi-paso para confirmación del usuario.',
+        parameters: {
+            type: 'object',
+            properties: {
+                title: { type: 'string' },
+                summary: { type: 'string' },
+                steps: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            id: { type: 'string' },
+                            label: { type: 'string' },
+                            tool: { type: 'string' },
+                            args: { type: 'object' },
+                            entityRef: {
+                                type: 'object',
+                                properties: {
+                                    kind: { type: 'string' },
+                                    id: { type: 'string' },
+                                    orgId: { type: 'string' },
+                                },
+                                required: ['kind', 'id'],
+                            },
+                        },
+                        required: ['id', 'label', 'tool'],
+                    },
+                },
+            },
+            required: ['title', 'summary', 'steps'],
+        },
+    },
+    {
+        name: 'confirm_plan',
+        description: 'Ejecuta un plan previamente propuesto (planId de propose_action_plan).',
+        parameters: {
+            type: 'object',
+            properties: { planId: { type: 'string' } },
+            required: ['planId'],
+        },
+    },
 ];
 export async function executeTool(ctx, name, args) {
+    if (CEREBRO_PROVIDER_TOOL_NAMES.has(name)) {
+        const providerResult = await executeCerebroProviderTool(ctx, name, args);
+        if (providerResult !== undefined)
+            return compactToolResult(providerResult);
+    }
     const uid = ctx.uid;
     let result;
     switch (name) {
@@ -362,11 +598,50 @@ export async function executeTool(ctx, name, args) {
         case 'dismiss_suggestion':
             result = await inbox.dismissSuggestion(uid, String(args.suggestionId));
             break;
-        case 'accept_todos':
-            result = await inbox.acceptTodos(uid, args.todoIds ?? []);
+        case 'get_maintenance_view':
+            result = await maintenance.listMaintenance(uid);
             break;
-        case 'create_todo':
-            result = await inbox.createTodoForUser(uid, {
+        case 'accept_project_suggestions':
+            result = await maintenance.acceptProjectSuggestions(uid, args.suggestionIds ?? [], {
+                existingProjectId: args.existingProjectId,
+                projectName: args.projectName,
+            });
+            break;
+        case 'accept_team_suggestions':
+            result = await maintenance.acceptTeamSuggestions(uid, args.suggestionIds ?? []);
+            break;
+        case 'batch_dismiss_suggestions':
+            result = await maintenance.batchDismissSuggestions(uid, args.suggestionIds ?? []);
+            break;
+        case 'dismiss_prospect':
+            result = await maintenance.dismissProspectForUser(uid, String(args.prospectId));
+            break;
+        case 'promote_prospect':
+            result = await maintenance.promoteProspectForUser(uid, String(args.prospectId), String(args.email ?? ''), args.displayName);
+            break;
+        case 'link_prospect_to_contact':
+            result = await maintenance.linkProspectForUser(uid, String(args.prospectId), String(args.personId));
+            break;
+        case 'get_prospect_link_candidates':
+            result = await maintenance.getProspectLinkCandidates(uid, String(args.prospectId));
+            break;
+        case 'assign_email_to_team':
+            result = await maintenance.assignEmailToTeamForUser(uid, String(args.teamId), String(args.email ?? ''));
+            break;
+        case 'dismiss_team_email_reassign':
+            result = await maintenance.dismissTeamEmailReassignForUser(uid, String(args.personId), String(args.email ?? ''));
+            break;
+        case 'create_team':
+            result = await maintenance.createTeamForUser(uid, String(args.name ?? ''));
+            break;
+        case 'accept_todos': {
+            const batch = await inbox.acceptTodos(uid, args.todoIds ?? []);
+            emitTodosEffect(ctx, 'move', batch.todos ?? [], 'accept_todos');
+            result = batch;
+            break;
+        }
+        case 'create_todo': {
+            const created = await inbox.createTodoForUser(uid, {
                 text: String(args.text ?? ''),
                 dueAt: args.dueAt,
                 projectIds: args.projectIds,
@@ -374,9 +649,15 @@ export async function executeTool(ctx, name, args) {
                 assigneePersonIds: args.assigneePersonIds,
                 notes: args.notes,
             });
+            if (created.todo) {
+                emitTodoEffect(ctx, 'create', created.todo, 'create_todo');
+                emitTodoEntityCard(ctx, created.todo, 'create_todo');
+            }
+            result = created;
             break;
-        case 'update_todo':
-            result = await inbox.updateTodoForUser(uid, String(args.todoId), {
+        }
+        case 'update_todo': {
+            const updated = await inbox.updateTodoForUser(uid, String(args.todoId), {
                 text: args.text,
                 dueAt: args.dueAt,
                 projectIds: args.projectIds,
@@ -384,13 +665,57 @@ export async function executeTool(ctx, name, args) {
                 assigneePersonIds: args.assigneePersonIds,
                 notes: args.notes,
             });
+            if (updated.todo) {
+                emitTodoEffect(ctx, 'update', updated.todo, 'update_todo');
+                emitTodoEntityCard(ctx, updated.todo, 'update_todo');
+            }
+            result = updated;
             break;
-        case 'complete_todos':
-            result = await inbox.completeTodos(uid, args.todoIds ?? []);
+        }
+        case 'move_todo': {
+            const moved = await inbox.moveTodoForUser(uid, String(args.todoId), {
+                status: String(args.status),
+                boardPosition: args.boardPosition,
+            });
+            if (moved.todo) {
+                emitTodoEffect(ctx, 'move', moved.todo, 'move_todo');
+                emitTodoEntityCard(ctx, moved.todo, 'move_todo');
+            }
+            result = moved;
             break;
-        case 'dismiss_todos':
-            result = await inbox.dismissTodos(uid, args.todoIds ?? []);
+        }
+        case 'complete_todos': {
+            const done = await inbox.completeTodos(uid, args.todoIds ?? []);
+            emitTodosEffect(ctx, 'move', done.todos ?? [], 'complete_todos');
+            result = done;
             break;
+        }
+        case 'dismiss_todos': {
+            const dismissed = await inbox.dismissTodos(uid, args.todoIds ?? []);
+            emitTodosEffect(ctx, 'delete', dismissed.todos ?? [], 'dismiss_todos');
+            result = dismissed;
+            break;
+        }
+        case 'highlight_entity': {
+            const kind = String(args.kind);
+            const id = String(args.id);
+            ctx.cerebro?.emitEntityEffect?.({
+                ref: { kind, id },
+                op: 'highlight',
+                animation: 'pulse',
+                source: 'cerebro',
+                toolName: 'highlight_entity',
+            });
+            ctx.cerebro?.emitUiCue?.({
+                id: `entity:${kind}:${id}`,
+                targetId: `entity.${kind}`,
+                action: 'pulse',
+                message: args.message,
+                entityRef: { kind, id },
+            });
+            result = { highlighted: { kind, id } };
+            break;
+        }
         case 'semantic_search': {
             const hits = await semanticSearchMeetings(uid, String(args.query ?? ''), Number(args.limit) || 8);
             result = hits ?? { error: 'Sin índice semántico todavía — corré una sincronización con API key configurada.' };
@@ -458,26 +783,63 @@ export function toolsForDomains(domains) {
             'list_smart_suggestions',
             'list_todos',
             'dismiss_suggestion',
+            'batch_dismiss_suggestions',
             'accept_smart_suggestion',
             'dismiss_smart_suggestion',
             'accept_todos',
             'create_todo',
             'update_todo',
+            'move_todo',
+            'highlight_entity',
             'complete_todos',
             'dismiss_todos',
+        ],
+        maintenance: [
+            'get_maintenance_view',
+            'get_store_health',
+            'list_suggestions',
+            'merge_people',
+            'accept_project_suggestions',
+            'accept_team_suggestions',
+            'batch_dismiss_suggestions',
+            'dismiss_suggestion',
+            'dismiss_prospect',
+            'promote_prospect',
+            'link_prospect_to_contact',
+            'get_prospect_link_candidates',
+            'assign_email_to_team',
+            'dismiss_team_email_reassign',
+            'create_team',
+            'analyze_meeting',
+            'list_people',
+            'list_prospects',
+            'list_projects',
+            'list_teams',
+            'search_catalog',
         ],
         sync: ['get_sync_progress', 'start_sync', 'start_pipeline'],
         graph: ['get_graph'],
         actions: [
             'dismiss_suggestion',
+            'batch_dismiss_suggestions',
+            'accept_project_suggestions',
+            'accept_team_suggestions',
             'accept_smart_suggestion',
             'dismiss_smart_suggestion',
             'accept_todos',
             'create_todo',
             'update_todo',
+            'move_todo',
+            'highlight_entity',
             'complete_todos',
             'dismiss_todos',
             'merge_people',
+            'dismiss_prospect',
+            'promote_prospect',
+            'link_prospect_to_contact',
+            'assign_email_to_team',
+            'dismiss_team_email_reassign',
+            'create_team',
             'analyze_meeting',
             'regenerate_intelligence',
             'run_repair',

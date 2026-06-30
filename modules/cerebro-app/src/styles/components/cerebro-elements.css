@@ -1,0 +1,143 @@
+/* Cerebro Elements — lifecycle + IA acting overlays */
+
+.cerebro-element {
+  position: relative;
+}
+
+.cerebro-element--dragging {
+  z-index: 2;
+}
+
+.cerebro-element--pending {
+  opacity: 0.88;
+}
+
+.cerebro-element--ai-acting {
+  outline: 2px solid var(--color-accent, #6366f1);
+  outline-offset: 2px;
+  animation: cerebro-element-pulse 1.2s ease-in-out infinite;
+}
+
+.cerebro-element--entering {
+  animation: cerebro-element-slide-in 0.35s ease-out;
+}
+
+.cerebro-element--exiting {
+  animation: cerebro-element-fade-out 0.4s ease-in forwards;
+}
+
+.cerebro-element--error {
+  outline: 2px solid var(--color-danger, #dc2626);
+  outline-offset: 2px;
+}
+
+.cerebro-ambient-spotlight--entity {
+  border-radius: 10px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent, #6366f1) 35%, transparent);
+}
+
+.kanban-card--ghost {
+  opacity: 0.92;
+  box-shadow: var(--shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.12));
+  transform: rotate(2deg);
+}
+
+@keyframes cerebro-element-pulse {
+  0%,
+  100% {
+    outline-color: color-mix(in srgb, var(--color-accent, #6366f1) 55%, transparent);
+  }
+  50% {
+    outline-color: color-mix(in srgb, var(--color-accent, #6366f1) 100%, transparent);
+  }
+}
+
+@keyframes cerebro-element-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cerebro-ai-acting-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.cerebro-ai-acting-pulse {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-accent, #6366f1) 18%, transparent) 50%,
+    transparent 100%
+  );
+  animation: cerebro-ai-sweep 1.4s ease-in-out infinite;
+}
+
+.cerebro-entity-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 10px;
+  background: var(--surface-raised, rgba(255, 255, 255, 0.04));
+  cursor: pointer;
+}
+
+.cerebro-entity-card-kind {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.65;
+}
+
+.cerebro-entity-card-status {
+  font-size: 0.75rem;
+  color: var(--color-accent, #6366f1);
+}
+
+.cerebro-plan-step-entity {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-accent, #6366f1) 40%, transparent);
+}
+
+.cerebro-plan-step-entity:hover {
+  color: var(--color-accent, #6366f1);
+}
+
+@keyframes cerebro-element-fade-out {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes cerebro-ai-sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}

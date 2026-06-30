@@ -1,13 +1,15 @@
 ---
 name: git-actualizar
-description: "[Rutina] Sincronizar con el remoto (git pull --rebase). No toca session.yaml. Use when the user invokes /actualizar."
+description: "[Rutina] Sincronizar proyecto (origin) y comprobar novedades del framework DT (upstream). No toca session.yaml. Use when the user invokes /actualizar."
 ---
 
 # git-actualizar
 
-**Solo Git.** No crea, no resetea ni modifica `vitals/ops/session.yaml`.
+**Dos fases independientes.** No crea, no resetea ni modifica `vitals/ops/session.yaml`.
 
-## Pasos
+Instrucciones upstream (Markdown): [`references/upstream-check.md`](references/upstream-check.md) · spec [`vitals/specs/dt-upstream-config.md`](../../../vitals/specs/dt-upstream-config.md).
+
+## Fase A — Proyecto (siempre)
 
 1. Resolver `git_root` (si existe `vitals/workspace.yaml`, respetar multi-proyecto).
 2. Ejecutar:
@@ -18,14 +20,28 @@ description: "[Rutina] Sincronizar con el remoto (git pull --rebase). No toca se
    ```
 
 3. Reportar breve: commits traídos o "al día", rama actual, conflictos si los hay.
-4. Si **no existe** `vitals/ops/session.yaml` o `operator.id` vacío → una línea: **"Para trabajar con identidad en este repo, usá `/yo`."** (la rule `06-dt-colaboracion` también lo exige en conversación).
 
-## Conflictos
+## Fase B — Framework DT (consulta only)
+
+Seguir **todo** [`references/upstream-check.md`](references/upstream-check.md).
+
+Resumen: leer `vitals/config/dt-upstream.md`, comparar semver con tags de `dt-upstream`, avisar si hay release nueva → ofrecer **`/actualizar-dt`**. **No** checkout. **No** scripts Ruby.
+
+## Post-Fase A (opcional)
+
+Tras pull grande en rules/commands/skills del **proyecto**, sugerir **`/setup`** o [`post-sync-pipeline.md`](../dt-setup/references/post-sync-pipeline.md).
+
+## Sesión
+
+Si **no existe** `vitals/ops/session.yaml` or `operator.id` vacío → una línea: **"Para trabajar con identidad en este repo, usá `/yo`."**
+
+## Conflictos (Fase A)
 
 - Listar archivos en conflicto; no `push --force` en main/master.
-- Tras resolver: el usuario puede seguir; si va a commitear, **`/guardar`**.
+- Tras resolver: **`/guardar`** si va a commitear.
 
 ## No hacer
 
 - No tocar `vitals/ops/session.yaml`.
-- No sustituir `/yo` ni pedir identidad larga aquí — solo recordatorio si falta sesión.
+- No ejecutar apply de sync desde `/actualizar`.
+- No invocar scripts Ruby para Fase B.

@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { getUid } from '../lib/auth-middleware.js';
-import { getAuthUrl, exchangeCode, saveGoogleTokens, revokeGoogle, hasGoogleIntegration, getGoogleAccessToken, getGooglePickerConfig, listDriveFolders, testDriveFolder, suggestMeetFolders, } from '../services/google.js';
+import { getAuthUrl, getCalendarAuthUrl, exchangeCode, saveGoogleTokens, revokeGoogle, hasGoogleIntegration, hasCalendarScope, getGoogleAccessToken, getGooglePickerConfig, listDriveFolders, testDriveFolder, suggestMeetFolders, CALENDAR_SCOPE, } from '../services/google.js';
+import { fetchPrimaryCalendarTimezone } from '../services/calendar.service.js';
+import { applyGoogleCalendarTimezone } from '../lib/settings.js';
 import { db } from '../lib/firebase.js';
 function driveErrorStatus(message) {
     if (message.includes('not connected') || message.includes('Reconectá') || message.includes('Desconectá')) {
@@ -12,7 +14,8 @@ export const authRouter = Router();
 authRouter.get('/status', async (req, res) => {
     try {
         const uid = getUid(req);
-        res.json({ connected: await hasGoogleIntegration(uid) });
+        const connected = await hasGoogleIntegration(uid);
+        res.json({ connected, hasCalendarScope: connected ? await hasCalendarScope(uid) : false });
     }
     catch (e) {
         res.status(500).json({ error: String(e) });
@@ -24,6 +27,17 @@ authRouter.get('/google/start', async (req, res) => {
         const state = Buffer.from(JSON.stringify({ uid, ts: Date.now() })).toString('base64url');
         await db.collection('oauth_states').doc(state).set({ uid, createdAt: Date.now() });
         res.json({ url: getAuthUrl(state) });
+    }
+    catch (e) {
+        res.status(500).json({ error: e instanceof Error ? e.message : String(e) });
+    }
+});
+authRouter.get('/google/calendar/start', async (req, res) => {
+    try {
+        const uid = getUid(req);
+        const state = Buffer.from(JSON.stringify({ uid, ts: Date.now(), kind: 'calendar' })).toString('base64url');
+        await db.collection('oauth_states').doc(state).set({ uid, createdAt: Date.now() });
+        res.json({ url: getCalendarAuthUrl(state) });
     }
     catch (e) {
         res.status(500).json({ error: e instanceof Error ? e.message : String(e) });
@@ -42,10 +56,26 @@ export async function handleGoogleCallback(req, res) {
             res.status(400).send('Invalid state');
             return;
         }
-        const { uid } = stateSnap.data();
+        const stateData = stateSnap.data();
+        const { uid } = stateData;
         await db.collection('oauth_states').doc(state).delete();
         const tokens = await exchangeCode(code);
-        await saveGoogleTokens(uid, tokens);
+        if (stateData.kind === 'calendar') {
+            await saveGoogleTokens(uid, tokens, { scopes: [CALENDAR_SCOPE] });
+        }
+        else {
+            await saveGoogleTokens(uid, tokens);
+        }
+        try {
+            if (await hasCalendarScope(uid)) {
+                const googleTz = await fetchPrimaryCalendarTimezone(uid);
+                if (googleTz)
+                    await applyGoogleCalendarTimezone(uid, googleTz);
+            }
+        }
+        catch {
+            // TZ seed opcional; no bloquea OAuth
+        }
         const appUrl = process.env.APP_URL || '/';
         res.redirect(`${appUrl}/#/settings?google=connected`);
     }
@@ -60,6 +90,21 @@ authRouter.post('/google/revoke', async (req, res) => {
     }
     catch (e) {
         res.status(500).json({ error: String(e) });
+    }
+});
+authRouter.post('/google/refresh-timezone', async (req, res) => {
+    try {
+        const uid = getUid(req);
+        const googleTz = await fetchPrimaryCalendarTimezone(uid);
+        if (!googleTz) {
+            res.status(400).json({ error: 'Google Calendar no disponible o sin permiso de calendario' });
+            return;
+        }
+        const settings = await applyGoogleCalendarTimezone(uid, googleTz);
+        res.json({ timezone: googleTz, locale: settings.locale });
+    }
+    catch (e) {
+        res.status(500).json({ error: e instanceof Error ? e.message : String(e) });
     }
 });
 authRouter.get('/google/picker-config', async (req, res) => {

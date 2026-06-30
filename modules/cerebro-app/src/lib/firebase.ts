@@ -11,6 +11,8 @@ import {
   type User,
 } from 'firebase/auth';
 
+import { devLog } from './dev-log.js';
+
 const useEmulators = import.meta.env.VITE_USE_EMULATORS === 'true';
 
 const config = {
@@ -32,6 +34,7 @@ if (useEmulators) {
   if (!g[key]) {
     connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
     g[key] = true;
+    devLog('auth', 'Auth emulator conectado en :9099');
   }
 }
 
@@ -44,10 +47,15 @@ export async function loginWithGoogle(): Promise<User> {
 export async function loginDev(): Promise<User> {
   const email = 'dev@cerebro.local';
   const password = 'devpass123';
+  devLog('auth', 'loginDev: iniciando…');
   try {
-    return (await signInWithEmailAndPassword(auth, email, password)).user;
+    const user = (await signInWithEmailAndPassword(auth, email, password)).user;
+    devLog('auth', 'loginDev: sign-in OK', { uid: user.uid });
+    return user;
   } catch {
-    return (await createUserWithEmailAndPassword(auth, email, password)).user;
+    const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
+    devLog('auth', 'loginDev: usuario creado', { uid: user.uid });
+    return user;
   }
 }
 

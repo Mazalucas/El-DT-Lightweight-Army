@@ -4,6 +4,7 @@ import { getUid } from '../lib/auth-middleware.js';
 import {
   getBoardView,
   getDashboardView,
+  getCalendarToday,
   getMaintenanceView,
   getMeetingDetailView,
   getMeetingsView,
@@ -26,6 +27,16 @@ viewsRouter.get('/dashboard', async (req, res, next) => {
   }
 });
 
+viewsRouter.get('/calendar/today', async (req, res, next) => {
+  try {
+    const uid = getUid(req as AuthedRequest);
+    const timezone = typeof req.query.timezone === 'string' ? req.query.timezone : undefined;
+    res.json(await getCalendarToday(uid, timezone));
+  } catch (e) {
+    next(e);
+  }
+});
+
 viewsRouter.get('/meetings', async (req, res, next) => {
   try {
     const uid = getUid(req as AuthedRequest);
@@ -36,6 +47,7 @@ viewsRouter.get('/meetings', async (req, res, next) => {
         q: typeof req.query.q === 'string' ? req.query.q : undefined,
         projectId: typeof req.query.projectId === 'string' ? req.query.projectId : undefined,
         teamId: typeof req.query.teamId === 'string' ? req.query.teamId : undefined,
+        sort: typeof req.query.sort === 'string' ? req.query.sort : undefined,
       }),
     );
   } catch (e) {

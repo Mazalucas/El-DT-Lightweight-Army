@@ -5,17 +5,35 @@ const VALID_DOMAINS = [
     'meetings',
     'contacts',
     'inbox',
+    'maintenance',
     'sync',
     'graph',
     'actions',
 ];
 const ORCHESTRATOR_SYSTEM = `Eres el orquestador del asistente de Cerebro Profesional.
 Clasificá el mensaje del usuario en dominios y herramientas sugeridas.
-Dominios válidos: health, meetings, contacts, inbox, sync, graph, actions.
+Dominios válidos: health, meetings, contacts, inbox, maintenance, sync, graph, actions.
+Usá dominio maintenance para limpieza de datos: duplicados, prospects, asignaciones proyecto/equipo, emails de equipo, reuniones a revisar.
+Agenda/calendario (hoy, mañana, próxima semana): dominio meetings + suggestedTools debe incluir get_calendar_today (con date si no es hoy).
+Preguntas sobre contenido de reuniones o temas: meetings + semantic_search o get_meeting_prep.
+Nunca sugieras responder sin tools cuando la pregunta es factual — priorizá investigar.
 Respondé SOLO JSON con: domains (array), intent (string corto), summary (string), suggestedTools (array de nombres de herramienta).
 Herramientas disponibles: ${ASSISTANT_TOOLS.map((t) => t.name).join(', ')}.`;
-export async function planAssistantTurn(uid, userMessage) {
-    const prompt = `Mensaje del usuario:\n"""${userMessage}"""\n\nClasificá dominios e intent.`;
+export async function planAssistantTurn(uid, userMessage, opts) {
+    const contextBlock = [
+        opts?.situationalHint ? `Contexto situacional: ${opts.situationalHint}` : '',
+        opts?.conversationContext ? `Historial reciente:\n${opts.conversationContext}` : '',
+    ]
+        .filter(Boolean)
+        .join('\n\n');
+    const prompt = [
+        contextBlock,
+        `Mensaje del usuario:\n"""${userMessage}"""`,
+        '',
+        'Clasificá dominios e intent. Si el mensaje es confirmación breve ("sí", "dale", "ok"), inferí el intent del historial.',
+    ]
+        .filter(Boolean)
+        .join('\n\n');
     const raw = await callUserLlmJson(uid, prompt, { systemInstruction: ORCHESTRATOR_SYSTEM, temperature: 0.1 });
     let parsed = {};
     try {

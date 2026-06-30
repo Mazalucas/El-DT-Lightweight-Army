@@ -1,4 +1,4 @@
-import { cleanChipPersonName, isChipLabelVariant, normalizePersonNameKey, personNameCandidates, pickPersonDisplayName, } from './person-name-clean.js';
+import { cleanChipPersonName, isChipLabelVariant, isLikelyPersonName, normalizePersonNameKey, personNameCandidates, pickPersonDisplayName, SECTION_LABEL_BLOCKLIST, } from './person-name-clean.js';
 import { slugId } from './parse-mirror-md.js';
 export { cleanChipPersonName, normalizePersonNameKey as normalizePersonName };
 function normalizeEmail(email) {
@@ -197,34 +197,13 @@ export class PersonResolver {
         return id;
     }
 }
-/** Etiquetas de sección que Meet/Gemini a veces formatean como "Título:" al inicio de línea. */
-export const TRANSCRIPT_LABEL_BLOCKLIST = new Set([
-    'próximos pasos',
-    'proximos pasos',
-    'detalles',
-    'sugerencias',
-    'resumen',
-    'transcripción',
-    'transcripcion',
-    'notas',
-    'participantes',
-    'asistentes',
-    'invitados',
-    'temas tratados',
-    'action items',
-    'summary',
-    'details',
-    'suggestions',
-    'transcript',
-]);
+/** @deprecated Usar SECTION_LABEL_BLOCKLIST en person-name-clean.ts */
+export const TRANSCRIPT_LABEL_BLOCKLIST = SECTION_LABEL_BLOCKLIST;
 export function isLikelyTranscriptSpeaker(name) {
-    const trimmed = cleanChipPersonName(name);
-    if (trimmed.length < 2 || trimmed.length >= 80)
+    if (!isLikelyPersonName(name))
         return false;
-    const key = normalizePersonNameKey(trimmed);
-    if (TRANSCRIPT_LABEL_BLOCKLIST.has(key))
-        return false;
-    if (/^\d/.test(trimmed))
+    const key = normalizePersonNameKey(cleanChipPersonName(name));
+    if (SECTION_LABEL_BLOCKLIST.has(key))
         return false;
     return true;
 }
@@ -266,6 +245,8 @@ export function collectSignalsFromMirror(parsed) {
     for (const name of parsed.participantNames)
         registerParticipant(name);
     for (const name of participantSet) {
+        if (!isLikelyPersonName(name))
+            continue;
         push({ name, source: 'participant' });
     }
     for (const inv of parsed.invitees) {

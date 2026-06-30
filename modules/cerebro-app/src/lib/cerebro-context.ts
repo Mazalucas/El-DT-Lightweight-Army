@@ -1,8 +1,10 @@
 import type { User } from 'firebase/auth';
 import type { Organization, OrgRole, UserAppSettings } from '@shared/types.js';
-import type { CerebroClientContextInput, CerebroViewport } from '@shared/cerebro-chat.js';
+import type { CerebroClientContextInput, CerebroViewport, MomentCardBlock } from '@shared/cerebro-chat.js';
+import { resolveMomentKey } from '@shared/cerebro-chat.js';
 import { resolveClientTimezone } from '@shared/timezone.js';
 import { listUiTargetsForRoute } from '@shared/cerebro-ui-registry.js';
+import { parseEntityDomId, type EntityRef } from '@shared/cerebro-elements.js';
 import { orgDisplayName } from './org-branding.js';
 
 function firstName(name: string | undefined): string | undefined {
@@ -101,6 +103,18 @@ export function collectVisibleCerebroTargets(): string[] {
   return [...new Set(fromDom)];
 }
 
+export function collectVisibleEntities(limit = 40): EntityRef[] {
+  const refs: EntityRef[] = [];
+  for (const el of document.querySelectorAll('[data-cerebro-entity]')) {
+    const raw = el.getAttribute('data-cerebro-entity');
+    if (!raw) continue;
+    const ref = parseEntityDomId(raw);
+    if (ref) refs.push(ref);
+    if (refs.length >= limit) break;
+  }
+  return refs;
+}
+
 export function inferVisibleTargets(route: string): string[] {
   const dom = collectVisibleCerebroTargets();
   if (dom.length) return dom;
@@ -119,6 +133,9 @@ export function buildCerebroClientContext(opts: {
   focusTopic?: string;
   preferences?: import('@shared/cerebro-chat.js').CerebroPreferences;
   settings?: UserAppSettings | null;
+  focusedEntity?: EntityRef | null;
+  visibleEntities?: EntityRef[];
+  meetingPrepFocus?: CerebroClientContextInput['navigation']['meetingPrepFocus'];
 }): CerebroClientContextInput {
   const meta = pageMetaFromPath(opts.pathname, opts.search);
   const user = opts.user ?? null;
@@ -136,6 +153,9 @@ export function buildCerebroClientContext(opts: {
       orgId: meta.orgId,
       settingsSection: meta.settingsSection,
       viewport: opts.viewport ?? (window.innerWidth < 768 ? 'mobile' : 'desktop'),
+      focusedEntity: opts.focusedEntity ?? undefined,
+      visibleEntities: opts.visibleEntities?.length ? opts.visibleEntities : collectVisibleEntities(),
+      meetingPrepFocus: opts.meetingPrepFocus,
     },
     user: {
       firstName: fn,
@@ -162,6 +182,9 @@ export function cerebroWelcomeMessage(pageTitle: string, firstName?: string): st
 }
 
 const DISMISSED_KEY = 'cerebro-dismissed-moments';
+const DELIVERED_KEY = 'cerebro-delivered-moments';
+
+export { resolveMomentKey, cerebroMomentKey } from '@shared/cerebro-chat.js';
 
 export function loadDismissedMoments(): string[] {
   try {
@@ -178,6 +201,29 @@ export function dismissMoment(key: string): void {
   sessionStorage.setItem(DISMISSED_KEY, JSON.stringify(list.slice(-50)));
 }
 
+/** @deprecated Use cerebroMomentKey from @shared/cerebro-chat */
 export function momentDismissKey(kind: string, eventId?: string): string {
   return eventId ? `${kind}:${eventId}` : kind;
+}
+
+function loadDeliveredMoments(): string[] {
+  try {
+    const raw = sessionStorage.getItem(DELIVERED_KEY);
+    return raw ? (JSON.parse(raw) as string[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function markMomentDelivered(key: string): void {
+  const list = loadDeliveredMoments();
+  if (!list.includes(key)) list.push(key);
+  sessionStorage.setItem(DELIVERED_KEY, JSON.stringify(list.slice(-50)));
+}
+
+export function shouldSurfaceProactiveMoment(block: MomentCardBlock): boolean {
+  const key = resolveMomentKey(block);
+  if (loadDismissedMoments().includes(key)) return false;
+  if (loadDeliveredMoments().includes(key)) return false;
+  return true;
 }

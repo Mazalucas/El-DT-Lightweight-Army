@@ -4,7 +4,7 @@ dt_command: orquestar
 ---
 # Pipeline Orquestador
 
-**Macro (4 fases) vs micro (8 pasos):** el core del DT resume el flujo en **4 fases** (`Clarificar → Planificar y validar → Ejecutar → Entregar`). Este comando es el **desglose en 8 pasos**; no es un pipeline alternativo. Vitals: `vitals/INDEX.md`.
+**Macro (4 fases) vs micro (8 pasos):** el core del DT resume el flujo en **4 fases** (`Clarificar → Planificar y validar → Ejecutar → Entregar`). Este comando es el **desglose en 8 pasos**; no es un pipeline alternativo. Fuente canónica del par macro/micro: regla `00-orquestador-core` (no redefinir el modelo en otros lugares; enlazar). Vitals: `vitals/INDEX.md`.
 
 Ejecuta el pipeline completo del Director Técnico. Sigue estos 8 pasos en orden.
 

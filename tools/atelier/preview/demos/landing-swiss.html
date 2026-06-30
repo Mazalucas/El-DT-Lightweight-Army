@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo landing — Swiss · Atelier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: oklch(98% 0.004 250);
+      --ink: oklch(22% 0.02 250);
+      --muted: oklch(45% 0.02 250);
+      --accent: oklch(48% 0.18 25);
+      --accent-on: oklch(98% 0.01 25);
+      --rule: oklch(88% 0.01 250);
+      --surface: oklch(100% 0 0);
+      --surface-2: oklch(95% 0.008 250);
+      --font-display: "Archivo", system-ui, sans-serif;
+      --font-body: "Source Sans 3", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .page {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.15fr);
+      min-height: 100vh;
+    }
+    @media (max-width: 900px) {
+      .page { grid-template-columns: 1fr; }
+    }
+
+    /* Left: visual + nav */
+    .visual-col {
+      padding: 2rem 2rem 2.5rem;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      background: var(--surface-2);
+    }
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .mark {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+    }
+    .back {
+      font-size: 0.8125rem;
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .back:hover { color: var(--ink); }
+
+    .preview-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+    .preview-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+    }
+
+    /* Mini product mock (CSS only) */
+    .mock-browser {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px oklch(22% 0.02 250 / 0.08);
+    }
+    .mock-chrome {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.65rem 0.85rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--bg);
+    }
+    .mock-chrome span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--rule);
+    }
+    .mock-chrome span:first-child { background: oklch(62% 0.15 25); }
+    .mock-url {
+      flex: 1;
+      margin-left: 0.5rem;
+      font-size: 0.6875rem;
+      color: var(--muted);
+      background: var(--surface);
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+    }
+    .mock-body {
+      padding: 1.25rem;
+      display: grid;
+      gap: 0.85rem;
+    }
+    .mock-bar {
+      height: 8px;
+      border-radius: 2px;
+      background: var(--rule);
+    }
+    .mock-bar.w60 { width: 60%; }
+    .mock-bar.w40 { width: 40%; }
+    .mock-bar.accent { background: var(--accent); width: 72%; height: 10px; }
+    .mock-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+    .mock-cell {
+      height: 52px;
+      background: var(--surface-2);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+    }
+    .mock-cell.highlight {
+      border-color: oklch(48% 0.18 25 / 0.35);
+      background: oklch(48% 0.18 25 / 0.06);
+    }
+
+    .swiss-block {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      margin-top: 1.25rem;
+      max-width: 200px;
+    }
+    .swiss-block div:nth-child(1) { background: var(--accent); aspect-ratio: 1; }
+    .swiss-block div:nth-child(2) { background: var(--ink); aspect-ratio: 1; }
+    .swiss-block div:nth-child(3) { background: var(--rule); aspect-ratio: 1; grid-column: span 2; }
+
+    .aside-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid var(--rule);
+    }
+    .aside-nav a {
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.35rem 0;
+    }
+    .aside-nav a:hover { color: var(--ink); }
+
+    /* Right: copy */
+    .copy-col {
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.25rem, 5vw, 3.25rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      max-width: 15ch;
+      margin: 0 0 1.25rem;
+      text-wrap: balance;
+    }
+    .lede {
+      font-size: 1.125rem;
+      color: var(--muted);
+      max-width: 44ch;
+      margin: 0 0 1.75rem;
+    }
+    .lede code {
+      font-size: 0.9em;
+      background: var(--surface-2);
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+    }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2.5rem; }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.25rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      font-size: 0.9375rem;
+    }
+    .btn-primary { background: var(--accent); color: var(--accent-on); }
+    .btn-ghost { color: var(--ink); border: 1px solid var(--rule); }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1.25rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+    }
+    .features dt {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 0.2rem;
+    }
+    .features dd {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <aside class="visual-col">
+      <div class="top-row">
+        <span class="mark">Atelier demo</span>
+        <a class="back" href="../index.html">← Hub</a>
+      </div>
+
+      <div class="preview-wrap">
+        <p class="preview-label">Output craft · preview</p>
+        <div class="mock-browser" aria-hidden="true">
+          <div class="mock-chrome">
+            <span></span><span></span><span></span>
+            <div class="mock-url">app.ejemplo.com/dashboard</div>
+          </div>
+          <div class="mock-body">
+            <div class="mock-bar accent"></div>
+            <div class="mock-bar w60"></div>
+            <div class="mock-bar w40"></div>
+            <div class="mock-row">
+              <div class="mock-cell highlight"></div>
+              <div class="mock-cell"></div>
+              <div class="mock-cell"></div>
+              <div class="mock-cell highlight"></div>
+            </div>
+          </div>
+        </div>
+        <div class="swiss-block" aria-hidden="true">
+          <div></div><div></div><div></div>
+        </div>
+      </div>
+
+      <nav class="aside-nav" aria-label="Secciones demo">
+        <a href="#">Craft</a>
+        <a href="#">Audit</a>
+        <a href="#">Polish</a>
+      </nav>
+    </aside>
+
+    <div class="copy-col">
+      <span class="tag">Swiss-style reference</span>
+      <h1>Interfaces que no gritan “generadas por IA”</h1>
+      <p class="lede">
+        Grid asimétrico, un acento, tipografía con contraste real.
+        Esta demo muestra el panel visual que suele faltar en landings vacías.
+        Probalo con <code>/atelier craft hero</code> en tu proyecto.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="../index.html">Volver al hub</a>
+        <a class="btn btn-ghost" href="dashboard-product.html">Ver dashboard</a>
+      </div>
+      <dl class="features">
+        <div><dt>23+</dt><dd>comandos Atelier</dd></div>
+        <div><dt>44+</dt><dd>reglas anti-slop</dd></div>
+        <div><dt>6</dt><dd>design systems DT</dd></div>
+      </dl>
+    </div>
+  </div>
+</body>
+</html>

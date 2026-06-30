@@ -46,7 +46,7 @@ Sin OAuth: se crean stubs con metadatos; export manual a `Meet Recordings/_expor
 
 Si recibís transcripciones compartidas que no están en tu **Meet Recordings**, usá el inbox con Apps Script:
 
-- Guía canónica: [cerebro-meet-apps-script.md](cerebro-meet-apps-script.md) (`DOC-GUIDE-012`)
+- Guía canónica: [cerebro-meet-apps-script.md](cerebro-meet-apps-script.md) (`DOC-GUIDE-014`)
 - Script: `modules/cerebro-app/assets/meet-sync-inbox/MeetSyncInbox.gs`
 - En local: añadí la ruta Desktop de la carpeta inbox en `sources[]` de `config.yaml`
 

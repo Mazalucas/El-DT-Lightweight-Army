@@ -47,6 +47,7 @@ const INBOX_PAGE_SIZE = 10;
 const KIND_ORDER: SuggestionKind[] = [
   'promote_prospect',
   'link_prospect',
+  'reassign_team_email',
   'assign_project',
   'assign_team',
   'accept_todo',
@@ -62,6 +63,7 @@ function kindLabel(kind: Suggestion['kind']): string {
     assign_team: 'Equipo',
     accept_todo: 'Tarea',
     merge_contacts: 'Unificar',
+    reassign_team_email: 'Email equipo',
     review_meeting: 'Revisar',
   };
   return map[kind] ?? kind;
@@ -75,6 +77,7 @@ function kindBadgeTone(kind: Suggestion['kind']): 'accent' | 'success' | 'warn' 
     assign_team: 'warn',
     accept_todo: 'default',
     merge_contacts: 'default',
+    reassign_team_email: 'warn',
     review_meeting: 'accent',
   };
   return map[kind] ?? 'default';

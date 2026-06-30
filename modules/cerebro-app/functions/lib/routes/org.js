@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { getUid } from '../lib/auth-middleware.js';
+import { getUid, getUserEmail } from '../lib/auth-middleware.js';
 import { acceptOrgInvite, createOrgInvite, createOrganization, getOrganization, ingestMemberStoreToOrg, listJoinRequests, listOrgMembers, listOrgsMatchingUserDomain, listPendingInvites, listUserMemberships, loadOrgStore, requestOrgJoin, requireOrgMember, reviewJoinRequest, saveOrgStore, updateOrganization, } from '../services/org.js';
 import { uploadOrgLogo } from '../services/org-branding.js';
-import { acceptTodosBatchForOrg, completeTodosBatchForOrg, createProjectForOrg, createTeamForOrg, createTodoForOrg, deleteProjectForOrg, deleteTeamForOrg, dismissTodosBatchForOrg, getBoardSnapshotForOrg, linkProspectToContactForOrg, mergePersonsIntoCanonicalForOrg, moveTodoForOrg, promoteProspectToContactForOrg, reopenTodosBatchForOrg, updatePersonForOrg, updateTodoForOrg, } from '../services/org-catalog.js';
+import { acceptTodosBatchForOrg, completeTodosBatchForOrg, createProjectForOrg, createTeamForOrg, createTodoForOrg, deleteProjectForOrg, deleteTeamForOrg, dismissTodosBatchForOrg, dismissProspectForOrg, dismissMergeContactForOrg, restoreProspectDismissForOrg, getBoardSnapshotForOrg, linkProspectToContactForOrg, mergePersonsIntoCanonicalForOrg, moveTodoForOrg, promoteProspectToContactForOrg, reopenTodosBatchForOrg, updatePersonForOrg, updateTodoForOrg, } from '../services/org-catalog.js';
 import { buildGraphFromStore, buildSuggestionsFromStore } from '../services/suggestions-graph.js';
 import { buildBoardViewFromStore, buildMaintenanceViewFromStore, buildMeetingDetailViewFromStore, buildMeetingsViewFromStore, buildPeopleViewFromStore, } from '../domain/views.service.js';
 import { computeStoreHealth } from '../services/store-health.js';
@@ -126,8 +126,8 @@ orgRouter.post('/:orgId/catalog/people/merge', async (req, res, next) => {
 orgRouter.post('/:orgId/catalog/prospects/:id/promote', async (req, res, next) => {
     try {
         const uid = getUid(req);
-        const { email, displayName } = req.body;
-        const result = await promoteProspectToContactForOrg(req.params.orgId, uid, req.params.id, email ?? '', displayName);
+        const { email, displayName, aliases, teamIds, projectIds } = req.body;
+        const result = await promoteProspectToContactForOrg(req.params.orgId, uid, req.params.id, email ?? '', displayName, { aliases, teamIds, projectIds });
         res.json(result);
     }
     catch (e) {
@@ -137,8 +137,44 @@ orgRouter.post('/:orgId/catalog/prospects/:id/promote', async (req, res, next) =
 orgRouter.post('/:orgId/catalog/prospects/:id/link', async (req, res, next) => {
     try {
         const uid = getUid(req);
-        const { personId } = req.body;
-        const store = await linkProspectToContactForOrg(req.params.orgId, uid, req.params.id, personId ?? '');
+        const { personId, aliases, teamIds, projectIds } = req.body;
+        const store = await linkProspectToContactForOrg(req.params.orgId, uid, req.params.id, personId ?? '', { aliases, teamIds, projectIds });
+        res.json({ store });
+    }
+    catch (e) {
+        next(e);
+    }
+});
+orgRouter.post('/:orgId/catalog/prospects/:id/dismiss', async (req, res, next) => {
+    try {
+        const uid = getUid(req);
+        const result = await dismissProspectForOrg(req.params.orgId, uid, req.params.id);
+        res.json(result);
+    }
+    catch (e) {
+        next(e);
+    }
+});
+orgRouter.post('/:orgId/catalog/prospects/restore-dismiss', async (req, res, next) => {
+    try {
+        const uid = getUid(req);
+        const { snapshot } = req.body;
+        if (!snapshot?.prospectId) {
+            res.status(400).json({ error: 'snapshot requerido' });
+            return;
+        }
+        const store = await restoreProspectDismissForOrg(req.params.orgId, uid, snapshot);
+        res.json({ store });
+    }
+    catch (e) {
+        next(e);
+    }
+});
+orgRouter.post('/:orgId/catalog/maintenance/dismiss-merge', async (req, res, next) => {
+    try {
+        const uid = getUid(req);
+        const { suggestionId } = req.body;
+        const store = await dismissMergeContactForOrg(req.params.orgId, uid, suggestionId ?? '');
         res.json({ store });
     }
     catch (e) {
@@ -178,8 +214,8 @@ orgRouter.post('/:orgId/catalog/todos', async (req, res, next) => {
 orgRouter.patch('/:orgId/catalog/todos/:id', async (req, res, next) => {
     try {
         const uid = getUid(req);
-        const store = await updateTodoForOrg(req.params.orgId, uid, req.params.id, req.body);
-        res.json({ store });
+        const result = await updateTodoForOrg(req.params.orgId, uid, req.params.id, req.body);
+        res.json(result);
     }
     catch (e) {
         next(e);
@@ -188,8 +224,8 @@ orgRouter.patch('/:orgId/catalog/todos/:id', async (req, res, next) => {
 orgRouter.post('/:orgId/catalog/todos/:id/move', async (req, res, next) => {
     try {
         const uid = getUid(req);
-        const store = await moveTodoForOrg(req.params.orgId, uid, req.params.id, req.body);
-        res.json({ store });
+        const result = await moveTodoForOrg(req.params.orgId, uid, req.params.id, req.body);
+        res.json(result);
     }
     catch (e) {
         next(e);
@@ -199,8 +235,8 @@ orgRouter.post('/:orgId/catalog/todos/complete-batch', async (req, res, next) =>
     try {
         const uid = getUid(req);
         const { todoIds } = req.body;
-        const store = await completeTodosBatchForOrg(req.params.orgId, uid, todoIds ?? []);
-        res.json({ store });
+        const result = await completeTodosBatchForOrg(req.params.orgId, uid, todoIds ?? []);
+        res.json(result);
     }
     catch (e) {
         next(e);
@@ -210,8 +246,8 @@ orgRouter.post('/:orgId/catalog/todos/reopen-batch', async (req, res, next) => {
     try {
         const uid = getUid(req);
         const { todoIds } = req.body;
-        const store = await reopenTodosBatchForOrg(req.params.orgId, uid, todoIds ?? []);
-        res.json({ store });
+        const result = await reopenTodosBatchForOrg(req.params.orgId, uid, todoIds ?? []);
+        res.json(result);
     }
     catch (e) {
         next(e);
@@ -221,8 +257,8 @@ orgRouter.post('/:orgId/catalog/todos/accept-batch', async (req, res, next) => {
     try {
         const uid = getUid(req);
         const { todoIds } = req.body;
-        const store = await acceptTodosBatchForOrg(req.params.orgId, uid, todoIds ?? []);
-        res.json({ store });
+        const result = await acceptTodosBatchForOrg(req.params.orgId, uid, todoIds ?? []);
+        res.json(result);
     }
     catch (e) {
         next(e);
@@ -232,8 +268,8 @@ orgRouter.post('/:orgId/catalog/todos/dismiss-batch', async (req, res, next) => 
     try {
         const uid = getUid(req);
         const { todoIds } = req.body;
-        const store = await dismissTodosBatchForOrg(req.params.orgId, uid, todoIds ?? []);
-        res.json({ store });
+        const result = await dismissTodosBatchForOrg(req.params.orgId, uid, todoIds ?? []);
+        res.json(result);
     }
     catch (e) {
         next(e);
@@ -368,7 +404,15 @@ orgRouter.get('/:orgId/graph', async (req, res, next) => {
         const memberUid = typeof req.query.memberUid === 'string' ? req.query.memberUid : undefined;
         const filteredMembers = memberUid ? members.filter((m) => m.uid === memberUid) : members;
         res.json({
-            graph: buildGraphFromStore(store, { limit, center, depth, types, members: filteredMembers }),
+            graph: buildGraphFromStore(store, {
+                limit,
+                center,
+                depth,
+                types,
+                members: filteredMembers,
+                memberUid: memberUid ?? uid,
+                userEmail: await getUserEmail(uid),
+            }),
         });
     }
     catch (e) {
@@ -387,6 +431,7 @@ orgRouter.get('/:orgId/views/meetings', async (req, res, next) => {
             q: typeof req.query.q === 'string' ? req.query.q : undefined,
             projectId: typeof req.query.projectId === 'string' ? req.query.projectId : undefined,
             teamId: typeof req.query.teamId === 'string' ? req.query.teamId : undefined,
+            sort: typeof req.query.sort === 'string' ? req.query.sort : undefined,
         });
         res.json(view);
     }

@@ -1,4 +1,4 @@
-import { cleanChipPersonName } from './person-name-clean.js';
+import { cleanChipPersonName, isLikelyPersonName } from './person-name-clean.js';
 const SECTION_ALIASES = {
     participantes: 'Participantes',
     attendees: 'Participantes',
@@ -162,7 +162,7 @@ function parseParticipantsList(block) {
     return block
         .split(/\n|,|•|·|–|-/)
         .map((s) => s.replace(/^\s*[-*]\s*/, '').trim())
-        .filter((s) => s.length > 1 && s.length < 80 && !EMAIL_RE.test(s));
+        .filter((s) => s.length > 1 && s.length < 80 && !EMAIL_RE.test(s) && isLikelyPersonName(s));
 }
 function extractMentionedEmails(text) {
     const found = text.match(EMAIL_RE) ?? [];

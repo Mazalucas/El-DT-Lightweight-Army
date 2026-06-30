@@ -1,6 +1,7 @@
 import { todoStableId } from '../core/profesional/extract-action-items.js';
 import { MANUAL_TODO_MEETING_ID } from '../core/profesional/meeting-todos-store.js';
-import { mutateStore, userStoreAdapter, } from '../services/catalog-mutate.js';
+import { userStoreAdapter } from '../services/catalog-mutate.js';
+import { mutateTodosInStore, todoMutationMeta } from '../services/todo-persist.js';
 const VALID_TRANSITIONS = {
     suggested: ['open', 'dismissed'],
     open: ['done', 'dismissed', 'suggested'],
@@ -29,12 +30,19 @@ function applyStatusChange(todo, status, now) {
         todo.completedAt = undefined;
     }
 }
+function wrapTodo(store, todo) {
+    return { todo, meta: todoMutationMeta(store) };
+}
+function wrapTodos(store, todos) {
+    return { todos, meta: todoMutationMeta(store) };
+}
 export async function createTodoOnAdapter(adapter, input) {
     const text = input.text.trim();
     if (!text)
         throw new Error('El texto de la tarea no puede estar vacío');
     let created;
-    const store = await mutateStore(adapter, (s) => {
+    let createdId = '';
+    const store = await mutateTodosInStore(adapter, (s) => {
         const now = new Date().toISOString();
         const id = todoStableId(MANUAL_TODO_MEETING_ID, text);
         if (s.todos.some((t) => t.id === id && t.status !== 'dismissed')) {
@@ -58,12 +66,13 @@ export async function createTodoOnAdapter(adapter, input) {
             createdAt: now,
             updatedAt: now,
         };
+        createdId = id;
         s.todos.push(created);
-    });
-    return { store, todo: created };
+    }, () => [createdId]);
+    return { ...wrapTodo(store, created), todo: created };
 }
 export async function updateTodoOnAdapter(adapter, todoId, patch) {
-    return mutateStore(adapter, (s) => {
+    const store = await mutateTodosInStore(adapter, (s) => {
         const todo = findTodo(s, todoId);
         const now = new Date().toISOString();
         if (patch.text !== undefined) {
@@ -89,19 +98,22 @@ export async function updateTodoOnAdapter(adapter, todoId, patch) {
         if (patch.boardPosition !== undefined)
             todo.boardPosition = patch.boardPosition;
         todo.updatedAt = now;
-    });
+    }, () => [todoId]);
+    return wrapTodo(store, findTodo(store, todoId));
 }
 export async function moveTodoOnAdapter(adapter, todoId, input) {
-    return mutateStore(adapter, (s) => {
+    const store = await mutateTodosInStore(adapter, (s) => {
         const todo = findTodo(s, todoId);
         const now = new Date().toISOString();
         applyStatusChange(todo, input.status, now);
         if (input.boardPosition !== undefined)
             todo.boardPosition = input.boardPosition;
-    });
+    }, () => [todoId]);
+    return wrapTodo(store, findTodo(store, todoId));
 }
 export async function completeTodosBatchOnAdapter(adapter, todoIds) {
-    return mutateStore(adapter, (s) => {
+    const updated = [];
+    const store = await mutateTodosInStore(adapter, (s) => {
         const set = new Set(todoIds);
         const now = new Date().toISOString();
         for (const t of s.todos) {
@@ -109,12 +121,15 @@ export async function completeTodosBatchOnAdapter(adapter, todoIds) {
                 t.status = 'done';
                 t.completedAt = now;
                 t.updatedAt = now;
+                updated.push({ ...t });
             }
         }
-    });
+    }, () => todoIds);
+    return wrapTodos(store, updated);
 }
 export async function reopenTodosBatchOnAdapter(adapter, todoIds) {
-    return mutateStore(adapter, (s) => {
+    const updated = [];
+    const store = await mutateTodosInStore(adapter, (s) => {
         const set = new Set(todoIds);
         const now = new Date().toISOString();
         for (const t of s.todos) {
@@ -122,9 +137,11 @@ export async function reopenTodosBatchOnAdapter(adapter, todoIds) {
                 t.status = 'open';
                 t.completedAt = undefined;
                 t.updatedAt = now;
+                updated.push({ ...t });
             }
         }
-    });
+    }, () => todoIds);
+    return wrapTodos(store, updated);
 }
 export async function createTodo(uid, input) {
     return createTodoOnAdapter(userStoreAdapter(uid), input);
@@ -140,4 +157,10 @@ export async function completeTodosBatch(uid, todoIds) {
 }
 export async function reopenTodosBatch(uid, todoIds) {
     return reopenTodosBatchOnAdapter(userStoreAdapter(uid), todoIds);
+}
+/** @deprecated Use TodoMutationResult — compat for legacy callers expecting store */
+export async function moveTodoLegacyStore(uid, todoId, input) {
+    const result = await moveTodo(uid, todoId, input);
+    const { loadStore } = await import('../services/store.js');
+    return { ...result, store: await loadStore(uid) };
 }

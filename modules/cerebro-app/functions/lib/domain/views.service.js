@@ -1,16 +1,26 @@
 import { loadStoreFromRepository } from '../services/store-repository.js';
 import { loadSettings } from '../lib/settings.js';
 import { hasGoogleIntegration } from '../services/google.js';
+import { resolveUserTimezone } from '../shared/timezone.js';
 import { listLlmProviders } from '../services/store.js';
 import { isSetupComplete } from '../services/setup.js';
-import { getSyncProgress } from '../services/sync.js';
+import { getSyncProgress, resolveLastSyncAt } from '../services/sync.js';
 import { isSyncRunning } from '../lib/sync-running.js';
 import { computeStoreHealth } from '../services/store-health.js';
+import { isLikelyPersonName } from '../core/profesional/person-name-clean.js';
+import { isProspectDismissed } from '../core/profesional/prospect-dismiss.js';
 import { buildDerivedSuggestions } from '../services/suggestions-graph.js';
 import { listActivePendingSuggestions } from '../services/pending-suggestions.js';
 import { listSmartSuggestions } from '../services/smart-suggestions.js';
 import { digestsCol } from '../lib/firebase.js';
 import { sortMeetingsByRecency } from './meeting-sort.js';
+import { comparePeopleByLastMeeting, parseMeetingSortKey, sortMeetings, sortTodosByRecency, } from '../shared/recency-sort.js';
+import { parseDateFromMeetFilename } from '../shared/parse-meet-filename.js';
+import { enrichMeetings, resolveMeetingStartedAt } from '../shared/meeting-dates.js';
+import { filterDailyTodos, meetingsInLastDays } from '../shared/filter-daily-todos.js';
+import { getCalendarTodayView } from '../services/calendar.service.js';
+import { getUserEmail } from '../lib/auth-middleware.js';
+import { computeLiveMeetingPrepInsights } from './meeting-prep-insights.service.js';
 // --- Builders puros sobre el store (reutilizables para org) ---
 function todoCountsByMeeting(todos) {
     const map = new Map();
@@ -26,10 +36,14 @@ function todoCountsByMeeting(todos) {
     return map;
 }
 export function toMeetingListItem(m, counts) {
+    const fromFile = m.sourceFile ? parseDateFromMeetFilename(m.sourceFile).startedAt : undefined;
+    const displayDate = resolveMeetingStartedAt(m);
     return {
         id: m.id,
         title: m.title,
-        startedAt: m.startedAt,
+        startedAt: m.startedAt ?? fromFile,
+        displayDate,
+        lastSyncedAt: m.lastSyncedAt,
         summary: m.summary,
         participants: m.participants,
         personIds: m.personIds,
@@ -48,7 +62,8 @@ export function buildMeetingsViewFromStore(store, query) {
     const limit = Math.min(Math.max(query?.limit ?? 50, 1), MEETINGS_VIEW_MAX_LIMIT);
     const offset = Math.max(query?.offset ?? 0, 0);
     const q = query?.q?.toLowerCase().trim();
-    let meetings = sortMeetingsByRecency(store.meetings);
+    const sort = parseMeetingSortKey(typeof query?.sort === 'string' ? query.sort : undefined);
+    let meetings = sortMeetings(enrichMeetings(store.meetings), sort);
     if (query?.projectId)
         meetings = meetings.filter((m) => m.projectIds.includes(query.projectId));
     if (query?.teamId)
@@ -65,6 +80,7 @@ export function buildMeetingsViewFromStore(store, query) {
         total: meetings.length,
         limit,
         offset,
+        sort,
         projects: store.projects,
         teams: store.teams,
     };
@@ -77,7 +93,7 @@ export function buildMeetingDetailViewFromStore(store, meetingId) {
     const prospectsById = new Map(store.prospects.map((p) => [p.id, p]));
     return {
         meeting,
-        todos: store.todos.filter((t) => t.meetingId === meetingId && t.status !== 'dismissed'),
+        todos: sortTodosByRecency(store.todos.filter((t) => t.meetingId === meetingId && t.status !== 'dismissed')),
         people: meeting.personIds
             .map((id) => peopleById.get(id))
             .filter((p) => Boolean(p))
@@ -104,7 +120,7 @@ export function buildPeopleViewFromStore(store, opts) {
         const list = meetingsByPerson.get(personId);
         if (!list?.length)
             return undefined;
-        return list.reduce((a, b) => ((a.startedAt ?? '') >= (b.startedAt ?? '') ? a : b));
+        return sortMeetingsByRecency(list)[0];
     }
     const fromPeople = store.people.map((p) => {
         const last = lastMeeting(p.id);
@@ -122,7 +138,7 @@ export function buildPeopleViewFromStore(store, opts) {
         };
     });
     const fromProspects = store.prospects
-        .filter((p) => !p.linkedPersonId)
+        .filter((p) => !p.linkedPersonId && isLikelyPersonName(p.displayName) && !isProspectDismissed(store, p))
         .map((p) => {
         const last = lastMeeting(p.id);
         return {
@@ -143,11 +159,11 @@ export function buildPeopleViewFromStore(store, opts) {
     if (q) {
         people = people.filter((p) => [p.displayName, ...p.emails].join(' ').toLowerCase().includes(q));
     }
-    people.sort((a, b) => (b.lastMeetingAt ?? '').localeCompare(a.lastMeetingAt ?? '') || b.meetingCount - a.meetingCount);
+    people.sort(comparePeopleByLastMeeting);
     return { people, total: people.length, teams: store.teams, projects: store.projects };
 }
 export function buildBoardViewFromStore(store) {
-    const todos = store.todos.filter((t) => t.status !== 'dismissed');
+    const todos = sortTodosByRecency(store.todos.filter((t) => t.status !== 'dismissed'));
     return {
         todos,
         projects: store.projects,
@@ -173,7 +189,7 @@ export function buildMaintenanceItemsFromStore(store) {
         source: row.source,
         confidence: row.confidence,
     }));
-    const derived = buildDerivedSuggestions(store)
+    const derived = buildDerivedSuggestions(store, { maxProspects: null })
         .filter((s) => s.kind !== 'accept_todo')
         .map((s) => ({ ...s }));
     const seen = new Set();
@@ -185,7 +201,11 @@ export function buildMaintenanceItemsFromStore(store) {
         seen.add(key);
         merged.push(item);
     }
-    return merged;
+    return merged.sort((a, b) => {
+        const ta = Date.parse(a.createdAt ?? '') || 0;
+        const tb = Date.parse(b.createdAt ?? '') || 0;
+        return tb - ta;
+    });
 }
 export function buildMaintenanceViewFromStore(store) {
     const items = buildMaintenanceItemsFromStore(store);
@@ -221,21 +241,41 @@ async function loadLatestDigest(uid) {
         return null;
     return snap.docs[0].data();
 }
-function pickDueTodos(todos, limit = 10) {
-    const open = todos.filter((t) => t.status === 'open');
-    const withDue = open
-        .filter((t) => t.dueAt)
-        .sort((a, b) => (a.dueAt ?? '').localeCompare(b.dueAt ?? ''));
-    const withoutDue = open
-        .filter((t) => !t.dueAt)
-        .sort((a, b) => {
-        const prio = (t) => (t.priority === 'high' ? 0 : t.priority === 'normal' ? 1 : 2);
-        return prio(a) - prio(b) || (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
-    });
-    return [...withDue, ...withoutDue].slice(0, limit);
+export async function getCalendarToday(uid, timezone) {
+    const store = await loadStoreFromRepository(uid);
+    let resolved = timezone?.trim();
+    if (!resolved) {
+        const settings = await loadSettings(uid);
+        resolved = resolveUserTimezone(settings);
+    }
+    return getCalendarTodayView(uid, { timezone: resolved, store });
+}
+function buildDailyTodos(store) {
+    const daily = filterDailyTodos(store.todos);
+    const suggested = store.todos.filter((t) => t.status === 'suggested').slice(0, 6);
+    return {
+        overdue: daily.overdue.slice(0, 8),
+        today: daily.today.slice(0, 8),
+        noDate: daily.noDate.slice(0, 4),
+        suggested,
+    };
+}
+function buildDashboardAttention(store, maintenanceItems, lastSyncAt) {
+    const daily = filterDailyTodos(store.todos);
+    const syncStale = lastSyncAt ? Date.now() - new Date(lastSyncAt).getTime() > 86400000 : false;
+    return {
+        maintenanceCount: maintenanceItems.length,
+        maintenancePreview: maintenanceItems.slice(0, 3),
+        meetingsNeedsReview: store.meetings.filter((m) => m.analysisStatus === 'needs_review').length,
+        overdueCount: daily.overdue.length,
+        todayCount: daily.today.length,
+        suggestedCount: store.todos.filter((t) => t.status === 'suggested').length,
+        weekMeetingCount: meetingsInLastDays(store.meetings, 7),
+        syncStale,
+    };
 }
 export async function getDashboardView(uid) {
-    const [store, settings, google, llmProviders, progress, smartSuggestions, digest] = await Promise.all([
+    const [store, settings, google, llmProviders, progress, smartSuggestions, digest, lastSyncAt, operatorEmail] = await Promise.all([
         loadStoreFromRepository(uid),
         loadSettings(uid),
         hasGoogleIntegration(uid),
@@ -243,18 +283,32 @@ export async function getDashboardView(uid) {
         getSyncProgress(uid),
         listSmartSuggestions(uid, { status: 'pending', limit: 5 }),
         loadLatestDigest(uid),
+        resolveLastSyncAt(uid),
+        getUserEmail(uid),
     ]);
+    const timezone = resolveUserTimezone(settings);
+    const calendarToday = await getCalendarTodayView(uid, { timezone, store }).catch(() => null);
+    const meetingPrepInsights = calendarToday
+        ? computeLiveMeetingPrepInsights(calendarToday, store, operatorEmail ?? '')
+        : undefined;
     const health = computeStoreHealth(store);
-    const maintenanceCount = buildMaintenanceItemsFromStore(store).length;
+    const maintenanceItems = buildMaintenanceItemsFromStore(store);
+    const maintenanceCount = maintenanceItems.length;
+    const dailyTodos = buildDailyTodos(store);
+    const dueTodos = [...dailyTodos.overdue, ...dailyTodos.today, ...dailyTodos.noDate].slice(0, 10);
+    const attention = buildDashboardAttention(store, maintenanceItems, lastSyncAt);
     const counts = todoCountsByMeeting(store.todos);
-    const recentMeetings = sortMeetingsByRecency(store.meetings)
-        .slice(0, 8)
+    const recentMeetings = sortMeetingsByRecency(enrichMeetings(store.meetings))
+        .slice(0, 5)
         .map((m) => toMeetingListItem(m, counts.get(m.id)));
+    const today = new Date().toISOString().slice(0, 10);
     return {
-        date: new Date().toISOString().slice(0, 10),
+        date: today,
         digest,
         suggestions: smartSuggestions,
-        dueTodos: pickDueTodos(store.todos),
+        dueTodos,
+        dailyTodos,
+        attention,
         openTodoCount: store.todos.filter((t) => t.status === 'open').length,
         suggestedTodoCount: store.todos.filter((t) => t.status === 'suggested').length,
         recentMeetings,
@@ -266,6 +320,7 @@ export async function getDashboardView(uid) {
         setupComplete: isSetupComplete(settings, google),
         hasGoogleIntegration: google,
         hasLlmKey: llmProviders.some((p) => p.enabled && p.keyHint),
-        lastSyncAt: settings.syncSchedule?.lastRunAt,
+        lastSyncAt,
+        meetingPrepInsights: meetingPrepInsights?.length ? meetingPrepInsights : undefined,
     };
 }

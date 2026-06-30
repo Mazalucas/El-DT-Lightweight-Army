@@ -1,5 +1,6 @@
 import { parse as parseYaml } from 'yaml';
 import { coerceStringArray } from '../../lib/text-coerce.js';
+import { isLikelyPersonName } from './person-name-clean.js';
 export function parseMirrorMarkdown(raw) {
     const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
     if (!match) {
@@ -62,7 +63,7 @@ export function enrichParsedFromBody(parsed) {
             parsed.participants = section[1]
                 .split(/\n|,|•|·/)
                 .map((s) => s.replace(/^\s*[-*]\s*/, '').trim())
-                .filter((s) => s.length > 1 && s.length < 80 && !s.includes('@'));
+                .filter((s) => s.length > 1 && s.length < 80 && !s.includes('@') && isLikelyPersonName(s));
         }
     }
     return parsed;

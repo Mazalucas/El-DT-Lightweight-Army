@@ -1,0 +1,45 @@
+/**
+ * Atlassian Design System — semantic tokens (Atelier template)
+ */
+:root {
+  --ds-font: "Charlie Display", "Charlie Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --ds-primary: #0052cc;
+  --ds-primary-hover: #0065ff;
+  --ds-primary-subtle: #deebff;
+  --ds-on-primary: #ffffff;
+  --ds-surface: #ffffff;
+  --ds-surface-sunken: #f7f8f9;
+  --ds-surface-raised: #ffffff;
+  --ds-border: #dfe1e6;
+  --ds-border-bold: #758195;
+  --ds-text: #172b4d;
+  --ds-text-subtle: #44546f;
+  --ds-text-disabled: #626f86;
+  --ds-success: #216e4e;
+  --ds-warning: #974f0c;
+  --ds-danger: #ae2e24;
+
+  --ds-radius-sm: 3px;
+  --ds-radius-md: 6px;
+  --ds-radius-lg: 8px;
+  --ds-shadow-overlay: 0 8px 12px rgba(9, 30, 66, 0.15), 0 0 1px rgba(9, 30, 66, 0.31);
+
+  --ds-space-100: 8px;
+  --ds-space-200: 16px;
+  --ds-space-300: 24px;
+  --ds-space-400: 32px;
+  --ds-space-500: 40px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ds-surface: #1d2125;
+    --ds-surface-sunken: #161a1d;
+    --ds-text: #b6c2cf;
+    --ds-text-subtle: #9fadbc;
+    --ds-border: #38414a;
+    --ds-primary: #579dff;
+    --ds-primary-subtle: #09326c;
+  }
+}

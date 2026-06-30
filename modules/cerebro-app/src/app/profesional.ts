@@ -134,20 +134,47 @@ export async function renderProfesional(container: HTMLElement): Promise<void> {
       onStore: (s) => {
         store = s;
       },
-      moveTodo: async (todoId, status) => (await api.moveTodo(todoId, { status })).store,
-      createTodo: (input) => api.createTodo(input),
-      updateTodo: (todoId, patch) => api.updateTodo(todoId, patch).then((r) => r.store),
-      acceptTodo: async (todoId) => (await api.acceptTodosBatch([todoId])).store,
-      dismissTodo: async (todoId) => (await api.dismissTodosBatch([todoId])).store,
-      completeTodo: async (todoId) => (await api.completeTodosBatch([todoId])).store,
-      reopenTodo: async (todoId) => (await api.reopenTodosBatch([todoId])).store,
+      moveTodo: async (todoId, status) => {
+        await api.moveTodo(todoId, { status });
+        return api.getStore();
+      },
+      createTodo: async (input) => {
+        const { todo } = await api.createTodo(input);
+        return { store: await api.getStore(), todo };
+      },
+      updateTodo: async (todoId, patch) => {
+        await api.updateTodo(todoId, patch);
+        return api.getStore();
+      },
+      acceptTodo: async (todoId) => {
+        await api.acceptTodosBatch([todoId]);
+        return api.getStore();
+      },
+      dismissTodo: async (todoId) => {
+        await api.dismissTodosBatch([todoId]);
+        return api.getStore();
+      },
+      completeTodo: async (todoId) => {
+        await api.completeTodosBatch([todoId]);
+        return api.getStore();
+      },
+      reopenTodo: async (todoId) => {
+        await api.reopenTodosBatch([todoId]);
+        return api.getStore();
+      },
       inbox: {
         scope: 'personal',
         dismissSuggestion: async (id) => (await api.dismissSuggestion(id)).store,
         acceptProject: async (id, opts) => (await api.acceptProjectSuggestion(id, opts)).store,
         acceptTeam: async (id) => (await api.acceptTeamSuggestion(id)).store,
-        acceptTodo: async (todoId) => (await api.acceptTodosBatch([todoId])).store,
-        dismissTodo: async (todoId) => (await api.dismissTodosBatch([todoId])).store,
+        acceptTodo: async (todoId) => {
+          await api.acceptTodosBatch([todoId]);
+          return api.getStore();
+        },
+        dismissTodo: async (todoId) => {
+          await api.dismissTodosBatch([todoId]);
+          return api.getStore();
+        },
         mergePeople: async (canonicalId, mergeIds) => (await api.mergePeople(canonicalId, mergeIds)).store,
         promoteProspect: async (prospectId, email, displayName) =>
           (await api.promoteProspect(prospectId, email, displayName)).store,

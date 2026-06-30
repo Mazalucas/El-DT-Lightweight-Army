@@ -1,0 +1,105 @@
+# Placeholders en español — templates Atelier (producto + servicio)
+version: 1
+locale: es
+
+brand: "Tu nuevo negocio"
+product: "Tu nuevo producto"
+service: "Tu nuevo servicio"
+presentation: "Tu nueva presentación"
+dashboard_title: "Tu panel de control"
+
+tagline: "La plataforma que tu equipo necesita para crecer"
+headline: "Hacé crecer tu operación con claridad y velocidad"
+subhead: "Producto y servicio en un solo lugar — pensado para equipos que recién empiezan o escalan."
+
+cta_primary: "Empezar gratis"
+cta_secondary: "Agendar demo"
+cta_tertiary: "Ver cómo funciona"
+
+nav:
+  product: "Producto"
+  service: "Servicio"
+  pricing: "Precios"
+  about: "Nosotros"
+  contact: "Contacto"
+  login: "Iniciar sesión"
+
+features:
+  - title: "Tu primer beneficio"
+    body: "Describí el valor concreto que recibe tu cliente en la primera semana."
+  - title: "Tu segundo beneficio"
+    body: "Automatizá una tarea repetitiva y liberá tiempo al equipo."
+  - title: "Tu tercer beneficio"
+    body: "Medí resultados con métricas que importan a tu negocio."
+
+metrics:
+  - label: "Tu métrica clave"
+    value: "12.4k"
+  - label: "Tu tasa de conversión"
+    value: "+8,2%"
+  - label: "Tu usuarios activos"
+    value: "1.204"
+  - label: "Tu satisfacción"
+    value: "94%"
+
+dashboard:
+  welcome: "Bienvenido a tu panel"
+  section_overview: "Resumen"
+  section_reports: "Reportes"
+  section_clients: "Clientes"
+  section_settings: "Configuración"
+  table_client: "Tu cliente ejemplo"
+  table_status: "Activo"
+
+presentation_slides:
+  title: "Tu nueva presentación"
+  subtitle: "Pitch · Reporte · Tu nuevo negocio"
+  bullet_1: "Problema que resolvés hoy"
+  bullet_2: "Solución con tu producto y servicio"
+  bullet_3: "Tracción y próximos pasos"
+
+pitch:
+  kicker: "Pitch · Ronda semilla"
+  hook: "Tu one-liner: qué hacés, para quién y por qué ahora"
+  problem_title: "El problema"
+  problem: "Tu cliente pierde tiempo y plata en un proceso manual que no escala. El dolor es concreto, medible y urgente."
+  opportunity: "El mercado está listo: la adopción de herramientas digitales creció y tu competencia aún no resolvió la experiencia completa."
+  solution_title: "Tu solución"
+  solution: "Unificás producto y servicio en una sola experiencia — menos fricción, más retención y venta cruzada desde el día uno."
+  market_label: "Mercado"
+  market: "Tu segmento objetivo · TAM/SAM/SOM a completar con tus números"
+  model_label: "Modelo"
+  model: "SaaS + servicios recurrentes · pricing por uso o por asiento"
+  traction_title: "Tracción"
+  traction_summary: "Señales tempranas que demuestran product-market fit en construcción."
+  quote: "Placeholder de testimonio — una frase corta de un cliente real o piloto."
+  quote_author: "Tu cliente ejemplo · Cargo"
+  product_demo_label: "Producto en acción"
+  product_demo: "Screenshot o mockup de Tu nuevo producto — reemplazá este bloque."
+  ask_title: "The ask"
+  ask_amount: "USD X – Y · Ronda semilla"
+  ask_use:
+    - "40% — Producto e ingeniería"
+    - "35% — Go-to-market y ventas"
+    - "25% — Operaciones y soporte"
+  team_title: "Equipo"
+  team:
+    - name: "Tu nombre"
+      role: "CEO · Fundador/a"
+    - name: "Tu cofundador/a"
+      role: "CTO · Producto"
+    - name: "Tu lead comercial"
+      role: "Head of Sales"
+  roadmap:
+    - quarter: "Q1"
+      focus: "Validación"
+      items: "MVP · 10 clientes piloto · Métricas de activación"
+    - quarter: "Q2"
+      focus: "Escala"
+      items: "Automatización · Canal de ventas · #{product} v1.1"
+    - quarter: "Q3"
+      focus: "Expansión"
+      items: "Nuevos verticales · #{service} premium · Partnerships"
+    - quarter: "Q4"
+      focus: "Consolidación"
+      items: "Rentabilidad · Expansión regional · Serie A ready"

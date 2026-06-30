@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo dashboard — product · Atelier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: oklch(97% 0.006 250);
+      --surface: oklch(100% 0 0);
+      --ink: oklch(20% 0.02 250);
+      --muted: oklch(48% 0.02 250);
+      --accent: oklch(52% 0.16 250);
+      --border: oklch(90% 0.01 250);
+      --sidebar: oklch(18% 0.02 250);
+      --sidebar-text: oklch(88% 0.01 250);
+      --ok: oklch(55% 0.14 145);
+      --warn: oklch(62% 0.16 75);
+      --font-body: "IBM Plex Sans", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font-body); background: var(--bg); color: var(--ink); font-size: 1rem; }
+    .shell { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+    @media (max-width: 900px) { .shell { grid-template-columns: 1fr; } .sidebar { display: none; } }
+    .sidebar { background: var(--sidebar); color: var(--sidebar-text); padding: 1.25rem 1rem; display: flex; flex-direction: column; }
+    .sidebar strong { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0.7; display: block; }
+    .sidebar nav a { display: block; color: inherit; text-decoration: none; padding: 0.5rem 0.65rem; border-radius: 4px; margin-bottom: 0.25rem; font-size: 0.9375rem; }
+    .sidebar nav a.active { background: oklch(28% 0.03 250); }
+    .sidebar .team { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid oklch(100% 0 0 / 0.1); }
+    .sidebar .team p { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.55; margin: 0 0 0.75rem; }
+    .avatar-row { display: flex; gap: 0.35rem; }
+    .avatar { width: 28px; height: 28px; border-radius: 50%; background: oklch(45% 0.08 250); font-size: 0.625rem; display: grid; place-items: center; font-weight: 600; }
+    .content { padding: 1.5rem 2rem 2.5rem; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem; }
+    .topbar h1 { font-size: 1.625rem; font-weight: 600; margin: 0; }
+    .topbar-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .topbar a { font-size: 0.8125rem; color: var(--muted); text-decoration: none; }
+    .cmd-palette { font-family: var(--font-mono); font-size: 0.75rem; padding: 0.45rem 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--muted); }
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    @media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+    .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.15rem; }
+    .kpi span { display: block; font-size: 0.75rem; color: var(--muted); margin-bottom: 0.35rem; }
+    .kpi strong { font-size: 1.625rem; font-weight: 600; }
+    .kpi .delta { font-size: 0.75rem; color: var(--ok); margin-top: 0.25rem; }
+    .grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem; }
+    .panel h2 { font-size: 1rem; font-weight: 600; margin: 0 0 1rem; }
+    .chart { display: flex; align-items: flex-end; gap: 0.5rem; height: 140px; padding-top: 0.5rem; }
+    .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.35rem; height: 100%; justify-content: flex-end; }
+    .bar { width: 100%; max-width: 36px; background: var(--accent); border-radius: 4px 4px 0 0; transform-origin: bottom center; }
+    .bar-wrap span { font-size: 0.6875rem; color: var(--muted); font-family: var(--font-mono); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th, td { text-align: left; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--border); }
+    th { font-family: var(--font-mono); color: var(--muted); font-weight: 500; font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    .badge { font-size: 0.6875rem; padding: 0.2rem 0.45rem; border-radius: 4px; font-family: var(--font-mono); }
+    .badge.ok { background: oklch(55% 0.14 145 / 0.15); color: var(--ok); }
+    .badge.warn { background: oklch(62% 0.16 75 / 0.15); color: var(--warn); }
+    .projects { list-style: none; margin: 0; padding: 0; }
+    .projects li { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+    .projects li:last-child { border-bottom: none; }
+    .progress { width: 80px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .progress i { display: block; height: 100%; background: var(--accent); transform-origin: left center; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <strong>Atelier product</strong>
+      <nav>
+        <a class="active" href="#">Overview</a>
+        <a href="#">Projects</a>
+        <a href="#">Detect runs</a>
+        <a href="#">Live sessions</a>
+        <a href="#">Settings</a>
+      </nav>
+      <div class="team">
+        <p>On call</p>
+        <div class="avatar-row">
+          <span class="avatar">LC</span>
+          <span class="avatar">DT</span>
+          <span class="avatar">QA</span>
+        </div>
+      </div>
+    </aside>
+    <div class="content">
+      <div class="topbar">
+        <h1>Overview</h1>
+        <div class="topbar-actions">
+          <span class="cmd-palette">⌘K /atelier craft</span>
+          <a href="../index.html">← Hub preview</a>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><span>Active users</span><strong>1,284</strong><div class="delta">+12% vs last week</div></div>
+        <div class="kpi"><span>Craft sessions</span><strong>47</strong><div class="delta">+8 today</div></div>
+        <div class="kpi"><span>Detect score</span><strong>Clean</strong><div class="delta">0 blockers</div></div>
+        <div class="kpi"><span>Live variants</span><strong>312</strong><div class="delta">68% accepted</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <h2>Craft throughput · 7 días</h2>
+          <div class="chart" aria-hidden="true">
+            <div class="bar-wrap"><div class="bar" style="height:45%"></div><span>Mon</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:62%"></div><span>Tue</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:55%"></div><span>Wed</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:78%"></div><span>Thu</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:70%"></div><span>Fri</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:40%"></div><span>Sat</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:85%"></div><span>Sun</span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Projects</h2>
+          <ul class="projects">
+            <li><span>Costa Norte landing</span><div class="progress"><i style="transform:scaleX(0.92)"></i></div></li>
+            <li><span>DT pitch deck</span><div class="progress"><i style="transform:scaleX(1)"></i></div></li>
+            <li><span>Checkout polish</span><div class="progress"><i style="transform:scaleX(0.64)"></i></div></li>
+            <li><span>Admin settings</span><div class="progress"><i style="transform:scaleX(0.38)"></i></div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Recent activity</h2>
+        <table>
+          <thead><tr><th>Action</th><th>Surface</th><th>Operator</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>/atelier craft</td><td>Hero · landing-coastal</td><td>lucas</td><td><span class="badge ok">Shipped</span></td></tr>
+            <tr><td>/atelier audit</td><td>Checkout flow</td><td>qa</td><td><span class="badge warn">2 warns</span></td></tr>
+            <tr><td>/atelier polish</td><td>Settings panel</td><td>lucas</td><td><span class="badge ok">Done</span></td></tr>
+            <tr><td>/atelier detect</td><td>slop-before.html</td><td>ci</td><td><span class="badge warn">11 flags</span></td></tr>
+            <tr><td>/atelier document</td><td>design-context</td><td>ui-designer</td><td><span class="badge ok">Synced</span></td></tr>
+            <tr><td>/atelier live</td><td>h1 pitch-dt</td><td>lucas</td><td><span class="badge ok">3/3 accepted</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

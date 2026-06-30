@@ -1,11 +1,16 @@
 import type { CerebroStore } from '../shared/types.js';
 import { getMirrorContent, listMeetings } from './sync.js';
 import { loadStore, saveStore } from './store.js';
+import { loadSettings } from '../lib/settings.js';
 import { reindexStoreFromMirrors, type ReindexResult } from '../core/profesional/reindex-store.js';
 import {
   collectExtractedTodosFromMirrors,
   syncExtractedTodosInStore,
 } from '../core/profesional/meeting-todos-store.js';
+import {
+  isWithinProcessLookback,
+  resolveProcessLookbackDays,
+} from '../shared/sync-policy.js';
 
 const MIRROR_BATCH = 25;
 
@@ -30,11 +35,34 @@ async function loadSyncedMirrors(uid: string, meetingIds: string[]): Promise<{ i
   return mirrors;
 }
 
-/** Import completo: reindex contactos/proyectos + sync todos desde mirrors en Storage. */
-export async function fullImportFromMirrors(uid: string): Promise<FullImportResult> {
-  const store = await loadStore(uid);
-  const manifest = await listMeetings(uid);
-  const syncedIds = manifest.filter((m) => m.syncStatus === 'synced').map((m) => m.meetingId);
+/** Import completo o incremental: reindex contactos/proyectos + sync todos desde mirrors en Storage. */
+export async function fullImportFromMirrors(
+  uid: string,
+  opts?: { meetingIds?: string[] },
+): Promise<FullImportResult> {
+  const [store, settings, manifest] = await Promise.all([
+    loadStore(uid),
+    loadSettings(uid),
+    listMeetings(uid),
+  ]);
+  const lookbackDays = resolveProcessLookbackDays(settings.syncPolicy);
+  const manifestById = new Map(manifest.map((m) => [m.meetingId, m]));
+
+  let syncedIds =
+    opts?.meetingIds?.length && opts.meetingIds.length > 0
+      ? opts.meetingIds
+      : manifest.filter((m) => m.syncStatus === 'synced').map((m) => m.meetingId);
+
+  if (lookbackDays > 0) {
+    syncedIds = syncedIds.filter((id) => {
+      const entry = manifestById.get(id);
+      return entry ? isWithinProcessLookback(entry, lookbackDays) : true;
+    });
+  }
+
+  if (!syncedIds.length) {
+    return { meetings: 0, people: 0, prospects: 0, consolidated: 0, pruned: 0, mirrorDuplicates: 0, linksRepaired: 0, todosSynced: 0 };
+  }
 
   const mirrors = await loadSyncedMirrors(uid, syncedIds);
   const reindexStats = reindexStoreFromMirrors(store, mirrors);

@@ -1,7 +1,7 @@
 import { getBoardSnapshotOnAdapter } from '../domain/board.service.js';
 import { completeTodosBatchOnAdapter, createTodoOnAdapter, moveTodoOnAdapter, reopenTodosBatchOnAdapter, updateTodoOnAdapter, } from '../domain/todos.service.js';
-import { acceptTodosBatchOnAdapter, createProjectOnAdapter, createTeamOnAdapter, deleteProjectOnAdapter, deleteTeamOnAdapter, dismissTodosBatchOnAdapter, linkProspectToContactOnAdapter, mergePersonsIntoCanonicalOnAdapter, promoteProspectToContactOnAdapter, updatePersonOnAdapter, } from './catalog-mutate.js';
-import { acceptProjectSuggestionOnAdapter, acceptTeamSuggestionOnAdapter, dismissSuggestionOnAdapter, } from './pending-suggestions.js';
+import { acceptTodosBatchOnAdapter, createProjectOnAdapter, createTeamOnAdapter, deleteProjectOnAdapter, deleteTeamOnAdapter, dismissTodosBatchOnAdapter, dismissProspectOnAdapter, dismissMergeContactOnAdapter, restoreProspectDismissOnAdapter, linkProspectToContactOnAdapter, mergePersonsIntoCanonicalOnAdapter, promoteProspectToContactOnAdapter, updatePersonOnAdapter, } from './catalog-mutate.js';
+import { acceptProjectSuggestionOnAdapter, acceptTeamSuggestionOnAdapter, batchAcceptProjectSuggestionsOnAdapter, batchAcceptTeamSuggestionsOnAdapter, batchDismissSuggestionsOnAdapter, dismissSuggestionOnAdapter, } from './pending-suggestions.js';
 import { loadOrgStore, requireOrgRole, saveOrgStore } from './org.js';
 const ORG_MEMBER_ROLES = ['org_owner', 'org_admin', 'org_member'];
 function orgAdapter(orgId) {
@@ -17,11 +17,20 @@ async function withOrgCatalog(orgId, uid, fn) {
 export async function mergePersonsIntoCanonicalForOrg(orgId, uid, canonicalId, mergeIds) {
     return withOrgCatalog(orgId, uid, () => mergePersonsIntoCanonicalOnAdapter(orgAdapter(orgId), canonicalId, mergeIds));
 }
-export async function promoteProspectToContactForOrg(orgId, uid, prospectId, email, displayName) {
-    return withOrgCatalog(orgId, uid, () => promoteProspectToContactOnAdapter(orgAdapter(orgId), prospectId, email, displayName));
+export async function promoteProspectToContactForOrg(orgId, uid, prospectId, email, displayName, enrichment) {
+    return withOrgCatalog(orgId, uid, () => promoteProspectToContactOnAdapter(orgAdapter(orgId), prospectId, email, displayName, enrichment));
 }
-export async function linkProspectToContactForOrg(orgId, uid, prospectId, personId) {
-    return withOrgCatalog(orgId, uid, () => linkProspectToContactOnAdapter(orgAdapter(orgId), prospectId, personId));
+export async function linkProspectToContactForOrg(orgId, uid, prospectId, personId, enrichment) {
+    return withOrgCatalog(orgId, uid, () => linkProspectToContactOnAdapter(orgAdapter(orgId), prospectId, personId, enrichment));
+}
+export async function dismissProspectForOrg(orgId, uid, prospectId) {
+    return withOrgCatalog(orgId, uid, () => dismissProspectOnAdapter(orgAdapter(orgId), prospectId));
+}
+export async function restoreProspectDismissForOrg(orgId, uid, snapshot) {
+    return withOrgCatalog(orgId, uid, () => restoreProspectDismissOnAdapter(orgAdapter(orgId), snapshot));
+}
+export async function dismissMergeContactForOrg(orgId, uid, suggestionId) {
+    return withOrgCatalog(orgId, uid, () => dismissMergeContactOnAdapter(orgAdapter(orgId), suggestionId));
 }
 export async function updatePersonForOrg(orgId, uid, personId, patch) {
     return withOrgCatalog(orgId, uid, () => updatePersonOnAdapter(orgAdapter(orgId), personId, patch));
@@ -52,6 +61,15 @@ export async function acceptProjectSuggestionForOrg(orgId, uid, suggestionId, op
 }
 export async function acceptTeamSuggestionForOrg(orgId, uid, suggestionId) {
     return withOrgCatalog(orgId, uid, () => acceptTeamSuggestionOnAdapter(orgAdapter(orgId), suggestionId));
+}
+export async function batchDismissSuggestionsForOrg(orgId, uid, ids) {
+    return withOrgCatalog(orgId, uid, () => batchDismissSuggestionsOnAdapter(orgAdapter(orgId), ids));
+}
+export async function batchAcceptProjectSuggestionsForOrg(orgId, uid, ids, opts) {
+    return withOrgCatalog(orgId, uid, () => batchAcceptProjectSuggestionsOnAdapter(orgAdapter(orgId), ids, opts));
+}
+export async function batchAcceptTeamSuggestionsForOrg(orgId, uid, ids) {
+    return withOrgCatalog(orgId, uid, () => batchAcceptTeamSuggestionsOnAdapter(orgAdapter(orgId), ids));
 }
 export async function getBoardSnapshotForOrg(orgId, uid) {
     return withOrgCatalog(orgId, uid, () => getBoardSnapshotOnAdapter(orgAdapter(orgId)));

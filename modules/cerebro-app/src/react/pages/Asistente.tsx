@@ -15,6 +15,7 @@ import {
   recordPromptUsage,
   saveConversationId,
 } from '../../lib/assistant-memory.js';
+import { MarkdownContent } from '../components/MarkdownContent.js';
 import { Button, EmptyState, Icon, PageHeader, toast } from '../ds.js';
 import { qk } from '../hooks.js';
 
@@ -216,7 +217,11 @@ export default function Asistente() {
                   {m.tools?.length ? (
                     <p className="row-meta">{m.tools.join(' · ')}</p>
                   ) : null}
-                  <div className="md-content">{m.content || (m.streaming ? '…' : '')}</div>
+                  {m.content ? (
+                    <MarkdownContent content={m.content} />
+                  ) : m.streaming ? (
+                    <p className="md-content md-content--placeholder">…</p>
+                  ) : null}
                 </div>
               ))
             )}
