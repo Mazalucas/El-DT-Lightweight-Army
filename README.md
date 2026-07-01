@@ -51,6 +51,7 @@ En el chat: **`/actualizar`** → **`/yo`** (ej. *"Soy Ana García, analista"*) 
 | `.env`, `*.credentials` | **No** | Secretos |
 | `.cursor/`, `.agent/`, `.agents/README.md`, `docs/`, skills | **Sí** | Comportamiento de la IA |
 | `.agents/product-marketing.md` | **No** | Contexto de producto local |
+| `.agents/design-context.md` | **No** | Contexto de diseño local (Atelier) |
 
 ### Commands (resumen)
 
@@ -58,11 +59,13 @@ Fuente canónica de taglines y grupos: **[vitals/config/commands-meta.yaml](vita
 
 | Grupo | Commands |
 |-------|----------|
-| **Rutina** | `/actualizar` · `/yo` · `/guardar` |
+| **Rutina** | `/bienvenida` · `/actualizar` · `/actualizar-dt` · `/yo` · `/guardar` |
 | **Trabajo** | `/orquestar` · `/fast-lane` · `/cuestionar` · `/contexto` · `/prepr` |
-| **Framework** | `/setup-cursor` · `/setup-antigravity` · `/github-save-small` |
+| **Framework** | `/setup-cursor` · `/setup-antigravity` · `/setup` · `/bootstrap` · `/github-save-small` |
+| **Diseño** | `/atelier` |
+| **Video** | `/remotion` |
 
-En **Antigravity**, los de rutina están en [`.agent/workflows/`](.agent/workflows/) (`actualizar`, `yo`, `guardar`); la lógica vive en [`.agent/skills/`](.agent/skills/) (ver [.antigravity/rules.md](.antigravity/rules.md)).
+En **Antigravity**, los de rutina están en [`.agent/workflows/`](.agent/workflows/) (`actualizar`, `yo`, `guardar`); la lógica vive en [`.agent/skills/`](.agent/skills/) (ver [.antigravity/rules.md](.antigravity/rules.md)). Tabla completa ↓ [Comandos principales](#comandos-principales).
 
 ### Tarjeta pegable al monitor
 
@@ -70,6 +73,116 @@ En **Antigravity**, los de rutina están en [`.agent/workflows/`](.agent/workflo
   actualizar → yo → trabajar → guardar
   session.yaml = solo en tu PC
 ```
+
+---
+
+## Qué puede hacer El DT
+
+| Bloque | En pocas palabras |
+|--------|-------------------|
+| **Orquestación** | Clarifica qué querés, planifica, ejecuta y cierra señalando riesgos. Comando principal: `/orquestar`. |
+| **21 especialistas** | Producto, diseño, marketing, documentación, calidad… El DT elige quién ayuda según tu pedido. |
+| **Atelier (diseño)** | Landings, dashboards, login, presentaciones — con criterio estético y guardrails anti-“diseño genérico de IA”. |
+| **Videos y contenido** | Videos promocionales; marketing con copy, SEO, lanzamientos y campañas. |
+
+```mermaid
+flowchart TB
+  vos[Vos en el chat]
+  dt[El DT — orquestador]
+  esp[21 especialistas]
+  atelier[Atelier — webs y presentaciones]
+  video[Videos — Remotion]
+  mkt[Marketing — 42 skills]
+  vos --> dt
+  dt --> esp
+  esp --> atelier
+  esp --> video
+  esp --> mkt
+```
+
+### Los cinco protocolos
+
+El DT no es un ejecutor pasivo. Siempre aplica:
+
+1. **Validar antes de actuar** — te pregunta antes de cambios importantes.
+2. **Alternativas** — propone caminos con pros y contras.
+3. **Puntos ciegos** — riesgos y mejoras visibles al cerrar.
+4. **Conversacional** — diálogo, no informe unidireccional.
+5. **Orden** — objetivo → plan → ejecución → validación.
+
+Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc) · versión en inglés ↓ [The five protocols](#the-five-protocols).
+
+---
+
+## Comandos principales {#comandos-principales}
+
+| Comando | Para qué sirve |
+|---------|----------------|
+| **`/bienvenida`** | Primera vez — verificar que El DT está listo |
+| **`/actualizar`** | Sincronizar tu proyecto y avisar si hay DT nuevo |
+| **`/actualizar-dt`** | Incorporar release del framework DT (cuando `/actualizar` avise) |
+| **`/yo`** | Decir quién sos en esta máquina |
+| **`/guardar`** | Subir tu trabajo (sin secretos ni datos privados) |
+| **`/orquestar`** | Tarea grande — pipeline completo en 8 pasos |
+| **`/fast-lane`** | Algo puntual ya definido — menos preguntas rutinarias |
+| **`/cuestionar`** | Solo análisis — sin ejecutar |
+| **`/contexto`** | Mapa del repo cuando entrás o después de un pull grande |
+| **`/prepr`** | Preparar cambios como pull request |
+| **`/atelier`** | Diseñar webs, dashboards o presentaciones |
+| **`/remotion`** | Crear videos (promos, explainers, motion) |
+| **`/setup`** · **`/setup-cursor`** · **`/setup-antigravity`** | Reparar configuración del editor tras un pull grande |
+| **`/bootstrap`** | Usar El DT como base de un proyecto nuevo (promover al raíz, irreversible) |
+| **`/github-save-small`** | Release liviano a GitHub (mismas exclusiones que `/guardar`) |
+
+Grupos completos y taglines: [commands-meta.yaml](vitals/config/commands-meta.yaml).
+
+---
+
+## Atelier — diseño web y presentaciones
+
+**Atelier** es la capacidad de diseño de El DT: landings, dashboards, flujos de login, pitches y decks — con selección de design system, tokens y revisión anti-slop.
+
+| Comando | Ejemplo |
+|---------|---------|
+| `/atelier init` | Crear contexto de diseño del proyecto |
+| `/atelier select [brief]` | Elegir estilo y sistema según tu pedido |
+| `/atelier detect [path]` | Detectar patrones genéricos de IA en el código |
+| `/atelier polish [target]` | Pasada final antes de entregar |
+
+Incluye **6 design systems** (Material, Apple HIG, Fluent, Carbon, Polaris, Atlassian), **5 lenguajes visuales** (Swiss, Bauhaus, minimalismo, neumorphism, glass) y biblioteca de plantillas.
+
+- Concepto: [Atelier en El DT](docs/01_concepts/design-atelier-el-dt.md)
+- Índice de skills: [.cursor/skills/design/README.md](.cursor/skills/design/README.md)
+- Plantillas: [.cursor/skills/design/templates/INDEX.md](.cursor/skills/design/templates/INDEX.md)
+
+Orquestador: **ui-designer** · Implementación en código: **frontend**.
+
+---
+
+## Remotion — videos
+
+**Remotion** convierte videos en composiciones React: promos, explainers, motion graphics, renders MP4.
+
+| Comando | Ejemplo |
+|---------|---------|
+| `/remotion init` | Arrancar un proyecto de video |
+| `/remotion promo 30s 9:16` | Video promocional vertical |
+
+Flujo típico: **marketing-strategist** (guion) → **remotion-producer** (composición y render).
+
+- Toolkit: [tools/remotion/](tools/remotion/)
+- Registro de tools: [tools/REGISTRY.md](tools/REGISTRY.md)
+
+---
+
+## Marketing — 42 skills tácticas
+
+**marketing-strategist** coordina **42 skills especializadas**: copy, SEO, ads, lanzamientos, email, pricing, CRO y más.
+
+- Índice completo: [.cursor/skills/marketing/README.md](.cursor/skills/marketing/README.md)
+- Contexto de producto (local): `.agents/product-marketing.md`
+
+[Ver listado completo de skills ↓](#marketing-strategist--42-skills-tácticas)
 
 ---
 
@@ -90,7 +203,7 @@ Models default to agreeableness. **El DT flips that:** clarity and validation fi
 
 ---
 
-## The five protocols
+## The five protocols {#the-five-protocols}
 
 Detail: [`.cursor/rules/01-protocolos-dt.mdc`](.cursor/rules/01-protocolos-dt.mdc)
 
@@ -134,6 +247,7 @@ Security and secrets **always** apply, including under `/fast-lane`.
 
 | Script | Uso |
 |--------|-----|
+| [dt-doctor.sh](scripts/dt-doctor.sh) | Verificador read-only del orden (frontmatter, enlaces, paridad multi-IDE) |
 | [sync-ide.sh](scripts/sync-ide.sh) | Reglas multi-IDE desde `vitals/specs/rule-bodies/` + `rules-manifest.yaml` |
 | [sync-commands-from-meta.sh](scripts/sync-commands-from-meta.sh) | Commands en Cursor + Antigravity desde `commands-meta.yaml` |
 | [sync-skills-parity.sh](scripts/sync-skills-parity.sh) | Skills `.cursor/skills` → `.agent/skills` (incl. árbol `marketing/*`) |
@@ -144,7 +258,7 @@ Detalle: [scripts/README.md](scripts/README.md).
 
 ## Subagentes (21)
 
-El DT delega en **21 especialistas**. Cada uno tiene definición de agente en **Cursor** y skill de rol en **Antigravity** (y espejo en `.agent/skills/` para todos).
+El DT delega en **21 especialistas**. Fuente canónica de skills de rol: [`.cursor/skills/`](.cursor/skills/) (espejo Antigravity/Claude/Codex vía `sync-ide`). Catálogo ↓ [de los 21 especialistas](#catálogo-de-los-21-especialistas).
 
 | IDE | Definición del subagente | Skill de rol | Skills tácticas extra |
 |-----|--------------------------|--------------|------------------------|
@@ -153,7 +267,7 @@ El DT delega en **21 especialistas**. Cada uno tiene definición de agente en **
 
 Tras editar skills en Cursor: `./scripts/sync-skills-parity.sh`. Reglas de delegación: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc).
 
-### Catálogo de los 21 subagentes
+### Catálogo de los 21 especialistas {#catálogo-de-los-21-especialistas}
 
 | # | Subagente | Grupo | Rol | Invocar cuando (keywords) | Agente (Cursor) | Skill de rol |
 |---|-----------|-------|-----|---------------------------|-----------------|--------------|
@@ -177,11 +291,11 @@ Tras editar skills en Cursor: `./scripts/sync-skills-parity.sh`. Reglas de deleg
 | 18 | **growth-hacker** | Marketing & Content | Experimentos y conversión | `growth`, `experiments`, `conversion` | [agente](.cursor/agents/growth-hacker.md) | [`.cursor/skills/growth-hacker/`](.cursor/skills/growth-hacker/) |
 | 19 | **pitch-specialist** | Marketing & Content | Pitch inversores y stakeholders | `pitch`, `presentation`, `investors` | [agente](.cursor/agents/pitch-specialist.md) | [`.cursor/skills/pitch-specialist/`](.cursor/skills/pitch-specialist/) |
 | 20 | **storytelling-specialist** | Marketing & Content | Narrativa y story arcs | `storytelling`, `narrative`, `story` | [agente](.cursor/agents/storytelling-specialist.md) | [`.cursor/skills/storytelling-specialist/`](.cursor/skills/storytelling-specialist/) |
-| 21 | **operations-maintainer** | Operations | Monitoreo, incidentes, mantenimiento | `operations`, `monitoring`, `incidentes` | [agente](.cursor/agents/operations-maintainer.md) | [`.cursor/skills/operations-maintainer/`](.cursor/skills/operations-maintainer/) | (dt(lucas): auditoría integral, skills canónicas y Contexto consultado)
+| 21 | **operations-maintainer** | Operations | Monitoreo, incidentes, mantenimiento | `operations`, `monitoring`, `incidentes` | [agente](.cursor/agents/operations-maintainer.md) | [`.cursor/skills/operations-maintainer/`](.cursor/skills/operations-maintainer/) |
 
 **Skills de rutina DT** (no son subagentes): `dt-session`, `git-actualizar`, `git-guardar`, `github-save-release` en [`.cursor/skills/`](.cursor/skills/) — comandos `/yo`, `/actualizar`, `/guardar`, `/github-save-small`.
 
-### Marketing strategist — 42 skills tácticas
+### Marketing strategist — 42 skills tácticas {#marketing-strategist--42-skills-tácticas}
 
 Único subagente con **pack de skills especializadas** (origen: [marketingskills](https://github.com/coreyhaines31/marketingskills) v2). Contexto compartido: `.agents/product-marketing.md` (local; skill `product-marketing`).
 
@@ -237,31 +351,58 @@ Tras editar skills en Cursor: `./scripts/sync-skills-parity.sh`. Reglas de deleg
 | `social` | Redes sociales |
 | `video` | Video marketing (IA) |
 
+#### Atelier — detalle técnico
+
+Atelier 2.0: **Impeccable vendoreado** + pack `design/` nativo. Contexto: `.agents/design-context.md` (local).
+
+| IDE | Router | Pack táctico | Vendor |
+|-----|--------|--------------|--------|
+| **Cursor** | [`.cursor/skills/atelier/`](.cursor/skills/atelier/) | [`.cursor/skills/design/`](.cursor/skills/design/) | [`tools/atelier/`](tools/atelier/) |
+
+Motores: `ruby scripts/dt-design-select.rb` · `./scripts/atelier-detect.sh` (Impeccable CLI, 44+ reglas)
+
+Actualizar Impeccable: `./tools/atelier/scripts/sync-from-impeccable.sh --latest` → `./scripts/sync-ide.sh` (ver `DOC-GUIDE-008`)
+
+#### Remotion — detalle técnico
+
+Toolkit en **[`tools/remotion/`](tools/remotion/)** (starter + primitivas). Best practices vendor: **`remotion-best-practices`**.
+
+Actualizar vendor skill: `./tools/remotion/scripts/update-vendor-skills.sh` → `./scripts/sync-ide.sh`
+
 ---
 
 ## Project layout
 
 ```text
 README.md / AGENTS.md / VERSION
-.agents/                    # README + product-marketing.md (local)
-docs/                       # Portal DOC-META-001 — cerebro DOC-OV-004
+tools/                              # Arsenal reutilizable — tools/REGISTRY.md
+.agents/                            # Contexto local (product-marketing, design-context)
+docs/                               # Portal de documentación
 vitals/
-  config/                   # commands-meta.yaml, roster.yaml
-  ops/                      # README schema; session.yaml = local (/yo)
+  config/                           # commands-meta.yaml, roster.yaml, rules-manifest.yaml
+  specs/rule-bodies/                # Cuerpos de reglas (fuente única)
+  data/                             # Registries (design, engineering)
+  ops/                              # session.yaml = local (/yo)
   pulse/ memory/ specs/
-  work/inbox/{operator_id}/ # cuaderno personal opcional
+  work/inbox/{operator_id}/
 
-.cursor/                    # rules, commands, agents, skills (+ marketing/)
-.agent/                     # Antigravity: rules, workflows, skills (+ marketing/)
+.cursor/                            # rules, commands, agents, skills (canónico)
+.agent/                             # Antigravity: rules, workflows, skills
+.claude/ .agents/                   # Espejos generados — no editar a mano
+output/                             # Generaciones locales (gitignored)
 ```
+
+Multi-IDE: [ide-targets.yaml](vitals/config/ide-targets.yaml) · Guía: [ide-setup.md](docs/02_guides/ide-setup.md).
 
 ---
 
 ## Customize
 
-- **Rules:** `.cursor/rules/` for your stack.
-- **Commands:** edit `vitals/config/commands-meta.yaml` first, then `.cursor/commands/` and `.agent/workflows/`.
-- **Multi-project:** `vitals/workspace.yaml` from [workspace.yaml.example](vitals/workspace.yaml.example).
+1. **Reglas:** editar `vitals/specs/rule-bodies/<stem>.body.md` + `vitals/config/rules-manifest.yaml` → `./scripts/sync-ide.sh`
+2. **Commands:** editar `vitals/config/commands-meta.yaml` → `./scripts/sync-commands-from-meta.sh`
+3. **Skills:** canónico en `.cursor/skills/` → `./scripts/sync-ide.sh` (Antigravity: `./scripts/sync-skills-parity.sh`)
+4. **Multi-proyecto:** `vitals/workspace.yaml` desde [workspace.yaml.example](vitals/workspace.yaml.example)
+5. **Verificar:** `./scripts/dt-doctor.sh`
 
 ---
 
