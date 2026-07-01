@@ -40,7 +40,7 @@ review_cycle_days: 90
 
 - Maximizar **información útil por token** (mismo espíritu que DOC-META-001).
 - Evitar cargar historial largo en el chat: **índice** (`vitals/INDEX.md`) y **puntero** (`vitals/pulse/current.md`).
-- Unificar normativa duplicable entre IDEs vía `vitals/specs/rule-bodies/` y `scripts/sync-dt-from-vitals.sh`.
+- Unificar normativa duplicable entre IDEs vía `vitals/specs/rule-bodies/` y `scripts/sync-ide.sh`.
 
 ## Scope
 

@@ -1,10 +1,10 @@
 # Pulse — puntero actual
 
-**Último pulse_id:** [dt-20260625-001](entries/2026-06-25-dt-20260625-001.md)
+**Último pulse_id:** [dt-20260702-001](entries/2026-07-02-dt-20260702-001.md)
 
-**Versión template:** 1.7.2
+**Versión template:** 1.7.3
 
-**Resumen:** Atelier 2.0 — vendor Impeccable (submodule skill-v3.8.0 + CLI 3.1.0), sync pipeline, 31 references, atelier-detect, craft escribe código.
+**Resumen:** Auditoría integral del framework — 14 skills de rol promovidas al canónico `.cursor/skills/` (paridad real Cursor/Antigravity/Claude/Codex), retiro del script legacy `sync-dt-from-vitals.sh`, fixes de docs e higiene, y norma nueva **Contexto consultado** en el formato de salida (regla `00`).
 
 **Proyecto / contexto Git:** raíz `.` (repo plantilla DT).
 

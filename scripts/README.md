@@ -7,7 +7,8 @@
 | [sync-catalog.rb](sync-catalog.rb) | Deriva `docs/99_meta/catalog.yaml` del frontmatter; `--next <DOMINIO>` da el próximo ID libre |
 | [sync-commands-from-meta.sh](sync-commands-from-meta.sh) | YAML → `.cursor/commands/` + `.agent/workflows/` |
 | [sync-skills-parity.sh](sync-skills-parity.sh) | `.cursor/skills/` → `.agent/skills/` (raíz: solo `SKILL.md`; `marketing/*`: árbol completo) |
-| [sync-dt-from-vitals.sh](sync-dt-from-vitals.sh) | (Legacy) Rules `04`–`05`. Reemplazado por `sync-ide.sh` (emite **todas** las reglas a todos los IDEs) |
+| [atelier-detect.sh](atelier-detect.sh) | Anti-slop determinístico (Impeccable CLI, 44+ reglas) sobre archivos o URLs |
+| [dt-design-select.rb](dt-design-select.rb) | Selección de estilo/sistema Atelier según brief (motor de `/atelier select`) |
 
 Upstream DT (`/actualizar` Fase B, `/actualizar-dt`): instrucciones en **Markdown** — skills `git-actualizar` y `dt-actualizar` + `vitals/specs/dt-upstream-config.md`. **Sin scripts Ruby de sync.**
 

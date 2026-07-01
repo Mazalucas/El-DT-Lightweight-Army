@@ -81,3 +81,6 @@ output/
 temporal/
 tools/**/node_modules/
 tools/**/out/
+
+# Impeccable — cache local del detector
+.impeccable/hook.cache.json

@@ -64,4 +64,4 @@
 
 Fuente canónica en Git: **Cursor**. Tras editar, corré `./scripts/sync-skills-parity.sh` para replicar el árbol completo en Antigravity.
 
-Listado en README del repo: [Marketing strategist — 42 skills](../../../README.md#marketing-strategist--42-skills).
+Listado en README del repo: [Marketing strategist — 42 skills tácticas](../../../README.md#marketing-strategist--42-skills-tácticas).

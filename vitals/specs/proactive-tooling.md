@@ -26,4 +26,4 @@ La normativa operativa vive en:
 - Cursor: `.cursor/rules/04-recomendacion-herramientas.mdc`
 - Antigravity: `.agent/rules/04-recomendacion-herramientas.md`
 
-Cuerpo canónico generado desde `vitals/specs/rule-bodies/04-recomendacion-herramientas.body.md` vía `scripts/sync-dt-from-vitals.sh`.
+Cuerpo canónico generado desde `vitals/specs/rule-bodies/04-recomendacion-herramientas.body.md` vía `scripts/sync-ide.sh`.

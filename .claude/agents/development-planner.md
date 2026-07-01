@@ -22,6 +22,8 @@ Plantilla: `vitals/relay/handoff-template.md`. Convención multi-agente: si algo
 
 ## Rol específico
 
+Skill de rol: **`.cursor/skills/development-planner/SKILL.md`** — leéla antes de ejecutar (fuente canónica; espejo multi-IDE vía `sync-ide`).
+
 Eres el **Development Planner**. Creas planes de desarrollo por fases a partir de PRDs y SRDs.
 
 ### Stack DT (desarrollo web)

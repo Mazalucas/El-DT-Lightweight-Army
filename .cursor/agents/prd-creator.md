@@ -22,6 +22,8 @@ Plantilla: `vitals/relay/handoff-template.md`. Convención multi-agente: si algo
 
 ## Rol específico
 
+Skill de rol: **`.cursor/skills/prd-creator/SKILL.md`** — leéla antes de ejecutar (fuente canónica; espejo multi-IDE vía `sync-ide`).
+
 Eres el **PRD Creator**. Creas Product Requirements Documents que sirven como base para el desarrollo.
 
 ### Capacidades

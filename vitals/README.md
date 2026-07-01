@@ -29,7 +29,7 @@ vitals/
 
 ## Sincronización con IDE (Cursor / Antigravity)
 
-El cuerpo de algunas rules se genera desde `vitals/specs/rule-bodies/` con **[scripts/sync-dt-from-vitals.sh](../scripts/sync-dt-from-vitals.sh)**. Tras editar un `rule-body`, ejecutá el script y commiteá **tanto** `vitals/` como `.cursor/` / `.agent/` en el mismo commit.
+El cuerpo de **todas** las rules se genera desde `vitals/specs/rule-bodies/` con **[scripts/sync-ide.sh](../scripts/sync-ide.sh)** (metadata en `vitals/config/rules-manifest.yaml`). Tras editar un `rule-body`, ejecutá el script y commiteá **tanto** `vitals/` como `.cursor/` / `.agent/` / `.claude/` en el mismo commit.
 
 ## Seguridad
 

@@ -19,8 +19,8 @@ Modelo único: **macro** = cómo pensás el flujo; **micro** = pasos detallados 
 
 1. **Clarificar**: objetivo, restricciones, alcance. Si hay ambigüedad, preguntar. Si no hay sesión local válida (`vitals/ops/session.yaml` + `operator.id`), pedir **`/yo`** antes de escribir en el repo.
 2. **Planificar y validar**: checkpoints, orden de ejecución, alternativas si aplica; **no aprobar sin cuestionar** ni ejecutar acciones con impacto sin validación (protocolo No cómplice), **salvo** que el usuario haya invocado explícitamente **`/fast-lane`** con alcance cerrado — precedencia en `vitals/specs/precedence.md`. Para **desarrollo web**, aplicar regla `08-stack-web-default` antes de delegar.
-3. **Ejecutar**: implementar con verificación cuando el repo tenga toolchain (lint, tests, build); si no aplica, indicar N/A en verificación. Antes de aceptar código de subagentes de ingeniería, verificar que la entrega incluya **Qué reutilicé** (regla `15-engineering-reuse`).
-4. **Entregar**: resumen + cambios + verificación + **Puntos ciegos / Mejoras detectadas** + cierre documental bajo `docs/` si aplica (paso 8 de `/orquestar`).
+3. **Ejecutar**: implementar con verificación cuando el repo tenga toolchain (lint, tests, build); si no aplica, indicar N/A en verificación. Antes de aceptar entregas sustantivas de subagentes, verificar que incluyan **Contexto consultado**; para código, **Qué reutilicé** (regla `15-engineering-reuse`) cumple ese rol.
+4. **Entregar**: resumen + cambios + verificación + **Contexto consultado** + **Puntos ciegos / Mejoras detectadas** + cierre documental bajo `docs/` si aplica (paso 8 de `/orquestar`).
 
 ### Macro vs micro (`/orquestar`)
 
@@ -50,7 +50,17 @@ Toda entrega debe incluir:
 1. Resumen ejecutivo
 2. Plan o cambios realizados
 3. Verificación (tests, lint, build)
-4. **Puntos ciegos / Mejoras detectadas** (si aplica)
+4. **Contexto consultado** (ver abajo)
+5. **Puntos ciegos / Mejoras detectadas** (si aplica)
+
+### Contexto consultado (evidencia de contexto)
+
+Toda entrega **sustantiva** (crear o modificar artefactos: código, docs, specs, planes, contenido) cierra con una sección **Contexto consultado** de 1–3 líneas: qué fuentes de la base de conocimiento (docs/, vitals/, skills, código existente) **informaron las decisiones** de la entrega.
+
+- Listar solo lo que **cambió una decisión**, no lecturas exhaustivas — el objetivo es evidencia, no ritual.
+- Para **código**, la sección **Qué reutilicé** (regla `15-engineering-reuse`) cumple este rol; no duplicar.
+- Respuestas conversacionales o tareas triviales: omitir la sección.
+- Si no se consultó nada porque no había fuente aplicable, decirlo (`N/A — sin fuente aplicable`): eso también es información.
 
 ## Setup multi-IDE
 

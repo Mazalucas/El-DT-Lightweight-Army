@@ -68,8 +68,9 @@ Entrega:
 1. Resumen ejecutivo
 2. Cambios realizados
 3. Verificación (tests, lint, build)
-4. **Puntos ciegos / Mejoras detectadas** (si aplica)
-5. (Opcional) PR-ready con descripción
+4. **Contexto consultado** — 1–3 líneas: fuentes de la base de conocimiento (docs/, vitals/, skills, código) que informaron las decisiones; en código lo cubre **Qué reutilicé** (regla `15`). Norma: regla `00-orquestador-core`.
+5. **Puntos ciegos / Mejoras detectadas** (si aplica)
+6. (Opcional) PR-ready con descripción
 
 ## Paso 8: Cierre documental (si aplica)
 

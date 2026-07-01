@@ -1,6 +1,6 @@
-# Subagentes Cursor (21)
+# Subagentes del DT (21)
 
-Definiciones de agente para delegación en Cursor. Paridad de skills de rol en `.agent/skills/{nombre}/` (Antigravity).
+Definiciones de agente para delegación en Cursor. Cada agente tiene su **skill de rol** canónica en `.cursor/skills/{nombre}/` (espejos generados: `.agent/skills/`, `.claude/skills/`, `.agents/skills/` vía `sync-ide`).
 
 **Catálogo completo** (tabla, keywords, skills tácticas): [README raíz — Subagentes (21)](../../README.md#catálogo-de-los-21-especialistas).
 

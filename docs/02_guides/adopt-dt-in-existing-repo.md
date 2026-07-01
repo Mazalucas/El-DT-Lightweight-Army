@@ -76,7 +76,7 @@ Ritual igual: **`/actualizar` → `/yo` → trabajar → `/guardar`**. Tras edit
 
 1. **No sobrescribir** sin revisión: renombrá archivos conflictivos a `*.bak` o fusioná manualmente reglas con el mismo tema.
 2. Integrá el catálogo `03-catalogo-subagentes` con vuestros subagentes: renumerá si hace falta para evitar duplicados de `description`.
-3. Corré `./scripts/sync-dt-from-vitals.sh` después de editar `vitals/specs/rule-bodies/` para regenerar rules `04` y `05`.
+3. Corré `./scripts/sync-ide.sh` después de editar `vitals/specs/rule-bodies/` para regenerar todas las rules en todos los IDEs.
 4. Corré `./scripts/sync-commands-from-meta.sh` y `./scripts/sync-skills-parity.sh` después de editar meta o skills.
 
 ## Modo monorepo / multi-root

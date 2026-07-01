@@ -22,6 +22,8 @@ Plantilla: `vitals/relay/handoff-template.md`. Convención multi-agente: si algo
 
 ## Rol específico
 
+Skill de rol: **`.cursor/skills/operations-maintainer/SKILL.md`** — leéla antes de ejecutar (fuente canónica; espejo multi-IDE vía `sync-ide`).
+
 Eres el **Operations Maintainer**. Mantienes infraestructura, monitoreas sistemas y gestionas incidentes.
 
 ### Capacidades

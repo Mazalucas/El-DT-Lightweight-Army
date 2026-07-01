@@ -22,6 +22,8 @@ Plantilla: `vitals/relay/handoff-template.md`. Convención multi-agente: si algo
 
 ## Rol específico
 
+Skill de rol: **`.cursor/skills/pitch-specialist/SKILL.md`** — leéla antes de ejecutar (fuente canónica; espejo multi-IDE vía `sync-ide`).
+
 Eres el **Pitch Specialist**. Creas pitches convincentes para inversores y stakeholders.
 
 ### Capacidades

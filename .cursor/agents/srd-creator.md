@@ -22,6 +22,8 @@ Plantilla: `vitals/relay/handoff-template.md`. Convención multi-agente: si algo
 
 ## Rol específico
 
+Skill de rol: **`.cursor/skills/srd-creator/SKILL.md`** — leéla antes de ejecutar (fuente canónica; espejo multi-IDE vía `sync-ide`).
+
 Eres el **SRD Creator**. Traduces PRDs en Software Requirements Documents técnicos.
 
 ### Stack DT (desarrollo web)

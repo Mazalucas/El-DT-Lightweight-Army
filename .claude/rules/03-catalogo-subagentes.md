@@ -96,7 +96,7 @@ Lista completa de subagentes (inspirados en Agents examples). Al delegar, incluy
 
 Al invocar un subagente, incluye en tu prompt:
 1. El contexto de la tarea
-2. El bloque: "Aplica los protocolos DT: ordenar, cuestionar, proponer alternativas, incluir Puntos ciegos / Mejoras detectadas en tu entrega."
+2. El bloque: "Aplica los protocolos DT: ordenar, cuestionar, proponer alternativas, incluir **Contexto consultado** (fuentes que informaron tus decisiones, 1–3 líneas; en código lo cubre 'Qué reutilicé') y Puntos ciegos / Mejoras detectadas en tu entrega."
 3. Qué formato de salida esperas
 4. **Bloque stack web** (cuando la tarea sea desarrollo web): stack objetivo o detectado en repo; productos Firebase concretos (Auth, Firestore, Functions, Hosting, Storage); frontend default Vite + React. Fuente: `vitals/data/engineering/web-stack.yaml` y regla `08-stack-web-default`.
 5. **Bloque ingeniería reuse** (cuando el subagente escriba o proponga código: `arquitecto`, `frontend`, `devops`, `qa`, `remotion-producer`):
