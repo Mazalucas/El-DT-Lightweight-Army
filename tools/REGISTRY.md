@@ -41,6 +41,13 @@ scaffold en proyecto consumidor (output/remotion-project o path del usuario)
 render → output/remotion/*.mp4 (gitignored)
 ```
 
+## Datos (verificación numérica)
+
+| Tool | Path | Agente | Command | Descripción |
+|------|------|--------|---------|-------------|
+| **verify-csv** | [`data/verify-csv.py`](data/verify-csv.py) | `data-auditor` | `/verificar` | CSV/TSV: perfil, sumas `Decimal`, subtotales, duplicados, `--assert-total` (stdlib, sin pandas) |
+| **Docs** | [`data/README.md`](data/README.md) | `data-auditor` | — | Uso rápido + exit codes; regla `16-numeric-grounding` |
+
 ## Integraciones marketing (stub)
 
 Referencias en skills de marketing apuntan a `tools/integrations/*.md`. Esas guías se añadirán por demanda; el enlace a este REGISTRY ya es válido desde la raíz del repo.

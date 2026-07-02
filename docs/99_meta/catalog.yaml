@@ -179,9 +179,14 @@ documents:
     title: "Registro de tools reutilizables"
     path: 03_reference/tools-registry.md
     type: reference
-    tags: [tools, remotion, atelier, agents]
+    tags: [tools, remotion, atelier, data, agents]
   - id: DOC-REF-008
     title: "Atelier detector y lock Impeccable"
     path: 03_reference/atelier-detector-lock.md
     type: reference
     tags: [atelier, detector, impeccable]
+  - id: DOC-REF-009
+    title: "Confianza numérica del DT (numeric grounding)"
+    path: 03_reference/numeric-verification-default.md
+    type: reference
+    tags: [data, verification, numeric, trust]

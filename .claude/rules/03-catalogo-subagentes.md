@@ -30,6 +30,7 @@ Lista completa de subagentes (inspirados en Agents examples). Al delegar, incluy
 | Subagente | Cuándo invocar |
 |-----------|----------------|
 | **qa** | test, qa, quality, pruebas, edge cases, validación |
+| **data-auditor** | planilla, spreadsheet, csv, excel, reporte, números, totales, reconciliar, verificar cifras — regla `16-numeric-grounding`, command `/verificar` |
 
 ## Design & UX
 
@@ -75,6 +76,7 @@ Lista completa de subagentes (inspirados en Agents examples). Al delegar, incluy
 - landing, dashboard, mockup, design system, estética, atelier → **ui-designer** (+ `/atelier`)
 - remotion, video programático, motion graphics, composiciones, render MP4, npx remotion → **remotion-producer** (+ `/remotion`)
 - test, qa, quality → **qa**
+- planilla, spreadsheet, csv, excel, reporte, números, totales, reconciliar → **data-auditor** (+ `/verificar`)
 - document, docs, readme → **doc**
 - research, analyze, investigate → **researcher**
 - deploy, infrastructure, ci/cd → **devops**
@@ -110,6 +112,18 @@ Bloque ingeniería reuse:
 ```
 
 Fuente: regla `15-engineering-reuse` · `docs/03_reference/engineering-reuse-default.md` (`DOC-REF-006`).
+
+6. **Bloque verificación numérica** (cuando la tarea involucre cifras derivadas de datos: `data-auditor`, `qa`, `arquitecto`, `researcher`, `marketing-strategist`):
+
+```text
+Bloque verificación numérica:
+- Regla: 16-numeric-grounding (nunca calcular mentalmente)
+- Todo cálculo con script ejecutado; etiquetas [VERIFICADO]/[DERIVADO]/[NO VERIFICADO]
+- Cross-checks: total vs partes, conteo de filas, unidades
+- Entregar sección "Verificación numérica"
+```
+
+Fuente: regla `16-numeric-grounding` · skill `data-auditor` · `docs/03_reference/numeric-verification-default.md` (`DOC-REF-009`).
 
 ## Un mensaje, varios agentes
 

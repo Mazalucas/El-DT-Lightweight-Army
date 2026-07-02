@@ -14,10 +14,11 @@ Este repo es el **cerebro compartido** de El DT. Leé esto antes de actuar a esc
 | ¿Reglas del DT? | `.cursor/rules/` o `.agent/rules/` |
 | ¿Stack web default (Firebase + Node)? | `docs/03_reference/web-stack-default.md` (`DOC-REF-005`) · `vitals/data/engineering/web-stack.yaml` |
 | ¿Reuse-first (código)? | `docs/03_reference/engineering-reuse-default.md` (`DOC-REF-006`) · skill `engineering-reuse` · regla `15-engineering-reuse` |
+| ¿Números, planillas, reportes? | `docs/03_reference/numeric-verification-default.md` (`DOC-REF-009`) · skill `data-auditor` · regla `16-numeric-grounding` · `/verificar` |
 | ¿Actualizar framework DT en mi proyecto? | `docs/02_guides/actualizar-framework-dt.md` (`DOC-GUIDE-007`) · `/actualizar-dt` |
 | ¿Pulso y specs? | `vitals/INDEX.md` |
 | ¿Documentación humana? | `docs/README.md` (`DOC-OV-001`) |
-| ¿Subagentes y skills? | [README#catálogo-de-los-21-especialistas](README.md#catálogo-de-los-21-especialistas) · marketing: `.cursor/skills/marketing/` · **Atelier**: `.cursor/skills/design/` · **Remotion**: [`tools/remotion/`](tools/remotion/) + `.cursor/skills/remotion-best-practices/` |
+| ¿Subagentes y skills? | [README#catálogo-de-los-22-especialistas](README.md#catálogo-de-los-22-especialistas) · marketing: `.cursor/skills/marketing/` · **Atelier**: `.cursor/skills/design/` · **Remotion**: [`tools/remotion/`](tools/remotion/) + `.cursor/skills/remotion-best-practices/` |
 | ¿Tools reutilizables? | [`tools/REGISTRY.md`](tools/REGISTRY.md) · [`docs/03_reference/tools-registry.md`](docs/03_reference/tools-registry.md) (`DOC-REF-007`) |
 
 ## Ritual post-clone (primera vez)
@@ -65,6 +66,7 @@ Fuente canónica: **`vitals/config/commands-meta.yaml`**
 | `/cuestionar` | Solo análisis |
 | `/contexto` | Mapa del repo |
 | `/prepr` | Preparar PR |
+| `/verificar` | Números de planillas/reportes con script — skill `data-auditor` |
 
 ### Framework
 
@@ -114,18 +116,19 @@ Todo se **genera desde fuentes únicas** — no editar destinos a mano:
 - `05-multi-project-git` — si existe `vitals/workspace.yaml`
 - `08-stack-web-default` — stack Firebase + Node (soft default)
 - `15-engineering-reuse` — discover before create, jerarquía de reutilización
+- `16-numeric-grounding` — números solo con script ejecutado; etiquetas de procedencia
 
 Precedencia: `vitals/specs/precedence.md`
 
-## Subagentes (21)
+## Subagentes (22)
 
-Tabla maestra con agente, skill de rol y keywords: **[README — Subagentes (21)](README.md#catálogo-de-los-21-especialistas)**. Reglas de delegación: `.cursor/rules/03-catalogo-subagentes.mdc`.
+Tabla maestra con agente, skill de rol y keywords: **[README — Subagentes (22)](README.md#catálogo-de-los-22-especialistas)**. Reglas de delegación: `.cursor/rules/03-catalogo-subagentes.mdc`.
 
 | Grupo | Subagentes |
 |-------|------------|
 | Engineering | arquitecto, frontend, devops, ui-designer, **remotion-producer** |
 | Planning | prd-creator, srd-creator, development-planner |
-| Testing | qa |
+| Testing | qa, **data-auditor** (números verificados — regla `16-numeric-grounding`, `/verificar`) |
 | Design & UX | ux-researcher |
 | Product | product-strategist, feedback-synthesizer, researcher |
 | Documentation | doc |

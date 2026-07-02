@@ -80,6 +80,12 @@ commands:
     example: "/prepr"
     skill: null
     command_path: .cursor/commands/prepr.md
+  verificar:
+    group: work
+    tagline: "Verificar números de planillas y reportes con script, sin cálculo mental de la IA."
+    when: "Compartís una planilla/reporte o pedís totales, sumas o reconciliación de cifras."
+    example: "/verificar ventas-junio.csv → totales y checks"
+    skill: data-auditor
   setup:
     group: framework
     tagline: "Verificar o reparar la estructura multi-IDE del DT."

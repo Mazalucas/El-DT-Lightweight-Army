@@ -3,13 +3,13 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.7.4**
+**v1.7.5**
 
 *Tu IA con equipo, criterio y herramientas — no un chat que dice “sí” a todo.*
 
 **El DT** es un Director de Proyecto para tu IA: no solo ejecuta — **organiza el trabajo**, **te hace preguntas antes de avanzar**, **propone alternativas** y **te avisa de riesgos** antes de cerrar.
 
-Delega en **21 especialistas** (producto, diseño, marketing, documentación, calidad…) y trae herramientas listas para:
+Delega en **22 especialistas** (producto, diseño, marketing, documentación, calidad…) y trae herramientas listas para:
 
 - **Páginas web y productos digitales** — landings, dashboards, pantallas de login ([Atelier](#atelier--diseño-web-y-presentaciones))
 - **Presentaciones y pitches** — decks, slides, material para inversores ([Atelier](#atelier--diseño-web-y-presentaciones))
@@ -17,6 +17,8 @@ Delega en **21 especialistas** (producto, diseño, marketing, documentación, ca
 - **Marketing** — copy, SEO, campañas, lanzamientos ([42 skills tácticas](#marketing--42-skills-tácticas))
 
 Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y más). **Empezá en 2 minutos:** [`/bienvenida`](#primera-vez) → [`/yo`](#ritual-del-día).
+
+> **El DT no es un prompt:** es un cerebro operativo con ~1.400 documentos canónicos, ~56.000 líneas de orquestación, 22 especialistas, 105 skills y un ecosistema de diseño/marketing/video que suma cientos de miles de líneas de plantillas listas para usar.
 
 ---
 
@@ -42,7 +44,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 | Algo puntual ya definido | `/fast-lane` |
 | Diseñar una web, dashboard o presentación | `/atelier` |
 | Crear un video | `/remotion` |
-| Ver el equipo completo de especialistas | [Catálogo de 21](#catálogo-de-los-21-especialistas) |
+| Ver el equipo completo de especialistas | [Catálogo de 22](#catálogo-de-los-22-especialistas) |
 
 Este repo es **memoria compartida + reglas** para que varias personas trabajen con la misma IA sin pisarse. Guía humana: [cerebro del equipo](docs/00_overview/cerebro-equipo-mecanismos-dt.md). La IA lee **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
 
@@ -90,7 +92,7 @@ Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. 
 | Bloque | En pocas palabras |
 |--------|-------------------|
 | **Orquestación** | Clarifica qué querés, planifica, ejecuta y cierra señalando riesgos. Comando principal: `/orquestar`. |
-| **21 especialistas** | Producto, diseño, marketing, documentación, calidad… El DT elige quién ayuda según tu pedido. |
+| **22 especialistas** | Producto, diseño, marketing, documentación, calidad… El DT elige quién ayuda según tu pedido. |
 | **Atelier (diseño)** | Landings, dashboards, login, presentaciones — con criterio estético y guardrails anti-“diseño genérico de IA”. |
 | **Videos y contenido** | Videos promocionales; marketing con copy, SEO, lanzamientos y campañas. |
 
@@ -98,7 +100,7 @@ Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. 
 flowchart TB
   vos[Vos en el chat]
   dt[El DT — orquestador]
-  esp[21 especialistas]
+  esp[22 especialistas]
   atelier[Atelier — webs y presentaciones]
   video[Videos — Remotion]
   mkt[Marketing — 42 skills]
@@ -251,13 +253,13 @@ Seguridad y secretos **siempre** aplican, incluso bajo `/fast-lane`.
 
 Detalle: [scripts/README.md](scripts/README.md).
 
-### Subagentes (21) — resumen por grupo
+### Subagentes (22) — resumen por grupo
 
 | Grupo | Especialistas | Ejemplos de uso |
 |-------|---------------|-----------------|
 | **Engineering** | arquitecto, frontend, devops, ui-designer, remotion-producer | APIs, UI, deploy, Atelier, video |
 | **Planning** | prd-creator, srd-creator, development-planner | PRD, specs técnicas, roadmap |
-| **Testing** | qa | Tests, edge cases |
+| **Testing** | qa, data-auditor | Tests, edge cases, verificación de números |
 | **Design & UX** | ux-researcher | Personas, journey mapping |
 | **Product** | product-strategist, feedback-synthesizer, researcher | Priorización, research |
 | **Documentation** | doc | README, ADRs, docs por niveles |
@@ -268,7 +270,7 @@ Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigra
 
 **Skills de rutina DT** (no son subagentes): `dt-setup`, `dt-session`, `git-actualizar`, `git-guardar`, `dt-actualizar`, `github-save-release`.
 
-#### Catálogo de los 21 especialistas
+#### Catálogo de los 22 especialistas
 
 | # | Subagente | Grupo | Rol | Invocar cuando (keywords) | Agente (Cursor) | Skill de rol |
 |---|-----------|-------|-----|---------------------------|-----------------|--------------|
@@ -293,6 +295,7 @@ Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigra
 | 19 | **pitch-specialist** | Marketing & Content | Pitch inversores y stakeholders | `pitch`, `presentation`, `investors` | [agente](.cursor/agents/pitch-specialist.md) | [`.agent/skills/pitch-specialist/`](.agent/skills/pitch-specialist/) |
 | 20 | **storytelling-specialist** | Marketing & Content | Narrativa y story arcs | `storytelling`, `narrative`, `story` | [agente](.cursor/agents/storytelling-specialist.md) | [`.agent/skills/storytelling-specialist/`](.agent/skills/storytelling-specialist/) |
 | 21 | **operations-maintainer** | Operations | Monitoreo, incidentes, mantenimiento | `operations`, `monitoring`, `incidentes` | [agente](.cursor/agents/operations-maintainer.md) | [`.agent/skills/operations-maintainer/`](.agent/skills/operations-maintainer/) |
+| 22 | **data-auditor** | Testing | Verificación de números y planillas con script (regla `16-numeric-grounding`) | `planilla`, `csv`, `excel`, `reporte`, `totales`, `reconciliar`, `verificar cifras` | [agente](.cursor/agents/data-auditor.md) | [`.cursor/skills/data-auditor/`](.cursor/skills/data-auditor/) |
 
 #### Marketing strategist — 42 skills tácticas
 

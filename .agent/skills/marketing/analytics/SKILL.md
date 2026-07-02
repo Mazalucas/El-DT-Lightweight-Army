@@ -43,6 +43,7 @@ Before implementing tracking, understand:
 - Validate implementation
 - Monitor for issues
 - Clean data > more data
+- DT rule `16-numeric-grounding`: when reporting figures derived from exported data (CSV reports, spreadsheets), compute with an executed script — `tools/data/verify-csv.py` for CSV — and label figures `[VERIFICADO]`/`[DERIVADO]`/`[NO VERIFICADO]`; never sum "by eye"
 
 ---
 

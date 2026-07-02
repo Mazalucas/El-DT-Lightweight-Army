@@ -5,11 +5,12 @@ type: reference
 status: canonical
 owner: dt-platform
 created: 2026-06-19
-updated: 2026-06-25
+updated: 2026-07-02
 tags:
   - tools
   - remotion
   - atelier
+  - data
   - agents
 domain:
   - reference
@@ -78,6 +79,17 @@ Remotion: gratis ≤3 personas; ver [remotion.dev/license](https://www.remotion.
 ### Sync maintainer
 
 Ver [atelier-impeccable-sync.md](../02_guides/atelier-impeccable-sync.md) (`DOC-GUIDE-008`).
+
+## Datos / verificación numérica (implementado)
+
+| Artefacto | Path | Consumidor |
+|-----------|------|------------|
+| CLI verify-csv | [`tools/data/verify-csv.py`](../../tools/data/verify-csv.py) | `data-auditor`, `/verificar` |
+| Docs | [`tools/data/README.md`](../../tools/data/README.md) | `data-auditor` |
+| Skill de rol | [`.cursor/skills/data-auditor/`](../../.cursor/skills/data-auditor/) | Recetas por runtime |
+| Regla | `16-numeric-grounding` | Todos los agentes (always-on) |
+
+Referencia: [numeric-verification-default.md](numeric-verification-default.md) (`DOC-REF-009`).
 
 ## Integraciones marketing (stub)
 

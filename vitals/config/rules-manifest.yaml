@@ -3,7 +3,7 @@
 # El emisor (scripts/sync-ide) combina esta metadata con el cuerpo para
 # generar el frontmatter correcto en cada IDE. No editar rules a mano.
 version: 1
-updated: "2026-06-23"
+updated: "2026-07-02"
 
 rules:
   - stem: 00-orquestador-core
@@ -36,6 +36,12 @@ rules:
     alwaysApply: true
   - stem: 15-engineering-reuse
     description: "Ingeniería reuse-first — discover before create, jerarquía de reutilización, entregable Qué reutilicé"
+    alwaysApply: true
+  - stem: 17-canvas-first
+    description: "Canvas-first — planes, propuestas y confirmaciones extensas se entregan en el canvas del IDE cuando está disponible"
+    alwaysApply: true
+  - stem: 16-numeric-grounding
+    description: "Confianza numérica — nunca calcular mentalmente; computar con script, etiquetar procedencia de cifras y cross-checks"
     alwaysApply: true
   - stem: 10-arquitectura-backend
     description: "Convenciones de arquitectura backend, APIs, capas, manejo de errores"
