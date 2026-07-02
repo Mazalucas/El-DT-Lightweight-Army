@@ -2,11 +2,11 @@
 
 **Último pulse_id:** [dt-20260702-001](entries/2026-07-02-dt-20260702-001.md)
 
-**Versión template:** 1.7.3
+**Versión template:** 1.7.4
 
-**Resumen:** Auditoría integral del framework — 14 skills de rol promovidas al canónico `.cursor/skills/` (paridad real Cursor/Antigravity/Claude/Codex), retiro del script legacy `sync-dt-from-vitals.sh`, fixes de docs e higiene, y norma nueva **Contexto consultado** en el formato de salida (regla `00`).
+**Resumen:** Repo reconvertido a **plantilla DT pura** — retiro de overlay Lucas Prime/Cerebro (modules/, knowledge/, BRAIN.md, commands/skills de módulos) y `mode: canonical` en dt-upstream.
 
-**Proyecto / contexto Git:** raíz `.` (repo plantilla DT).
+**Proyecto / contexto Git:** raíz `.` (repo plantilla DT canónica).
 
 ---
 

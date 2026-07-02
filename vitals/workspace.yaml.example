@@ -1,27 +1,19 @@
 # Copiar a vitals/workspace.yaml y ajustar (opcional). No commitear secretos.
-# IDs alineados con vitals/catalog/modules.yaml
 version: 1
-updated: "2026-06-02"
-default_project: lucas-prime
+updated: "2026-07-02"
+default_project: main-app
 
 projects:
-  - id: lucas-prime
-    label: "Lucas Prime — segundo cerebro"
+  - id: main-app
+    label: "App principal"
     path: .
     git_root: .
     aliases:
-      - brain
-      - hub
-      - prime
-
-  - id: facturas-autonomo-es
-    label: "Facturas autónomo (España)"
-    path: apps/facturas
-    git_root: .
-    note: "App local gitignored — no versionada"
+      - app
+      - root
 
   # - id: other-service
-  #   label: "Proyecto externo"
+  #   label: "Microservicio X"
   #   path: ../other-service
   #   git_root: ../other-service
   #   aliases:

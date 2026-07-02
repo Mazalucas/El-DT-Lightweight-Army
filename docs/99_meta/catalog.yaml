@@ -80,36 +80,6 @@ documents:
     path: 02_guides/atelier-impeccable-sync.md
     type: guide
     tags: [atelier, impeccable, guide, vendor]
-  - id: DOC-GUIDE-010
-    title: "Cerebro profesional — setup"
-    path: 02_guides/cerebro-profesional-setup.md
-    type: guide
-    tags: [cerebro, meet, gemini, reuniones]
-  - id: DOC-GUIDE-011
-    title: "Cerebro App — deploy producción"
-    path: 02_guides/cerebro-app-deploy.md
-    type: guide
-    tags: [cerebro, firebase, deploy, webapp]
-  - id: DOC-GUIDE-012
-    title: "Cerebro App — test local"
-    path: 02_guides/cerebro-app-local-test.md
-    type: guide
-    tags: [cerebro, local, emulators, qa]
-  - id: DOC-GUIDE-013
-    title: "Cerebro App — pipeline, inbox y grafo org"
-    path: 02_guides/cerebro-app-org-graph.md
-    type: guide
-    tags: [cerebro, firebase, org, graph, inbox, pipeline]
-  - id: DOC-GUIDE-014
-    title: "Cerebro — Apps Script inbox para notas Meet compartidas"
-    path: 02_guides/cerebro-meet-apps-script.md
-    type: guide
-    tags: [cerebro, meet, drive, apps-script]
-  - id: DOC-GUIDE-015
-    title: "Recordatorios — quickstart"
-    path: 02_guides/recordatorios-quickstart.md
-    type: guide
-    tags: [recordatorios, modules, productividad, guide]
   - id: DOC-META-001
     title: "Protocolo de documentación orientada a IA"
     path: 99_meta/protocolo-documentacion-ia.md

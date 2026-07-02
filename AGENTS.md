@@ -1,24 +1,24 @@
 # AGENTS.md — puerta de entrada para la IA
 
-Este repo es el **cerebro compartido** de El DT (Cerebro Prime / Lucas Prime). Leé esto antes de actuar a escala.
+Este repo es el **cerebro compartido** de El DT. Leé esto antes de actuar a escala.
 
 ## Índice rápido
 
 | Pregunta | Dónde |
 |----------|--------|
-| ¿Segundo cerebro — módulos y herramientas? | **`BRAIN.md`** · `vitals/catalog/modules.yaml` |
 | ¿Cómo sincronizo y subo trabajo? | Ritual abajo + `docs/00_overview/cerebro-equipo-mecanismos-dt.md` (`DOC-OV-004`) |
 | ¿Quién está en esta sesión? | `vitals/ops/session.yaml` (local) — pedir `/yo` si falta |
 | ¿Equipo registrado? | `vitals/config/roster.yaml` |
-| ¿Primera vez post-clone? | `/bienvenida` → `/yo` |
+| ¿Primera vez post-clone? | `docs/02_guides/primer-setup-dt.md` (`DOC-GUIDE-006`) — `/bienvenida` → `/yo` |
 | ¿Lista de commands y taglines? | `vitals/config/commands-meta.yaml` |
 | ¿Reglas del DT? | `.cursor/rules/` o `.agent/rules/` |
-| ¿Stack web default (Firebase + Node)? | `vitals/data/engineering/web-stack.yaml` |
-| ¿Actualizar framework DT en este proyecto? | `/actualizar-dt` · `vitals/config/dt-upstream.md` |
+| ¿Stack web default (Firebase + Node)? | `docs/03_reference/web-stack-default.md` (`DOC-REF-005`) · `vitals/data/engineering/web-stack.yaml` |
+| ¿Reuse-first (código)? | `docs/03_reference/engineering-reuse-default.md` (`DOC-REF-006`) · skill `engineering-reuse` · regla `15-engineering-reuse` |
+| ¿Actualizar framework DT en mi proyecto? | `docs/02_guides/actualizar-framework-dt.md` (`DOC-GUIDE-007`) · `/actualizar-dt` |
 | ¿Pulso y specs? | `vitals/INDEX.md` |
 | ¿Documentación humana? | `docs/README.md` (`DOC-OV-001`) |
-| ¿Subagentes y skills? | [README#subagentes](README.md) · marketing: `.cursor/skills/marketing/` · **Atelier**: `.cursor/skills/design/` · **Remotion**: [`tools/remotion/`](tools/remotion/) |
-| ¿Tools reutilizables? | [`tools/REGISTRY.md`](tools/REGISTRY.md) |
+| ¿Subagentes y skills? | [README#catálogo-de-los-21-especialistas](README.md#catálogo-de-los-21-especialistas) · marketing: `.cursor/skills/marketing/` · **Atelier**: `.cursor/skills/design/` · **Remotion**: [`tools/remotion/`](tools/remotion/) + `.cursor/skills/remotion-best-practices/` |
+| ¿Tools reutilizables? | [`tools/REGISTRY.md`](tools/REGISTRY.md) · [`docs/03_reference/tools-registry.md`](docs/03_reference/tools-registry.md) (`DOC-REF-007`) |
 
 ## Ritual post-clone (primera vez)
 
@@ -26,17 +26,22 @@ Este repo es el **cerebro compartido** de El DT (Cerebro Prime / Lucas Prime). L
 /bienvenida  →  /yo  →  trabajar  →  /guardar
 ```
 
+- **`/bienvenida`** — skill `dt-setup` (modo first-run): checklist markdown, sin Ruby obligatorio
+- **`/yo`** — skill `dt-session`: identidad local + roster si nuevo
+
 ## Ritual de jornada (obligatorio en equipo)
 
 ```text
 /actualizar  →  /yo  →  trabajar  →  /guardar
 ```
 
-- **`/actualizar`** — skill `git-actualizar`: sync del proyecto + consulta upstream DT (Fase B, aviso); **no** toca `session.yaml`
+- **`/actualizar`** — skill `git-actualizar`: sync `origin` (proyecto) + consulta upstream DT (Fase B, solo aviso); **no** toca `session.yaml`
 - **`/yo`** — skill `dt-session`: identidad local + roster si nuevo
 - **`/guardar`** — skill `git-guardar`: commit + push **sin** `session.yaml`
 
-**Sin sesión válida** (`vitals/ops/session.yaml` con `operator.id`): **pedí `/yo`** antes de escribir o commitear.
+**Sin sesión válida** (`vitals/ops/session.yaml` con `operator.id`): **pedí `/yo`** antes de escribir o commitear. La sesión **solo se crea con `/yo`**, no con `/actualizar`.
+
+**`/actualizar`** hace pull del proyecto y consulta si hay versión DT más nueva (ofrece `/actualizar-dt`). No toca `session.yaml` (archivo **local**, no va a Git).
 
 ## Commands por grupo
 
@@ -50,7 +55,6 @@ Fuente canónica: **`vitals/config/commands-meta.yaml`**
 | `/actualizar` | `git-actualizar` |
 | `/yo` | `dt-session` |
 | `/guardar` | `git-guardar` |
-| `/exit` | `exit` — cierra dev servers Vite de módulos (5173–5182) |
 
 ### Trabajo
 
@@ -66,66 +70,56 @@ Fuente canónica: **`vitals/config/commands-meta.yaml`**
 
 | Command | Notas |
 |---------|--------|
-| `/setup-cursor` | Solo Cursor |
-| `/setup-antigravity` | Solo Antigravity |
-| `/setup` | Verificar/reparar drift multi-IDE (skill `dt-setup`) |
-| `/bootstrap` | Promover DT al raíz en proyecto nuevo (skill `dt-bootstrap`) |
-| `/actualizar-dt` | Incorporar release del framework desde `dt-upstream` |
-| `/github-save-small` | Skill `github-save-release` |
+| `/setup` | Verificar/reparar drift multi-IDE (skill `dt-setup`, modo repair) |
+| `/bootstrap` | Usar El DT como base: promover al raíz + soltar remoto (skill `dt-bootstrap`, irreversible) |
+| `/actualizar-dt` | Incorporar release del framework DT desde `dt-upstream` (skill `dt-actualizar`) |
+| `/github-save-small` | Skill `github-save-release` (mismas exclusiones que guardar) |
 
 ### Diseño (Atelier)
 
 | Command | Skill |
 |---------|--------|
-| `/atelier` | `atelier` — init, select, craft, audit, … |
+| `/atelier` | `atelier` — init, select, detect, polish, audit, … |
+
+Contexto local: `.agents/design-context.md`. Orquestador: **ui-designer**. Implementación: **frontend**.
 
 ### Video programático (Remotion)
 
 | Command | Skill |
 |---------|--------|
-| `/remotion` | `remotion-producer` |
+| `/remotion` | `remotion-producer` — composiciones, motion, render |
 
-### Módulos (Cerebro Prime)
-
-| Command | Skill |
-|---------|--------|
-| `/nueva-factura` | `nueva-factura` |
-| `/recordatorio` | `recordatorio` |
-| `/recordatorios` | `recordatorios` (deprecated → cerebro-profesional) |
-| `/cerebro-profesional` | `cerebro-profesional` |
-| `/sincronizar-notas-meet` | `sincronizar-notas-meet` |
-| `/CerebroWork` · `/cerebro-work` | `cerebro-work` |
-| `/indexar-reuniones` | `indexar-reuniones` |
-| `/procesar-reuniones` | `procesar-reuniones` |
-| `/start` | `start` — Cerebro App (dev local) |
-| `/deploy` | `deploy` — Firebase producción |
+Orquestador: **remotion-producer**. Best practices: **`remotion-best-practices`** (vendor). Estrategia de video: **marketing-strategist** (`marketing/video`).
 
 ## Paridad multi-IDE
 
-IDEs soportados: **`vitals/config/ide-targets.yaml`** (Cursor, Antigravity, Claude Code, Codex, …).
+IDEs soportados (registro en **`vitals/config/ide-targets.yaml`**): **Cursor, Antigravity, Claude Code, Codex, GitHub Copilot** (stubs: Gemini CLI, Windsurf).
 
-- **Reglas:** `vitals/specs/rule-bodies/` + `vitals/config/rules-manifest.yaml` → `./scripts/sync-ide.sh`
-- **Commands:** `vitals/config/commands-meta.yaml` → `./scripts/sync-commands-from-meta.sh`
-- **Skills:** `.cursor/skills/` → `./scripts/sync-skills-parity.sh` / `sync-ide.sh`
+Todo se **genera desde fuentes únicas** — no editar destinos a mano:
 
-**Verificación:** `./scripts/dt-doctor.sh`
+- **Reglas:** cuerpo en `vitals/specs/rule-bodies/*.body.md` + metadata en `vitals/config/rules-manifest.yaml` → `./scripts/sync-ide.sh`.
+- **Commands:** `vitals/config/commands-meta.yaml` → `./scripts/sync-commands-from-meta.sh`.
+- **Skills:** `.cursor/skills/` (canónico) → `./scripts/sync-skills-parity.sh` / `sync-ide.sh`.
+- **Catálogo de docs:** derivado → `ruby scripts/sync-catalog.rb`.
+
+**Verificación de orden:** `./scripts/dt-doctor.sh` (debe quedar en verde). El loop de orden continuo (regla `07`) lo aplica de forma autónoma tras cada cambio.
 
 ## Reglas siempre activas relevantes
 
 - `00-orquestador-core` — macro pipeline
 - `01-protocolos-dt` — no cómplice, alternativas, puntos ciegos
-- `02-documentacion` — protocolo `docs/`
-- `07-orden-continuo` — loop autónomo (`dt-doctor`)
+- `02-documentacion` — protocolo `docs/` + tabla "qué cambió → dónde se documenta"
+- `07-orden-continuo` — loop autónomo siempre activo (verifica con `dt-doctor`, corrige hasta verde)
 - `06-dt-colaboracion` — sesión, zonas, `_meta` en pulse
 - `05-multi-project-git` — si existe `vitals/workspace.yaml`
-- `08-stack-web-default` — stack Firebase + Node
-- `15-engineering-reuse` — discover before create
+- `08-stack-web-default` — stack Firebase + Node (soft default)
+- `15-engineering-reuse` — discover before create, jerarquía de reutilización
 
 Precedencia: `vitals/specs/precedence.md`
 
 ## Subagentes (21)
 
-Reglas de delegación: `.cursor/rules/03-catalogo-subagentes.mdc`.
+Tabla maestra con agente, skill de rol y keywords: **[README — Subagentes (21)](README.md#catálogo-de-los-21-especialistas)**. Reglas de delegación: `.cursor/rules/03-catalogo-subagentes.mdc`.
 
 | Grupo | Subagentes |
 |-------|------------|
@@ -140,10 +134,10 @@ Reglas de delegación: `.cursor/rules/03-catalogo-subagentes.mdc`.
 
 **Marketing táctico:** `.cursor/skills/marketing/` · contexto `.agents/product-marketing.md` (local).
 
-**Atelier:** `.cursor/skills/design/` · `/atelier` · contexto `.agents/design-context.md` (local).
+**Atelier (diseño):** `.cursor/skills/design/` · `/atelier` · contexto `.agents/design-context.md` (local) · docs `DOC-DESIGN-001`.
 
-**Remotion:** [`tools/remotion/`](tools/remotion/) · `.cursor/skills/remotion-best-practices/` · `/remotion`.
+**Remotion (video):** [`tools/remotion/`](tools/remotion/) · `.cursor/skills/remotion-best-practices/` · `/remotion` · orquestador **remotion-producer**.
 
-## Versión del framework DT
+## Versión del template
 
-Semver incorporado: **`vitals/config/dt-upstream.md`** → `framework_version` (actual: **1.7.2**). Remote: `dt-upstream`.
+`VERSION` en la raíz (semver del framework).

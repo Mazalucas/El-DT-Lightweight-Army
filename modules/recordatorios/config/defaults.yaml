@@ -1,7 +1,0 @@
-version: 1
-defaultCategoryId: personal
-inboxPollIntervalMs: 30000
-projectCategory:
-  color: "#f97316"
-  icon: "📁"
-  sortOrderBase: 100

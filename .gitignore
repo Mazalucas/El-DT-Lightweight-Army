@@ -13,13 +13,6 @@ env/
 .env
 .env.local
 .env.*.local
-modules/cerebro-app/.firebaserc
-modules/cerebro-app/functions/.env
-modules/cerebro-app/functions/.env.local
-modules/cerebro-app/functions/.env.cerebro-prime-a0729
-modules/cerebro-app/src/.env.development.local
-modules/cerebro-app/src/.env.production.local
-
 # IDE
 .idea/
 .vscode/
@@ -57,17 +50,6 @@ client_secret*.json
 # Marketing — contexto por proyecto (skill product-marketing)
 .agents/product-marketing.md
 
-# Módulos — datos fiscales / personales locales (NIF, IBAN, facturas emitidas)
-modules/*/assets/local/
-modules/**/assets/local/**
-
-# App Facturas — proyecto local (no versionado; datos fiscales + código)
-apps/facturas/
-
-# Módulos — cola local de captura (chat → app)
-modules/*/.local/
-modules/**/.local/**
-
 # Atelier — contexto de diseño unificado (skill design-context)
 .agents/design-context.md
 .agents/design-system/
@@ -78,7 +60,6 @@ modules/**/.local/**
 
 # Generaciones locales (nunca en plantilla clonable)
 output/
-temporal/
 tools/**/node_modules/
 tools/**/out/
 
