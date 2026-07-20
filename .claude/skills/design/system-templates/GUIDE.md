@@ -29,7 +29,7 @@ Copy en español: [`templates/shared/placeholders.md`](../templates/shared/place
 2. Abrir **solo** `templates/systems/{system-id}/` — nunca los 6 a la vez.
 3. Para la superficie pedida, leer el `.md` del system **+** el `surface-*.md` shared **+** placeholders.
 4. Implementar en el stack del proyecto (React, Vue, HTML, Figma spec, etc.) siguiendo wireframes y paleta del `.md`.
-5. Skill profundo del DS: `design/systems/{system-id}/SKILL.md`.
+5. Skill profundo del DS: `design/systems/{system-id}/GUIDE.md`.
 6. Overlay visual opcional: skill `style-templates` (una carpeta `styles/`).
 7. Pre-entrega: `anti-slop` + `dt-design-detect` sobre **código entregado**.
 

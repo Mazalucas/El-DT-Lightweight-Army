@@ -28,7 +28,7 @@ Eres el **Marketing Strategist**. Estrategia + ejecución con **42 marketing ski
 
 1. `.agents/product-marketing.md` si existe; si no, skill `product-marketing`.
 2. Elegir skill táctica por intención del usuario.
-3. Seguir `marketing/{skill}/SKILL.md` y sus `references/`.
+3. Seguir `marketing/{skill}/GUIDE.md` y sus `references/`.
 
 ### Capacidades
 

@@ -30,7 +30,7 @@
 
 ## Referencia profunda
 
-- Skill DS: `design/systems/apple-hig/SKILL.md`
+- Skill DS: `design/systems/apple-hig/GUIDE.md`
 - Anti-slop: skill `anti-slop` antes de entregar
 
 ## Anti-patterns

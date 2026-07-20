@@ -168,9 +168,12 @@ def check_design_pack
     ui-templates design-tokens component-specs
   ]
   required_skills.each do |s|
-    path = File.join(ROOT, ".cursor/skills/design/#{s}/SKILL.md")
-    err("atelier", "missing skill design/#{s}") unless File.exist?(path)
+    path = File.join(ROOT, ".cursor/skills/design/#{s}/GUIDE.md")
+    err("atelier", "missing guide design/#{s}") unless File.exist?(path)
   end
+
+  style_templates_guide = File.join(ROOT, ".cursor/skills/design/style-templates/GUIDE.md")
+  err("atelier", "missing guide design/style-templates") unless File.exist?(style_templates_guide)
 
   data_dir = File.join(ROOT, "vitals/data/design")
   %w[industries.yaml decision-matrix.yaml styles.yaml template-registry.yaml template-placeholders.yaml].each do |f|
@@ -184,9 +187,6 @@ def check_design_pack
     path = File.join(ROOT, ".cursor/skills/design/templates/shared", f)
     err("atelier", "missing templates/shared/#{f}") unless File.exist?(path)
   end
-
-  style_templates_skill = File.join(ROOT, ".cursor/skills/design/style-templates/SKILL.md")
-  err("atelier", "missing skill design/style-templates") unless File.exist?(style_templates_skill)
 
   registry_path = File.join(data_dir, "template-registry.yaml")
   if File.exist?(registry_path)

@@ -29,7 +29,7 @@
 
 ## Referencia profunda
 
-- Skill DS: `design/systems/fluent-design/SKILL.md`
+- Skill DS: `design/systems/fluent-design/GUIDE.md`
 - Anti-slop: skill `anti-slop` antes de entregar
 
 ## Anti-patterns

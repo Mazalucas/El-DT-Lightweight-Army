@@ -1,6 +1,6 @@
 ---
-description: Confianza numérica — nunca calcular mentalmente; computar con script, etiquetar procedencia de cifras y cross-checks
-alwaysApply: true
+description: OBLIGATORIO con planillas, CSV, totales o reportes — calcular con script, etiquetas VERIFICADO/DERIVADO
+alwaysApply: false
 ---
 
 # Confianza numérica (numeric grounding)

@@ -57,7 +57,7 @@ Map `register` from design-context sections — do not create duplicate PRODUCT.
 
 ## DT extensions (after Impeccable setup)
 
-When building surfaces, load **one** tactical skill from `.cursor/skills/design/`:
+When building surfaces, load **one** tactical guide: `.cursor/skills/design/{skill}/GUIDE.md` (see table).
 
 | Moment | Skill |
 |--------|-------|

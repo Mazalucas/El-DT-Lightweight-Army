@@ -88,7 +88,7 @@ Grid tipográfico, jerarquía clara, decoración mínima. **Dials:** V=4, M=3, D
 | Landing | Hero asimétrico 60/40, KPI row, editorial two-col | [landing.md](../../.cursor/skills/design/templates/styles/swiss-style/landing.md) |
 | Product shell | Sidebar 240px, tabla densa, sin cards anidadas | [product-shell.md](../../.cursor/skills/design/templates/styles/swiss-style/product-shell.md) |
 
-Skill profundo: [styles/swiss-style/SKILL.md](../../.cursor/skills/design/styles/swiss-style/SKILL.md)
+Skill profundo: [styles/swiss-style/GUIDE.md](../../.cursor/skills/design/styles/swiss-style/GUIDE.md)
 
 ---
 
@@ -102,7 +102,7 @@ Formas geométricas, primarios, composición audaz. **Dials:** V=7, M=5, D=4.
 | Landing | Bloques geométricos, hero tipográfico, secciones modulares | [landing.md](../../.cursor/skills/design/templates/styles/bauhaus-style/landing.md) |
 | Product shell | Nav con acentos geométricos, cards modulares | [product-shell.md](../../.cursor/skills/design/templates/styles/bauhaus-style/product-shell.md) |
 
-Skill profundo: [styles/bauhaus-style/SKILL.md](../../.cursor/skills/design/styles/bauhaus-style/SKILL.md)
+Skill profundo: [styles/bauhaus-style/GUIDE.md](../../.cursor/skills/design/styles/bauhaus-style/GUIDE.md)
 
 ---
 
@@ -117,7 +117,7 @@ Product UI limpio, contenido primero. **Dials:** V=5, M=3, D=3 · **Slop risk:**
 | Product shell | Sidebar colapsable, content-first, poco chrome | [product-shell.md](../../.cursor/skills/design/templates/styles/digital-minimalism/product-shell.md) |
 | Auth | Card centrada 400px, campos simples, SSO opcional | [auth.md](../../.cursor/skills/design/templates/styles/digital-minimalism/auth.md) |
 
-Skill profundo: [styles/digital-minimalism/SKILL.md](../../.cursor/skills/design/styles/digital-minimalism/SKILL.md)
+Skill profundo: [styles/digital-minimalism/GUIDE.md](../../.cursor/skills/design/styles/digital-minimalism/GUIDE.md)
 
 **Combinación típica:** [auth-minimal.md](../../.cursor/skills/design/ui-templates/references/templates/auth-minimal.md) (estructura) + [auth.md](../../.cursor/skills/design/templates/styles/digital-minimalism/auth.md) (estética).
 
@@ -133,7 +133,7 @@ Controles extruidos con sombras duales. **Cuota:** ≤20% de la UI.
 | Controls | Toggles, sliders, botones soft — no formularios largos | [controls.md](../../.cursor/skills/design/templates/styles/neumorphism/controls.md) |
 | Product shell | Dashboard IoT con panel de controles neumórficos | [product-shell.md](../../.cursor/skills/design/templates/styles/neumorphism/product-shell.md) |
 
-Skill profundo: [styles/neumorphism/SKILL.md](../../.cursor/skills/design/styles/neumorphism/SKILL.md)
+Skill profundo: [styles/neumorphism/GUIDE.md](../../.cursor/skills/design/styles/neumorphism/GUIDE.md)
 
 ---
 
@@ -148,7 +148,7 @@ Blur, translucencia, chrome espacial. **Cuota:** ≤30% de la UI · requiere fon
 | Product shell | Sidebar glass, content opaco, toolbar flotante | [product-shell.md](../../.cursor/skills/design/templates/styles/glassmorphism/product-shell.md) |
 | Nav overlay | Barra flotante, pills translúcidos, modal chrome | [nav-overlay.md](../../.cursor/skills/design/templates/styles/glassmorphism/nav-overlay.md) |
 
-Skill profundo: [styles/glassmorphism/SKILL.md](../../.cursor/skills/design/styles/glassmorphism/SKILL.md)
+Skill profundo: [styles/glassmorphism/GUIDE.md](../../.cursor/skills/design/styles/glassmorphism/GUIDE.md)
 
 ---
 
@@ -161,7 +161,7 @@ Sin tokens de estilo — combinar con cualquier carpeta `styles/{id}/`.
 | Auth minimal | Card login 400px, email/password, SSO | [auth-minimal.md](../../.cursor/skills/design/ui-templates/references/templates/auth-minimal.md) |
 | Dashboard analytics | KPI strip, chart 2/3, tabla, filtros | [dashboard-analytics.md](../../.cursor/skills/design/ui-templates/references/templates/dashboard-analytics.md) |
 
-Skill: [ui-templates/SKILL.md](../../.cursor/skills/design/ui-templates/SKILL.md)
+Skill: [ui-templates/GUIDE.md](../../.cursor/skills/design/ui-templates/GUIDE.md)
 
 ---
 

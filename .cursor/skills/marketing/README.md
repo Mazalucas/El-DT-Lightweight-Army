@@ -5,7 +5,7 @@
 ## Uso
 
 1. Contexto base: `.agents/product-marketing.md` (skill `product-marketing`).
-2. Elegir skill por intención (tabla abajo) y leer `marketing/{nombre}/SKILL.md` completo, incluido `references/` si aplica.
+2. Elegir skill por intención (tabla abajo) y leer `marketing/{nombre}/GUIDE.md` completo, incluido `references/` si aplica.
 3. El orquestador delega en **marketing-strategist**; este agente aplica la skill táctica correspondiente.
 
 ## Catálogo

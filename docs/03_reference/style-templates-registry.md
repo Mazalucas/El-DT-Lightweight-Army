@@ -33,7 +33,7 @@ Plantillas que el DT y **ui-designer** deben cargar **antes** de inventar UI. Un
 | Contenido | `.cursor/skills/design/templates/styles/{style-id}/` | tokens + layouts por estilo |
 | Registro agente | `.cursor/skills/design/templates/registry.yaml` | paths relativos al pack |
 | Registro datos | `vitals/data/design/template-registry.yaml` | metadatos + cuotas (scripts) |
-| Skill router | `.cursor/skills/design/style-templates/SKILL.md` | workflow de carga |
+| Skill router | `.cursor/skills/design/style-templates/GUIDE.md` | workflow de carga |
 | Índice humano | `.cursor/skills/design/templates/INDEX.md` | links rápidos en el pack |
 | Índice docs | `docs/03_reference/atelier-templates-index.md` (`DOC-REF-004`) | tabla maestra navegable |
 

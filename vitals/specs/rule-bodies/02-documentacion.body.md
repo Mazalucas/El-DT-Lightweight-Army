@@ -1,93 +1,51 @@
 # Documentación (DT)
 
-**Aplica siempre** al operar como Director Técnico en este repositorio. El texto completo del protocolo (todas las secciones, ecuaciones, reglas) está en **`docs/99_meta/protocolo-documentacion-ia.md`** (`DOC-META-001`). Abrilo antes de crear o refactorizar documentación bajo `docs/`.
+Carga automática con glob `docs/**`. Si vas a crear docs **sin** archivos abiertos aún, el DT debe leer esta regla igual (mandato en `00-orquestador-core`).
 
-**Mejora continua:** Los equipos pueden adaptar el protocolo. Editar `docs/` y el propio protocolo en `99_meta` es **válido y deseable** cuando se actualizan `updated`, `owner`, `status` y vínculos; no trates el canónico como inmutable salvo política explícita del proyecto.
+**Canónico completo:** abrir **`docs/99_meta/protocolo-documentacion-ia.md`** (`DOC-META-001`) antes de crear o refactorizar bajo `docs/`.
 
-## Jerarquía de niveles (memoria del proyecto)
-
-| Nivel | Ubicación | Uso |
-|-------|-----------|-----|
-| **1 - Acceso rápido** | README, CHANGELOG, índices | Visión general, quick start |
-| **2 - Contexto de decisión** | `docs/` por capas, ADRs | Decisiones, patrones, contexto |
-| **3 - Memoria de implementación** | Comentarios, JSDoc, docstrings | Detalles de código |
-| **4 - Trazabilidad** | Commits, PR descriptions | Historial, cambios |
-
-## Capas obligatorias bajo `docs/`
+## Capas bajo `docs/`
 
 ```text
-docs/
-  00_overview/   → mapa, quickstart, índices
-  01_concepts/   → qué es / por qué
-  02_guides/     → cómo hacer X
-  03_reference/  → lookup técnico estable
-  04_architecture/
-  05_decisions/  → ADRs
-  06_operations/ → runbooks, deploy
-  07_glossary/
-  99_meta/       → protocolo, plantillas, id-registry, catalog
+00_overview/  01_concepts/  02_guides/  03_reference/
+04_architecture/  05_decisions/  06_operations/  07_glossary/  99_meta/
 ```
 
-**Portal:** `docs/README.md` (`DOC-OV-001`).
+Portal: `docs/README.md` (`DOC-OV-001`). Telemetría DT: `vitals/INDEX.md` (complemento, no reemplazo de docs).
 
-**Vitals (telemetría y normativa del DT):** `vitals/INDEX.md` — pulse, memoria sugerida y specs canónicas; no sustituye `docs/`, es complementario para orquestación.
+## Qué cambió → dónde
 
-## Qué cambió → dónde se documenta (árbol de decisión)
+| Cambio | Capa | ID |
+|--------|------|-----|
+| DT / reglas / pipeline | `00_overview/` o rule-bodies | `DOC-OV-*` |
+| Concepto / por qué | `01_concepts/` | `DOC-CONCEPT-*` |
+| How-to | `02_guides/` | `DOC-GUIDE-*` |
+| Contrato estable | `03_reference/` + CHANGELOG | `DOC-REF-*` |
+| Arquitectura | `04_architecture/` | `DOC-ARCH-*` |
+| Decisión (ADR) | `05_decisions/` | `DOC-DEC-*` |
+| Runbook / ops | `06_operations/` | `DOC-OPS-*` |
+| Glosario | `07_glossary/` | `DOC-GLOSS-*` |
+| Evento orquestación | `vitals/pulse/entries/` | `pulse_id` |
 
-Usá esta tabla para ubicar cada cambio en su capa sin dudar:
+Si dudás: capa de **mayor autoridad** (decision > architecture > reference > guide) y enlazá desde la otra.
 
-| Si el cambio es… | Va en… | ID/registro |
-|------------------|--------|-------------|
-| Comportamiento del DT, reglas, pipeline | `docs/00_overview/` o regla en `.cursor/rules/` (cuerpo en `vitals/specs/rule-bodies/`) | `DOC-OV-*` |
-| Concepto / modelo mental / "qué es y por qué" | `docs/01_concepts/` | `DOC-CONCEPT-*` |
-| Cómo hacer X (setup, how-to) | `docs/02_guides/` | `DOC-GUIDE-*` |
-| Contrato estable (API, CLI, esquema, sesión) | `docs/03_reference/` + CHANGELOG | `DOC-REF-*` |
-| Componentes, límites, diagramas de sistema | `docs/04_architecture/` | `DOC-ARCH-*` |
-| Decisión con alternativas y consecuencias | `docs/05_decisions/` (ADR) | `DOC-DEC-*` |
-| Runbook, deploy, incidente, operación | `docs/06_operations/` | `DOC-OPS-*` |
-| Término, alias, sigla | `docs/07_glossary/` | `DOC-GLOSS-*` |
-| Detalle local de implementación | Comentario / JSDoc / docstring | — |
-| Evento de orquestación / telemetría del DT | `vitals/pulse/entries/` | `pulse_id` |
+## Obligaciones mínimas
 
-Si dudás entre dos capas, elegí la de **mayor autoridad** (decision/policy > architecture > reference > guide > concept) y enlazá desde la otra.
+1. **Fuente única** — un concepto, un doc canónico (`source_of_truth: true` donde aplique).
+2. **Frontmatter YAML** en todo `.md` nuevo bajo `docs/`: `id`, `title`, `type`, `status`, `owner`, `updated`, `tags`, `summary`, `related`, `priority`, `source_of_truth`.
+3. **IDs** `DOC-<DOMINIO>-<NNN>` — registrar dominios nuevos en `docs/99_meta/id-registry.md`. Próximo libre: `ruby scripts/sync-catalog.rb --next <DOMINIO>`.
+4. **Plantillas** en `docs/99_meta/templates/` según `type`.
+5. **Catálogo** — `ruby scripts/sync-catalog.rb` tras agregar/mover docs (no editar `catalog.yaml` a mano).
+6. **Nombres** semánticos estables; evitar `final-v2`, `misc`.
 
-## Obligaciones operativas
+## ADR (mínimo)
 
-1. **Fuente única:** un concepto → un documento canónico (`source_of_truth` y enlaces; no duplicar semántica).
-2. **Frontmatter YAML** en todo Markdown nuevo bajo `docs/` con campos mínimos: `id`, `title`, `type`, `status`, `owner`, `updated`, `tags`, `summary`, `related`, `priority`, `source_of_truth` (más los que aplique el protocolo).
-3. **IDs:** forma `DOC-<DOMINIO>-<NNN>` (ej. `DOC-AUTH-001`). Registrar prefijos nuevos en `docs/99_meta/id-registry.md` antes de acuñar un dominio nuevo. Para el próximo número libre: `ruby scripts/sync-catalog.rb --next <DOMINIO>`.
-4. **Plantillas:** `docs/99_meta/templates/` según `type` (concept, guide, reference, decision, runbook, etc.).
-5. **Catálogo:** `docs/99_meta/catalog.yaml` se **deriva** del frontmatter — corré `ruby scripts/sync-catalog.rb` tras agregar o mover docs (no lo edites a mano).
-6. **Naming de archivos:** semántico y estable (`jwt-refresh-flow.md`); evitar `final-v2`, `misc`.
+Contexto · Decisión · Consecuencias. Tipos: `overview`, `concept`, `guide`, `reference`, `architecture`, `decision`, `runbook`, `glossary`, `policy`, `faq`.
 
-## Tipos documentales
+## Checklist antes de cerrar doc nuevo
 
-Usar un `type` explícito por archivo: `overview`, `concept`, `guide`, `reference`, `architecture`, `decision`, `runbook`, `glossary`, `policy`, `faq`.
-
-## Cuándo documentar qué (resumen)
-
-- **Decisiones arquitectónicas:** `docs/05_decisions/` (ADRs) o `04_architecture/` según alcance.
-- **Cambios de API:** CHANGELOG + `docs/03_reference/` si hay contrato estable.
-- **Setup / how-to:** `docs/02_guides/`.
-- **Contexto en código:** comentarios, JSDoc.
-
-## Formato ADR (mínimo)
-
-```markdown
-# ADR-001: [Título]
-
-## Contexto
-[Qué problema se resuelve]
-
-## Decisión
-[Qué se decidió]
-
-## Consecuencias
-[Pros y contras]
-```
-
-## Lectura obligatoria para tareas de documentación
-
-1. `docs/99_meta/protocolo-documentacion-ia.md`
-2. `docs/99_meta/id-registry.md` si asignás IDs nuevos
-3. Plantilla correspondiente en `docs/99_meta/templates/`
+- [ ] Capa correcta y ID registrado
+- [ ] Frontmatter completo
+- [ ] `sync-catalog.rb` ejecutado si aplica
+- [ ] Enlaces internos válidos
+- [ ] Detalle profundo en DOC-META-001 consultado si el doc es no trivial

@@ -1,6 +1,6 @@
 ---
-description: Stack web canónico — Node + Firebase (soft default); propagar a subagentes en desarrollo web
-alwaysApply: true
+description: OBLIGATORIO en desarrollo web, MVP, API o deploy — stack Node + Firebase soft default; bloque stack al delegar
+alwaysApply: false
 ---
 
 # Stack web canónico (Firebase + Node)

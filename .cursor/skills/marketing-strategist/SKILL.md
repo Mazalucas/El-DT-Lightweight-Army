@@ -34,7 +34,7 @@ Antes de tareas tácticas (salvo crear/actualizar contexto):
 ### Cómo usar las marketing skills
 
 1. Identificar la skill que coincide con el pedido (catálogo en `.cursor/skills/marketing/README.md`).
-2. **Leer y seguir** el `SKILL.md` completo en `.cursor/skills/marketing/{skill}/` (Antigravity: `.agent/skills/marketing/{skill}/`).
+2. **Leer y seguir** el `GUIDE.md` completo en `.cursor/skills/marketing/{skill}/` (Antigravity: `.agent/skills/marketing/{skill}/`).
 3. Usar archivos en `references/` y `evals/` cuando la skill los cite.
 4. Mantener coherencia con otras skills relacionadas (sección *Related Skills* de cada una).
 

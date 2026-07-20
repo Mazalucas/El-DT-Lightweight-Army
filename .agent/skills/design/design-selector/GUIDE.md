@@ -40,10 +40,10 @@ Map results to skills:
 
 | Output field | Skill to open next |
 |--------------|-------------------|
-| design_system | `systems/{name}/SKILL.md` |
-| visual_overlay | `styles/{name}/SKILL.md` |
+| design_system | `systems/{name}/GUIDE.md` |
+| visual_overlay | `styles/{name}/GUIDE.md` |
 | TEMPLATE * | `style-templates` → `design/templates/styles/{name}/` |
-| pattern | `patterns/{name}/SKILL.md` if exists |
+| pattern | `patterns/{name}/GUIDE.md` if exists |
 | avoid | Add to design-context anti-patterns |
 
 See `references/decision-flow.md` for precedence rules (ecosystem lock > industry > defaults).

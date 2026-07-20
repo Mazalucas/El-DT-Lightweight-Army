@@ -1,6 +1,6 @@
 ---
-description: Resolver a qué proyecto o git_root aplica un pedido en workspaces multi-repo
-alwaysApply: true
+description: OBLIGATORIO si hay varios git roots o vitals/workspace.yaml — resolver project_id antes de Git o commits
+alwaysApply: false
 ---
 
 # Multi-proyecto y contexto Git

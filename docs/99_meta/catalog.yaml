@@ -3,7 +3,7 @@
 # Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
 
 version: 1
-updated: "2026-07-02"
+updated: "2026-07-20"
 documents:
   - id: DOC-ARCH-002
     title: "Arquitectura de la capacidad Atelier"
@@ -35,6 +35,11 @@ documents:
     path: 05_decisions/adr-atelier-impeccable-vendor.md
     type: decision
     tags: [adr, design, atelier, impeccable]
+  - id: DOC-DEC-005
+    title: "ADR-005: Optimización de contexto — reglas condicionales y skills tácticas"
+    path: 05_decisions/adr-005-optimizacion-contexto-dt.md
+    type: decision
+    tags: [adr, context, tokens, rules]
   - id: DOC-DESIGN-001
     title: "Atelier — design intelligence en El DT"
     path: 01_concepts/design-atelier-el-dt.md

@@ -21,7 +21,7 @@
    - Dashboard SaaS → [`shared/surface-dashboard.md`](shared/surface-dashboard.md)
 6. **Un solo** design system: `systems/{system-id}/` (homepage · presentation · dashboard-saas).
 7. **Opcional — framework slide deck:** `frameworks/slide-deck-html/` (navegación fullscreen; tokens desde manual de marca).
-8. Skill profundo del DS: `systems/{system-id}/../SKILL.md` (carpeta `design/systems/`).
+8. Skill profundo del DS: `systems/{system-id}/../GUIDE.md` (carpeta `design/systems/`).
 9. Overlay visual opcional: **una** carpeta `styles/{style-id}/` (skill `style-templates`).
 
 ## Qué NO hacer

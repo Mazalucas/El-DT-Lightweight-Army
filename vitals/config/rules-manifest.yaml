@@ -3,7 +3,7 @@
 # El emisor (scripts/sync-ide) combina esta metadata con el cuerpo para
 # generar el frontmatter correcto en cada IDE. No editar rules a mano.
 version: 1
-updated: "2026-07-02"
+updated: "2026-07-20"
 
 rules:
   - stem: 00-orquestador-core
@@ -13,36 +13,35 @@ rules:
     description: "Protocolos obligatorios del DT - Cuestionar, alternativas, puntos ciegos"
     alwaysApply: true
   - stem: 02-documentacion
-    description: "Protocolo de documentación orientada a IA — capas docs/, metadata, IDs DOC-<DOMINIO>, canónico en 99_meta"
-    alwaysApply: true
+    description: "OBLIGATORIO al crear o editar docs/ — protocolo DOC-META-001, capas, IDs, catálogo sync-catalog"
+    globs: "docs/**"
+    alwaysApply: false
   - stem: 03-catalogo-subagentes
     description: "Catálogo de subagentes - Qué existen y cuándo invocarlos"
     alwaysApply: true
-  - stem: 04-recomendacion-herramientas
-    description: "Sugerir al usuario commands, workflows y subagentes pertinentes"
-    agent_description: "Sugerir al usuario workflows, skills y comandos pertinentes"
-    alwaysApply: true
   - stem: 05-multi-project-git
-    description: "Resolver a qué proyecto o git_root aplica un pedido en workspaces multi-repo"
-    alwaysApply: true
+    description: "OBLIGATORIO si hay varios git roots o vitals/workspace.yaml — resolver project_id antes de Git o commits"
+    alwaysApply: false
   - stem: 06-dt-colaboracion
     description: "Colaboración multiusuario — sesión solo con /yo, identidad obligatoria en conversación"
     alwaysApply: true
   - stem: 07-orden-continuo
-    description: "Orden continuo - loop autónomo siempre activo que verifica y corrige el orden con dt-doctor"
-    alwaysApply: true
+    description: "OBLIGATORIO tras cambios en docs/, reglas, commands, skills o vitals/specs — una pasada dt-doctor y corregir hallazgos"
+    globs: "docs/**, .cursor/**, vitals/**"
+    alwaysApply: false
   - stem: 08-stack-web-default
-    description: "Stack web canónico — Node + Firebase (soft default); propagar a subagentes en desarrollo web"
-    alwaysApply: true
+    description: "OBLIGATORIO en desarrollo web, MVP, API o deploy — stack Node + Firebase soft default; bloque stack al delegar"
+    alwaysApply: false
   - stem: 15-engineering-reuse
-    description: "Ingeniería reuse-first — discover before create, jerarquía de reutilización, entregable Qué reutilicé"
-    alwaysApply: true
+    description: "OBLIGATORIO al escribir o modificar código — discover before create, sección Qué reutilicé"
+    globs: "**/*.ts, **/*.tsx, **/*.js, **/*.jsx, **/*.py, **/*.go, **/src/**"
+    alwaysApply: false
   - stem: 17-canvas-first
-    description: "Canvas-first — planes, propuestas y confirmaciones extensas se entregan en el canvas del IDE cuando está disponible"
-    alwaysApply: true
+    description: "OBLIGATORIO en auditorías, planes grandes o análisis con tablas/charts — entregar en canvas del IDE si existe"
+    alwaysApply: false
   - stem: 16-numeric-grounding
-    description: "Confianza numérica — nunca calcular mentalmente; computar con script, etiquetar procedencia de cifras y cross-checks"
-    alwaysApply: true
+    description: "OBLIGATORIO con planillas, CSV, totales o reportes — calcular con script, etiquetas VERIFICADO/DERIVADO"
+    alwaysApply: false
   - stem: 10-arquitectura-backend
     description: "Convenciones de arquitectura backend, APIs, capas, manejo de errores"
     globs: "**/backend/**/*, **/api/**/*, **/*.py, **/*.go, **/*.ts, **/server/**/*"

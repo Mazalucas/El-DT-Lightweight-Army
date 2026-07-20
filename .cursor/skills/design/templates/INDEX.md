@@ -33,7 +33,7 @@ Presentación fullscreen con navegación teclado/clic. **Requiere manual de marc
 |---------|-------|
 | `presentation.md` | [frameworks/slide-deck-html/presentation.md](frameworks/slide-deck-html/presentation.md) |
 | `tokens.css` | [frameworks/slide-deck-html/tokens.css](frameworks/slide-deck-html/tokens.css) |
-| Skill | [../frameworks/slide-deck-html/SKILL.md](../frameworks/slide-deck-html/SKILL.md) |
+| Skill | [../frameworks/slide-deck-html/GUIDE.md](../frameworks/slide-deck-html/GUIDE.md) |
 
 ---
 

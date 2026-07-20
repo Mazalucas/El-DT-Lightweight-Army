@@ -1,10 +1,10 @@
 # Pulse — puntero actual
 
-**Último pulse_id:** [dt-20260702-004](entries/2026-07-02-dt-20260702-004.md)
+**Último pulse_id:** [dt-20260720-002](entries/2026-07-20-dt-20260720-002.md)
 
-**Versión template:** 1.7.5
+**Versión template:** 1.7.6
 
-**Resumen:** Regla **17-canvas-first** — planes, propuestas y confirmaciones extensas van a la superficie visual del IDE (Canvas en Cursor, Artifacts en Antigravity: Implementation Plan / Task List / Walkthrough); fallback de markdown liviano donde no hay. Previo: stack de confianza numérica (`16-numeric-grounding`, `data-auditor`, `/verificar`) en `dt-20260702-003`.
+**Resumen:** **Esencia DT** en regla `00` (documentar / reutilizar / ordenar siempre como parte de entregar) + **globs** en `02`, `15`, `07` para cargar protocolos con contexto de archivos. Always-apply ~3.9k tok; peor caso con las tres esencia ~5.6k tok. Previo: optimización contexto `dt-20260720-001`.
 
 **Proyecto / contexto Git:** raíz `.` (repo plantilla DT canónica).
 
