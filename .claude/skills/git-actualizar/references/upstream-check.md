@@ -27,6 +27,8 @@ Si `vitals/ops/dt-upstream-state.md` tiene `snooze_until` **posterior a ahora** 
 
    Tomar el tag `vX.Y.Z` semver más alto.
 
+   **Mantenedores del template:** cada release publicada debe taguear `vX.Y.Z` en el commit que actualiza `VERSION` (paso en skill `git-guardar` → `./scripts/dt-tag-version.sh --push`). Sin tag, los consumidores no ven la release en esta consulta.
+
    Si no hay tags:
 
    ```bash

@@ -5,7 +5,7 @@ type: overview
 status: canonical
 owner: dt-platform
 created: 2026-05-27
-updated: 2026-06-25
+updated: 2026-07-21
 tags:
   - dt
   - evolution
@@ -297,6 +297,7 @@ Guía: [actualizar-framework-dt.md](../02_guides/actualizar-framework-dt.md) (`D
 | **Staging** | Cambios del operador + `docs/`, `.cursor/`, `.agent/` si tocados |
 | **Excluye** | `session.yaml`, `.env`, credenciales |
 | **Versión** | Bump patch en `VERSION` si cambió normativa DT (rules, vitals/specs, commands-meta) |
+| **Tag release** | Si el commit incluye `VERSION` nuevo → `./scripts/dt-tag-version.sh --push` (`vX.Y.Z` anotado). `/actualizar-dt` y Fase B de `/actualizar` leen tags remotos, no solo el archivo |
 | **Push** | `git push origin HEAD`; si falla → `/actualizar` y reintentar |
 
 Ejemplo de mensaje de commit:

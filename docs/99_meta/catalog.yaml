@@ -3,7 +3,7 @@
 # Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
 
 version: 1
-updated: "2026-07-20"
+updated: "2026-07-21"
 documents:
   - id: DOC-ARCH-002
     title: "Arquitectura de la capacidad Atelier"
