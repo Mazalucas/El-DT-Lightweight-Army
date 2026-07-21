@@ -37,7 +37,7 @@ if git rev-parse "$TAG" >/dev/null 2>&1; then
   if [[ "$TAG_COMMIT" == "$HEAD_COMMIT" ]]; then
     echo "OK: $TAG ya apunta a HEAD"
   else
-    echo "ERROR: $TAG existe en $(git rev-parse --short "$TAG_COMMIT)), HEAD es $(git rev-parse --short HEAD)" >&2
+    echo "ERROR: $TAG existe en $(git rev-parse --short "$TAG_COMMIT"), HEAD es $(git rev-parse --short HEAD)" >&2
     echo "Bump VERSION o borrar/recrear tag solo con acuerdo explícito (no force en main)." >&2
     exit 1
   fi
