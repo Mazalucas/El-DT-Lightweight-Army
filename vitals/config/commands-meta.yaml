@@ -35,9 +35,9 @@ commands:
     skill: dt-session
   guardar:
     group: routine
-    tagline: "Subir a GitHub — commit vX.Y.Z, sync README/front/back, tag release."
-    when: "Al cerrar bloque de trabajo o antes de irte. Release semver: /guardar release (o release minor)."
-    example: "/guardar  ·  /guardar release"
+    tagline: "Subir a GitHub — bump patch, sync README/front/back, commit vX.Y.Z, tag."
+    when: "Al cerrar bloque con cambios. Minor: /guardar release minor."
+    example: "/guardar"
     skill: git-guardar
   deploy:
     group: work

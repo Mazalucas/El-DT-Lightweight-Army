@@ -4,7 +4,7 @@
 version: 1
 initialized: false
 initial_semver: "0.1.0"
-auto_bump: none
+auto_bump: patch
 tag_releases: true
 
 # Propagar VERSION (raíz). Tipos: json | readme_badge | yaml_frontmatter

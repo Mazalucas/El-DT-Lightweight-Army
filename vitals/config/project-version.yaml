@@ -3,7 +3,7 @@
 
 version: 1
 initialized: true
-auto_bump: none
+auto_bump: patch
 tag_releases: true
 
 sync_paths:

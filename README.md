@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.7.8**
+**v1.7.9**
 
 *Tu IA con equipo, criterio y herramientas — no un chat que dice “sí” a todo.*
 

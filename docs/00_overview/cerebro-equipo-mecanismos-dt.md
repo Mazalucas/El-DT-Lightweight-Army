@@ -296,8 +296,8 @@ Guía: [actualizar-framework-dt.md](../02_guides/actualizar-framework-dt.md) (`D
 | **Pre-requisitos** | `session.yaml` con `operator.id` |
 | **Staging** | Cambios del operador + producto, `docs/`, etc. |
 | **Excluye** | `session.yaml`, `.env`, credenciales |
-| **Versión** | Sync README + front/back + `framework_version`; commit `vX.Y.Z:`; tag obligatorio en push |
-| **Bump** | Solo `/guardar release` o `/github-save-small` |
+| **Versión** | Cada `/guardar` con cambios: bump **patch**, sync README/front/back, commit `vX.Y.Z:`, tag |
+| **Minor** | `/guardar release minor` |
 | **Push** | `git push origin HEAD`; si falla → `/actualizar` y reintentar |
 
 Spec: [`vitals/specs/project-version.md`](../../vitals/specs/project-version.md).

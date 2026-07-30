@@ -2,12 +2,16 @@
 
 Spec: [`vitals/specs/project-version.md`](../../../../vitals/specs/project-version.md).
 
-## Obligatorio (canonical y consumer)
+## Regla central
 
-1. Commit empieza con **`vX.Y.Z:`**
-2. **`./scripts/project-sync-version.sh`** — README, dt-upstream, front/back
-3. **`./scripts/dt-tag-version.sh --push`** tras push OK
+**Hay cambios → bump patch → sync → commit `vX.Y.Z:` → tag.**
 
-## Bump
+Sin cambios → no bump.
 
-Solo **`/guardar release`** (o `/github-save-small` en canónico).
+## Scripts
+
+```bash
+./scripts/project-bump-version.sh patch   # o minor
+./scripts/project-sync-version.sh
+./scripts/dt-tag-version.sh --push --message "Release v$(cat VERSION)"
+```
