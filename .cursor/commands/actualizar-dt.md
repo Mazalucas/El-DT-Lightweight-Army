@@ -13,6 +13,6 @@ skill: dt-actualizar
 **Cuándo:** Cuando /actualizar avisó una versión más nueva; working tree limpio.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`dt-actualizar`** — `.cursor/skills/dt-actualizar/` y `.agent/skills/dt-actualizar/`.
+Ejecutá el skill **`dt-actualizar`** — `.cursor/skills/dt-actualizar/` y `.agents/skills/dt-actualizar/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

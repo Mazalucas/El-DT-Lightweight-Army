@@ -13,6 +13,6 @@ skill: github-save-release
 **Cuándo:** Cierre de iteración del template o app consumidora.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`github-save-release`** — `.cursor/skills/github-save-release/` y `.agent/skills/github-save-release/`.
+Ejecutá el skill **`github-save-release`** — `.cursor/skills/github-save-release/` y `.agents/skills/github-save-release/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

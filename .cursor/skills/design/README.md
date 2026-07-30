@@ -57,7 +57,7 @@ Skills de diseño para el subagente **ui-designer**, organizadas por fases. Insp
 | IDE | Ruta |
 |-----|------|
 | **Cursor** | `.cursor/skills/design/{skill}/` |
-| **Antigravity** | `.agent/skills/design/{skill}/` |
+| **Antigravity** | `.agents/skills/design/{skill}/` |
 
 Fuente canónica: **Cursor**. Tras editar, corré `./scripts/sync-skills-parity.sh`.
 

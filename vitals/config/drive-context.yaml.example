@@ -1,0 +1,23 @@
+# Plantilla — copiar a vitals/config/drive-context.yaml (local, gitignoreado).
+# Registrar con /drive tras conectar Google Drive.
+version: 1
+updated: "2026-07-30T00:00:00Z"
+operator_id: "<slug-del-operador>"
+sync_mode: selective  # selective | full_drive
+folders:
+  - id: "<folderId-de-google-drive>"
+    name: "Briefs Clientes"
+    drive: "my_drive"  # my_drive | shared:<nombre-unidad-compartida>
+    purpose: "Briefs y propuestas comerciales por cliente"
+    keywords:
+      - brief
+      - cliente
+      - propuesta
+  - id: "<otro-folderId>"
+    name: "Reportes Mensuales"
+    drive: "shared:Equipo Operaciones"
+    purpose: "Reportes de cierre y métricas mensuales"
+    keywords:
+      - reporte
+      - métricas
+registered_at: "2026-07-30T00:00:00Z"

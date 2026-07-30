@@ -1,9 +1,0 @@
-{
-  "skill_name": "carbon-design",
-  "evals": [
-    {
-      "prompt": "Enterprise data table dashboard",
-      "expected": ["@carbon/react", "IBM Plex", "WCAG"]
-    }
-  ]
-}

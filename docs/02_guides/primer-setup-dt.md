@@ -5,7 +5,7 @@ type: guide
 status: canonical
 owner: dt-platform
 created: 2026-06-23
-updated: 2026-06-23
+updated: 2026-07-30
 tags:
   - onboarding
   - setup
@@ -13,7 +13,7 @@ tags:
   - first-run
 domain:
   - meta
-summary: Ritual de primera vez tras clonar El DT — /bienvenida y /yo — sin Ruby ni comandos por IDE.
+summary: Ritual de primera vez tras clonar El DT — /bienvenida (mensaje + commands) y /yo — sin Ruby ni comandos por IDE.
 related:
   - DOC-GUIDE-001
   - DOC-GUIDE-007
@@ -55,9 +55,11 @@ Tras clonar el repo, ejecutá **`/bienvenida`** y luego **`/yo`**. No necesitás
 
 ## Qué hace `/bienvenida`
 
-La IA verifica que existan reglas, skills y commands (checklist markdown). **No** instala nada ni borra carpetas.
+La IA verifica reglas, skills y commands (checklist read-only) y entrega el **mensaje de bienvenida canónico**: commands recomendados, tarjeta ritual y —si falta estructura— el paso **`/setup`** integrado. **No** instala nada ni borra carpetas.
 
-Si algo falta → te lo dice en español claro y sugiere re-clonar o pedir ayuda.
+Si abrís el repo por primera vez **sin** haber corrido `/yo`, la IA puede mostrar el mismo mensaje de forma proactiva (solo lectura).
+
+Si algo falta → te lo dice en español claro; **`/setup`** repara drift; re-clonar solo si el clone está roto.
 
 ## Qué hace `/yo`
 

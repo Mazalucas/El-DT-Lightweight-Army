@@ -31,4 +31,4 @@ Toda entrada en `pulse/entries/` y toda contribución documental que use `agent_
 ## IDE
 
 - Cursor: regla [../../.cursor/rules/05-multi-project-git.mdc](../../.cursor/rules/05-multi-project-git.mdc)
-- Antigravity: [../../.agent/rules/05-multi-project-git.md](../../.agent/rules/05-multi-project-git.md)
+- Antigravity: [../../.agents/rules/05-multi-project-git.md](../../.agents/rules/05-multi-project-git.md)

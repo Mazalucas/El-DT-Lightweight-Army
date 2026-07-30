@@ -1,14 +1,28 @@
 ---
 name: git-guardar
-description: "[Rutina] Commit y push del trabajo del operador — excluye session.yaml y secretos. Use when the user invokes /guardar."
+description: "[Rutina] Commit y push — versión del proyecto (no del DT), commits con vX.Y.Z; bump y tag solo con /guardar release. Use when the user invokes /guardar."
 ---
 
 # git-guardar
 
+Spec versión: [`vitals/specs/project-version.md`](../../../vitals/specs/project-version.md).
+
+## Invocaciones
+
+| Comando | Bump semver | Tag |
+|---------|-------------|-----|
+| `/guardar` | No (default) | Solo si cambió `VERSION` en el commit |
+| `/guardar release` | **patch** | Sí (si `tag_releases`) |
+| `/guardar release minor` | **minor** | Sí |
+| `/guardar release patch` | **patch** | Sí |
+
+También aplica si el operador escribe "release", "minor release" o "patch release" en el mismo mensaje.
+
 ## Pre-requisitos
 
 1. Leer `vitals/ops/session.yaml`. Si `operator.id` está vacío o ausente → **detener** y pedir `/yo`.
-2. Opcional: `git fetch` y comprobar si la rama está behind; si sí, sugerir `/actualizar` antes de commit.
+2. Leer `vitals/config/dt-upstream.md` → `mode`: **`canonical`** | **`consumer`**.
+3. Opcional: `git fetch`; si behind → sugerir `/actualizar`.
 
 ## Exclusiones obligatorias (nunca stage)
 
@@ -17,47 +31,88 @@ description: "[Rutina] Commit y push del trabajo del operador — excluye sessio
 - `vitals/workspace.yaml`
 - `vitals/work/inbox/**/draft-*`
 
-## Pasos
+## Pasos comunes
 
-1. `git status` — mostrar resumen al usuario.
-2. Si `vitals/ops/session.yaml` aparece staged:
+1. `git status` — resumen al usuario.
+2. Si `session.yaml` staged → `git reset HEAD vitals/ops/session.yaml`.
+3. Stage selectivo: código producto, `docs/`, `vitals/` (excepto exclusiones).
+
+Detectar **release explícito** (`/guardar release` …) antes de tocar versión.
+
+---
+
+## Modo `consumer` — versión **del proyecto**
+
+**Regla:** no continuar numeración del DT. `framework_version` en `dt-upstream.md` no se bump aquí.
+
+### Manifest (`vitals/config/project-version.yaml`)
+
+- Lo prepara **`/bootstrap`** (discover + sync). Si falta → fallback en primer `/guardar` (copiar example + discover).
+- Default **`auto_bump: none`** — bump solo con release explícito.
+
+### Primer `/guardar` (`initialized: false`)
+
+1. Si no hay manifest → copiar example, discover `package.json`, reset `VERSION` a `initial_semver`, `./scripts/project-sync-version.sh`.
+2. Si bootstrap ya preparó manifest → solo confirmar `VERSION` alineada con `sync_paths`.
+3. Commit con prefijo `v{X.Y.Z}` — **sin bump**.
+4. Tras push OK → `initialized: true`.
+5. Tag inicial si `tag_releases` y no existe `v{X.Y.Z}`:
+
    ```bash
-   git reset HEAD vitals/ops/session.yaml
+   ./scripts/dt-tag-version.sh --push --message "Release v$(cat VERSION)"
    ```
-3. Stage selectivo (preferir lo tocado en la sesión):
-   - `vitals/` (excepto paths excluidos)
-   - `docs/`, `.cursor/`, `.agent/`, `README.md`, `AGENTS.md`, `VERSION` si aplican
-4. **Versión:** si cambiaron `VERSION`, rules (cualquier stem de `vitals/config/rules-manifest.yaml`), `vitals/specs/`, `vitals/config/` (incl. `rules-manifest.yaml`, `ide-targets.yaml`, `commands-meta.yaml`) o commands/skills de rutina → bump **patch** en `VERSION` (semver del template).
-5. **Telemetría (orden continuo):** si bumpeaste `VERSION` o cambió normativa del DT → actualizá `vitals/pulse/current.md` para que mencione el `VERSION` nuevo y un resumen de una línea (y, si corresponde, un entry en `vitals/pulse/entries/`). Esto mantiene `dt-doctor` en verde (chequeo de frescura de pulse).
-6. **Orden antes de commitear:** corré `./scripts/dt-doctor.sh`; si hay ERRORES, regenerá artefactos (`ruby scripts/sync-catalog.rb`, `./scripts/sync-ide.sh`, `./scripts/sync-commands-from-meta.sh`) hasta dejarlo en verde.
-7. Mensaje de commit (español, una línea + cuerpo breve):
+
+### `/guardar` habitual (sin "release")
+
+1. **No** bump `VERSION`.
+2. `./scripts/project-sync-version.sh` solo si `VERSION` cambió manualmente (raro).
+3. `./scripts/dt-doctor.sh` si tocó normativa DT local.
+4. Commit:
 
    ```text
-   dt({operator_id}): {resumen corto}
+   v{X.Y.Z} ({operator_id}): {resumen corto}
 
    Operador: {operator_name} ({role})
+   Framework DT: {framework_version}
    Archivos: {lista breve}
-   Versión template: {VERSION}
    ```
 
-8. Commit solo si hay cambios staged.
-9. `git push origin HEAD` — si falla (non-fast-forward), indicar `/actualizar`, resolver, reintentar. **No** `push --force` en main/master.
-10. **Tag de release DT (obligatorio si cambió `VERSION` en el commit):** los consumidores descubren releases con **`git ls-remote --tags`** (`/actualizar` Fase B, `/actualizar-dt` apply). Sin tag `vX.Y.Z`, no ven la versión aunque `VERSION` en main lo diga.
+5. Push; tag **solo** si `VERSION` cambió en el commit.
 
-    Tras push exitoso, si el commit incluye cambio en `VERSION` (comparar `git show HEAD:VERSION` con el padre o `git diff HEAD^ HEAD -- VERSION`):
+### `/guardar release` (patch / minor / patch explícito)
 
-    ```bash
-    ./scripts/dt-tag-version.sh --push --message "El DT template $(cat VERSION)"
-    ```
+1. Bump `VERSION` raíz (patch por defecto; minor si lo pidió).
+2. `./scripts/project-sync-version.sh`.
+3. Mismo formato de commit con **nueva** versión en el prefijo.
+4. Push + tag:
 
-    - Formato: tag anotado **`vX.Y.Z`** en `HEAD`, alineado con el contenido de `VERSION`.
-    - Si el tag ya existe en el mismo commit: el script hace push del tag si faltaba en remoto.
-    - Si el tag existe en **otro** commit: **detener** — bump de `VERSION` o resolver manualmente (nunca `push --force` del tag en main).
+   ```bash
+   ./scripts/dt-tag-version.sh --push --message "Release v$(cat VERSION)"
+   ```
 
-    Si **no** hubo cambio en `VERSION`, omitir tag (entrega: "tag: N/A — VERSION sin cambio").
+**No** bump por cambios solo de normativa DT importada — eso va con `/actualizar-dt`.
+
+---
+
+## Modo `canonical` — repo template El DT
+
+- **No** auto-bump `VERSION` (release → `/github-save-small`).
+- `./scripts/dt-doctor.sh` antes de commitear normativa.
+
+```text
+dt({operator_id}): {resumen corto}
+
+Operador: {operator_name} ({role})
+Versión template: {VERSION}
+Archivos: {lista breve}
+```
+
+---
 
 ## Entrega
 
-- Hash de commit o "sin cambios"
-- Estado del push (ok / error + siguiente paso)
-- Tag creado/pusheado (`vX.Y.Z`) o motivo de omisión
+- Hash o "sin cambios"
+- Modo y versión actual (`VERSION`)
+- ¿Release? (sí/no) y bump aplicado
+- Push ok/error
+- Tag `vX.Y.Z` o motivo de omisión

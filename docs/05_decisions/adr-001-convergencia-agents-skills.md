@@ -55,4 +55,4 @@ El DT empezó como template dual (Cursor + Antigravity) con reglas y skills dupl
 
 ## Notas
 
-Colisión `.agent/` (Antigravity) vs `.agents/` (Codex): se mantiene `.agents/product-marketing.md` (local) y se suma `.agents/skills/` alimentado por la misma fuente canónica.
+Colisión histórica `.agent/` (Antigravity legacy) vs `.agents/` (Codex + Antigravity 2.0): convergido en **`.agents/`** para rules, workflows y skills; `.agents/product-marketing.md` y contexto local siguen en la raíz de `.agents/`.

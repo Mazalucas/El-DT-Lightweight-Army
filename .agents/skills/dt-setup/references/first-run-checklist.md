@@ -26,7 +26,7 @@ Verificar presencia según cada target con `enabled: true`:
 | Target | Paths mínimos |
 |--------|----------------|
 | cursor | `.cursor/rules/`, `.cursor/commands/`, `.cursor/skills/` |
-| antigravity | `.antigravity/rules.md`, `.agent/rules/`, `.agent/workflows/`, `.agent/skills/` |
+| antigravity | `.antigravity/rules.md`, `.agents/rules/`, `.agents/workflows/`, `.agents/skills/` |
 | claude | `CLAUDE.md`, `.claude/rules/`, `.claude/skills/` |
 | codex | `AGENTS.md`, `.agents/skills/` |
 | copilot | `.github/copilot-instructions.md` |
@@ -52,26 +52,12 @@ Señales de que hace falta `/setup` repair:
 
 ## 6. Cierre obligatorio
 
+- Entregar el mensaje completo según [`welcome-message.md`](welcome-message.md) (§ plantilla).
 - Recordar: **`/yo`** con nombre y rol.
-- Tarjeta:
 
-```text
-  bienvenida → yo → trabajar → guardar
-  actualizar = proyecto + aviso si hay DT nuevo
-  actualizar-dt = cuando quieras incorporar el framework
-  session.yaml = solo en tu PC
-```
+## 7. Entrega non-dev (deprecado — usar welcome-message.md)
 
-## 7. Entrega non-dev
-
-```markdown
-## Bienvenida a El DT
-- Estado: [Listo / Falta X]
-- Versión DT: {VERSION}
-- Tu IDE: [inferido si se puede]
-- Qué NO tocamos: session.yaml, .env, borradores
-- Siguiente paso: /yo
-```
+Usar solo [`welcome-message.md`](welcome-message.md) como formato único de bienvenida.
 
 ## Troubleshooting plain
 

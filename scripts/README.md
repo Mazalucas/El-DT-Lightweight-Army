@@ -5,10 +5,11 @@
 | [dt-doctor.sh](dt-doctor.sh) | **Verificador read-only del orden** (frontmatter, enlaces, catálogo, paridad multi-IDE, pulse). Motor del loop de orden continuo. Exit 0 = verde |
 | [sync-ide.sh](sync-ide.sh) | **Emisor único multi-IDE**: recorre `vitals/config/ide-targets.yaml` y emite reglas, skills, commands (Claude) y punteros (CLAUDE.md, Copilot, …) desde fuentes canónicas |
 | [sync-catalog.rb](sync-catalog.rb) | Deriva `docs/99_meta/catalog.yaml` del frontmatter; `--next <DOMINIO>` da el próximo ID libre |
-| [sync-commands-from-meta.sh](sync-commands-from-meta.sh) | YAML → `.cursor/commands/` + `.agent/workflows/` |
-| [sync-skills-parity.sh](sync-skills-parity.sh) | `.cursor/skills/` → `.agent/skills/` (raíz: solo `SKILL.md`; `marketing/*`: árbol completo) |
+| [sync-commands-from-meta.sh](sync-commands-from-meta.sh) | YAML → `.cursor/commands/` + `.agents/workflows/` |
+| [sync-skills-parity.sh](sync-skills-parity.sh) | `.cursor/skills/` → `.agents/skills/` (raíz: solo `SKILL.md`; `marketing/*`: árbol completo) |
 | [atelier-detect.sh](atelier-detect.sh) | Anti-slop determinístico (Impeccable CLI, 44+ reglas) sobre archivos o URLs |
 | [dt-design-select.rb](dt-design-select.rb) | Selección de estilo/sistema Atelier según brief (motor de `/atelier select`) |
+| [setup-drive.sh](setup-drive.sh) | Instalador OAuth + MCP Google Drive (`--ide cursor\|antigravity\|all`; credenciales en `~/.config/`) |
 
 Upstream DT (`/actualizar` Fase B, `/actualizar-dt`): instrucciones en **Markdown** — skills `git-actualizar` y `dt-actualizar` + `vitals/specs/dt-upstream-config.md`. **Sin scripts Ruby de sync.**
 

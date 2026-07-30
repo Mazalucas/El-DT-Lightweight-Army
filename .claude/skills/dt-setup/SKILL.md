@@ -1,6 +1,6 @@
 ---
 name: dt-setup
-description: "[Rutina/Framework] Primera vez o repair multi-IDE. /bienvenida = checklist markdown sin Ruby; /setup = reparar drift con scripts. Use when the user invokes /bienvenida or /setup."
+description: "[Rutina/Framework] Primera vez o repair multi-IDE. /bienvenida = checklist + mensaje de bienvenida con commands y rama /setup; /setup = repair drift. Use when the user invokes /bienvenida, /setup, or first conversation post-clone without session."
 ---
 
 # dt-setup
@@ -12,7 +12,7 @@ Setup **multi-IDE**, **no destructivo**. Dos modos; el agente elige según el co
 | `/bienvenida` | **first-run** — checklist markdown, sin Ruby obligatorio |
 | `/setup` | **repair** — regenerar desde fuentes canónicas + `dt-doctor` |
 
-Referencias: [`references/first-run-checklist.md`](references/first-run-checklist.md) · [`references/post-sync-pipeline.md`](references/post-sync-pipeline.md)
+Referencias: [`references/first-run-checklist.md`](references/first-run-checklist.md) · [`references/welcome-message.md`](references/welcome-message.md) · [`references/post-sync-pipeline.md`](references/post-sync-pipeline.md)
 
 ## Fuente de verdad
 
@@ -20,13 +20,13 @@ Registro de IDEs: `vitals/config/ide-targets.yaml`. No hardcodear IDEs en este s
 
 ## Modo A — first-run (default en `/bienvenida`)
 
-El clone **ya trae** `.cursor/`, `.agent/`, `.claude/`, commands y skills en Git. El usuario **no necesita Ruby** para empezar.
+El clone **ya trae** `.cursor/`, `.agents/`, `.claude/`, commands y skills en Git. El usuario **no necesita Ruby** para empezar.
 
 1. Resolver `git_root` (multi-proyecto: `vitals/workspace.yaml` si existe).
 2. Seguir **todo** [`references/first-run-checklist.md`](references/first-run-checklist.md): verificar paths, Git, detectar drift, **registrar dt-upstream si aplica** (§4).
 3. **No correr** `sync-ide` ni `dt-doctor` salvo drift evidente **y** que el usuario pida reparar → pasar a modo B.
-4. Entregar formato non-dev del checklist (§7).
-5. Cierre obligatorio: **"Siguiente paso: `/yo`"** + tarjeta del ritual.
+4. Entregar **obligatoriamente** el mensaje canónico en [`references/welcome-message.md`](references/welcome-message.md): completar placeholders tras checklist; si hay drift → rama **`/setup`** visible en el mensaje (no solo al final).
+5. Cierre obligatorio: **"Siguiente paso: `/yo`"** — el mensaje de bienvenida ya incluye la tarjeta ritual; no acortar a una línea.
 
 ### Registro dt-upstream (first-run)
 

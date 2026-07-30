@@ -124,7 +124,7 @@ Fuente: [`.gitignore`](../../.gitignore).
 | `vitals/work/inbox/**/draft-*` | **NO** | Borradores locales |
 | `vitals/work/inbox/{operator_id}/` | **SÍ** | Cuaderno personal (si se usa) |
 | `.env`, `.env.local`, `*.credentials` | **NO** | Secretos |
-| `.cursor/`, `.agent/`, `docs/`, skills | **SÍ** | Comportamiento IA |
+| `.cursor/`, `.agents/`, `docs/`, skills | **SÍ** | Comportamiento IA |
 | `node_modules/`, `dist/`, logs | **NO** | Build |
 
 ### Primera vez en una máquina
@@ -198,7 +198,7 @@ Regla: [`.cursor/rules/06-dt-colaboracion.mdc`](../../.cursor/rules/06-dt-colabo
 | IDE | Commands / workflows | Skills | Rules |
 |-----|---------------------|--------|-------|
 | **Cursor** | `.cursor/commands/*.md` | `.cursor/skills/` | `.cursor/rules/*.mdc` |
-| **Antigravity** | `.agent/workflows/*.md` | `.agent/skills/` | `.agent/rules/` |
+| **Antigravity** | `.agents/workflows/*.md` | `.agents/skills/` | `.agents/rules/` |
 | **Claude Code** | `.claude/commands/*.md` | `.claude/skills/` | `.claude/rules/*.md` |
 | **Codex** | — (skills) | `.agents/skills/` | — |
 | **GitHub Copilot** | — | — | `.github/copilot-instructions.md` |
@@ -294,20 +294,23 @@ Guía: [actualizar-framework-dt.md](../02_guides/actualizar-framework-dt.md) (`D
 |--|--|
 | **Skill** | `git-guardar` |
 | **Pre-requisitos** | `session.yaml` con `operator.id` |
-| **Staging** | Cambios del operador + `docs/`, `.cursor/`, `.agent/` si tocados |
+| **Staging** | Cambios del operador + producto, `docs/`, etc. |
 | **Excluye** | `session.yaml`, `.env`, credenciales |
-| **Versión** | Bump patch en `VERSION` si cambió normativa DT (rules, vitals/specs, commands-meta) |
-| **Tag release** | Si el commit incluye `VERSION` nuevo → `./scripts/dt-tag-version.sh --push` (`vX.Y.Z` anotado). `/actualizar-dt` y Fase B de `/actualizar` leen tags remotos, no solo el archivo |
+| **Versión proyecto** | **consumer**: `/bootstrap` prepara `project-version.yaml` + sync; commits con prefijo `vX.Y.Z`; bump/tag solo con **`/guardar release`**; primer `/guardar` → tag `v0.1.0` |
+| **Versión DT** | `framework_version` en `dt-upstream.md` — `/actualizar-dt`. **canonical**: `/github-save-small` |
+| **Tag release** | Cuando cambia `VERSION` o primer guardar (consumer) |
 | **Push** | `git push origin HEAD`; si falla → `/actualizar` y reintentar |
 
-Ejemplo de mensaje de commit:
+Spec: [`vitals/specs/project-version.md`](../../vitals/specs/project-version.md).
+
+Ejemplo de mensaje (proyecto consumer):
 
 ```text
-dt(<operator_id>): pulse y docs protocolo sesión
+v0.1.0 (<operator_id>): primera entrega con DT embebido
 
 Operador: <nombre> (<rol>)
-Archivos: vitals/pulse, docs/00_overview
-Versión template: <VERSION>
+Framework DT: 1.7.8
+Archivos: src/, package.json
 ```
 
 ---
@@ -321,6 +324,7 @@ Versión template: <VERSION>
 | `/cuestionar` | work | No |
 | `/contexto` | work | No |
 | `/prepr` | work | Recomendado |
+| `/deploy` | work | Recomendado |
 | `/setup` | framework | No |
 | `/bootstrap` | framework | Sí (recomendado) |
 | `/actualizar-dt` | framework | Recomendado |
@@ -372,7 +376,7 @@ vitals/
   pulse/, memory/, specs/
   work/inbox/{id}/
 
-.cursor/  .agent/
+.cursor/  .agents/  .antigravity/
 docs/     DOC-OV-004, DOC-OPS-001, …
 ```
 

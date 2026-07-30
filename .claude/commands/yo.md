@@ -13,6 +13,6 @@ skill: dt-session
 **Cuándo:** Después de cada /actualizar; primera vez en el repo.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`dt-session`** — `.cursor/skills/dt-session/` y `.agent/skills/dt-session/`.
+Ejecutá el skill **`dt-session`** — `.cursor/skills/dt-session/` y `.agents/skills/dt-session/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

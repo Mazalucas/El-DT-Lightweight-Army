@@ -13,6 +13,6 @@ skill: git-actualizar
 **Cuándo:** Al abrir el editor; antes de /guardar si estás behind.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`git-actualizar`** — `.cursor/skills/git-actualizar/` y `.agent/skills/git-actualizar/`.
+Ejecutá el skill **`git-actualizar`** — `.cursor/skills/git-actualizar/` y `.agents/skills/git-actualizar/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

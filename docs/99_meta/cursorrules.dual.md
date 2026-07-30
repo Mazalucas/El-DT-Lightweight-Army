@@ -10,7 +10,7 @@ La fuente de reglas del agente son las **Project Rules** en **`.cursor/rules/*.m
 
 ## Si usás **Antigravity**
 
-Leé **`.antigravity/rules.md`** y las reglas en **`.agent/rules/`**. Para delegar tareas especializadas usá los skills en **`.agent/skills/`**.
+Leé **`.antigravity/rules.md`** y las reglas en **`.agents/rules/`**. Para delegar tareas especializadas usá los skills en **`.agents/skills/`**.
 
 ## Primera vez en este repo
 

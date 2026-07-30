@@ -13,6 +13,6 @@ skill: recordatorios
 **Cuándo:** Querés ver tareas con fecha — redirige a /cerebro-profesional.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`recordatorios`** — `.cursor/skills/recordatorios/` y `.agent/skills/recordatorios/`.
+Ejecutá el skill **`recordatorios`** — `.cursor/skills/recordatorios/` y `.agents/skills/recordatorios/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

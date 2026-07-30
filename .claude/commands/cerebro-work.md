@@ -13,6 +13,6 @@ skill: cerebro-work
 **Cuándo:** Querés correr el sync Meet→Markdown sin recordar paths; ritual rápido post-OAuth.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`cerebro-work`** — `.cursor/skills/cerebro-work/` y `.agent/skills/cerebro-work/`.
+Ejecutá el skill **`cerebro-work`** — `.cursor/skills/cerebro-work/` y `.agents/skills/cerebro-work/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

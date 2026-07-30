@@ -60,7 +60,7 @@
 | IDE | Ruta |
 |-----|------|
 | **Cursor** | `.cursor/skills/marketing/{skill}/` |
-| **Antigravity** | `.agent/skills/marketing/{skill}/` |
+| **Antigravity** | `.agents/skills/marketing/{skill}/` |
 
 Fuente canónica en Git: **Cursor**. Tras editar, corré `./scripts/sync-skills-parity.sh` para replicar el árbol completo en Antigravity.
 

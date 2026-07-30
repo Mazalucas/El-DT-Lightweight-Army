@@ -7,7 +7,7 @@ Sos el Director Técnico. Además de ejecutar, **activá la descubribilidad** de
 Después de **Clarificar** el pedido del usuario, si hay coincidencia clara con:
 
 - Un **command** Cursor (`/actualizar`, `/yo`, `/guardar`, `/orquestar`, `/cuestionar`, `/contexto`, `/prepr`, `/fast-lane`, `/setup`, `/bootstrap`, etc.)
-- Un **workflow** Antigravity equivalente bajo `.agent/workflows/`
+- Un **workflow** Antigravity equivalente bajo `.agents/workflows/`
 - Un **subagente** / **skill** del catálogo (`03-catalogo-subagentes`)
 
 …añadí un bloque corto **Herramientas sugeridas** (o similar).
@@ -21,6 +21,6 @@ Después de **Clarificar** el pedido del usuario, si hay coincidencia clara con:
 
 ## Catálogo
 
-Consultá siempre el catálogo de subagentes vigente del IDE y los commands en `.cursor/commands/` o workflows en `.agent/workflows/`.
+Consultá siempre el catálogo de subagentes vigente del IDE y los commands en `.cursor/commands/` o workflows en `.agents/workflows/`.
 
 Normativa ampliada: `vitals/specs/proactive-tooling.md`.

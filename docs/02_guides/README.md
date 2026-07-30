@@ -33,5 +33,6 @@ Responder: **cómo hago X**.
 
 - [Configuración multi-IDE (Cursor y Antigravity)](ide-setup.md) (`DOC-GUIDE-001`)
 - [Adoptar El DT en un repositorio existente](adopt-dt-in-existing-repo.md) (`DOC-GUIDE-003`)
+- [Google Drive como cerebro — setup usuarios](drive-cerebro-setup.md) (`DOC-GUIDE-009`)
 
 [Portal `docs/`](../README.md)

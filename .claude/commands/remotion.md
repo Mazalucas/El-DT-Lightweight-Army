@@ -13,6 +13,6 @@ skill: remotion-producer
 **Cuándo:** Video en código, motion graphics, promo, explainers, render MP4.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`remotion-producer`** — `.cursor/skills/remotion-producer/` y `.agent/skills/remotion-producer/`.
+Ejecutá el skill **`remotion-producer`** — `.cursor/skills/remotion-producer/` y `.agents/skills/remotion-producer/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

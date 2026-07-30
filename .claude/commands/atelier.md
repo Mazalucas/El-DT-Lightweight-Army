@@ -13,6 +13,6 @@ skill: atelier
 **Cuándo:** Landing, dashboard, mockup, craft UI, critique, polish, design system.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`atelier`** — `.cursor/skills/atelier/` y `.agent/skills/atelier/`.
+Ejecutá el skill **`atelier`** — `.cursor/skills/atelier/` y `.agents/skills/atelier/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

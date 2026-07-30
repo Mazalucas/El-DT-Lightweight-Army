@@ -13,6 +13,6 @@ skill: sincronizar-notas-meet
 **Cuándo:** Hay reuniones nuevas en Drive o falta contenido en el espejo .md.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`sincronizar-notas-meet`** — `.cursor/skills/sincronizar-notas-meet/` y `.agent/skills/sincronizar-notas-meet/`.
+Ejecutá el skill **`sincronizar-notas-meet`** — `.cursor/skills/sincronizar-notas-meet/` y `.agents/skills/sincronizar-notas-meet/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

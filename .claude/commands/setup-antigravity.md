@@ -15,7 +15,7 @@ Este workflow configura el proyecto para usar **solo** Antigravity IDE. Elimina 
 
 3. **Eliminar .cursor/**: Una vez confirmado, elimina la carpeta `.cursor/` del proyecto (incluyendo rules, commands y agents). **No** elimines `vitals/`, `docs/` ni `scripts/` — son compartidas y no dependen del IDE.
 
-4. **Informar al usuario**: Indica que el setup está completo. El proyecto ahora usa solo `.agent/` y `.antigravity/` para la configuración del DT y `.cursorrules` refleja modo Antigravity.
+4. **Informar al usuario**: Indica que el setup está completo. El proyecto ahora usa `.agents/` (rules, workflows, skills) y `.antigravity/` para la configuración del DT; `.cursorrules` refleja modo Antigravity.
 
 5. **Restauración**: Si el usuario necesita volver a usar Cursor o el repo multi-IDE: `git checkout .cursor` y restaurá **`.cursorrules`** (por ejemplo desde `docs/99_meta/cursorrules.dual.md` o `git checkout .cursorrules`).
 

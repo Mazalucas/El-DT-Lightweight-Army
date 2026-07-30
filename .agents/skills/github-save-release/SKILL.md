@@ -1,11 +1,13 @@
 ---
 name: github-save-release
-description: "[Framework] Release del template — bump VERSION, commit atribuido, tag y push. Alineado con exclusiones de git-guardar."
+description: "[Framework] Release del template DT (solo mode canonical) — bump VERSION, commit atribuido, tag y push. No usar para versión de producto; eso es /guardar."
 ---
 
 # github-save-release
 
 Complementa `/github-save-small`. **Mismas exclusiones** que `git-guardar`.
+
+**Alcance:** repo **`mode: canonical`** en `vitals/config/dt-upstream.md`. En proyectos **`consumer`**, la versión de la app la maneja **`/guardar`** ([`vitals/specs/project-version.md`](../../../vitals/specs/project-version.md)) — no bump `VERSION` aquí salvo que mantengas el template DT como producto.
 
 ## Pre-requisitos
 

@@ -3,7 +3,7 @@
 # El emisor (scripts/sync-ide) combina esta metadata con el cuerpo para
 # generar el frontmatter correcto en cada IDE. No editar rules a mano.
 version: 1
-updated: "2026-07-20"
+updated: "2026-07-30"
 
 rules:
   - stem: 00-orquestador-core
@@ -41,6 +41,10 @@ rules:
     alwaysApply: false
   - stem: 16-numeric-grounding
     description: "OBLIGATORIO con planillas, CSV, totales o reportes — calcular con script, etiquetas VERIFICADO/DERIVADO"
+    alwaysApply: false
+  - stem: 18-drive-contexto
+    description: "OBLIGATORIO al consultar Google Drive vía MCP — solo carpetas registradas, solo lectura, consulta dirigida"
+    globs: "vitals/config/drive-context.yaml, vitals/config/drive-context.yaml.example"
     alwaysApply: false
   - stem: 10-arquitectura-backend
     description: "Convenciones de arquitectura backend, APIs, capas, manejo de errores"

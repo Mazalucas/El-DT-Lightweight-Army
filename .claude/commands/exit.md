@@ -13,6 +13,6 @@ skill: exit
 **Cuándo:** Al terminar la jornada o cuando quedaron apps abiertas en segundo plano.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`exit`** — `.cursor/skills/exit/` y `.agent/skills/exit/`.
+Ejecutá el skill **`exit`** — `.cursor/skills/exit/` y `.agents/skills/exit/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

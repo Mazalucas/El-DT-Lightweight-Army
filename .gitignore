@@ -37,6 +37,7 @@ logs/
 vitals/workspace.yaml
 vitals/ops/session.yaml
 vitals/ops/dt-upstream-state.md
+vitals/config/drive-context.yaml
 
 # Borradores personales temporales (si usás vitals/work/inbox/)
 vitals/work/inbox/**/draft-*

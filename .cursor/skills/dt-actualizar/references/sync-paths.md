@@ -5,10 +5,9 @@ La IA usa esta lista al hacer dry-run y apply. Respetar **`preserve_paths`** del
 ## Incluir (checkout desde tag upstream)
 
 - `.cursor/`
-- `.agent/`
+- `.agents/`
 - `.antigravity/`
 - `.claude/`
-- `.agents/`
 - `vitals/config/` (excepto exclusiones abajo)
 - `vitals/specs/`
 - `vitals/data/`

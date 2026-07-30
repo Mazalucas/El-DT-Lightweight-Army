@@ -1,0 +1,13 @@
+# Copia a vitals/config/project-version.yaml — completar en el primer /guardar (consumer).
+# Spec: vitals/specs/project-version.md
+
+version: 1
+initialized: false
+initial_semver: "0.1.0"
+auto_bump: none
+tag_releases: true
+
+# Propagar VERSION (raíz) a estos archivos — discover añade package.json en bootstrap
+sync_paths:
+  - path: package.json
+    field: version

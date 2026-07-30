@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # Sincroniza commands en Cursor y Antigravity desde vitals/config/commands-meta.yaml
-# Una definición en YAML → .cursor/commands/{cmd}.md + .agent/workflows/{cmd}.md
+# Una definición en YAML → .cursor/commands/{cmd}.md + .agents/workflows/{cmd}.md
 # Uso: ruby scripts/sync-commands-from-meta.rb [--check]
 
 require "yaml"
@@ -67,7 +67,7 @@ def skill_command_body(cmd, cfg, groups)
     **Cuándo:** #{cfg['when']}
     **Quién:** Cualquier operador del repo.
 
-    Ejecutá el skill **`#{skill}`** — `.cursor/skills/#{skill}/` y `.agent/skills/#{skill}/`.
+    Ejecutá el skill **`#{skill}`** — `.cursor/skills/#{skill}/` y `.agents/skills/#{skill}/`.
 
     _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._
   MD
@@ -92,7 +92,7 @@ drift = []
 commands.each_key do |cmd|
   cfg = commands[cmd]
   cursor_path = File.join(ROOT, ".cursor/commands/#{cmd}.md")
-  workflow_path = File.join(ROOT, ".agent/workflows/#{cmd}.md")
+  workflow_path = File.join(ROOT, ".agents/workflows/#{cmd}.md")
 
   if cfg["skill"]
     expected_cursor = cursor_frontmatter(cmd, cfg, groups) + skill_command_body(cmd, cfg, groups)

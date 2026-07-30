@@ -13,6 +13,6 @@ skill: recordatorio
 **Cuándo:** Capturás una tarea sin abrir el navegador; usá @categoria #tag y fechas como mañana.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`recordatorio`** — `.cursor/skills/recordatorio/` y `.agent/skills/recordatorio/`.
+Ejecutá el skill **`recordatorio`** — `.cursor/skills/recordatorio/` y `.agents/skills/recordatorio/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

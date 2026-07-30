@@ -1,6 +1,6 @@
 # Subagentes del DT (22)
 
-Definiciones de agente para delegación en Cursor. Cada agente tiene su **skill de rol** canónica en `.cursor/skills/{nombre}/` (espejos generados: `.agent/skills/`, `.claude/skills/`, `.agents/skills/` vía `sync-ide`).
+Definiciones de agente para delegación en Cursor. Cada agente tiene su **skill de rol** canónica en `.cursor/skills/{nombre}/` (espejos generados: `.agents/skills/`, `.claude/skills/` vía `sync-ide`).
 
 **Catálogo completo** (tabla, keywords, skills tácticas): [README raíz — Subagentes (22)](../../README.md#catálogo-de-los-22-especialistas).
 

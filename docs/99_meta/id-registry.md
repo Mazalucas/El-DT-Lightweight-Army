@@ -33,9 +33,9 @@ Antes de crear un documento con un prefijo nuevo, añadí una fila a esta tabla 
 | Prefijo (`DOMINIO`) | Descripción | Ejemplos |
 |---------------------|-------------|----------|
 | META | Meta-documentación, protocolo, políticas editoriales | DOC-META-001 … DOC-META-002 |
-| GUIDE | Guías how-to del repositorio / DT | DOC-GUIDE-001 … DOC-GUIDE-008; consumidor Cerebro: DOC-GUIDE-010 … DOC-GUIDE-015 |
+| GUIDE | Guías how-to del repositorio / DT | DOC-GUIDE-001 … DOC-GUIDE-009; consumidor Cerebro: DOC-GUIDE-010 … DOC-GUIDE-015 |
 | OV | Overview, índices de capa, quickstart, portal `docs/README` | DOC-OV-001 … DOC-OV-010 (DOC-OV-004 = cerebro DT; DOC-OV-010 = índice de guías) |
-| OPS | Operaciones, runbooks en `06_operations` | DOC-OPS-001 |
+| OPS | Operaciones, runbooks en `06_operations` | DOC-OPS-001 … DOC-OPS-002 |
 | CONCEPT | Conceptos en `01_concepts` | DOC-CONCEPT-001 |
 | REF | Referencia técnica en `03_reference` | DOC-REF-001 … DOC-REF-008 |
 | ARCH | Arquitectura en `04_architecture` | DOC-ARCH-002 |

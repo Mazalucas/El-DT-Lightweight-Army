@@ -13,6 +13,6 @@ skill: cerebro-profesional
 **Cuándo:** Querés explorar notas Meet, timelines por persona o filtrar por proyecto.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`cerebro-profesional`** — `.cursor/skills/cerebro-profesional/` y `.agent/skills/cerebro-profesional/`.
+Ejecutá el skill **`cerebro-profesional`** — `.cursor/skills/cerebro-profesional/` y `.agents/skills/cerebro-profesional/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

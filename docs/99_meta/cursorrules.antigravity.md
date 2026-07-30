@@ -4,4 +4,4 @@
 
 ## Si usás **Antigravity**
 
-Leé **`.antigravity/rules.md`** y las reglas en **`.agent/rules/`**. Skills en **`.agent/skills/`**. **IA:** `AGENTS.md`.
+Leé **`.antigravity/rules.md`** y las reglas en **`.agents/rules/`**. Skills en **`.agents/skills/`**. **IA:** `AGENTS.md`.

@@ -1,0 +1,31 @@
+# Copia a vitals/config/deploy.yaml y completá en el primer /deploy (o a mano).
+# Schema version: 1
+
+version: 1
+initialized: false
+
+# firebase | cloud-run | vercel | docker | custom
+platform: null
+
+# Doc humano generado/curado por la IA en bootstrap
+project_deploy_doc: .cursor/skills/deploy/references/project-deploy.md
+
+environments:
+  production:
+    description: "Producción"
+    pre_deploy: []
+    # Ejemplo Firebase: npm run build && firebase deploy --only hosting,functions
+    deploy: []
+    post_deploy: []
+  staging:
+    description: "Staging / preview (opcional)"
+    pre_deploy: []
+    deploy: []
+    post_deploy: []
+
+# Paths de documentación canónica del repo (discover en bootstrap)
+docs_paths:
+  - docs/DEPLOY.md
+
+# Smoke checks post-deploy (URLs, comandos)
+smoke_checks: []

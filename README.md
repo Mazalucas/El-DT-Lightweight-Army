@@ -249,7 +249,7 @@ Seguridad y secretos **siempre** aplican, incluso bajo `/fast-lane`.
 | [sync-ide.sh](scripts/sync-ide.sh) | Emisor único multi-IDE (rules, skills, commands) |
 | [sync-catalog.rb](scripts/sync-catalog.rb) | Catálogo de docs derivado del frontmatter |
 | [sync-commands-from-meta.sh](scripts/sync-commands-from-meta.sh) | Commands desde `commands-meta.yaml` |
-| [sync-skills-parity.sh](scripts/sync-skills-parity.sh) | Skills `.cursor/skills` → `.agent/skills` |
+| [sync-skills-parity.sh](scripts/sync-skills-parity.sh) | Skills `.cursor/skills` → `.agents/skills` |
 
 Detalle: [scripts/README.md](scripts/README.md).
 
@@ -279,22 +279,22 @@ Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigra
 | 3 | **devops** | Engineering | CI/CD, infra, deploy | `deploy`, `infrastructure`, `ci/cd`, `devops`, `pipelines` | [agente](.cursor/agents/devops.md) | [`.cursor/skills/devops/`](.cursor/skills/devops/) |
 | 4 | **ui-designer** | Engineering | Orquestador **Atelier** + specs UI | `UI design`, `mockups`, `Atelier`, `landing`, `dashboard`, `design system` | [agente](.cursor/agents/ui-designer.md) | [`.cursor/skills/ui-designer/`](.cursor/skills/ui-designer/) |
 | 5 | **remotion-producer** | Engineering | Video programático **Remotion** | `Remotion`, `video programático`, `motion graphics`, `render MP4` | [agente](.cursor/agents/remotion-producer.md) | [`.cursor/skills/remotion-producer/`](.cursor/skills/remotion-producer/) |
-| 6 | **prd-creator** | Planning | PRD, visión de producto, user stories | `product idea`, `requirements`, `PRD` | [agente](.cursor/agents/prd-creator.md) | [`.agent/skills/prd-creator/`](.agent/skills/prd-creator/) |
-| 7 | **srd-creator** | Planning | SRD y specs técnicas desde PRD | `technical spec`, `SRD`, `PRD to technical` | [agente](.cursor/agents/srd-creator.md) | [`.agent/skills/srd-creator/`](.agent/skills/srd-creator/) |
-| 8 | **development-planner** | Planning | Fases, MVP, roadmap, timelines | `development plan`, `phases`, `MVP`, `roadmap` | [agente](.cursor/agents/development-planner.md) | [`.agent/skills/development-planner/`](.agent/skills/development-planner/) |
+| 6 | **prd-creator** | Planning | PRD, visión de producto, user stories | `product idea`, `requirements`, `PRD` | [agente](.cursor/agents/prd-creator.md) | [`.agents/skills/prd-creator/`](.agents/skills/prd-creator/) |
+| 7 | **srd-creator** | Planning | SRD y specs técnicas desde PRD | `technical spec`, `SRD`, `PRD to technical` | [agente](.cursor/agents/srd-creator.md) | [`.agents/skills/srd-creator/`](.agents/skills/srd-creator/) |
+| 8 | **development-planner** | Planning | Fases, MVP, roadmap, timelines | `development plan`, `phases`, `MVP`, `roadmap` | [agente](.cursor/agents/development-planner.md) | [`.agents/skills/development-planner/`](.agents/skills/development-planner/) |
 | 9 | **qa** | Testing | Tests, edge cases, validación | `test`, `qa`, `quality`, `pruebas` | [agente](.cursor/agents/qa.md) | [`.cursor/skills/qa/`](.cursor/skills/qa/) |
-| 10 | **ux-researcher** | Design & UX | Personas, journey, research UX | `user research`, `personas`, `UX`, `journey mapping` | [agente](.cursor/agents/ux-researcher.md) | [`.agent/skills/ux-researcher/`](.agent/skills/ux-researcher/) |
-| 11 | **product-strategist** | Product | Priorización, roadmap de producto | `prioritization`, `roadmap`, `product strategy` | [agente](.cursor/agents/product-strategist.md) | [`.agent/skills/product-strategist/`](.agent/skills/product-strategist/) |
-| 12 | **feedback-synthesizer** | Product | Síntesis de feedback en insights | `feedback`, `synthesis`, `insights` | [agente](.cursor/agents/feedback-synthesizer.md) | [`.agent/skills/feedback-synthesizer/`](.agent/skills/feedback-synthesizer/) |
-| 13 | **researcher** | Product | Investigación y análisis de información | `research`, `analyze`, `investigate` | [agente](.cursor/agents/researcher.md) | [`.agent/skills/researcher/`](.agent/skills/researcher/) |
-| 14 | **doc** | Documentation | Docs por niveles, README, ADRs | `document`, `docs`, `readme`, `documentación` | [agente](.cursor/agents/doc.md) | [`.agent/skills/doc/`](.agent/skills/doc/) |
-| 15 | **content-creator** | Marketing & Content | Contenido multi-canal, SEO, brand | `content`, `copy` (contenido editorial) | [agente](.cursor/agents/content-creator.md) | [`.agent/skills/content-creator/`](.agent/skills/content-creator/) |
+| 10 | **ux-researcher** | Design & UX | Personas, journey, research UX | `user research`, `personas`, `UX`, `journey mapping` | [agente](.cursor/agents/ux-researcher.md) | [`.agents/skills/ux-researcher/`](.agents/skills/ux-researcher/) |
+| 11 | **product-strategist** | Product | Priorización, roadmap de producto | `prioritization`, `roadmap`, `product strategy` | [agente](.cursor/agents/product-strategist.md) | [`.agents/skills/product-strategist/`](.agents/skills/product-strategist/) |
+| 12 | **feedback-synthesizer** | Product | Síntesis de feedback en insights | `feedback`, `synthesis`, `insights` | [agente](.cursor/agents/feedback-synthesizer.md) | [`.agents/skills/feedback-synthesizer/`](.agents/skills/feedback-synthesizer/) |
+| 13 | **researcher** | Product | Investigación y análisis de información | `research`, `analyze`, `investigate` | [agente](.cursor/agents/researcher.md) | [`.agents/skills/researcher/`](.agents/skills/researcher/) |
+| 14 | **doc** | Documentation | Docs por niveles, README, ADRs | `document`, `docs`, `readme`, `documentación` | [agente](.cursor/agents/doc.md) | [`.agents/skills/doc/`](.agents/skills/doc/) |
+| 15 | **content-creator** | Marketing & Content | Contenido multi-canal, SEO, brand | `content`, `copy` (contenido editorial) | [agente](.cursor/agents/content-creator.md) | [`.agents/skills/content-creator/`](.agents/skills/content-creator/) |
 | 16 | **marketing-strategist** | Marketing & Content | Estrategia + **42 skills tácticas** | `marketing`, `CRO`, `SEO`, `ads`, `campaigns`, `growth` | [agente](.cursor/agents/marketing-strategist.md) | [`.cursor/skills/marketing-strategist/`](.cursor/skills/marketing-strategist/) |
-| 17 | **brand-guardian** | Marketing & Content | Marca y brand guidelines | `brand`, `brand compliance` | [agente](.cursor/agents/brand-guardian.md) | [`.agent/skills/brand-guardian/`](.agent/skills/brand-guardian/) |
-| 18 | **growth-hacker** | Marketing & Content | Experimentos y conversión | `growth`, `experiments`, `conversion` | [agente](.cursor/agents/growth-hacker.md) | [`.agent/skills/growth-hacker/`](.agent/skills/growth-hacker/) |
-| 19 | **pitch-specialist** | Marketing & Content | Pitch inversores y stakeholders | `pitch`, `presentation`, `investors` | [agente](.cursor/agents/pitch-specialist.md) | [`.agent/skills/pitch-specialist/`](.agent/skills/pitch-specialist/) |
-| 20 | **storytelling-specialist** | Marketing & Content | Narrativa y story arcs | `storytelling`, `narrative`, `story` | [agente](.cursor/agents/storytelling-specialist.md) | [`.agent/skills/storytelling-specialist/`](.agent/skills/storytelling-specialist/) |
-| 21 | **operations-maintainer** | Operations | Monitoreo, incidentes, mantenimiento | `operations`, `monitoring`, `incidentes` | [agente](.cursor/agents/operations-maintainer.md) | [`.agent/skills/operations-maintainer/`](.agent/skills/operations-maintainer/) |
+| 17 | **brand-guardian** | Marketing & Content | Marca y brand guidelines | `brand`, `brand compliance` | [agente](.cursor/agents/brand-guardian.md) | [`.agents/skills/brand-guardian/`](.agents/skills/brand-guardian/) |
+| 18 | **growth-hacker** | Marketing & Content | Experimentos y conversión | `growth`, `experiments`, `conversion` | [agente](.cursor/agents/growth-hacker.md) | [`.agents/skills/growth-hacker/`](.agents/skills/growth-hacker/) |
+| 19 | **pitch-specialist** | Marketing & Content | Pitch inversores y stakeholders | `pitch`, `presentation`, `investors` | [agente](.cursor/agents/pitch-specialist.md) | [`.agents/skills/pitch-specialist/`](.agents/skills/pitch-specialist/) |
+| 20 | **storytelling-specialist** | Marketing & Content | Narrativa y story arcs | `storytelling`, `narrative`, `story` | [agente](.cursor/agents/storytelling-specialist.md) | [`.agents/skills/storytelling-specialist/`](.agents/skills/storytelling-specialist/) |
+| 21 | **operations-maintainer** | Operations | Monitoreo, incidentes, mantenimiento | `operations`, `monitoring`, `incidentes` | [agente](.cursor/agents/operations-maintainer.md) | [`.agents/skills/operations-maintainer/`](.agents/skills/operations-maintainer/) |
 | 22 | **data-auditor** | Testing | Verificación de números y planillas con script (regla `16-numeric-grounding`) | `planilla`, `csv`, `excel`, `reporte`, `totales`, `reconciliar`, `verificar cifras` | [agente](.cursor/agents/data-auditor.md) | [`.cursor/skills/data-auditor/`](.cursor/skills/data-auditor/) |
 
 #### Marketing strategist — 42 skills tácticas
@@ -304,7 +304,7 @@ Origen: [marketingskills](https://github.com/coreyhaines31/marketingskills) v2. 
 | IDE | Orquestadora | Pack táctico |
 |-----|--------------|--------------|
 | **Cursor** | [`.cursor/skills/marketing-strategist/`](.cursor/skills/marketing-strategist/) | [`.cursor/skills/marketing/{skill}/`](.cursor/skills/marketing/) |
-| **Antigravity** | [`.agent/skills/marketing-strategist/`](.agent/skills/marketing-strategist/) | [`.agent/skills/marketing/{skill}/`](.agent/skills/marketing/) |
+| **Antigravity** | [`.agents/skills/marketing-strategist/`](.agents/skills/marketing-strategist/) | [`.agents/skills/marketing/{skill}/`](.agents/skills/marketing/) |
 
 | Skill | Área |
 |-------|------|
@@ -379,7 +379,7 @@ Actualizar vendor skill: `./tools/remotion/scripts/update-vendor-skills.sh` → 
 | `.env`, `*.credentials` | **No** | Secretos |
 | `.agents/product-marketing.md` | **No** | Contexto de producto local |
 | `.agents/design-context.md` | **No** | Contexto de diseño local |
-| `.cursor/`, `.agent/`, `docs/`, skills | **Sí** | Comportamiento de la IA |
+| `.cursor/`, `.agents/`, `docs/`, skills | **Sí** | Comportamiento de la IA |
 
 ### Project layout
 
@@ -397,7 +397,8 @@ vitals/
   work/inbox/{operator_id}/
 
 .cursor/                            # rules, commands, agents, skills (canónico)
-.agent/                             # Antigravity: rules, workflows, skills
+.agents/                            # Antigravity + Codex: rules, workflows, skills
+.antigravity/                       # Entrada Antigravity (rules.md)
 .claude/ .codex/                    # Espejos generados — no editar a mano
 output/                             # Generaciones locales (gitignored)
 ```

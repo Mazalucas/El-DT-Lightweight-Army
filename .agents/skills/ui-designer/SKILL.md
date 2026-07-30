@@ -34,7 +34,7 @@ Antes de tareas tácticas (salvo crear/actualizar contexto):
 
 ### Cómo usar las design skills
 
-1. Catálogo: `.cursor/skills/design/README.md` (Antigravity: `.agent/skills/design/README.md`).
+1. Catálogo: `.cursor/skills/design/README.md` (Antigravity: `.agents/skills/design/README.md`).
 2. **Leer y seguir** un solo `SKILL.md` táctico por tarea — no cargar el catálogo completo.
 3. Para recomendación automática: `ruby scripts/dt-design-select.rb "brief"` o skill **`design-selector`**.
 4. Antes de generar UI: skill **`design-read`** (Design Read + dials).

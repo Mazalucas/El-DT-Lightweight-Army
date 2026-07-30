@@ -28,4 +28,7 @@ review_cycle_days: 180
 
 Runbooks, troubleshooting, monitoreo.
 
+- [Colaboración Git — El DT](git-colaboracion-dt.md) (`DOC-OPS-001`)
+- [Google Drive — admin OAuth Google Cloud](drive-google-cloud-admin.md) (`DOC-OPS-002`)
+
 [Portal `docs/`](../README.md)

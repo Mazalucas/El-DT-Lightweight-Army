@@ -5,7 +5,7 @@
 Antes de **escribir** en el repo, proponer **commit/push**, crear pulse, o ejecutar trabajo sustantivo:
 
 1. Leer `vitals/ops/session.yaml` si existe.
-2. Si el archivo **no existe** o `operator.id` está vacío/ausente → **detener** y pedir al usuario que valide con **`/yo`** (nombre y rol). No asumir identidad por el historial del chat.
+2. Si el archivo **no existe** o `operator.id` está vacío/ausente → **detener** escrituras sustantivas y pedir **`/yo`**, **salvo** onboarding read-only: mensaje de bienvenida post-clone o **`/bienvenida`** (skill `dt-setup` → `welcome-message.md`).
 3. Si el usuario ya dijo quién es pero no corrió `/yo` → invitar a **`/yo`** para cargar la sesión local; no seguir con escrituras atribuidas.
 
 La sesión se **crea y completa solo con `/yo`** (skill `dt-session`).

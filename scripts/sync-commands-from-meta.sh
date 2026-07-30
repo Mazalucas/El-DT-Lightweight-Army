@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sincroniza commands de rutina (.cursor/commands, .agent/workflows) desde commands-meta.yaml
+# Sincroniza commands de rutina (.cursor/commands, .agents/workflows) desde commands-meta.yaml
 # Uso: ./scripts/sync-commands-from-meta.sh [--check]
 set -euo pipefail
 

@@ -45,13 +45,13 @@ Integrar El DT sin romper flujos del equipo y manteniendo trazabilidad (`vitals/
 
 ## Scope
 
-**Cubre:** copia de carpetas, resolución de conflictos con `.cursor/` o `.agent/` previos, workspace multi-root, versionado por tags del template.
+**Cubre:** copia de carpetas, resolución de conflictos con `.cursor/` o `.agents/` previos, workspace multi-root, versionado por tags del template.
 
 **No cubre:** políticas de CI de terceros ni migración de datos desde otras herramientas.
 
 ## Modo drop-in (repo sin rules DT)
 
-1. Copiá desde el template: `.cursor/`, `.agent/` + `.antigravity/`, `vitals/` (`config/commands-meta.yaml`, `config/dt-upstream.example.md`, `config/roster.yaml`, `config/roles.yaml` vacíos, `ops/README.md`), `AGENTS.md`, `vitals/specs/dt-upstream-config.md`, y lo que necesités de `docs/99_meta/` y `scripts/`.
+1. Copiá desde el template: `.cursor/`, `.agents/` + `.antigravity/`, `vitals/` (`config/commands-meta.yaml`, `config/dt-upstream.example.md`, `config/roster.yaml`, `config/roles.yaml` vacíos, `ops/README.md`), `AGENTS.md`, `vitals/specs/dt-upstream-config.md`, y lo que necesités de `docs/99_meta/` y `scripts/`.
 2. Configurá upstream: `git remote add dt-upstream <url-repo-canónico-DT>` y copiá `dt-upstream.example.md` → `vitals/config/dt-upstream.md` con `mode: consumer` y `framework_version` del tag adoptado.
 3. Ritual primera vez: **`/bienvenida`** → **`/yo`** → `/guardar` cuando corresponda (ver `DOC-GUIDE-006`).
 4. Ritual diario: `/actualizar` → `/yo` → `/guardar` (ver `DOC-OV-004`).
@@ -93,7 +93,7 @@ Al copiar desde El DT, anotá el **tag o commit** del template en el README del 
 
 - Abrí `vitals/INDEX.md` y verificá que los enlaces resuelven.
 - En Cursor: Project Rules cargan `00`–`06` y documentación.
-- En Antigravity: `.antigravity/rules.md` lista skills en `.agent/skills/` y workflows de rutina.
+- En Antigravity: `.antigravity/rules.md` lista skills en `.agents/skills/` y workflows en `.agents/workflows/`.
 - `./scripts/sync-commands-from-meta.sh --check` termina sin drift.
 
 ## Related docs

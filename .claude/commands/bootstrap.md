@@ -13,6 +13,6 @@ skill: dt-bootstrap
 **Cuándo:** Arrancar un proyecto nuevo a partir del template.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`dt-bootstrap`** — `.cursor/skills/dt-bootstrap/` y `.agent/skills/dt-bootstrap/`.
+Ejecutá el skill **`dt-bootstrap`** — `.cursor/skills/dt-bootstrap/` y `.agents/skills/dt-bootstrap/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._

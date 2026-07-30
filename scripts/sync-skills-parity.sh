@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copia skills de .cursor/skills/ → .agent/skills/
+# Copia skills de .cursor/skills/ → .agents/skills/ (Antigravity 2.0 + Codex)
 # - Raíz: solo SKILL.md (rutinas DT)
 # - marketing/*, design/*: árbol completo (SKILL.md + references/ + evals/)
 # Uso: ./scripts/sync-skills-parity.sh
@@ -7,7 +7,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SRC="$ROOT/.cursor/skills"
-DST="$ROOT/.agent/skills"
+DST="$ROOT/.agents/skills"
 
 if [[ ! -d "$SRC" ]]; then
   echo "sync-skills-parity: no existe $SRC" >&2
@@ -59,7 +59,7 @@ for pack in marketing design; do
     echo "Copied $pack/${reldir#/}/"
     pcount=$((pcount + 1))
   done < <(find "$PACK_SRC" -name SKILL.md -print0)
-  echo "sync-skills-parity: $pcount $pack skill(s) → .agent/skills/$pack/"
+  echo "sync-skills-parity: $pcount $pack skill(s) → .agents/skills/$pack/"
   if [[ -d "$PACK_SRC/templates" ]]; then
     rm -rf "$PACK_DST/templates"
     cp -R "$PACK_SRC/templates" "$PACK_DST/"
@@ -67,4 +67,4 @@ for pack in marketing design; do
   fi
 done
 
-echo "sync-skills-parity: $count root skill(s) → .agent/skills/"
+echo "sync-skills-parity: $count root skill(s) → .agents/skills/"

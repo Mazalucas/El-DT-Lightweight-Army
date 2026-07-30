@@ -1,9 +1,4 @@
 # Equipo en Git — solo entradas reales añadidas por /yo (skill dt-session). No commitear datos de ejemplo.
 version: 1
-updated: "2026-06-04T14:00:00+02:00"
-team:
-  - id: lucas
-    name: Lucas
-    role: ""
-    email: ""
-    registered_at: "2026-06-04T14:00:00+02:00"
+updated: "2026-07-30T16:15:00+02:00"
+team: []

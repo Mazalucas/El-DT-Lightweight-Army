@@ -53,4 +53,6 @@ Resumen · cambios · verificación · **Contexto consultado** (1–3 líneas) �
 
 ## Setup multi-IDE
 
-`/bienvenida` (first-run) · `/setup` (repair drift).
+`/bienvenida` (first-run + **mensaje de bienvenida canónico** con commands recomendados y rama `/setup`) · `/setup` (repair drift).
+
+**Post-clone:** sin sesión local → la IA muestra bienvenida (read-only) antes de trabajo sustantivo — ver sección homónima en este archivo.

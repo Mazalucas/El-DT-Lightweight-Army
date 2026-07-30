@@ -141,7 +141,7 @@ end
 
 # Claude consume commands/agents como markdown: copia verbatim de .cursor/.
 # Gateado por flags explícitas para NO pisar los workflows de Antigravity
-# (que genera sync-commands-from-meta) ni el origen de Cursor.
+# (`.agents/workflows/` vía sync-commands-from-meta) ni el origen de Cursor.
 def emit_commands(cfg)
   return unless cfg["mirror_commands"] && cfg["commands_dir"] && Dir.exist?(COMMANDS_SRC)
 

@@ -1,9 +1,0 @@
-{
-  "skill_name": "design-context",
-  "evals": [
-    {
-      "prompt": "Initialize design context for new project with existing product-marketing.md",
-      "expected": ["design-context.md", "import", "anti_patterns", "DESIGN_VARIANCE"]
-    }
-  ]
-}

@@ -59,7 +59,7 @@ El set soportado vive en **`vitals/config/ide-targets.yaml`**. Stubs: Gemini CLI
 | IDE | Entrada | Reglas | Skills | Notas |
 |-----|---------|--------|--------|-------|
 | Cursor | `.cursorrules` | `.cursor/rules/*.mdc` | `.cursor/skills/` (canónico) | Origen de skills |
-| Antigravity | `.antigravity/rules.md` | `.agent/rules/*.md` | `.agent/skills/` | Commands en `.agent/workflows/` |
+| Antigravity | `.antigravity/rules.md` | `.agents/rules/*.md` | `.agents/skills/` | Commands en `.agents/workflows/` |
 | Claude Code | `CLAUDE.md` (puntero) | `.claude/rules/*.md` | `.claude/skills/` | `.claude/{commands,agents,settings.json}` |
 | Codex | `AGENTS.md` | — | `.agents/skills/` | Comandos = skills |
 | GitHub Copilot | `.github/copilot-instructions.md` | — | — | Puntero a `AGENTS.md` |

@@ -58,7 +58,7 @@ Evitar el flujo manual y propenso a errores de "clonar, borrar el `.git`, recone
 2. **Promover al raíz** (si el DT está en subcarpeta).
 3. **Registrar upstream** (antes de soltar `origin`): `git remote add dt-upstream "$(git remote get-url origin)"` y crear `vitals/config/dt-upstream.md` con `framework_version` = `VERSION` actual (ver `dt-upstream.example.md`).
 4. **Soltar remoto del template**: `git remote remove origin` (ofrece reconectar a tu repo o `git init` fresco).
-5. **Reset de estado**: `VERSION` del **proyecto** → `0.1.0`; versión del **framework** en `framework_version` de `vitals/config/dt-upstream.md`; `roster.yaml` (`team: []`), pulse de ejemplo, banner/README.
+5. **Reset de estado**: `VERSION` del **proyecto** → `0.1.0`; versión del **framework** en `framework_version` de `vitals/config/dt-upstream.md`; crear `vitals/config/project-version.yaml` (discover `package.json`, `auto_bump: none`, `./scripts/project-sync-version.sh`); `roster.yaml` (`team: []`), pulse de ejemplo, banner/README.
 6. **Garantizar IDE**: corre `/setup` (skill `dt-setup`) para el/los IDE(s) elegido(s).
 7. **Verificar**: `./scripts/dt-doctor.sh` en verde.
 

@@ -54,7 +54,7 @@ Usuario → /atelier ──► .cursor/skills/atelier/SKILL.md (23+ commands)
 
 ## Pack táctico nativo
 
-`.cursor/skills/design/` — espejo en `.agent/skills/design/` vía `sync-skills-parity.sh`.
+`.cursor/skills/design/` — espejo en `.agents/skills/design/` vía `sync-skills-parity.sh` / `sync-ide.sh`.
 
 ## Commands
 

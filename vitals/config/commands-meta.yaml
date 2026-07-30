@@ -1,6 +1,6 @@
-# Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agent/workflows
+# Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agents/workflows
 version: 1
-updated: "2026-07-02"
+updated: "2026-07-30"
 locale: es
 
 groups:
@@ -35,14 +35,26 @@ commands:
     skill: dt-session
   guardar:
     group: routine
-    tagline: "Subir mi trabajo a GitHub."
-    when: "Al cerrar bloque de trabajo o antes de irte."
-    example: "/guardar"
+    tagline: "Subir trabajo a GitHub — commits con vX.Y.Z; bump y tag solo con /guardar release."
+    when: "Al cerrar bloque de trabajo o antes de irte. Release semver: /guardar release (o release minor)."
+    example: "/guardar  ·  /guardar release"
     skill: git-guardar
+  deploy:
+    group: work
+    tagline: "Desplegar la app — primera vez autocompleta scripts y config del repo."
+    when: "Querés publicar a staging o producción; tras bootstrap genera vitals/config/deploy.yaml."
+    example: "/deploy production"
+    skill: deploy
+  drive:
+    group: routine
+    tagline: "Conectar Google Drive y elegir carpetas como contexto del cerebro."
+    when: "Primera vez que querés consultar documentos en Drive con el DT; o para cambiar qué carpetas compartís."
+    example: "/drive"
+    skill: dt-drive
   bienvenida:
     group: routine
-    tagline: "Primera vez en este repo — verificar que El DT está listo."
-    when: "Justo después de clonar o abrir el DT por primera vez en esta máquina."
+    tagline: "Primera vez post-clone — checklist + mensaje de bienvenida con commands recomendados (incluye /setup si falta estructura)."
+    when: "Justo después de clonar o abrir el DT por primera vez; la IA también puede mostrarlo sin invocación si no hay sesión local."
     example: "/bienvenida"
     skill: dt-setup
   orquestar:

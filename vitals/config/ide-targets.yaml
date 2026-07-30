@@ -3,7 +3,7 @@
 # El emisor scripts/sync-ide.rb recorre este registro y emite cada destino
 # desde las fuentes canónicas: rule-bodies/ + rules-manifest.yaml + SKILL.md + commands-meta.yaml
 version: 1
-updated: "2026-06-13"
+updated: "2026-07-30"
 
 # Formatos de frontmatter para reglas:
 #   cursor → ---\n description, [globs], alwaysApply \n---
@@ -28,12 +28,13 @@ targets:
     enabled: true
     entry: .antigravity/rules.md
     rules:
-      dir: .agent/rules
+      dir: .agents/rules
       ext: .md
       frontmatter: agent
-    commands_dir: .agent/workflows
-    skills_dir: .agent/skills
+    commands_dir: .agents/workflows
+    skills_dir: .agents/skills
     receives_skills: true
+    notes: "Antigravity 2.0 defaultea a .agents/; skills compartidos con Codex."
 
   codex:
     label: "Codex"

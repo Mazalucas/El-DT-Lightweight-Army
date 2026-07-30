@@ -13,6 +13,6 @@ skill: start
 **Cuándo:** Querés ver o encontrar rápido tus tools y commands del segundo cerebro.
 **Quién:** Cualquier operador del repo.
 
-Ejecutá el skill **`start`** — `.cursor/skills/start/` y `.agent/skills/start/`.
+Ejecutá el skill **`start`** — `.cursor/skills/start/` y `.agents/skills/start/`.
 
 _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._
