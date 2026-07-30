@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.7.9**
+**v1.7.10**
 
 *Tu IA con equipo, criterio y herramientas — no un chat que dice “sí” a todo.*
 
@@ -28,6 +28,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 - [Ritual del día](#ritual-del-día)
 - [Qué puede hacer El DT](#qué-puede-hacer-el-dt)
 - [Comandos principales](#comandos-principales)
+- [Google Drive — `/drive`](#google-drive--drive)
 - [Atelier · Remotion · Marketing](#atelier--diseño-web-y-presentaciones)
 - [Quick setup (English)](#quick-setup-english)
 - [Para el equipo técnico](#para-el-equipo-técnico)
@@ -44,6 +45,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 | Algo puntual ya definido | `/fast-lane` |
 | Diseñar una web, dashboard o presentación | `/atelier` |
 | Crear un video | `/remotion` |
+| Consultar documentos en Google Drive | `/drive` (opcional — ver [abajo](#google-drive--drive)) |
 | Ver el equipo completo de especialistas | [Catálogo de 22](#catálogo-de-los-22-especialistas) |
 
 Este repo es **memoria compartida + reglas** para que varias personas trabajen con la misma IA sin pisarse. Guía humana: [cerebro del equipo](docs/00_overview/cerebro-equipo-mecanismos-dt.md). La IA lee **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
@@ -72,7 +74,8 @@ No hace falta `/actualizar` en un clone recién hecho — usalo cuando el remoto
 | **`/actualizar`** | Sincronizar tu proyecto (`origin`) y avisar si hay release nuevo del framework DT |
 | **`/yo`** | Decir quién sos en esta computadora |
 | **Trabajar** | Pedir lo que necesites (`/orquestar`, diseño, video, docs…) |
-| **`/guardar`** | Subir tu trabajo al equipo (sin datos privados de tu PC) |
+| **`/guardar`** | Subir tu trabajo — bump de versión, sync y tag (sin secretos ni datos privados) |
+| **`/drive`** | Conectar Google Drive y elegir carpetas como contexto del cerebro (opcional) |
 
 Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. Tu identidad en esta PC **no se sube a GitHub** — es privada.
 
@@ -82,6 +85,7 @@ Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. 
   bienvenida → yo → trabajar → guardar
   actualizar = proyecto + aviso si hay DT nuevo
   actualizar-dt = cuando quieras incorporar el framework
+  drive = Google Drive (carpetas que elijas, solo en tu PC)
   tu identidad en esta PC = solo local
 ```
 
@@ -133,7 +137,8 @@ Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc).
 | **`/actualizar`** | Sincronizar tu proyecto y avisar si hay DT nuevo |
 | **`/actualizar-dt`** | Incorporar release del framework DT (cuando /actualizar avise) |
 | **`/yo`** | Decir quién sos en esta máquina |
-| **`/guardar`** | Subir tu trabajo (sin secretos ni datos privados) |
+| **`/guardar`** | Subir tu trabajo — bump patch, sync README/paquetes, tag `vX.Y.Z` |
+| **`/drive`** | Conectar Google Drive y registrar carpetas para que la IA las consulte |
 | **`/orquestar`** | Tarea grande — pipeline completo en 8 pasos |
 | **`/fast-lane`** | Algo puntual ya definido — menos preguntas rutinarias |
 | **`/cuestionar`** | Solo análisis — sin ejecutar |
@@ -144,6 +149,33 @@ Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc).
 | **`/setup`** | Reparar configuración del editor tras un pull grande |
 
 Grupos completos y taglines: [commands-meta.yaml](vitals/config/commands-meta.yaml).
+
+---
+
+## Google Drive — `/drive` {#google-drive--drive}
+
+Integración **opcional**: conectá **solo las carpetas que elijas** de Google Drive para que el DT las use como contexto al responder (briefs, reportes, docs de cliente). **No movés archivos al repo** y **nada de Drive se sube a GitHub** — credenciales, tokens y la lista de carpetas viven solo en tu máquina.
+
+### Para qué sirve
+
+| Situación | Qué hace `/drive` |
+|-----------|-------------------|
+| Primera vez | OAuth con tu cuenta Google, registra el MCP en Cursor/Antigravity, elegís carpetas |
+| Ya conectado | Cambiar qué carpetas compartís al cerebro o revisar la config local |
+| En el chat | La IA lee Docs/Sheets/Slides/PDF de esas carpetas vía MCP cuando el pedido lo amerita |
+
+### Cómo usarlo
+
+1. **`/yo`** — identidad local (requisito del DT).
+2. **`/drive`** — el DT te guía paso a paso:
+   - Pedí el archivo **`dt-drive-credentials.json`** al canal interno de tu empresa (nunca va al repo).
+   - Corre **`./scripts/setup-drive.sh`** (o dejá que la IA lo ejecute) y reiniciá el IDE si hace falta.
+   - Elegí **Shared Drives** o carpetas de “Mi unidad” y describí en una frase qué contiene cada una.
+3. **Trabajá normal** — pedí en lenguaje natural: *“según el brief en Drive…”*, *“resume el doc de la carpeta X”*.
+
+La selección queda en **`vitals/config/drive-context.yaml`** (local, no Git). Alcance de lectura: **solo lectura** (`drive.readonly`).
+
+**Guía completa:** [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md) · **Admin GCP:** [drive-google-cloud-admin.md](docs/06_operations/drive-google-cloud-admin.md)
 
 ---
 
@@ -268,7 +300,7 @@ Detalle: [scripts/README.md](scripts/README.md).
 
 Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigravity/Claude vía `sync-ide`). Reglas de delegación: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc).
 
-**Skills de rutina DT** (no son subagentes): `dt-setup`, `dt-session`, `git-actualizar`, `git-guardar`, `dt-actualizar`, `github-save-release`.
+**Skills de rutina DT** (no son subagentes): `dt-setup`, `dt-session`, `git-actualizar`, `git-guardar`, `dt-drive`, `dt-actualizar`, `github-save-release`.
 
 #### Catálogo de los 22 especialistas
 
