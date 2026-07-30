@@ -27,8 +27,8 @@ Manifest: [`vitals/config/project-version.yaml`](../config/project-version.yaml)
 
 1. **Commit** — primera línea empieza con `v{X.Y.Z}:`.
 2. **Sync** — ejecutar script antes de stage/commit.
-3. **Tag** — tras push OK: `./scripts/dt-tag-version.sh --push` (anotado `vX.Y.Z` en HEAD).
-4. **Bump** — solo `/guardar release` (patch/minor); default `auto_bump: none`.
+3. **Bump** — solo `/guardar release` (patch/minor).
+4. **Tag** — tras push: `dt-tag-version.sh --push`. Si `VERSION` no cambió y el tag ya apunta a un commit anterior → omitir; nueva tag con **`/guardar release`**.
 
 ## Consumer
 
@@ -38,7 +38,7 @@ Manifest: [`vitals/config/project-version.yaml`](../config/project-version.yaml)
 ## Canonical (repo El DT)
 
 - Manifest versionado con README + `framework_version` + tools.
-- Cada guardar sincroniza y tagea; bump solo con release explícito.
+- Cada guardar sincroniza; tag nueva solo cuando bump (`/guardar release`).
 - `/github-save-small` = release documentado del template (mismo bump+tag).
 
 ## Scripts

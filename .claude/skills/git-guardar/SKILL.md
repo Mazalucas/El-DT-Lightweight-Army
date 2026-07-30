@@ -51,14 +51,15 @@ También aplica si el operador escribe "release", "minor release" o "patch relea
    Sin sesión: `v{X.Y.Z}: {resumen}`.
 
 8. Push `git push origin HEAD` — sin `--force` en main/master.
-9. **Tag obligatorio** tras push OK:
+9. **Tag** tras push OK:
 
    ```bash
    ./scripts/dt-tag-version.sh --push --message "Release v$(cat VERSION)"
    ```
 
-   - Crea tag anotado **`vX.Y.Z`** en `HEAD` si no existe.
-   - Si el tag existe en otro commit → **detener** (bump con `/guardar release`).
+   - Crea **`vX.Y.Z`** en `HEAD` si el tag no existe.
+   - Si el tag **ya existe en otro commit** y `VERSION` no cambió → **omitir** (informar: usar `/guardar release` para nueva semver).
+   - Si el tag existe en otro commit **y** hubo bump en este commit → **detener** (resolver manualmente; nunca force en main).
 
 ---
 
