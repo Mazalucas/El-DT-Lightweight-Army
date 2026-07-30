@@ -1,10 +1,12 @@
 {
   "name": "dt-remotion-toolkit",
-  "version": "1.0.0",
+  "version": "1.7.8",
   "private": true,
   "description": "Remotion toolkit for El DT — install and run from tools/remotion/",
   "license": "UNLICENSED",
-  "workspaces": ["starter"],
+  "workspaces": [
+    "starter"
+  ],
   "scripts": {
     "dev": "npm run dev --workspace=remotion-starter",
     "build": "npm run build --workspace=remotion-starter",

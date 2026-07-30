@@ -1,0 +1,20 @@
+# Manifest de sincronización semver — repo canónico El DT.
+# Fuente de verdad: VERSION (raíz). Spec: vitals/specs/project-version.md
+
+version: 1
+initialized: true
+auto_bump: none
+tag_releases: true
+
+sync_paths:
+  - path: README.md
+    type: readme_badge
+  - path: vitals/config/dt-upstream.md
+    type: yaml_frontmatter
+    field: framework_version
+  - path: tools/remotion/package.json
+    type: json
+    field: version
+  - path: tools/remotion/starter/package.json
+    type: json
+    field: version

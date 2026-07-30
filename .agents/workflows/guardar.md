@@ -1,11 +1,11 @@
 ---
-description: "[Rutina] Subir trabajo a GitHub — commits con vX.Y.Z; bump y tag solo con /guardar release."
+description: "[Rutina] Subir a GitHub — commit vX.Y.Z, sync README/front/back, tag release."
 dt_command: guardar
 ---
 # /guardar
 
 **Grupo:** Rutina del día a día
-**En una frase:** Subir trabajo a GitHub — commits con vX.Y.Z; bump y tag solo con /guardar release.
+**En una frase:** Subir a GitHub — commit vX.Y.Z, sync README/front/back, tag release.
 **Cuándo:** Al cerrar bloque de trabajo o antes de irte. Release semver: /guardar release (o release minor).
 **Quién:** Cualquier operador del repo.
 

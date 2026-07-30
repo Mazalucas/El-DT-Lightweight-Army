@@ -1,89 +1,53 @@
 # Especificación — versión del proyecto (`/guardar`)
 
-Contrato para separar **versión del producto** de **versión del framework DT**.
+Contrato para **semver unificado** en commit, tag, README y paquetes.
 
-## Fuentes de verdad
+## Fuente de verdad
 
-| Concepto | Dónde vive | Quién la bump |
-|----------|------------|---------------|
-| Versión **proyecto/app** | `VERSION` (raíz) + paths en `vitals/config/project-version.yaml` | `/guardar release` (modo consumer) |
-| Versión **framework DT** | `framework_version` en `vitals/config/dt-upstream.md` | `/actualizar-dt`, `/github-save-small` (modo canonical) |
-| Versión **template DT** en repo canónico | `VERSION` raíz = semver publicado del DT | `/github-save-small` — **no** auto-bump en `/guardar` |
+**`VERSION`** (raíz del repo) — todos los demás paths se alinean vía `./scripts/project-sync-version.sh`.
 
-Leer `mode` en [`vitals/config/dt-upstream.md`](../config/dt-upstream.example.md): `canonical` | `consumer`.
+| Modo (`dt-upstream.md`) | Qué es `VERSION` |
+|---------------------------|------------------|
+| `canonical` | Versión publicada del framework DT |
+| `consumer` | Versión del producto/app (independiente de `framework_version`) |
 
-## Archivo `vitals/config/project-version.yaml`
+## Sincronización (`project-sync-version.sh`)
 
-Plantilla: [`vitals/config/project-version.yaml.example`](../config/project-version.yaml.example).
+Manifest: [`vitals/config/project-version.yaml`](../config/project-version.yaml) (canónico) o example (consumer/bootstrap).
 
-| Campo | Uso |
-|-------|-----|
-| `version` | Schema (`1`) |
-| `initialized` | `false` hasta el **primer** `/guardar` exitoso en modo consumer |
-| `initial_semver` | Semver de arranque (default `0.1.0`) |
-| `sync_paths` | Lista `{ path, field }` — p. ej. `package.json` → `version` |
-| `auto_bump` | `patch` \| `minor` \| `none` — **default `none`** (bump solo con `/guardar release`) |
-| `tag_releases` | Si `true`, tag anotado `vX.Y.Z` cuando cambia `VERSION` o primer guardar |
+| Tipo | Archivo | Efecto |
+|------|---------|--------|
+| `readme_badge` | `README.md` | Línea `**vX.Y.Z**` |
+| `yaml_frontmatter` | `vitals/config/dt-upstream.md` | Campo `framework_version` (canónico: = VERSION) |
+| `json` | `package.json`, `frontend/`, `backend/`, `apps/*` | Campo `version` |
 
-## Preparación en `/bootstrap`
+**Discover automático:** `frontend/package.json`, `backend/package.json`, `apps/*/package.json` si existen y no están en manifest.
 
-Tras reset de `VERSION` a `initial_semver`:
+## Reglas de `/guardar` (ambos modos)
 
-1. Crear `vitals/config/project-version.yaml` desde example (`auto_bump: none`, `initialized: false`).
-2. **Discover** `package.json` (raíz, `frontend/`, `backend/`, `apps/*/package.json`) → `sync_paths`.
-3. `./scripts/project-sync-version.sh` — alinear front/back/monorepo **antes** del primer commit de producto.
+1. **Commit** — primera línea empieza con `v{X.Y.Z}:`.
+2. **Sync** — ejecutar script antes de stage/commit.
+3. **Tag** — tras push OK: `./scripts/dt-tag-version.sh --push` (anotado `vX.Y.Z` en HEAD).
+4. **Bump** — solo `/guardar release` (patch/minor); default `auto_bump: none`.
 
-El primer `/guardar` solo marca `initialized: true` y tag inicial; no reinventa el manifest.
+## Consumer
 
-## Adopción sin bootstrap
+- Bootstrap o primer guardar: reset a `initial_semver` (`0.1.0`).
+- `framework_version` queda en `dt-upstream.md`; no se bump en guardar habitual.
 
-Si el repo es `consumer` pero no pasó por `/bootstrap`: el primer `/guardar` crea el manifest (misma discover + sync) como fallback.
+## Canonical (repo El DT)
 
-## Primer `/guardar` (consumer)
-
-1. Si falta `project-version.yaml` → copiar desde example + discover (fallback).
-2. Si `initialized: false` → marcar `initialized: true` tras commit exitoso.
-3. Commit con prefijo `v{X.Y.Z}` (versión actual, sin bump).
-4. Tag `v{initial_semver}` si aún no existe en remoto y `tag_releases: true`.
-
-**No** bump por cambios solo de normativa DT — eso es upstream/framework, no producto.
-
-## `/guardar` habitual (consumer)
-
-- **Sin bump** de `VERSION` (default `auto_bump: none`).
-- Mensaje **empieza** con la versión actual:
-
-  ```text
-  v{X.Y.Z} ({operator_id}): {resumen corto}
-  ```
-
-- Sin tag salvo que `VERSION` haya cambiado en el commit.
-
-## `/guardar release` (consumer)
-
-Intención explícita de release semver:
-
-| Invocación | Bump |
-|------------|------|
-| `/guardar release` o "release" | **patch** |
-| `/guardar release minor` o "minor release" | **minor** |
-| `/guardar release patch` | **patch** |
-
-Flujo: bump en `VERSION` → `project-sync-version.sh` → commit con prefijo nueva versión → tag `vX.Y.Z` si `tag_releases`.
-
-## Modo `canonical` (repo El DT)
-
-- `/guardar` **no** auto-bump `VERSION`.
-- Release del framework: `/github-save-small` (`github-save-release`).
-- Mensaje: `dt({operator_id}): {resumen corto}`
+- Manifest versionado con README + `framework_version` + tools.
+- Cada guardar sincroniza y tagea; bump solo con release explícito.
+- `/github-save-small` = release documentado del template (mismo bump+tag).
 
 ## Scripts
 
-- [`scripts/project-sync-version.sh`](../../scripts/project-sync-version.sh) — propaga `VERSION` raíz a `sync_paths`
-- [`scripts/dt-tag-version.sh`](../../scripts/dt-tag-version.sh) — tag anotado `vX.Y.Z` desde `VERSION`
+- [`scripts/project-sync-version.sh`](../../scripts/project-sync-version.sh)
+- [`scripts/dt-tag-version.sh`](../../scripts/dt-tag-version.sh)
 
 ## Skills
 
 - [`git-guardar`](../../.cursor/skills/git-guardar/SKILL.md)
 - [`dt-bootstrap`](../../.cursor/skills/dt-bootstrap/SKILL.md)
-- [`github-save-release`](../../.cursor/skills/github-save-release/SKILL.md) — solo framework canonical
+- [`github-save-release`](../../.cursor/skills/github-save-release/SKILL.md)

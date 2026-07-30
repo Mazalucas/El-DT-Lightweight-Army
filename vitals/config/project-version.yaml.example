@@ -1,4 +1,4 @@
-# Copia a vitals/config/project-version.yaml — completar en el primer /guardar (consumer).
+# Copia a vitals/config/project-version.yaml — bootstrap (consumer) o canónico (DT).
 # Spec: vitals/specs/project-version.md
 
 version: 1
@@ -7,7 +7,15 @@ initial_semver: "0.1.0"
 auto_bump: none
 tag_releases: true
 
-# Propagar VERSION (raíz) a estos archivos — discover añade package.json en bootstrap
+# Propagar VERSION (raíz). Tipos: json | readme_badge | yaml_frontmatter
 sync_paths:
+  - path: README.md
+    type: readme_badge
+  - path: vitals/config/dt-upstream.md
+    type: yaml_frontmatter
+    field: framework_version
   - path: package.json
+    type: json
     field: version
+
+# Discover automático (script): frontend/package.json, backend/package.json, apps/*/package.json
