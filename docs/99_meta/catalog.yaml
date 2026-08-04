@@ -3,7 +3,7 @@
 # Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
 
 version: 1
-updated: "2026-07-30"
+updated: "2026-08-04"
 documents:
   - id: DOC-ARCH-002
     title: "Arquitectura de la capacidad Atelier"
@@ -90,6 +90,11 @@ documents:
     path: 02_guides/drive-cerebro-setup.md
     type: guide
     tags: [drive, google, onboarding, cerebro, mcp, antigravity, cursor]
+  - id: DOC-GUIDE-016
+    title: "Capturar y ordenar conocimiento con /ordenar"
+    path: 02_guides/ordenar-captura-conocimiento.md
+    type: guide
+    tags: [documentation, ordenar, knowledge, dt]
   - id: DOC-META-001
     title: "Protocolo de documentación orientada a IA"
     path: 99_meta/protocolo-documentacion-ia.md
@@ -205,3 +210,8 @@ documents:
     path: 03_reference/numeric-verification-default.md
     type: reference
     tags: [data, verification, numeric, trust]
+  - id: DOC-REF-010
+    title: "Auditoría de seguridad del DT (hack-audit)"
+    path: 03_reference/hack-audit-default.md
+    type: reference
+    tags: [security, audit, hack, vulnerabilities]

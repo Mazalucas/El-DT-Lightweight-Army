@@ -48,6 +48,15 @@ render → output/remotion/*.mp4 (gitignored)
 | **verify-csv** | [`data/verify-csv.py`](data/verify-csv.py) | `data-auditor` | `/verificar` | CSV/TSV: perfil, sumas `Decimal`, subtotales, duplicados, `--assert-total` (stdlib, sin pandas) |
 | **Docs** | [`data/README.md`](data/README.md) | `data-auditor` | — | Uso rápido + exit codes; regla `16-numeric-grounding` |
 
+## Seguridad (auditoría)
+
+| Tool | Path | Agente | Command | Descripción |
+|------|------|--------|---------|-------------|
+| **scan-repo** | [`security/scan-repo.sh`](security/scan-repo.sh) | `hack-audit` | `/hack` | Pasada read-only sin red: secretos (valores redactados), rules abiertas, sinks, CI, superficie de agentes; `--history` para historial Git |
+| **semgrep taint** | [`security/semgrep/`](security/semgrep/) | `hack-audit` | `/hack` | Reglas locales de taint (XSS, command injection, eval, SSRF) — nivel 3 de evidencia, opcional |
+| **make-fixtures** | [`security/make-fixtures.sh`](security/make-fixtures.sh) | `hack-audit` | — | Banco de calibración: 7 vulnerabilidades plantadas + 5 señuelos en `output/` (gitignoreado) |
+| **Docs** | [`security/README.md`](security/README.md) | `hack-audit` | — | Tipos de señal, exit codes y límites; skill `.cursor/skills/hack-audit/` |
+
 ## Integraciones marketing (stub)
 
 Referencias en skills de marketing apuntan a `tools/integrations/*.md`. Esas guías se añadirán por demanda; el enlace a este REGISTRY ya es válido desde la raíz del repo.

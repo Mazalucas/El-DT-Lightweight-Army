@@ -250,6 +250,36 @@ def check_engineering_agents
   end
 end
 
+# 6) Integridad del catálogo de subagentes: cada agente tiene skill de rol y
+# los conteos publicados coinciden (evita el drift que aparece al sumar un rol).
+def check_agent_catalog
+  agents_dir = File.join(ROOT, ".cursor/agents")
+  return unless Dir.exist?(agents_dir)
+
+  agents = Dir.glob(File.join(agents_dir, "*.md")).map { |p| File.basename(p, ".md") }
+              .reject { |n| n.start_with?("_") || n == "README" }.sort
+
+  agents.each do |agent|
+    skill = File.join(ROOT, ".cursor/skills/#{agent}/SKILL.md")
+    err("agents", "#{agent}.md sin skill de rol (.cursor/skills/#{agent}/SKILL.md)") unless File.exist?(skill)
+  end
+
+  expected = agents.size
+  {
+    ".cursor/agents/README.md" => /Subagentes del DT \((\d+)\)/,
+    "README.md" => /Catálogo de los (\d+) especialistas/
+  }.each do |rel, re|
+    path = File.join(ROOT, rel)
+    next unless File.exist?(path)
+
+    found = File.read(path)[re, 1]
+    next if found.nil?
+    next if found.to_i == expected
+
+    err("agents", "#{rel} declara #{found} especialistas y hay #{expected} en .cursor/agents/")
+  end
+end
+
 def check_upstream
   cfg_path = File.join(ROOT, "vitals/config/dt-upstream.md")
   return unless File.exist?(cfg_path)
@@ -278,6 +308,7 @@ check_links
 check_subscripts
 check_design_pack
 check_engineering_agents
+check_agent_catalog
 check_upstream
 check_pulse_freshness
 

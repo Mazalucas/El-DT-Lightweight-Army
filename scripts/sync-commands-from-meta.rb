@@ -68,9 +68,20 @@ def skill_command_body(cmd, cfg, groups)
     **Quién:** Cualquier operador del repo.
 
     Ejecutá el skill **`#{skill}`** — `.cursor/skills/#{skill}/` y `.agents/skills/#{skill}/`.
-
+    #{agent_activation(cfg)}
     _Generado desde `vitals/config/commands-meta.yaml` — corré `scripts/sync-commands-from-meta.sh`._
   MD
+end
+
+# Solo los commands que declaran `agent:` proponen delegar en un subagente.
+# Sin esta cláusula, rutinas como /guardar invitarían a delegar escrituras Git.
+def agent_activation(cfg)
+  agent = cfg["agent"]
+  return "" unless agent
+
+  "\nDelegá en el subagente **`#{agent}`** (`.cursor/agents/#{agent}.md`) vía Task " \
+    "(`subagent_type: #{agent}`) con el alcance del usuario. Si el IDE no expone subagentes " \
+    "(Antigravity, Codex), ejecutá el pipeline de la skill en esta conversación.\n"
 end
 
 def canonical_body(cmd, cfg)

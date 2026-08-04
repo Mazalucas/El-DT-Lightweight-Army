@@ -3,13 +3,13 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.7.10**
+**v1.7.11**
 
 *Tu IA con equipo, criterio y herramientas — no un chat que dice “sí” a todo.*
 
 **El DT** es un Director de Proyecto para tu IA: no solo ejecuta — **organiza el trabajo**, **te hace preguntas antes de avanzar**, **propone alternativas** y **te avisa de riesgos** antes de cerrar.
 
-Delega en **22 especialistas** (producto, diseño, marketing, documentación, calidad…) y trae herramientas listas para:
+Delega en **23 especialistas** (producto, diseño, marketing, documentación, calidad, seguridad…) y trae herramientas listas para:
 
 - **Páginas web y productos digitales** — landings, dashboards, pantallas de login ([Atelier](#atelier--diseño-web-y-presentaciones))
 - **Presentaciones y pitches** — decks, slides, material para inversores ([Atelier](#atelier--diseño-web-y-presentaciones))
@@ -18,7 +18,7 @@ Delega en **22 especialistas** (producto, diseño, marketing, documentación, ca
 
 Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y más). **Empezá en 2 minutos:** [`/bienvenida`](#primera-vez) → [`/yo`](#ritual-del-día).
 
-> **El DT no es un prompt:** es un cerebro operativo con ~1.400 documentos canónicos, ~56.000 líneas de orquestación, 22 especialistas, 105 skills y un ecosistema de diseño/marketing/video que suma cientos de miles de líneas de plantillas listas para usar.
+> **El DT no es un prompt:** es un cerebro operativo con ~1.400 documentos canónicos, ~56.000 líneas de orquestación, 23 especialistas, 105 skills y un ecosistema de diseño/marketing/video que suma cientos de miles de líneas de plantillas listas para usar.
 
 ---
 
@@ -29,7 +29,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 - [Qué puede hacer El DT](#qué-puede-hacer-el-dt)
 - [Comandos principales](#comandos-principales)
 - [Google Drive — `/drive`](#google-drive--drive)
-- [Atelier · Remotion · Marketing](#atelier--diseño-web-y-presentaciones)
+- [Ordenar · Hack · Atelier · Remotion · Marketing](#ordenar--captura-de-conocimiento)
 - [Quick setup (English)](#quick-setup-english)
 - [Para el equipo técnico](#para-el-equipo-técnico)
 
@@ -46,7 +46,9 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 | Diseñar una web, dashboard o presentación | `/atelier` |
 | Crear un video | `/remotion` |
 | Consultar documentos en Google Drive | `/drive` (opcional — ver [abajo](#google-drive--drive)) |
-| Ver el equipo completo de especialistas | [Catálogo de 22](#catálogo-de-los-22-especialistas) |
+| Volcar briefs, notas o dumps al cerebro del repo | `/ordenar` |
+| Auditar seguridad del proyecto (auth, API, secrets…) | `/hack` |
+| Ver el equipo completo de especialistas | [Catálogo de 23](#catálogo-de-los-23-especialistas) |
 
 Este repo es **memoria compartida + reglas** para que varias personas trabajen con la misma IA sin pisarse. Guía humana: [cerebro del equipo](docs/00_overview/cerebro-equipo-mecanismos-dt.md). La IA lee **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
 
@@ -96,15 +98,17 @@ Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. 
 | Bloque | En pocas palabras |
 |--------|-------------------|
 | **Orquestación** | Clarifica qué querés, planifica, ejecuta y cierra señalando riesgos. Comando principal: `/orquestar`. |
-| **22 especialistas** | Producto, diseño, marketing, documentación, calidad… El DT elige quién ayuda según tu pedido. |
+| **23 especialistas** | Producto, diseño, marketing, documentación, calidad, seguridad… El DT elige quién ayuda según tu pedido. |
 | **Atelier (diseño)** | Landings, dashboards, login, presentaciones — con criterio estético y guardrails anti-“diseño genérico de IA”. |
+| **Captura de conocimiento** | Volcar archivos, carpetas y dumps del chat — clasificar, documentar en la capa correcta y dejar manifest recuperable (`/ordenar`). |
+| **Seguridad** | Auditoría ofensiva-defensiva del propio repo — auth, API, secrets, agentes/IA (`/hack` → subagente **hack-audit**). |
 | **Videos y contenido** | Videos promocionales; marketing con copy, SEO, lanzamientos y campañas. |
 
 ```mermaid
 flowchart TB
   vos[Vos en el chat]
   dt[El DT — orquestador]
-  esp[22 especialistas]
+  esp[23 especialistas]
   atelier[Atelier — webs y presentaciones]
   video[Videos — Remotion]
   mkt[Marketing — 42 skills]
@@ -143,6 +147,9 @@ Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc).
 | **`/fast-lane`** | Algo puntual ya definido — menos preguntas rutinarias |
 | **`/cuestionar`** | Solo análisis — sin ejecutar |
 | **`/contexto`** | Mapa del repo cuando entrás o después de un pull grande |
+| **`/ordenar`** | Volcar archivos y data — documentar en la capa correcta + manifest (skill `dt-ordenar`) |
+| **`/hack`** | Auditoría de seguridad — mentalidad de atacante, entrega defensiva (skill `hack-audit` → subagente **hack-audit**) |
+| **`/verificar`** | Verificar números de planillas y reportes con script (skill `data-auditor` → subagente **data-auditor**) |
 | **`/prepr`** | Preparar cambios como pull request |
 | **`/atelier`** | Diseñar webs, dashboards o presentaciones |
 | **`/remotion`** | Crear videos (promos, explainers, motion) |
@@ -176,6 +183,45 @@ Integración **opcional**: conectá **solo las carpetas que elijas** de Google D
 La selección queda en **`vitals/config/drive-context.yaml`** (local, no Git). Alcance de lectura: **solo lectura** (`drive.readonly`).
 
 **Guía completa:** [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md) · **Admin GCP:** [drive-google-cloud-admin.md](docs/06_operations/drive-google-cloud-admin.md)
+
+---
+
+## Ordenar — captura de conocimiento {#ordenar--captura-de-conocimiento}
+
+**`/ordenar`** ingesta archivos, carpetas y dumps del chat, los clasifica por capa (`docs/`, `vitals/work/knowledge/`, inbox personal…) y deja un **manifest** recuperable para que la IA no pierda contexto.
+
+| Comando | Ejemplo |
+|---------|---------|
+| `/ordenar` | Pipeline completo — inventario, plan de archivo, documentación, indexación |
+| `/ordenar quick` | Plan + máx. 3 docs canónicos; el resto en `sources/` |
+| `/ordenar inbox` | Solo cuaderno personal (`vitals/work/inbox/{id}/`) |
+| `/ordenar docs` | Forzar promoción a `docs/` con frontmatter |
+
+Flujo típico: skill **`dt-ordenar`** orquesta la ingesta; redacción pesada → delegar en **doc**.
+
+- Skill: [`.cursor/skills/dt-ordenar/`](.cursor/skills/dt-ordenar/)
+- Guía: [ordenar-captura-conocimiento.md](docs/02_guides/ordenar-captura-conocimiento.md) (`DOC-GUIDE-016`)
+- Paquetes de sesión: [`vitals/work/knowledge/`](vitals/work/knowledge/)
+
+---
+
+## Hack — auditoría de seguridad {#hack--auditoría-de-seguridad}
+
+**`/hack`** audita el propio proyecto con mentalidad de atacante y entrega **defensiva**: hallazgos con severidad (SEV), prioridad y remediación anclada al repo — sin exploits ni PoCs.
+
+| Comando | Ejemplo |
+|---------|---------|
+| `/hack` | Full repo — los 9 dominios (auth, API, secrets, frontend, infra, agents…) |
+| `/hack auth` · `/hack api` · `/hack agents` | Un dominio |
+| `/hack diff` | Cambios vs base (`git diff`) con contexto de superficie |
+
+Flujo típico: skill **`hack-audit`** → subagente **`hack-audit`** (evidencia con `tools/security/scan-repo.sh` antes del juicio manual).
+
+- Skill: [`.cursor/skills/hack-audit/`](.cursor/skills/hack-audit/)
+- Subagente: [`.cursor/agents/hack-audit.md`](.cursor/agents/hack-audit.md)
+- Referencia: [hack-audit-default.md](docs/03_reference/hack-audit-default.md) (`DOC-REF-010`)
+- Informes locales (gitignored): [`vitals/work/audits/`](vitals/work/audits/)
+- Scanners: [`tools/security/`](tools/security/)
 
 ---
 
@@ -232,7 +278,7 @@ Flujo típico: **marketing-strategist** (guion) → **remotion-producer** (compo
 1. **Clone** this repo (or **Use this template** on GitHub).
 2. In chat: **`/bienvenida`** then **`/yo`** — see [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
 3. **Daily ritual:** `/actualizar` → `/yo` → work → `/guardar`
-4. **Design:** `/atelier` · **Video:** `/remotion` · **Deep work:** `/orquestar` or `/fast-lane`
+4. **Design:** `/atelier` · **Video:** `/remotion` · **Knowledge:** `/ordenar` · **Security:** `/hack` · **Deep work:** `/orquestar` or `/fast-lane`
 5. **Repair IDE drift:** `/setup` — see [ide-setup.md](docs/02_guides/ide-setup.md)
 
 Adopting El DT in an existing repo: [adopt-dt-in-existing-repo.md](docs/02_guides/adopt-dt-in-existing-repo.md).
@@ -285,13 +331,13 @@ Seguridad y secretos **siempre** aplican, incluso bajo `/fast-lane`.
 
 Detalle: [scripts/README.md](scripts/README.md).
 
-### Subagentes (22) — resumen por grupo
+### Subagentes (23) — resumen por grupo
 
 | Grupo | Especialistas | Ejemplos de uso |
 |-------|---------------|-----------------|
 | **Engineering** | arquitecto, frontend, devops, ui-designer, remotion-producer | APIs, UI, deploy, Atelier, video |
 | **Planning** | prd-creator, srd-creator, development-planner | PRD, specs técnicas, roadmap |
-| **Testing** | qa, data-auditor | Tests, edge cases, verificación de números |
+| **Testing** | qa, data-auditor, hack-audit | Tests, números, auditoría de seguridad |
 | **Design & UX** | ux-researcher | Personas, journey mapping |
 | **Product** | product-strategist, feedback-synthesizer, researcher | Priorización, research |
 | **Documentation** | doc | README, ADRs, docs por niveles |
@@ -300,9 +346,11 @@ Detalle: [scripts/README.md](scripts/README.md).
 
 Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigravity/Claude vía `sync-ide`). Reglas de delegación: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc).
 
-**Skills de rutina DT** (no son subagentes): `dt-setup`, `dt-session`, `git-actualizar`, `git-guardar`, `dt-drive`, `dt-actualizar`, `github-save-release`.
+**Skills de rutina DT** (no son subagentes): `dt-setup`, `dt-session`, `dt-ordenar`, `git-actualizar`, `git-guardar`, `dt-drive`, `dt-actualizar`, `github-save-release`.
 
-#### Catálogo de los 22 especialistas
+**Skills con subagente dedicado** (command → skill → agente): `/hack` → `hack-audit` · `/verificar` → `data-auditor`.
+
+#### Catálogo de los 23 especialistas
 
 | # | Subagente | Grupo | Rol | Invocar cuando (keywords) | Agente (Cursor) | Skill de rol |
 |---|-----------|-------|-----|---------------------------|-----------------|--------------|
@@ -328,6 +376,7 @@ Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigra
 | 20 | **storytelling-specialist** | Marketing & Content | Narrativa y story arcs | `storytelling`, `narrative`, `story` | [agente](.cursor/agents/storytelling-specialist.md) | [`.agents/skills/storytelling-specialist/`](.agents/skills/storytelling-specialist/) |
 | 21 | **operations-maintainer** | Operations | Monitoreo, incidentes, mantenimiento | `operations`, `monitoring`, `incidentes` | [agente](.cursor/agents/operations-maintainer.md) | [`.agents/skills/operations-maintainer/`](.agents/skills/operations-maintainer/) |
 | 22 | **data-auditor** | Testing | Verificación de números y planillas con script (regla `16-numeric-grounding`) | `planilla`, `csv`, `excel`, `reporte`, `totales`, `reconciliar`, `verificar cifras` | [agente](.cursor/agents/data-auditor.md) | [`.cursor/skills/data-auditor/`](.cursor/skills/data-auditor/) |
+| 23 | **hack-audit** | Testing | Auditoría de seguridad ofensiva-defensiva (`/hack`) | `hack`, `seguridad`, `vulnerabilidades`, `pentest`, `auth`, `permisos`, `IDOR`, `secrets`, `API security` | [agente](.cursor/agents/hack-audit.md) | [`.cursor/skills/hack-audit/`](.cursor/skills/hack-audit/) |
 
 #### Marketing strategist — 42 skills tácticas
 

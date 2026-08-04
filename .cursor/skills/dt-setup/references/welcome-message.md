@@ -62,6 +62,8 @@ Hola — este repo ya trae el **Director Técnico (DT)**: reglas, skills y comma
 | **`/drive`** | Conectar Google Drive como contexto (opcional) |
 | **`/atelier`** | Diseño UI / mockups / anti-slop |
 | **`/verificar`** | Planillas y totales (con script, no a ojo) |
+| **`/hack`** | Auditoría de seguridad del repo (mentalidad atacante) |
+| **`/ordenar`** | Capturar archivos/dumps — documentar y dejar manifest recuperable |
 | **`/actualizar-dt`** | Incorporar nueva versión del framework (maintainers) |
 
 ## Tarjeta rápida

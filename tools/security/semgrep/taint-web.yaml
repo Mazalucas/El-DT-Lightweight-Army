@@ -1,0 +1,115 @@
+# Reglas locales de taint para hack-audit (/hack) — nivel 3 de evidencia.
+#
+# Aportan lo que el grep no puede: seguir el dato desde su origen hasta el sink y
+# reconocer sanitizadores. Son OPCIONALES: si semgrep no está instalado, la skill
+# lo declara en la sección Cobertura del informe y baja su confianza.
+#
+# Uso (sin red, solo reglas locales):
+#   semgrep --config tools/security/semgrep/ --error
+#   semgrep --validate --config tools/security/semgrep/     # antes de confiar en ellas
+#
+# Alcance deliberadamente corto: JS/TS, las cuatro clases donde el taint paga.
+# Ampliar por demanda, no por completitud.
+
+rules:
+  - id: dt-taint-html-sink
+    mode: taint
+    message: >-
+      Dato controlado por el usuario llega a un sink de HTML sin sanitizar (XSS).
+      Confirmar el origen y que no exista sanitizador ni autoescape antes de reportar.
+    languages: [javascript, typescript]
+    severity: ERROR
+    metadata:
+      category: security
+      domain: frontend
+      owner: hack-audit
+    pattern-sources:
+      - pattern-either:
+          - pattern: req.query
+          - pattern: req.params
+          - pattern: req.body
+          - pattern: location.search
+          - pattern: location.hash
+          - pattern: new URLSearchParams(...).get(...)
+    pattern-sanitizers:
+      - pattern-either:
+          - pattern: DOMPurify.sanitize(...)
+          - pattern: sanitizeHtml(...)
+          - pattern: escapeHtml(...)
+    pattern-sinks:
+      - pattern-either:
+          - pattern: $EL.innerHTML = $SINK
+          - pattern: $EL.outerHTML = $SINK
+          - pattern: $EL.insertAdjacentHTML(..., $SINK)
+
+  - id: dt-taint-shell-exec
+    mode: taint
+    message: >-
+      Dato controlado por el usuario llega a la ejecución de un comando.
+      Verificar si se interpola en el shell o se pasa como argumento aislado.
+    languages: [javascript, typescript]
+    severity: ERROR
+    metadata:
+      category: security
+      domain: api
+      owner: hack-audit
+    pattern-sources:
+      - pattern-either:
+          - pattern: req.query
+          - pattern: req.params
+          - pattern: req.body
+    pattern-sinks:
+      - pattern-either:
+          - pattern: execSync($SINK, ...)
+          - pattern: exec($SINK, ...)
+          - pattern: execFile($SINK, ...)
+          - pattern: spawn($SINK, ...)
+
+  - id: dt-taint-dynamic-eval
+    mode: taint
+    message: >-
+      Dato controlado por el usuario llega a evaluación dinámica de código.
+      Salvo prueba en contrario, esto es ejecución remota.
+    languages: [javascript, typescript]
+    severity: ERROR
+    metadata:
+      category: security
+      domain: api
+      owner: hack-audit
+    pattern-sources:
+      - pattern-either:
+          - pattern: req.query
+          - pattern: req.params
+          - pattern: req.body
+    pattern-sinks:
+      - pattern-either:
+          - pattern: eval($SINK)
+          - pattern: new Function($SINK, ...)
+
+  - id: dt-taint-ssrf
+    mode: taint
+    message: >-
+      URL controlada por el usuario usada en una petición del servidor (SSRF).
+      Confirmar si hay allowlist de destinos o restricción de egress.
+    languages: [javascript, typescript]
+    severity: WARNING
+    metadata:
+      category: security
+      domain: api
+      owner: hack-audit
+    pattern-sources:
+      - pattern-either:
+          - pattern: req.query
+          - pattern: req.params
+          - pattern: req.body
+    pattern-sanitizers:
+      - pattern-either:
+          - pattern: isAllowedUrl(...)
+          - pattern: allowlist.includes(...)
+    pattern-sinks:
+      - pattern-either:
+          - pattern: fetch($SINK, ...)
+          - pattern: axios.get($SINK, ...)
+          - pattern: axios.post($SINK, ...)
+          - pattern: http.get($SINK, ...)
+          - pattern: https.request($SINK, ...)

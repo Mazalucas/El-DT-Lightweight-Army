@@ -1,6 +1,6 @@
 # Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agents/workflows
 version: 1
-updated: "2026-07-30"
+updated: "2026-08-04"
 locale: es
 
 groups:
@@ -98,6 +98,21 @@ commands:
     when: "Compartís una planilla/reporte o pedís totales, sumas o reconciliación de cifras."
     example: "/verificar ventas-junio.csv → totales y checks"
     skill: data-auditor
+    agent: data-auditor
+  hack:
+    group: work
+    tagline: "Auditoría de seguridad del proyecto — mentalidad de atacante, entrega defensiva (SEV + prioridad)."
+    when: "Querés cazar vulnerabilidades, auth/permisos, API, secrets, superficie de agentes/IA o riesgos de arquitectura en el propio repo."
+    example: "/hack  ·  /hack auth  ·  /hack api  ·  /hack agents  ·  /hack diff"
+    skill: hack-audit
+    agent: hack-audit
+  ordenar:
+    group: work
+    tagline: "Capturar archivos, carpetas y dumps del chat — documentar en la capa correcta y dejar manifest recuperable."
+    when: "Volcás mucha data, briefs, notas o paths y querés que el DT clasifique, documente e indexe para reutilizar."
+    example: "/ordenar  ·  /ordenar quick  ·  /ordenar inbox  ·  /ordenar docs onboarding"
+    skill: dt-ordenar
+
   setup:
     group: framework
     tagline: "Verificar o reparar la estructura multi-IDE del DT."
@@ -135,3 +150,4 @@ commands:
     when: "Video en código, motion graphics, promo, explainers, render MP4."
     example: "/remotion promo 30s 9:16  ·  /remotion init mi-video"
     skill: remotion-producer
+    agent: remotion-producer

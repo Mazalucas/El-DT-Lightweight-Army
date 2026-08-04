@@ -9,11 +9,12 @@ Cerebro compartido de **El DT**. Reglas operativas: **`.cursor/rules/`** (Cursor
 | Ritual Git / equipo | `docs/00_overview/cerebro-equipo-mecanismos-dt.md` (`DOC-OV-004`) |
 | Sesión local | `vitals/ops/session.yaml` — sin `operator.id` → **`/yo`** |
 | Commands | `vitals/config/commands-meta.yaml` |
-| Reglas y subagentes | `.cursor/rules/` · [README — 22 especialistas](README.md#catálogo-de-los-22-especialistas) |
+| Reglas y subagentes | `.cursor/rules/` · [README — 23 especialistas](README.md#catálogo-de-los-23-especialistas) |
 | Stack web | `docs/03_reference/web-stack-default.md` · regla `08-stack-web-default` |
 | Reuse / números | reglas `15-engineering-reuse`, `16-numeric-grounding` |
 | Docs IA | `docs/99_meta/protocolo-documentacion-ia.md` · regla `02-documentacion` |
 | Pulso / specs DT | `vitals/INDEX.md` |
+| Captura de conocimiento | `/ordenar` · `docs/02_guides/ordenar-captura-conocimiento.md` (`DOC-GUIDE-016`) |
 | Google Drive (opcional) | `docs/02_guides/drive-cerebro-setup.md` · `/drive` |
 | Atelier / marketing táctico | `.cursor/skills/atelier/` · guías `design/*/GUIDE.md`, `marketing/*/GUIDE.md` |
 | Paridad multi-IDE | `vitals/config/ide-targets.yaml` · `./scripts/sync-ide.sh` |

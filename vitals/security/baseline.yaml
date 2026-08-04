@@ -1,0 +1,40 @@
+# Registro de riesgo de seguridad — baseline de /hack
+#
+# Sirve para que cada auditoría responda "¿qué es NUEVO?" en vez de repetir lo ya sabido.
+# Versionado a propósito: describe estado y dueños, no cómo explotar (el detalle vive
+# en vitals/work/audits/, gitignoreado).
+#
+# Estados que usa el informe: NUEVO · PERSISTENTE · RESUELTO · ACEPTADO
+version: 1
+updated: ""
+
+# Última auditoría corrida (la completa el subagente hack-audit)
+last_audit:
+  date: ""
+  scope: "" # full · <dominio> · diff
+  verdict: ""
+  counts: { critical: 0, high: 0, medium: 0, low: 0, info: 0 }
+
+# Hallazgos abiertos que se arrastran entre auditorías.
+# id: kebab-case estable para poder diffear entre corridas.
+open: []
+# - id: firestore-users-read-any-auth
+#   severity: HIGH
+#   priority: P1
+#   domain: authz
+#   summary: "Lectura de perfiles ajenos con cualquier token válido"
+#   first_seen: 2026-08-04
+#   owner: ""
+
+# Riesgos aceptados con decisión explícita: no cuentan en el veredicto,
+# pero se listan en cada informe para que la aceptación no se olvide.
+accepted: []
+# - id: source-maps-en-staging
+#   severity: LOW
+#   reason: "Staging es interno y ayuda a depurar"
+#   owner: lucas
+#   accepted_on: 2026-08-04
+#   review_on: 2027-02-01
+
+# Hallazgos cerrados (histórico corto; podar cuando crezca).
+resolved: []

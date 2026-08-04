@@ -13,13 +13,15 @@ Cursor inyecta la descripción de cada subagente en la herramienta **Task**. Us�
 - frontend, ui, ux, client → **frontend** o **ui-designer** (Atelier: `/atelier`)
 - deploy, ci/cd → **devops** · test, qa → **qa**
 - planilla, csv, totales → **data-auditor** (`/verificar`, regla `16`)
+- seguridad, vulnerabilidades, pentest, /hack → **hack-audit** (`/hack`, canvas-first)
+- ordenar, capturar conocimiento, volcar archivos, dump → **`/ordenar`** (skill `dt-ordenar`; redacción pesada → **doc**)
 - docs, readme → **doc** · research → **researcher**
 - PRD / SRD / plan MVP → **prd-creator** / **srd-creator** / **development-planner**
 - marketing, SEO, ads → **marketing-strategist** (guías en `.cursor/skills/marketing/*/GUIDE.md`)
 - remotion, video programático → **remotion-producer**
 - operations, monitoring → **operations-maintainer**
 
-Lista completa y keywords: [README — Subagentes](README.md#catálogo-de-los-22-especialistas).
+Lista completa y keywords: [README — Subagentes](README.md#catálogo-de-los-23-especialistas).
 
 ## Prompt de delegación (compacto)
 
@@ -28,6 +30,7 @@ Lista completa y keywords: [README — Subagentes](README.md#catálogo-de-los-22
 3. Si **web**: bloque stack (`08`, `vitals/data/engineering/web-stack.yaml`).
 4. Si **código** (`arquitecto`, `frontend`, `devops`, `qa`, `remotion-producer`): bloque reuse — skill `engineering-reuse`, diff mínimo, sección **Qué reutilicé**.
 5. Si **cifras**: bloque numérico — regla `16`, script ejecutado, etiquetas de procedencia.
+6. Si **seguridad** (`hack-audit`): bloque defensivo — sin exploits/PoCs; secretos redactados; **hallazgo sin traza origen→sink va a Sospechas** (tope MEDIUM); evidencia determinista (`tools/security/scan-repo.sh`) antes del juicio; canvas-first (`17`) e informe gitignoreado.
 
 Varios pedidos en un mensaje: cada agente solo su rol; fuera de alcance → `DEFER: <rol>`.
 

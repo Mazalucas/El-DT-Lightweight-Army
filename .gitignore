@@ -42,6 +42,11 @@ vitals/config/drive-context.yaml
 # Borradores personales temporales (si usás vitals/work/inbox/)
 vitals/work/inbox/**/draft-*
 
+# Auditorías de seguridad (/hack) — mapa de debilidades: nunca al remoto
+vitals/work/audits/*
+!vitals/work/audits/README.md
+canvases/*hack-audit*
+
 # Credenciales
 *.credentials
 client_secret*.json

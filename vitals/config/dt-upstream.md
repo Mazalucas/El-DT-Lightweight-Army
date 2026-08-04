@@ -1,7 +1,7 @@
 ---
 version: 1
 mode: canonical
-framework_version: 1.7.10
+framework_version: 1.7.11
 source:
   remote: dt-upstream
   ref: main
