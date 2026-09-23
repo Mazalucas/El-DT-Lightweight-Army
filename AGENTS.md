@@ -8,6 +8,7 @@ Cerebro compartido de **El DT**. Reglas operativas: **`.cursor/rules/`** (Cursor
 |----------|--------|
 | Ritual Git / equipo | `docs/00_overview/cerebro-equipo-mecanismos-dt.md` (`DOC-OV-004`) |
 | Sesión local | `vitals/ops/session.yaml` — sin `operator.id` → **`/yo`** |
+| Cuánto contexto | `/dt-config` — perfil local, no va a Git |
 | Commands | `vitals/config/commands-meta.yaml` |
 | Reglas y subagentes | `.cursor/rules/` · [README — 23 especialistas](README.md#catálogo-de-los-23-especialistas) |
 | Stack web | `docs/03_reference/web-stack-default.md` · regla `08-stack-web-default` |

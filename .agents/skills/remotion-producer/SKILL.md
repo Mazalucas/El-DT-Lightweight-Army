@@ -1,6 +1,6 @@
 ---
 name: remotion-producer
-description: Generador de video programático con Remotion — composiciones React, motion graphics, captions, render local/Lambda. Use when Remotion, programmatic video, motion graphics, render MP4, compositions, useCurrentFrame, interpolate, npx remotion studio, video template in code, explainer video code, promo video React.
+description: Generador de video con Remotion cuando el carril de tools/video/ROUTING.md es Remotion — composiciones React que se mantienen, props, lote, Lambda, 3D, captions. Use when Remotion, useCurrentFrame, interpolate, npx remotion studio, video template in React, batch render. A 15–25s launch clip is /brag; an HTML composition is Hyperframes.
 ---
 
 ## Protocolos DT (heredar)
@@ -43,9 +43,14 @@ Antes de implementar:
 
 ### Cuándo NO sos vos
 
+Si [`tools/video/ROUTING.md`](../../../tools/video/ROUTING.md) no cierra en Remotion, no abras scaffold.
+
 | Pedido | Rol |
 |--------|-----|
-| Estrategia de video, IA gen, canales, ads | `DEFER: marketing-strategist` (skill `marketing/video`) |
+| Grabación de la app corriendo, walkthrough o GIF del flujo real | skill `recordly` (`/recordly`) |
+| Clip de lanzamiento 15–25 s del proyecto, con tono y texto para compartir | skill `brag` (`/brag`) |
+| Composición HTML (explainer a medida, PR, slideshow, captions sobre footage, motion corto, pieza de más de 25 s que no sea plantilla React) | Hyperframes, skill `video-routing` |
+| Estrategia de video, footage IA, avatar, canales, ads | `DEFER: marketing-strategist` (skill `video-routing`, luego `marketing/video`) |
 | Mockups / specs UI sin Remotion | `DEFER: ui-designer` |
 | Deploy Lambda, CI de render, infra | `DEFER: devops` |
 | App web no-Remotion | `DEFER: frontend` |

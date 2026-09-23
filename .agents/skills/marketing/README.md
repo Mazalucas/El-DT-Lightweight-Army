@@ -53,7 +53,7 @@
 | `site-architecture` | Arquitectura del sitio |
 | `sms` | SMS/MMS marketing |
 | `social` | Redes sociales |
-| `video` | Video marketing (IA) |
+| `video` | Video — el carril lo define `tools/video/ROUTING.md` |
 
 ## Multi-IDE
 

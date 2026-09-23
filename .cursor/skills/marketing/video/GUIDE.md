@@ -9,6 +9,10 @@ metadata:
 
 You are an expert video producer who helps create marketing videos using AI generation models, AI avatars, and programmatic video frameworks. Your goal is to help users produce professional video content efficiently — from product demos and explainers to social clips and ads.
 
+## El DT — elegir carril primero
+
+Dentro de El DT, leé [`tools/video/ROUTING.md`](../../../../tools/video/ROUTING.md) y la skill `video-routing` antes de esta guía. Nombrá un carril (`recordly`, `brag`, `hyperframes`, `remotion`, `footage`, `avatar` o `edit`). Hyperframes es un carril, no el motor por defecto. Una skill global que lo declare framework de salida cede ante esa matriz.
+
 ## Before Starting
 
 **Check for product marketing context first:**
@@ -36,89 +40,55 @@ Gather this context (ask if not provided):
 
 ## Choosing Your Approach
 
-Pick the right tool for the job:
+The lane comes from [`tools/video/ROUTING.md`](../../../../tools/video/ROUTING.md). Use this table only after that file names a lane:
 
-| Approach | Best For | Tools | When to Use |
-|----------|----------|-------|-------------|
-| **Programmatic** | Templated, data-driven, batch video | Remotion, Hyperframes | Product updates, personalized videos, recurring content |
-| **AI Generation** | Original footage from text/image prompts | Veo 3, Sora 2, Runway, Kling, Seedance | B-roll, hero shots, creative visuals you can't film |
-| **AI Avatars** | Talking-head presenter without filming | HeyGen, Synthesia | Explainers, tutorials, multilingual content |
-| **Editing/Repurposing** | Cutting long-form into short clips | Descript, Opus Clip, CapCut | Podcast/webinar → social clips |
+| Lane | Best for | Tool |
+|------|----------|------|
+| **recordly** | A recording of the real running product: clicks, cursor, walkthrough, README GIF | `/recordly` — official app via `./tools/video/install-recordly.sh`; a person records |
+| **brag** | 15–25s share clip of the current project, with tone, music, and post copy | `/brag` — upstream skill cached by `./tools/video/install-brag.sh`, rendered with Hyperframes |
+| **hyperframes** | HTML composition that is not that clip: explainer, PR walkthrough, slideshow, captions on footage, music-driven piece, sub-10s motion, launch longer than 25s | `npx hyperframes` |
+| **remotion** | A video asset you keep: props, React brand system, batch, 3D, `tools/remotion` primitives, Studio, Lambda | `/remotion` · `remotion-producer` |
+| **footage** | Original picture you cannot film | Veo 3, Sora 2, Runway, Kling, Seedance |
+| **avatar** | A presenter on camera | HeyGen, Synthesia |
+| **edit** | Cutting long footage into clips | Descript, Opus Clip, CapCut |
 
 ---
 
 ## Programmatic Video
 
-Build videos with code. Best for repeatable, templated, or data-driven video at scale.
+Three code lanes. Pick with the matrix above. Do not install Hyperframes into the DT `package.json`, and do not copy the brag repo into this template.
 
-### Hyperframes (HTML/CSS — recommended for agents)
+### /brag
 
-Open-source, Apache 2.0, from HeyGen. Uses plain HTML/CSS/JS — no framework DSL to learn. LLM-native: AI models generate better HTML than React components.
+A launch recipe on top of Hyperframes, for this project, 15–25 seconds, one shareable file plus post copy. First run:
 
 ```bash
-npm install hyperframes
+./tools/video/install-brag.sh
 ```
 
-**Key concept:** Each frame is an HTML document. Compose frames into a timeline, render to MP4.
+Then follow `output/.cache/brag/skills/brag/SKILL.md`. That cache is gitignored.
 
-```typescript
-import { render } from "hyperframes";
+### Hyperframes (HTML)
 
-await render({
-  frames: [
-    { html: "<h1>Welcome to Acme</h1>", duration: 3 },
-    { html: "<h2>Here's what we built</h2>", duration: 3 },
-    { html: "<p>Try it free →</p>", duration: 2 },
-  ],
-  output: "intro.mp4",
-  width: 1080,
-  height: 1920, // 9:16 for vertical
-});
+Open-source engine from HeyGen. A composition is HTML with seekable timing; the CLI renders MP4. Use it when the matrix lands on the Hyperframes row. Runtime:
+
+```bash
+npx hyperframes doctor
 ```
 
-**Best for:** Product announcements, changelogs, data-driven reports, personalized outreach videos.
-
-**Why agents prefer it:** Plain HTML/CSS means any coding agent can generate frames without learning a framework. Deterministic rendering — same input always produces identical output.
+Domain skills stay on the operator's machine (`npx hyperframes skills update`). They are not vendored into El DT.
 
 ### Remotion (React)
 
-Mature open-source framework. More powerful than Hyperframes but requires React knowledge.
+The maintained React lane already in the template. Frame-accurate motion (`useCurrentFrame`, `interpolate`, `spring`), props, and Lambda for batch. Entry:
 
 ```bash
-npx create-video@latest
+cd tools/remotion && npm install && npm run dev
 ```
 
-**Key concept:** React components are frames. Props drive content. Render locally or via Remotion Lambda (AWS) for scale.
+Free for teams of up to 3 people. Larger companies need a [commercial license](https://www.remotion.dev/docs/license).
 
-```tsx
-export const ProductDemo: React.FC<{ title: string; features: string[] }> = ({
-  title, features
-}) => {
-  const frame = useCurrentFrame();
-  return (
-    <AbsoluteFill style={{ background: "#000", color: "#fff" }}>
-      <h1>{title}</h1>
-      {features.map((f, i) => (
-        <Sequence from={i * 30} key={i}>
-          <p>{f}</p>
-        </Sequence>
-      ))}
-    </AbsoluteFill>
-  );
-};
-```
-
-**Best for:** Complex animations, interactive previews, large-scale batch rendering (Lambda).
-
-### When to Pick Which
-
-| Factor | Hyperframes | Remotion |
-|--------|-------------|----------|
-| Agent compatibility | Better (plain HTML) | Good (React) |
-| Animation complexity | Basic (CSS transitions) | Advanced (Spring, interpolate) |
-| Batch rendering | Local | Lambda (AWS) for scale |
-| Learning curve | Minimal | Moderate (React + Remotion API) |
-| License | Apache 2.0 | Company license for commercial use |
+Scaffold and primitives: [`tools/remotion/README.md`](../../../../tools/remotion/README.md).
 
 ---
 
@@ -252,7 +222,7 @@ Distribute: TikTok, Reels, Shorts, LinkedIn
 
 1. **Script** the key features and value props (use copywriting skill)
 2. **Screen record** the product flow
-3. **Programmatic overlay** — use Hyperframes/Remotion for titles, callouts, transitions
+3. **Programmatic overlay** — titles, callouts, transitions on the code lane from `tools/video/ROUTING.md`
 4. **AI B-roll** — generate establishing shots or lifestyle scenes with Veo/Runway
 5. **Voiceover** — record yourself or use AI avatar for narration
 6. **Export** at platform-appropriate specs
@@ -267,7 +237,7 @@ Distribute: TikTok, Reels, Shorts, LinkedIn
 
 ### Batch Social Clips
 
-1. **Create master template** in Hyperframes/Remotion
+1. **Create master template** on the Remotion lane when the same layout repeats with new data (`/remotion`)
 2. **Feed data** — product features, testimonials, stats
 3. **Render batch** — one template, many variations
 4. **Add platform-specific captions** via CapCut or Captions.ai
@@ -280,24 +250,21 @@ Distribute: TikTok, Reels, Shorts, LinkedIn
 The most powerful setup combines tools that agents can control directly:
 
 ```
-Agent writes script (from product context)
+Agent reads tools/video/ROUTING.md and names one lane
     ↓
-Hyperframes: Generate templated video (HTML → MP4)
+brag, Hyperframes, or Remotion for the code picture
     and/or
-HeyGen MCP: Generate avatar video from script
+HeyGen MCP for an avatar
     and/or
-Veo/Runway API: Generate B-roll footage
-    ↓
-Agent assembles final cut
+Veo/Runway API for B-roll
     ↓
 Output: Ready-to-publish video
 ```
 
 **What makes this agent-native:**
-- Hyperframes uses HTML — any coding agent can generate it
-- HeyGen MCP server — agents call it directly
-- Video model APIs — standard HTTP requests
-- No manual editing step required
+- The lane is chosen from the situation, then one engine runs
+- HeyGen MCP — agents call it directly when the lane is avatar
+- Video model APIs — standard HTTP requests when the lane is footage
 
 ---
 
@@ -329,9 +296,12 @@ For the tools catalog, see [`tools/REGISTRY.md`](../../../../../../tools/REGISTR
 
 | Tool | Type | MCP | Guide |
 |------|------|:---:|-------|
-| **Remotion** | Programmatic video (React) | - | [`tools/remotion/README.md`](../../../../../../tools/remotion/README.md) · subagente `remotion-producer` |
-| **HeyGen** | AI avatars | Yes | [heygen.md](../../../../../../tools/integrations/heygen.md) (stub) |
-| **Hyperframes** | Programmatic video | - | [hyperframes.md](../../../../../../tools/integrations/hyperframes.md) (stub) |
+| **Routing** | Which lane | - | [`tools/video/ROUTING.md`](../../../../tools/video/ROUTING.md) |
+| **Recordly** | Screen recording of the running product | - | `./tools/video/install-recordly.sh` — official binary, not vendored |
+| **/brag** | 15–25s launch clip | - | `./tools/video/install-brag.sh` → cached upstream skill |
+| **Remotion** | React video asset | - | [`tools/remotion/README.md`](../../../../tools/remotion/README.md) · `remotion-producer` |
+| **Hyperframes** | HTML video | - | `npx hyperframes` — not vendored |
+| **HeyGen** | AI avatars | Yes | Avatar lane in this guide |
 | **Runway** | AI generation | - | [runwayml.com/docs](https://docs.dev.runwayml.com) |
 
 ---

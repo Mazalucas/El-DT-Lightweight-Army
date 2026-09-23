@@ -23,7 +23,7 @@ Registro de IDEs: `vitals/config/ide-targets.yaml`. No hardcodear IDEs en este s
 El clone **ya trae** `.cursor/`, `.agents/`, `.claude/`, commands y skills en Git. El usuario **no necesita Ruby** para empezar.
 
 1. Resolver `git_root` (multi-proyecto: `vitals/workspace.yaml` si existe).
-2. Seguir **todo** [`references/first-run-checklist.md`](references/first-run-checklist.md): verificar paths, Git, detectar drift, **registrar dt-upstream si aplica** (§4).
+2. Seguir **todo** [`references/first-run-checklist.md`](references/first-run-checklist.md): verificar paths, Git, detectar drift, **registrar dt-upstream si aplica** (§4), e instalar el pre-push con `./scripts/dt-oficial.sh install-hook`.
 3. **No correr** `sync-ide` ni `dt-doctor` salvo drift evidente **y** que el usuario pida reparar → pasar a modo B.
 4. Entregar **obligatoriamente** el mensaje canónico en [`references/welcome-message.md`](references/welcome-message.md): completar placeholders tras checklist; si hay drift → rama **`/setup`** visible en el mensaje (no solo al final).
 5. Cierre obligatorio: **"Siguiente paso: `/yo`"** — el mensaje de bienvenida ya incluye la tarjeta ritual; no acortar a una línea.
@@ -41,9 +41,9 @@ Si el repo parece El DT (`AGENTS.md` + `vitals/config/commands-meta.yaml`) **y**
 
    Copiar `vitals/config/dt-upstream.example.md` → `vitals/config/dt-upstream.md` con `mode: consumer` y `framework_version` = contenido de `VERSION`.
 
-3. **Canónico:** `mode: canonical` en el frontmatter (Fase B de `/actualizar` se omite).
+3. **Canónico:** `mode: canonical` en el frontmatter (Fase B de `/actualizar` se omite). Eso no habilita el push. Publicar al remoto oficial exige `/oficial` en este checkout, con la sesión de GitHub del dueño.
 
-No commitear durante `/bienvenida` salvo que el usuario pida `/guardar`.
+No commitear durante `/bienvenida` salvo que el usuario pida `/guardar`. Si ese `/guardar` apunta al remoto oficial y la carpeta no está activada, el gate corta: no pidas acceso.
 
 ## Modo B — repair (default en `/setup`, drift, post-pull grande)
 
@@ -64,3 +64,4 @@ No commitear durante `/bienvenida` salvo que el usuario pida `/guardar`.
 - No tocar `vitals/ops/session.yaml`, `.env`, credenciales.
 - No instalar Git/Ruby/npm sin confirmación explícita del usuario.
 - No commitear durante setup.
+- No pushear al remoto oficial del DT ni ofrecer pedir acceso. Publicar es `/oficial`, solo en el checkout que el dueño activó.

@@ -25,12 +25,14 @@ node tools/atelier/generated/scripts/context.adapter.mjs --target <path>
 
 ## Register references (DT paths)
 
-| Register | File |
-|----------|------|
-| Brand (marketing, landing, portfolio) | `tools/atelier/generated/references/brand.md` |
-| Product (app, dashboard, tool) | `tools/atelier/generated/references/product.md` |
+Impeccable 4 names visitor modes. Map `register` from design-context:
 
-Map `register` from design-context sections — do not create duplicate PRODUCT.md/DESIGN.md.
+| design-context `register` | Mode | File |
+|----------|------|------|
+| brand (marketing, landing, portfolio) | Persuade | Modes in this skill + `tools/atelier/generated/references/new-work.md` |
+| product (app, dashboard, tool) | Operate | `tools/atelier/generated/references/operate.md` |
+
+Do not create duplicate PRODUCT.md/DESIGN.md.
 
 ## DT-native subcommands
 

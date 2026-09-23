@@ -5,7 +5,7 @@ type: reference
 status: canonical
 owner: dt-platform
 created: 2026-06-19
-updated: 2026-07-02
+updated: 2026-09-23
 tags:
   - tools
   - remotion
@@ -14,7 +14,7 @@ tags:
   - agents
 domain:
   - reference
-summary: Referencia estable del catálogo tools/ — Remotion, Atelier/Impeccable y futuras integraciones.
+summary: Referencia estable del catálogo tools/ — elección de carril de video, Remotion, Atelier/Impeccable.
 related:
   - DOC-REF-006
   - DOC-REF-008
@@ -41,7 +41,18 @@ Referencia humana de la capa **`tools/`** en la raíz del repo. Catálogo vivo (
 | Comportamiento | `.cursor/skills/` | Protocolos, discover, vendor skills |
 | Generaciones | `output/`, `temporal/` | **No versionar** — gitignored |
 
-## Remotion (implementado)
+## Video — elección de carril
+
+[`tools/video/ROUTING.md`](../../tools/video/ROUTING.md) es la matriz. Skill `video-routing`. La primera fila que cierra gana. Hyperframes no es el motor por defecto.
+
+| Carril | Cómo se usa | Peso en git |
+|--------|-------------|-------------|
+| Recordly | `./tools/video/install-recordly.sh` → binario en `output/.cache/recordly/` | Cero. El fuente AGPL no entra al template |
+| `/brag` | `./tools/video/install-brag.sh` → `output/.cache/brag/skills/brag/SKILL.md` | Cero. La caché y `brag-output/` están gitignored |
+| Hyperframes | `npx hyperframes` en el proyecto del video | Cero. Sin dependencia en el template |
+| Remotion | [`tools/remotion/`](../../tools/remotion/) · `/remotion` | Código y lockfile. `node_modules` y MP4 no se versionan |
+
+## Remotion (carril React)
 
 | Artefacto | Path | Consumidor |
 |-----------|------|------------|
@@ -55,8 +66,8 @@ Referencia humana de la capa **`tools/`** en la raíz del repo. Catálogo vivo (
 ### Flujo
 
 ```text
-marketing-strategist → guion/copy
-remotion-producer → tools/remotion/primitives → proyecto consumidor
+marketing-strategist lee tools/video/ROUTING.md
+carril remotion → remotion-producer → tools/remotion/primitives → proyecto consumidor
 render → output/remotion/*.mp4 (local, gitignored)
 ```
 

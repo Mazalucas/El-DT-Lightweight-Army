@@ -21,6 +21,8 @@ Usá este archivo para decidir **qué leer primero** y no inflar el contexto.
 | ¿Google Drive como contexto? | `/drive` · [config/drive-context.yaml.example](config/drive-context.yaml.example) (local: `drive-context.yaml`) · `DOC-GUIDE-009` |
 | ¿Roles del proyecto? | [config/roles.yaml](config/roles.yaml) (`roles: []` = texto libre en /yo) |
 | ¿Forma de session.yaml? | [ops/README.md](ops/README.md) · DOC-REF-001 |
+| ¿Postura personal o team? | [config/collaboration.yaml.example](config/collaboration.yaml.example) · la escribe `/yo` en `config/collaboration.yaml` · [precedence.md](specs/precedence.md) |
+| ¿Quién puede publicar al repo oficial del DT? | [specs/canonical-publish.md](specs/canonical-publish.md) · `/oficial` |
 | ¿Colaboración Git y zonas? | [../docs/06_operations/git-colaboracion-dt.md](../docs/06_operations/git-colaboracion-dt.md) (`DOC-OPS-001`) |
 | ¿Capturar archivos/dumps y ordenar conocimiento? | `/ordenar` · [../docs/02_guides/ordenar-captura-conocimiento.md](../docs/02_guides/ordenar-captura-conocimiento.md) (`DOC-GUIDE-016`) · [work/knowledge/](work/knowledge/) |
 | ¿Estado de seguridad / riesgos aceptados? | [security/baseline.yaml](security/baseline.yaml) · `/hack` · `DOC-REF-010` (informes en `work/audits/`, gitignoreados) |

@@ -10,7 +10,7 @@ rules:
     description: "Núcleo del Orquestador - Personalidad del DT y pipeline base"
     alwaysApply: true
   - stem: 01-protocolos-dt
-    description: "Protocolos obligatorios del DT - Cuestionar, alternativas, puntos ciegos"
+    description: "Protocolos obligatorios del DT - Cuestionar, alternativas, voz corta (Resumen, siguiente paso)"
     alwaysApply: true
   - stem: 02-documentacion
     description: "OBLIGATORIO al crear o editar docs/ — protocolo DOC-META-001, capas, IDs, catálogo sync-catalog"

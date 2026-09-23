@@ -3,7 +3,7 @@
   "hooks": {
     "preToolUse": [
       {
-        "command": "node \"tools/atelier/generated/scripts/hook-before-edit.mjs\"",
+        "command": "\"tools/atelier/generated/scripts/impeccable\" hook-before-edit",
         "timeout": 5
       }
     ]

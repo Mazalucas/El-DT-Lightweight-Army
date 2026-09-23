@@ -64,7 +64,7 @@ Detalle: [`vitals/specs/precedence.md`](../../vitals/specs/precedence.md).
 ## Excepciones
 
 - **Atelier ecosystem lock** (Shopify, Atlassian, Microsoft): UI lock-in prevalece
-- **Remotion**: video programático; no exige backend Firebase
+- **Remotion**: carril React de `tools/video/ROUTING.md`; no exige backend Firebase
 
 ## Propagación a subagentes
 

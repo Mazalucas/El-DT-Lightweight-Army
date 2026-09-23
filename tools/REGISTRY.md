@@ -2,9 +2,21 @@
 
 Catálogo machine- y human-readable de herramientas reutilizables en `tools/`. Los marketing skills y subagentes enlazan aquí.
 
-> Integraciones SaaS (`tools/integrations/`, `tools/clis/`) están planificadas; hoy solo Remotion está implementado en el template.
+> Integraciones SaaS (`tools/integrations/`, `tools/clis/`) están planificadas. Video: la matriz en `video/ROUTING.md` elige carril; Remotion es el único motor vendoreado en el template. Recordly, `/brag` e Hyperframes se usan bajo demanda y no se commitean.
 
-## Video programático
+## Video — elegir carril
+
+La matriz vive en [`video/ROUTING.md`](video/ROUTING.md). Skill `video-routing`. Hyperframes no es el motor por defecto.
+
+| Carril | Path | Agente | Command | Descripción |
+|--------|------|--------|---------|-------------|
+| **Decisión** | [`video/ROUTING.md`](video/ROUTING.md) | `marketing-strategist` | — | Primera fila que cierra gana |
+| **/recordly** | binario oficial vía [`video/install-recordly.sh`](video/install-recordly.sh) | skill `recordly` | `/recordly` | Demo del producto corriendo. No se clona el repo |
+| **/brag** | caché `output/.cache/brag/` vía [`video/install-brag.sh`](video/install-brag.sh) | skill `brag` | `/brag` | Clip 15–25 s del proyecto. El repo upstream no se vendorea |
+| **Hyperframes** | `npx hyperframes` en el proyecto del video | skill `video-routing` | — | Composición HTML. Sin dependencia en el DT |
+| **Remotion** | [`remotion/`](remotion/) | `remotion-producer` | `/remotion` | Asset React que se mantiene |
+
+## Video programático — Remotion
 
 | Tool | Path | Agente | Command | Descripción |
 |------|------|--------|---------|-------------|
@@ -29,7 +41,20 @@ Catálogo machine- y human-readable de herramientas reutilizables en `tools/`. L
 Maintainer: ./tools/atelier/scripts/sync-from-impeccable.sh --latest
 ```
 
-## Flujo agente (Remotion)
+## Flujo agente (video)
+
+```text
+marketing-strategist lee tools/video/ROUTING.md
+        ↓
+recordly    → ./tools/video/install-recordly.sh → la persona graba
+brag        → ./tools/video/install-brag.sh → skill upstream en output/.cache/brag/
+hyperframes → npx hyperframes en el proyecto del video
+remotion    → remotion-producer → tools/remotion/primitives/
+        ↓
+mp4 en output/recordly/, brag-output/ o output/remotion/ (gitignored)
+```
+
+## Flujo agente (Remotion, si ese fue el carril)
 
 ```text
 marketing-strategist (marketing/video) → guion y copy

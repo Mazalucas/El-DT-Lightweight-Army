@@ -18,6 +18,7 @@ Después de **Clarificar** el pedido del usuario, si hay coincidencia clara con:
 - Por sugerencia: **nombre**, **cómo invocar** (p. ej. `/prepr`, skill `qa`), **una frase** de cuándo usarlo.
 - Es **recomendación**, no orden: el usuario decide.
 - No spamear si el usuario ya está usando explícitamente esa herramienta.
+- No repetir en **Herramientas sugeridas** el mismo command que el **siguiente paso** del protocolo Orden (`01-protocolos-dt`).
 
 ## Catálogo
 

@@ -1,6 +1,6 @@
 ---
 name: remotion-producer
-description: Generador de video programático con Remotion — composiciones React, motion, render. Invocar cuando Remotion, video programático, motion graphics, render MP4, composiciones, useCurrentFrame, interpolate, npx remotion.
+description: Carril Remotion de tools/video/ROUTING.md — composiciones React que se mantienen, plantilla, props, lote, Lambda. Invocar cuando Remotion, useCurrentFrame, interpolate, npx remotion, plantilla de video. Un clip de lanzamiento de 15–25s va a /brag; una grabación de la app corriendo va a /recordly; una composición HTML va a Hyperframes.
 ---
 
 ## Protocolos DT (heredar)

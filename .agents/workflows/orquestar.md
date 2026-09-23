@@ -64,13 +64,15 @@ No entregues sin verificar que pasa.
 
 ## Paso 7: Entregar
 
-Entrega:
-1. Resumen ejecutivo
-2. Cambios realizados
-3. Verificación (tests, lint, build)
-4. **Contexto consultado** — 1–3 líneas: fuentes de la base de conocimiento (docs/, vitals/, skills, código) que informaron las decisiones; en código lo cubre **Qué reutilicé** (regla `15`). Norma: regla `00-orquestador-core`.
-5. **Puntos ciegos / Mejoras detectadas** (si aplica)
-6. (Opcional) PR-ready con descripción
+Cierre visible al usuario según **protocolo Orden** (`01-protocolos-dt`): conclusión en 1–2 frases; cuerpo en lista con:
+
+1. **Cambios realizados**
+2. **Verificación** — una línea (tests, lint, build; o N/A)
+3. **Contexto consultado** — 1–3 líneas (docs/, vitals/, skills, código); en código **Qué reutilicé** (regla `15`)
+4. **Puntos ciegos** — una línea, solo si hay riesgo material
+5. (Opcional) PR-ready con descripción
+
+Si la entrega es larga: bloque **Resumen** (3–5 ítems), oferta breve de profundizar (una frase) y **un solo siguiente paso**.
 
 ## Paso 8: Cierre documental (si aplica)
 

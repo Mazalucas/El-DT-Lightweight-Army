@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # project-bump-version — incrementa semver en VERSION (raíz).
-# Uso: ./scripts/project-bump-version.sh [patch|minor]
+# Uso: ./scripts/project-bump-version.sh patch|minor|major
+# El dígito lo elige /guardar (skill git-guardar). Este script solo suma.
 # Escribe la nueva versión en stdout.
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-KIND="${1:-patch}"
+KIND="${1:-}"
 VERSION_FILE="$ROOT/VERSION"
 
 if [[ ! -f "$VERSION_FILE" ]]; then
@@ -26,8 +27,9 @@ PA="${BASH_REMATCH[3]}"
 case "$KIND" in
   patch) PA=$((PA + 1)) ;;
   minor) MI=$((MI + 1)); PA=0 ;;
+  major) MA=$((MA + 1)); MI=0; PA=0 ;;
   *)
-    echo "Uso: project-bump-version.sh [patch|minor]" >&2
+    echo "Uso: project-bump-version.sh patch|minor|major" >&2
     exit 2
     ;;
 esac

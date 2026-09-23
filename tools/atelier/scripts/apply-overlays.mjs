@@ -64,6 +64,10 @@ function linkDetectorEngine() {
   else if (fs.existsSync(upstreamEngine)) target = upstreamEngine;
 
   if (!target) {
+    // CLI 4+ bundles the detector in the engine binary. The v3 cli/engine tree is gone.
+    const launcher = path.join(genScripts, 'impeccable');
+    const npmCli = path.join(ROOT, 'node_modules', 'impeccable', 'cli', 'bin', 'cli.js');
+    if (fs.existsSync(launcher) || fs.existsSync(npmCli)) return;
     console.warn('warn: detector engine not found — run npm install in tools/atelier');
     return;
   }

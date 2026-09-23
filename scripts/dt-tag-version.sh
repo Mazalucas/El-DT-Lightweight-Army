@@ -31,6 +31,17 @@ fi
 TAG="v${VERSION}"
 cd "$ROOT"
 
+if $PUSH; then
+  ORIGIN_URL="$(git remote get-url origin 2>/dev/null || true)"
+  if [[ -z "$ORIGIN_URL" ]]; then
+    echo "Sin origin: no se pushea el tag." >&2
+    PUSH=false
+  elif ! ruby "$ROOT/scripts/dt-canonical-publish.rb" push-remote "$ORIGIN_URL"; then
+    echo "ERROR: el gate frenó el push del tag." >&2
+    exit 1
+  fi
+fi
+
 if git rev-parse "$TAG" >/dev/null 2>&1; then
   TAG_COMMIT="$(git rev-list -n 1 "$TAG")"
   HEAD_COMMIT="$(git rev-parse HEAD)"

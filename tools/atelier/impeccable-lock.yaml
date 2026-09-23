@@ -1,9 +1,9 @@
 # Pin Impeccable upstream for tools/atelier sync.
 # Updated by: ./tools/atelier/scripts/sync-from-impeccable.sh
-skill_tag: skill-v3.8.0
-cli_version: "3.1.0"
-submodule_sha: da18929df04fbfc0ad6526ff224cc3c21cf7d361
-synced_at: "2026-06-25"
+skill_tag: skill-v4.3.1
+cli_version: "4.1.0"
+submodule_sha: cd12f8660e2dde57b9615c8a6b8ea674101f9cfc
+synced_at: "2026-09-23"
 dt_overlay_version: 1
 reference_count_min: 23
-reference_count: 31
+reference_count: 35

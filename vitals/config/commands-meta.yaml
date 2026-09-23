@@ -1,6 +1,6 @@
 # Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agents/workflows
 version: 1
-updated: "2026-08-04"
+updated: "2026-09-23"
 locale: es
 
 groups:
@@ -17,8 +17,8 @@ groups:
     title: "Diseño y Atelier"
     description: "Design intelligence — contexto, selección de sistema, anti-slop, specs UI."
   video:
-    title: "Video programático"
-    description: "Remotion — composiciones React, motion graphics, render."
+    title: "Video"
+    description: "Elegir carril (Recordly, brag, Hyperframes, Remotion) y producir el video."
 
 commands:
   actualizar:
@@ -29,14 +29,14 @@ commands:
     skill: git-actualizar
   yo:
     group: routine
-    tagline: "Decir quién está trabajando en esta máquina."
-    when: "Después de cada /actualizar; primera vez en el repo."
+    tagline: "Decir quién trabaja en esta máquina y, si el repo no lo dice, si es personal o equipo."
+    when: "Después de cada /actualizar; primera vez en el repo. La postura se pregunta solo si el roster está vacío y no hay collaboration.yaml válido."
     example: '/yo → "Soy Ana García, rol desarrollo"'
     skill: dt-session
   guardar:
     group: routine
-    tagline: "Subir a GitHub — bump patch, sync README/front/back, commit vX.Y.Z, tag."
-    when: "Al cerrar bloque con cambios. Minor: /guardar release minor."
+    tagline: "Guardar cambios — bump, commit y push al remoto de este repo. El DT oficial solo con /oficial activo."
+    when: "Al cerrar bloque con cambios. El dígito lo elige la IA; si nombrás patch, minor o major, usa ese."
     example: "/guardar"
     skill: git-guardar
   deploy:
@@ -51,6 +51,12 @@ commands:
     when: "Primera vez que querés consultar documentos en Drive con el DT; o para cambiar qué carpetas compartís."
     example: "/drive"
     skill: dt-drive
+  dt-config:
+    group: routine
+    tagline: "Elegir qué reglas van en cada mensaje. El perfil queda en esta PC."
+    when: "Querés más o menos contexto del DT, o ver qué está siempre activo y qué entra solo cuando hace falta."
+    example: "/dt-config  ·  Recomendado  ·  Docs  ·  Web"
+    skill: dt-config
   bienvenida:
     group: routine
     tagline: "Primera vez post-clone — checklist + mensaje de bienvenida con commands recomendados (incluye /setup si falta estructura)."
@@ -78,6 +84,12 @@ commands:
     example: "/cuestionar"
     skill: null
     command_path: .cursor/commands/cuestionar.md
+  analisis-propuesta:
+    group: work
+    tagline: "Panel multi-modelo sobre un plan ya escrito — dos rondas, solo diagnóstico."
+    when: "Tenés una propuesta o plan y querés que otros LLM lo evalúen (objetivo, approach, escala, replicabilidad) antes de ejecutar."
+    example: "/analisis-propuesta  ·  pegá el plan en el mismo mensaje"
+    skill: analisis-propuesta
   contexto:
     group: work
     tagline: "Mapa del repo y vista de sistema."
@@ -125,6 +137,13 @@ commands:
     when: "Arrancar un proyecto nuevo a partir del template."
     example: "/bootstrap"
     skill: dt-bootstrap
+  oficial:
+    group: framework
+    tagline: "Marcar esta carpeta como el único checkout que puede publicar al remoto oficial del DT."
+    when: "Solo el dueño, en la carpeta del DT de verdad. /oficial off lo apaga."
+    example: "/oficial"
+    who: "El dueño del repo oficial, en el checkout que quiere publicar."
+    skill: dt-oficial
   actualizar-dt:
     group: framework
     tagline: "Incorporar una nueva versión del framework DT desde upstream."
@@ -146,8 +165,20 @@ commands:
     skill: atelier
   remotion:
     group: video
-    tagline: "Video programático con Remotion — composiciones, motion, render."
-    when: "Video en código, motion graphics, promo, explainers, render MP4."
+    tagline: "Asset de video en React — plantilla, props, lote, render."
+    when: "El carril de tools/video/ROUTING.md es Remotion: composición que se mantiene, parametriza o renderiza en lote."
     example: "/remotion promo 30s 9:16  ·  /remotion init mi-video"
     skill: remotion-producer
     agent: remotion-producer
+  brag:
+    group: video
+    tagline: "Clip de lanzamiento de 15–25s del proyecto — la skill upstream queda en caché, fuera del git."
+    when: "Compartir lo que acabás de construir: un clip corto, con tono, música y texto para postear."
+    example: "/brag  ·  /brag --tone polished --format vertical"
+    skill: brag
+  recordly:
+    group: video
+    tagline: "Demo del producto corriendo — Recordly graba la pantalla; el binario queda fuera del git."
+    when: "Screen recording, walkthrough o GIF del flujo real. /recordingly es el mismo command."
+    example: "/recordly signup  ·  /recordingly"
+    skill: recordly

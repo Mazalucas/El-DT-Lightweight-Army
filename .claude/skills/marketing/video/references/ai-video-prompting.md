@@ -134,7 +134,7 @@ Use these terms — video models understand them:
 | Mistake | Why It Fails | Fix |
 |---------|-------------|-----|
 | "A person using our app" | Too vague, no visual detail | Describe the person, setting, lighting, camera |
-| Including text/logos | AI can't render readable text | Add text in post via Hyperframes/CapCut |
+| Including text/logos | AI can't render readable text | Add text in post on the code lane from `tools/video/ROUTING.md`, or in CapCut |
 | "Make it viral" | Not a visual instruction | Describe the visual style you want |
 | Extremely long prompts (200+ words) | Models lose focus | Keep to 50-100 words, be specific |
 | No camera direction | Random/static camera | Always specify movement or "static" |

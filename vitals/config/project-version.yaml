@@ -3,7 +3,10 @@
 
 version: 1
 initialized: true
-auto_bump: patch
+# classify — la IA elige patch|minor|major en /guardar
+# patch|minor|major — dígito fijo, salvo que el mensaje nombre otro
+# none + initialized:true — sin incremento (opt-out)
+auto_bump: classify
 tag_releases: true
 
 sync_paths:

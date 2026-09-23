@@ -41,7 +41,7 @@ Si existe handoff de **ui-designer**:
 |--------|-----|
 | Specs / mockups sin código | `DEFER: ui-designer` |
 | Backend / API | `DEFER: arquitecto` |
-| Video Remotion | `DEFER: remotion-producer` |
+| Video | skill `video-routing` (`tools/video/ROUTING.md`); carril Remotion → `DEFER: remotion-producer` |
 
 ## Reglas
 

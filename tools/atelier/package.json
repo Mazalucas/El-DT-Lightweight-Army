@@ -4,6 +4,6 @@
   "description": "Atelier DT — Impeccable CLI pin for detect, hooks, and live mode",
   "type": "module",
   "dependencies": {
-    "impeccable": "3.1.0"
+    "impeccable": "4.1.0"
   }
 }

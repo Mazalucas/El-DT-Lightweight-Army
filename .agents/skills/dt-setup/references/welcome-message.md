@@ -52,7 +52,7 @@ Hola — este repo ya trae el **Director Técnico (DT)**: reglas, skills y comma
 |---------|----------|
 | **`/actualizar`** | Traer cambios del remoto (+ aviso si hay DT nuevo) |
 | **`/yo`** | Refrescar sesión local tras actualizar |
-| **`/guardar`** | Subir tu trabajo a GitHub |
+| **`/guardar`** | Guardar tu trabajo. Publica en el remoto de este proyecto. Si `origin` es el repo del DT, no publica hasta que el dueño active esta carpeta con `/oficial` |
 
 ### Cuando lo necesites
 
@@ -60,11 +60,14 @@ Hola — este repo ya trae el **Director Técnico (DT)**: reglas, skills y comma
 |---------|----------|
 | **`/orquestar`** | Tarea grande — pipeline DT en 8 pasos |
 | **`/drive`** | Conectar Google Drive como contexto (opcional) |
+| **`/dt-config`** | Elegir cuánto contexto queda activo. Recomendado deja el resto para cuando haga falta |
 | **`/atelier`** | Diseño UI / mockups / anti-slop |
 | **`/verificar`** | Planillas y totales (con script, no a ojo) |
 | **`/hack`** | Auditoría de seguridad del repo (mentalidad atacante) |
 | **`/ordenar`** | Capturar archivos/dumps — documentar y dejar manifest recuperable |
 | **`/actualizar-dt`** | Incorporar nueva versión del framework (maintainers) |
+| **`/bootstrap`** | Empezar tu propio proyecto desde este clone y soltar el remoto del DT |
+| **`/oficial`** | Solo el dueño, en la carpeta del DT: permitir publicar al remoto oficial |
 
 ## Tarjeta rápida
 
@@ -76,7 +79,7 @@ Hola — este repo ya trae el **Director Técnico (DT)**: reglas, skills y comma
 
 ## Qué NO tocamos en Git
 
-`session.yaml`, `.env`, credenciales, `vitals/workspace.yaml` — solo en tu máquina.
+`session.yaml`, `.env`, credenciales, `vitals/workspace.yaml`, `canonical-checkout.yaml` (lo crea `/oficial`) — solo en tu máquina.
 
 ---
 

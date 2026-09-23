@@ -38,7 +38,7 @@ exceptions:
   - id: atelier_ecosystem_lock
     note: "Shopify/Polaris, Atlassian, Microsoft — Atelier lock-in prevalece en UI"
   - id: remotion
-    note: "Video programático con Remotion — React sin backend DB Firebase obligatorio"
+    note: "Solo el carril Remotion de tools/video/ROUTING.md. React, sin backend Firebase obligatorio."
 
 delegation_snippet: |
   Stack DT (soft default): Node + Firebase (Auth, Firestore, Functions, Hosting, Storage).

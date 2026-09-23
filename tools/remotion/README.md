@@ -1,6 +1,6 @@
 # Remotion — toolkit del DT
 
-Video programático con [Remotion](https://www.remotion.dev/) para el subagente **remotion-producer** y el command **`/remotion`**.
+Video programático con [Remotion](https://www.remotion.dev/) cuando [`tools/video/ROUTING.md`](../video/ROUTING.md) cierra en el carril Remotion. Subagente **remotion-producer**, command **`/remotion`**. Un clip de lanzamiento de 15–25 s va por **`/brag`**. Una grabación de la app corriendo va por **`/recordly`**.
 
 **Punto de entrada:** instalá y corré desde **`tools/remotion/`** (el cerebro DT no tiene Remotion en la raíz del repo).
 

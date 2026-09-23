@@ -280,6 +280,38 @@ def check_agent_catalog
   end
 end
 
+def check_publish_gate
+  cfg_path = File.join(ROOT, "vitals/config/canonical-publish.yaml")
+  unless File.exist?(cfg_path)
+    err("publish", "falta vitals/config/canonical-publish.yaml")
+    return
+  end
+
+  cfg = YAML.safe_load(File.read(cfg_path), permitted_classes: [])
+  unless cfg.is_a?(Hash)
+    err("publish", "canonical-publish.yaml ilegible")
+    return
+  end
+
+  login = cfg["publisher_github_login"].to_s.strip
+  remotes = cfg["official_remotes"]
+  err("publish", "publisher_github_login vacío") if login.empty?
+  err("publish", "official_remotes vacío") unless remotes.is_a?(Array) && !remotes.empty?
+
+  %w[scripts/dt-canonical-publish.rb scripts/dt-publish-gate.sh scripts/dt-oficial.sh].each do |rel|
+    err("publish", "falta #{rel}") unless File.exist?(File.join(ROOT, rel))
+  end
+
+  gi = File.read(File.join(ROOT, ".gitignore"))
+  unless gi.include?("vitals/ops/canonical-checkout.yaml")
+    err("publish", ".gitignore no ignora vitals/ops/canonical-checkout.yaml")
+  end
+
+  run_check("publish-gate", "ruby", File.join(ROOT, "scripts/dt-canonical-publish.rb"), "self-check")
+rescue StandardError => e
+  err("publish", e.message)
+end
+
 def check_upstream
   cfg_path = File.join(ROOT, "vitals/config/dt-upstream.md")
   return unless File.exist?(cfg_path)
@@ -301,6 +333,32 @@ rescue StandardError
   nil
 end
 
+def check_collaboration
+  example = File.join(ROOT, "vitals/config/collaboration.yaml.example")
+  paths = [example, File.join(ROOT, "vitals/config/collaboration.yaml")]
+  unless File.exist?(example)
+    err("collaboration", "falta vitals/config/collaboration.yaml.example")
+  end
+
+  paths.each do |path|
+    next unless File.exist?(path)
+
+    rel = path.sub("#{ROOT}#{File::SEPARATOR}", "")
+    data = YAML.safe_load(File.read(path), permitted_classes: [])
+    unless data.is_a?(Hash)
+      err("collaboration", "#{rel} ilegible")
+      next
+    end
+
+    posture = data["posture"].to_s.strip
+    unless %w[personal team].include?(posture)
+      err("collaboration", "#{rel}: posture debe ser personal o team")
+    end
+  end
+rescue StandardError => e
+  err("collaboration", e.message)
+end
+
 # --- run ---
 say "dt-doctor — verificación de orden (#{Time.now.strftime('%H:%M:%S')})"
 check_frontmatter
@@ -310,6 +368,8 @@ check_design_pack
 check_engineering_agents
 check_agent_catalog
 check_upstream
+check_publish_gate
+check_collaboration
 check_pulse_freshness
 
 unless QUIET

@@ -19,7 +19,7 @@
     {
       "id": 2,
       "prompt": "Generate me an image of our app's dashboard.",
-      "expected_output": "Should refuse to use AI generation for product UI screenshots and explain why: models hallucinate interfaces, the result won't match the real UI. Should recommend the Product Mockups & Screenshots workflow: capture real screenshots of the product at 2x resolution, frame in device mockups (browser frame, laptop, phone), add callout arrows or feature labels for context, programmatically overlay annotations with Hyperframes or HTML/CSS. Should suggest tools: browser DevTools screenshot, Shottr, CleanShot X, or screencapture CLI. Should warn this is Common Mistake #1: using AI for product UI.",
+      "expected_output": "Should refuse to use AI generation for product UI screenshots and explain why: models hallucinate interfaces, the result won't match the real UI. Should recommend the Product Mockups & Screenshots workflow: capture real screenshots of the product at 2x resolution, frame in device mockups (browser frame, laptop, phone), add callout arrows or feature labels for context, programmatically overlay annotations on the lane in tools/video/ROUTING.md. Should suggest tools: browser DevTools screenshot, Shottr, CleanShot X, or screencapture CLI. Should warn this is Common Mistake #1: using AI for product UI.",
       "assertions": [
         "Refuses to use AI generation for product UI",
         "Explains models hallucinate UI",

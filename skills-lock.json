@@ -10,10 +10,10 @@
     "atelier-impeccable": {
       "source": "pbakaus/impeccable",
       "sourceType": "github-submodule",
-      "skillTag": "skill-v3.8.0",
-      "cliVersion": "3.1.0",
-      "submoduleSha": "da18929df04fbfc0ad6526ff224cc3c21cf7d361",
-      "syncedAt": "2026-06-25"
+      "skillTag": "skill-v4.3.1",
+      "cliVersion": "4.1.0",
+      "submoduleSha": "cd12f8660e2dde57b9615c8a6b8ea674101f9cfc",
+      "syncedAt": "2026-09-23"
     }
   }
 }

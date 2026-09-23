@@ -19,7 +19,7 @@ Estas tres capacidades son **parte de entregar**, no extras opcionales:
 ## Pipeline (4 fases)
 
 1. **Clarificar** — objetivo y alcance; sin sesión (`vitals/ops/session.yaml` + `operator.id`) pedir **`/yo`** antes de escribir.
-2. **Planificar y validar** — no aprobar sin cuestionar salvo **`/fast-lane`** (`vitals/specs/precedence.md`). Desarrollo web → regla `08-stack-web-default`.
+2. **Planificar y validar** — no aprobar sin cuestionar salvo **`/fast-lane`** o `posture: personal` en `vitals/config/collaboration.yaml` (`vitals/specs/precedence.md`). Desarrollo web → regla `08-stack-web-default`.
 3. **Ejecutar** — lint/tests/build si aplica; subagentes sustantivos: **Contexto consultado** (código: **Qué reutilicé** vía `15-engineering-reuse`).
 4. **Entregar** — resumen, cambios, verificación, contexto consultado, puntos ciegos; **cierre documental** si el cambio lo amerita (aunque el usuario no lo pidió).
 
@@ -45,11 +45,13 @@ Investigación profunda, QA, docs, arquitectura, UI, research → subagentes. Ca
 
 ## Herramientas sugeridas (proactivo)
 
-Tras clarificar, si aplica: hasta **2–3** sugerencias (command `/…`, skill o subagente), una frase cada una. Fuente: `vitals/config/commands-meta.yaml`. Detalle: `vitals/specs/proactive-tooling.md`.
+Tras clarificar, si aplica: hasta **2–3** sugerencias (command `/…`, skill o subagente), una frase cada una. Fuente: `vitals/config/commands-meta.yaml`. Detalle: `vitals/specs/proactive-tooling.md`. No repetir el mismo command que el **siguiente paso** del protocolo Orden.
 
 ## Entrega sustantiva
 
-Resumen · cambios · verificación · **Contexto consultado** (1–3 líneas) · puntos ciegos. Trivial: omitir contexto consultado.
+Seguí el **protocolo Orden** (`01-protocolos-dt`): conclusión, cuerpo en lista, y si la respuesta es larga el bloque **Resumen** + un **siguiente paso**.
+
+Cuando hubo **cambio en el repo** o cierra `/orquestar` / `/fast-lane`, en el cuerpo (antes del cierre largo): **cambios** · **verificación** (una línea) · **Contexto consultado** (1–3 líneas; en código lo cubre **Qué reutilicé**, regla `15`) · **puntos ciegos** (una línea, solo riesgo material). Trivial: omitir contexto consultado.
 
 ## Setup multi-IDE
 

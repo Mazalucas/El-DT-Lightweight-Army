@@ -14,11 +14,15 @@ Cursor inyecta la descripción de cada subagente en la herramienta **Task**. Us�
 - deploy, ci/cd → **devops** · test, qa → **qa**
 - planilla, csv, totales → **data-auditor** (`/verificar`, regla `16`)
 - seguridad, vulnerabilidades, pentest, /hack → **hack-audit** (`/hack`, canvas-first)
+- plan o propuesta ya escrita, validar approach, panel multi-modelo → skill **analisis-propuesta** (`/analisis-propuesta`; sin subagente nuevo)
 - ordenar, capturar conocimiento, volcar archivos, dump → **`/ordenar`** (skill `dt-ordenar`; redacción pesada → **doc**)
 - docs, readme → **doc** · research → **researcher**
 - PRD / SRD / plan MVP → **prd-creator** / **srd-creator** / **development-planner**
 - marketing, SEO, ads → **marketing-strategist** (guías en `.cursor/skills/marketing/*/GUIDE.md`)
-- remotion, video programático → **remotion-producer**
+- video, promo, clip, brag, recordly, recordingly, hyperframes, remotion, screen recording, render MP4 → skill **video-routing** (`tools/video/ROUTING.md`); nombrá el carril antes de producir
+- carril Recordly (demo del producto corriendo) → skill **recordly** (`/recordly`), sin subagente nuevo
+- carril Remotion (plantilla React, lote, Lambda, 3D) → **remotion-producer**
+- carril `/brag` → skill **brag** (caché en `output/.cache/brag/`, sin subagente nuevo)
 - operations, monitoring → **operations-maintainer**
 
 Lista completa y keywords: [README — Subagentes](README.md#catálogo-de-los-23-especialistas).

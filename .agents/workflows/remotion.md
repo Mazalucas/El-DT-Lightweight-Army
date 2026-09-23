@@ -1,12 +1,12 @@
 ---
-description: "[Video programático] Video programático con Remotion — composiciones, motion, render."
+description: "[Video] Asset de video en React — plantilla, props, lote, render."
 dt_command: remotion
 ---
 # /remotion
 
-**Grupo:** Video programático
-**En una frase:** Video programático con Remotion — composiciones, motion, render.
-**Cuándo:** Video en código, motion graphics, promo, explainers, render MP4.
+**Grupo:** Video
+**En una frase:** Asset de video en React — plantilla, props, lote, render.
+**Cuándo:** El carril de tools/video/ROUTING.md es Remotion: composición que se mantiene, parametriza o renderiza en lote.
 **Quién:** Cualquier operador del repo.
 
 Ejecutá el skill **`remotion-producer`** — `.cursor/skills/remotion-producer/` y `.agents/skills/remotion-producer/`.

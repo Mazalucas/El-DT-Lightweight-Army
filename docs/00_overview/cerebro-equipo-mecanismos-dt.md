@@ -5,7 +5,7 @@ type: overview
 status: canonical
 owner: dt-platform
 created: 2026-05-27
-updated: 2026-07-21
+updated: 2026-09-23
 tags:
   - dt
   - evolution
@@ -29,6 +29,7 @@ related:
   - DOC-GUIDE-006
   - DOC-META-001
   - DOC-OPS-001
+  - DOC-REF-011
 keywords:
   - cerebro
   - gitignore
@@ -116,9 +117,12 @@ Fuente: [`.gitignore`](../../.gitignore).
 | Path / patrón | ¿En Git? | Por qué |
 |---------------|----------|---------|
 | `vitals/ops/session.yaml` | **NO** | Quién está en **esta** máquina ahora |
+| `vitals/ops/context-profile.yaml` | **NO** | Qué reglas van en cada mensaje (`/dt-config`). Sin nombre |
+| `99-perfil-local` en `.cursor/rules`, `.claude/rules`, `.agents/rules` | **NO** | Regla local que materializa ese perfil |
 | `vitals/ops/README.md` | **SÍ** | Referencia de forma (sin placeholders commiteados) |
 | `vitals/config/roles.yaml` | **SÍ** | Roles opcionales del **proyecto** (`roles: []` al inicio) |
 | `vitals/config/roster.yaml` | **SÍ** | Equipo registrado |
+| `vitals/config/collaboration.yaml` | **SÍ** | Postura `personal` o `team`. La escribe `/yo`. El `.example` también va. |
 | `vitals/workspace.yaml` | **NO** | Multi-repo local |
 | `vitals/workspace.yaml.example` | **SÍ** | Plantilla |
 | `vitals/work/inbox/**/draft-*` | **NO** | Borradores locales |
@@ -144,8 +148,9 @@ El skill `git-guardar`:
 
 - Verifica que `vitals/ops/session.yaml` no esté staged.
 - `git reset HEAD vitals/ops/session.yaml` por si acaso.
-- Nunca agrega `.env`, credenciales, `session.yaml`.
+- Nunca agrega `.env`, credenciales, `session.yaml`, ni `canonical-checkout.yaml`.
 - Si `operator.id` es null → pedir `/yo` primero.
+- Antes del bump corre `./scripts/dt-publish-gate.sh`. Si `origin` es el repo oficial del DT y esta carpeta no está activada con `/oficial`, no hay bump, commit ni push, y no se pide acceso.
 
 Detalle de zonas: [git-colaboracion-dt.md](../06_operations/git-colaboracion-dt.md) (`DOC-OPS-001`).
 
@@ -155,8 +160,9 @@ Detalle de zonas: [git-colaboracion-dt.md](../06_operations/git-colaboracion-dt.
 
 ```text
 ┌─────────────────────────────────────────────────────────┐
-│  roster.yaml (Git)     →  "Quiénes son del equipo"      │
-│  session.yaml (local)  →  "Quién está en ESTA sesión"   │
+│  roster.yaml (Git)          →  "Quiénes son del equipo"     │
+│  collaboration.yaml (Git)   →  "personal o team"            │
+│  session.yaml (local)       →  "Quién está en ESTA sesión" │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -170,9 +176,10 @@ Detalle de zonas: [git-colaboracion-dt.md](../06_operations/git-colaboracion-dt.
 | 2 | Si ya hay operador → "¿Seguís como {name}?" |
 | 3 | Si no → "¿Quién está trabajando hoy?" + rol |
 | 4 | `roster.yaml` si operador nuevo |
-| 5 | Escribir **sesión completa** (`operator`, `inbox_path`, timestamps) + `mkdir` inbox |
+| 5 | Postura: no preguntar si `collaboration.yaml` es válido o el roster tiene gente; si no, una pregunta |
+| 6 | Escribir **sesión completa** (`operator`, `inbox_path`, timestamps) + `mkdir` inbox |
 
-**No commitea** `session.yaml`. Sin `/yo`, la IA debe **pedir identidad** antes de escribir (rule `06`).
+**No commitea** `session.yaml`. Sin `/yo`, la IA debe **pedir identidad** antes de escribir (rule `06`). Excepción: **`/dt-config`** solo escribe el perfil local de contexto, sin sesión ni roster.
 
 ### Metadata en pulse (`_meta` opcional)
 
@@ -214,7 +221,7 @@ Post-clone: **`/bienvenida`** · Repair: **`/setup`** — [ide-setup.md](../02_g
 | Rule | Alcance |
 |------|---------|
 | `00-orquestador-core` | Personalidad DT, pipeline macro |
-| `01-protocolos-dt` | No cómplice, alternativas, orden |
+| `01-protocolos-dt` | No cómplice, alternativas, voz corta (Resumen, siguiente paso) |
 | `02-documentacion` | Protocolo `docs/` |
 | `03-catalogo-subagentes` | 20 especialistas |
 | `04-recomendacion-herramientas` | Sugerir commands |
@@ -285,8 +292,17 @@ Guía: [actualizar-framework-dt.md](../02_guides/actualizar-framework-dt.md) (`D
 | | |
 |--|--|
 | **Skill** | `dt-session` |
-| **Escribe** | `session.yaml` (local), `roster.yaml` si nuevo |
+| **Escribe** | `session.yaml` (local), `roster.yaml` si nuevo, `collaboration.yaml` si la postura se infiere o se responde |
 | **Crea** | `vitals/work/inbox/{id}/` |
+
+### `/dt-config`
+
+| | |
+|--|--|
+| **Skill** | `dt-config` |
+| **Pre-requisitos** | Ninguno. No pide `/yo` ni guarda nombre |
+| **Escribe** | `vitals/ops/context-profile.yaml` y `99-perfil-local` en las reglas de cada IDE. Los dos quedan fuera de Git |
+| **Qué hace** | Panel con perfiles e interruptores. Recomendado deja el resto para cuando el tema aparece. Docs, código, web o números suman esas reglas en cada mensaje |
 
 ### `/guardar`
 
@@ -295,10 +311,10 @@ Guía: [actualizar-framework-dt.md](../02_guides/actualizar-framework-dt.md) (`D
 | **Skill** | `git-guardar` |
 | **Pre-requisitos** | `session.yaml` con `operator.id` |
 | **Staging** | Cambios del operador + producto, `docs/`, etc. |
-| **Excluye** | `session.yaml`, `.env`, credenciales |
-| **Versión** | Cada `/guardar` con cambios: bump **patch**, sync README/front/back, commit `vX.Y.Z:`, tag |
-| **Minor** | `/guardar release minor` |
-| **Push** | `git push origin HEAD`; si falla → `/actualizar` y reintentar |
+| **Excluye** | `session.yaml`, `canonical-checkout.yaml`, `context-profile.yaml`, `99-perfil-local`, `.env`, credenciales |
+| **Versión** | Cada `/guardar` con cambios: la IA elige patch, minor o major, sync README/front/back, commit `vX.Y.Z:`, tag |
+| **Override** | Si el mensaje nombra patch, minor o major, usa ese dígito |
+| **Push** | Al `origin` de este checkout, solo si el gate sale 0 o 10. El remoto oficial del DT exige `/oficial` en esta carpeta. Si el push se rechaza por permisos, no se pide acceso |
 
 Spec: [`vitals/specs/project-version.md`](../../vitals/specs/project-version.md).
 
@@ -307,6 +323,7 @@ Ejemplo de mensaje (proyecto consumer):
 ```text
 v0.1.0 (<operator_id>): primera entrega con DT embebido
 
+Bump: inicial — initial_semver, sin incremento
 Operador: <nombre> (<rol>)
 Framework DT: 1.7.8
 Archivos: src/, package.json
@@ -326,6 +343,7 @@ Archivos: src/, package.json
 | `/deploy` | work | Recomendado |
 | `/setup` | framework | No |
 | `/bootstrap` | framework | Sí (recomendado) |
+| `/oficial` | framework | Sí — solo el dueño, en el checkout del DT |
 | `/actualizar-dt` | framework | Recomendado |
 | `/github-save-small` | framework | Sí |
 
@@ -356,6 +374,8 @@ Listado completo y taglines: `vitals/config/commands-meta.yaml`.
 | v1.5.2 | `/actualizar` solo Git; rule identidad en conversación; sin pre-commit |
 | v1.7.0 | **Orden continuo + multi-IDE inclusivo:** fuente única total (`rule-bodies/` + `rules-manifest.yaml`), `ide-targets.yaml`, `dt-doctor`, catálogo derivado (`sync-catalog`), emisor único `sync-ide` (Cursor, Antigravity, Claude, Codex, Copilot), regla `07-orden-continuo` (loop autónomo), `/setup` no destructivo, `/bootstrap` |
 | v1.7.2 | **Upstream DT:** Fase B en `/actualizar`, `/actualizar-dt`, config `dt-upstream.md`, instrucciones Markdown en skills, DOC-GUIDE-007 |
+| v1.7.8–v1.7.11 | Semver en cada `/guardar` con cambios; `/drive`; `/ordenar`; `/hack` con subagente **hack-audit** |
+| v1.8.0 | **Publicación, contexto y video.** `/oficial` y gate de push; `/dt-config`; carriles `/recordly`, `/brag`, Hyperframes y `/remotion`; `/analisis-propuesta`; postura `personal`/`team`; Atelier con el playbook de Impeccable. Texto: [Qué trae v1.8.0](../../README.md#que-trae). |
 
 Reutilizar en otro proyecto: [adopt-dt-in-existing-repo.md](../02_guides/adopt-dt-in-existing-repo.md).
 
@@ -387,6 +407,7 @@ docs/     DOC-OV-004, DOC-OPS-001, …
 |--------|-------------------------|
 | Trabajar sin identidad | Rule `06` + orquestador: pedir **`/yo`** en conversación |
 | `session.yaml` en Git | `.gitignore` + `git-guardar` no lo stagea |
+| Perfil `/dt-config` en Git | `.gitignore` + `git-guardar` no stagea `context-profile.yaml` ni `99-perfil-local` |
 | Drift commands entre IDEs | `sync-commands-from-meta.sh` → Cursor + Antigravity |
 | Drift skills entre IDEs | `sync-skills-parity.sh` |
 | Operador null en commit | `git-guardar` exige sesión válida |
@@ -401,6 +422,9 @@ Solo con **`/yo`** — crea `session.yaml`, inbox y roster si aplica.
 
 **¿`/yo` sube a GitHub?**  
 No. `session.yaml` es local. `/guardar` sube el resto (p. ej. roster nuevo).
+
+**¿`/dt-config` pide quién soy?**  
+No. El perfil no lleva nombre y no se commitea. Las cuatro reglas fijas siguen en cada mensaje.
 
 **¿Qué hace `/actualizar`?**  
 Solo `git pull`. No borra ni crea sesión.

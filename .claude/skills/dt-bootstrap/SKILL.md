@@ -57,15 +57,18 @@ Convierte el template El DT en la **base de tu propio proyecto**: lo promueve a 
      - `./scripts/project-sync-version.sh` — unificar semver en front/back/monorepo
      - Spec: [`vitals/specs/project-version.md`](../../../vitals/specs/project-version.md)
    - `vitals/config/roster.yaml` → `team: []`.
+   - Borrar `vitals/config/collaboration.yaml` si existe (conservar el `.example`). No preguntar postura: el proyecto nuevo la responde en el primer `/yo`, con el roster ya vacío.
    - `vitals/pulse/` → limpiar entries de ejemplo (conservar `current.md` como puntero vacío).
    - Banner/README → placeholder del nuevo proyecto (preguntar antes de reescribir).
 
 6. **Garantizar estructura**: correr el skill `dt-setup` (`/setup`) para el/los IDE(s) elegido(s).
 7. **Verificar**: `./scripts/dt-doctor.sh` en verde.
-8. **Resumen**: remoto nuevo + `dt-upstream`, versión proyecto `0.1.0` + `project-version.yaml`, primer **`/guardar`** (tag inicial) vs **`/guardar release`** (bumps posteriores), y que `/actualizar` avisará releases del DT.
+8. **Resumen**: remoto nuevo + `dt-upstream`, versión proyecto `0.1.0` + `project-version.yaml`, primer **`/guardar`** (tag inicial; si `auto_bump` era `none`, pasa a `classify`) y los siguientes los clasifica la IA, y que `/actualizar` avisará releases del DT. Este checkout ya no publica al DT: `/guardar` empuja solo al `origin` propio. El framework entra por `/actualizar-dt`.
 
 ## Gate duro (no saltear)
 
 - `git remote remove`, mover carpetas, `git init`, reset de estado → **irreversibles**: requieren confirmación explícita y working tree limpio.
 - Nunca borrar historial sin que el usuario lo pida.
 - Nunca commitear secretos durante el proceso.
+- Si `/guardar` se niega porque `origin` sigue siendo el DT, hacé stash, seguí con bootstrap y después `git stash pop`. No insistas con el push ni pidas acceso.
+- No entrevistes `personal` / `team`. Eso lo resuelve `/yo`.

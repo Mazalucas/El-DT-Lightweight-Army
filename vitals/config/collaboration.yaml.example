@@ -1,0 +1,8 @@
+# Lo escribe /yo (skill dt-session). No copiar este ejemplo al archivo real con un valor inventado.
+# Spec de comportamiento: vitals/specs/precedence.md · contrato: docs/03_reference/dt-session-roster.md
+#
+# personal — sin preguntas rutinarias de la regla 01. Las compuertas siguen.
+# team     — preguntas de validación antes de actuar. También es la voz si este archivo no existe.
+
+version: 1
+posture: team

@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "We need a 2-minute product demo video for our SaaS homepage. What's the fastest way to produce it?",
-      "expected_output": "Should check for product-marketing.md first. Should walk through the Product Demo Video workflow: script the key features and value props (cross-reference copywriting skill), screen record the product flow, programmatic overlay with Hyperframes or Remotion for titles/callouts/transitions, optional AI B-roll with Veo/Runway for establishing shots, voiceover via recording or AI avatar (HeyGen) for narration, export at platform-appropriate specs (16:9 for homepage). Should recommend Hyperframes for agent-friendliness (plain HTML, no React DSL). Should remind: don't use AI for product UI screens (models hallucinate UI) — use real screen recording. Should mention captions are essential (85% of social video watched without sound — applies to homepage too).",
+      "expected_output": "Should check for product-marketing.md first and name a lane from tools/video/ROUTING.md before picking an engine. Should walk through the Product Demo Video workflow: script the key features and value props (cross-reference copywriting skill), screen record the product flow, programmatic overlay on the code lane that fits (brag only if it is a 15–25s share clip of this project; Hyperframes for a one-off HTML composition; Remotion if the demo is a template you will keep), optional AI B-roll with Veo/Runway for establishing shots, voiceover via recording or AI avatar (HeyGen) for narration, export at platform-appropriate specs (16:9 for homepage). Should not recommend Hyperframes as the default agent engine. Should remind: don't use AI for product UI screens (models hallucinate UI) — use real screen recording. Should mention captions are essential (85% of social video watched without sound — applies to homepage too).",
       "assertions": [
         "Checks for product-marketing.md",
         "Walks through Product Demo workflow steps",
@@ -18,7 +18,7 @@
     {
       "id": 2,
       "prompt": "We want to make weekly product update videos. About 60 seconds each. Don't want to be on camera. Recommend a setup.",
-      "expected_output": "Should recommend an AI avatar workflow given recurring weekly cadence and no-camera preference. Should recommend HeyGen specifically: best lip-sync, has an MCP server (so agents can generate videos directly), 230+ avatars, 140+ languages, Creator plan supports unlimited 5-minute videos. Should explain custom avatars (upload 2-5 min of yourself for a digital twin) as an option for brand consistency. Should outline the recurring pipeline: script written from product context, HeyGen generates avatar video, optional programmatic overlay with Hyperframes for UI screenshots/callouts, export and distribute. Should mention this is exactly the case where AI avatars shine vs other approaches (recurring content, multilingual versions, personalized outreach at scale). Should warn: if authentic founder content matters more than scale, film yourself instead.",
+      "expected_output": "Should name the avatar lane from tools/video/ROUTING.md given recurring weekly cadence and no-camera preference. Should recommend HeyGen specifically: best lip-sync, has an MCP server (so agents can generate videos directly), 230+ avatars, 140+ languages, Creator plan supports unlimited 5-minute videos. Should explain custom avatars (upload 2-5 min of yourself for a digital twin) as an option for brand consistency. Should outline the recurring pipeline: script written from product context, HeyGen generates avatar video, optional programmatic overlay on the code lane that fits (Remotion when the same layout repeats each week), export and distribute. Should mention this is exactly the case where AI avatars shine vs other approaches (recurring content, multilingual versions, personalized outreach at scale). Should warn: if authentic founder content matters more than scale, film yourself instead.",
       "assertions": [
         "Recommends AI avatar approach",
         "Names HeyGen specifically",
@@ -59,9 +59,9 @@
     {
       "id": 5,
       "prompt": "We need to generate 50 personalized intro videos for sales outreach. Each one mentions a different company name and pain point.",
-      "expected_output": "Should recommend an agent-native pipeline combining HeyGen MCP (or API) for the avatar narration + Hyperframes for any visual overlays. Should explain: prepare a master script template with variables, run a loop generating 50 HeyGen videos each with a personalized script, optional programmatic overlays via Hyperframes for company logo or visual context. Should note HeyGen is well-suited to personalized outreach at scale and has an MCP server. Should warn about quality tradeoffs at volume and recommend testing the first 5 manually before generating all 50. Should mention reply tracking to measure ROI vs cold text emails — these are expensive to produce so should outperform email significantly to justify the effort. Should mention captions for the videos.",
+      "expected_output": "Should read tools/video/ROUTING.md and split lanes: avatar narration is HeyGen; a repeated overlay with per-company data is the Remotion lane. Should explain: prepare a master script template with variables, run a loop generating 50 HeyGen videos each with a personalized script, optional Remotion overlays for company logo or visual context. Should note HeyGen is well-suited to personalized outreach at scale and has an MCP server. Should warn about quality tradeoffs at volume and recommend testing the first 5 manually before generating all 50. Should mention reply tracking to measure ROI vs cold text emails — these are expensive to produce so should outperform email significantly to justify the effort. Should mention captions for the videos.",
       "assertions": [
-        "Recommends HeyGen + Hyperframes pipeline",
+        "Splits avatar (HeyGen) and repeated overlay (Remotion) using tools/video/ROUTING.md",
         "Names HeyGen MCP server",
         "Suggests template + loop approach",
         "Recommends testing 5 manually first",
@@ -73,14 +73,14 @@
     {
       "id": 6,
       "prompt": "Should I use Hyperframes or Remotion for programmatic video?",
-      "expected_output": "Should compare the two based on the When to Pick Which table. Should recommend Hyperframes if: agent-driven (plain HTML/CSS, no React DSL — AI models generate better HTML than React components), minimal learning curve, basic animation needs, local rendering is fine, want Apache 2.0 license. Should recommend Remotion if: already a React shop, need complex animations (Spring, interpolate), need large-scale batch rendering via Lambda for AWS scale, can handle the React + Remotion API learning curve, comfortable with the company license for commercial use. Should note Hyperframes is from HeyGen and LLM-native by design. Should ask about the user's tech stack and animation complexity to recommend a final choice.",
+      "expected_output": "Should refuse a default and apply tools/video/ROUTING.md. Should name /brag when the job is a 15–25s share clip of the current project. Should name Hyperframes when the job is a one-off HTML composition (explainer, PR, slideshow, captions, short motion, or a launch longer than 25s). Should name Remotion when the video is an asset you keep: props, batch, 3D, Studio, or Lambda. Should mention Remotion's company license above 3 people. Should ask which of those situations this video is.",
       "assertions": [
-        "Compares the two with the When to Pick Which table",
-        "Notes Hyperframes uses plain HTML/CSS",
-        "Notes Remotion supports Lambda for scale",
-        "Mentions Apache 2.0 vs company license",
-        "Recommends Hyperframes for agent-driven workflows",
-        "Asks about stack or animation needs"
+        "Reads tools/video/ROUTING.md before choosing",
+        "Names /brag for a 15–25s launch clip of this project",
+        "Names Hyperframes for a one-off HTML composition",
+        "Names Remotion for a kept template, batch, or Lambda",
+        "Does not recommend Hyperframes as the default agent engine",
+        "Asks which situation this video is"
       ],
       "files": []
     }

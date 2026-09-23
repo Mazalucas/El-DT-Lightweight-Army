@@ -5,14 +5,14 @@ type: reference
 status: canonical
 owner: dt-platform
 created: 2026-05-27
-updated: 2026-05-27
+updated: 2026-09-23
 tags:
   - session
   - roster
   - roles
 domain:
   - meta
-summary: Forma de session.yaml (local), roster.yaml (Git) y roles opcionales — sin participantes ni roles precargados en la plantilla.
+summary: Forma de session.yaml (local), roster.yaml (Git), roles opcionales y collaboration.yaml (postura personal|team que escribe /yo).
 related:
   - DOC-OV-004
 keywords:
@@ -60,6 +60,19 @@ roles: []   # vacío = cualquier rol en /yo; si hay strings, dt-session valida o
 ```
 
 El equipo del **proyecto consumidor** rellena `roles` cuando quiera estandarizar (p. ej. `analista`, `lead`, `platform`). El template base deja `roles: []`.
+
+## `vitals/config/collaboration.yaml` (Git)
+
+Lo escribe **`/yo`**. No forma parte de la sesión local. Forma: [collaboration.yaml.example](../../vitals/config/collaboration.yaml.example).
+
+| `posture` | Efecto |
+|-----------|--------|
+| `personal` | Sin preguntas rutinarias de la regla `01`. Compuertas iguales. |
+| `team` | Preguntas de validación antes de actuar. |
+
+Si el archivo no existe, la voz es `team`. `/yo` pregunta solo cuando el roster está vacío y no hay `posture` válida. Un roster que **ya tenía** al menos una persona antes de este `/yo` fija `team` sin preguntar. Comportamiento: [precedence.md](../../vitals/specs/precedence.md).
+
+`/bootstrap` borra este archivo al resetear el template y no hace la entrevista.
 
 ## Related docs
 

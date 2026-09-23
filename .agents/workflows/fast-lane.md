@@ -17,7 +17,7 @@ dt_command: fast-lane
 
 ## Entrega
 
-Igual que `/orquestar` paso 7–8: resumen, cambios, verificación (o N/A), puntos ciegos, cierre documental si aplica.
+Igual que `/orquestar` paso 7–8: protocolo Orden (`01-protocolos-dt`) — conclusión, lista con cambios · verificación (o N/A) · contexto consultado · puntos ciegos (una línea si aplica); si es largo, **Resumen** + un **siguiente paso**; paso 8 documental si aplica.
 
 ## Pulse
 

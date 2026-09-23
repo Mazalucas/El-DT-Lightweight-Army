@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * DT context adapter — maps .agents/design-context.md to Impeccable context flow.
- * Falls back to upstream context.mjs (PRODUCT.md/DESIGN.md) when design-context absent.
+ * Falls back to the Impeccable launcher (`impeccable context`) when design-context is absent.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -56,15 +56,15 @@ function printDesignContext(designPath, marketingPath) {
 }
 
 function runUpstreamContext(passthrough) {
-  const upstream = path.join(__dirname, 'context.mjs');
-  if (!fs.existsSync(upstream)) {
+  const launcher = path.join(__dirname, 'impeccable');
+  if (!fs.existsSync(launcher)) {
     process.stdout.write('NO_DESIGN_CONTEXT\n');
     process.stdout.write(
       'No design context found. Run `/atelier init` (skill design-context).\n',
     );
     return;
   }
-  const result = spawnSync(process.execPath, [upstream, ...passthrough], {
+  const result = spawnSync(launcher, ['context', ...passthrough], {
     cwd: ROOT,
     encoding: 'utf8',
     env: process.env,

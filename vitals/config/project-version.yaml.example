@@ -4,7 +4,9 @@
 version: 1
 initialized: false
 initial_semver: "0.1.0"
-auto_bump: patch
+# classify | patch | minor | major | none — ver vitals/specs/project-version.md
+# Bootstrap consumer escribe none + initialized:false; el primer /guardar pasa a classify.
+auto_bump: classify
 tag_releases: true
 
 # Propagar VERSION (raíz). Tipos: json | readme_badge | yaml_frontmatter

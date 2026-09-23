@@ -190,7 +190,7 @@ Showcase your product UI in context. AI models hallucinate UI — don't use them
 1. **Capture real screenshots** of your product at 2x resolution
 2. **Frame in device mockups** — use browser frame, laptop, or phone templates
 3. **Add context** — callout arrows, feature labels, before/after comparisons
-4. **Annotate with code** — Hyperframes or HTML/CSS for programmatic overlays
+4. **Annotate with code** — programmatic overlay on the lane in `tools/video/ROUTING.md`
 
 **Tools:** Browser DevTools (screenshot), Shottr (Mac), CleanShot X, or `screencapture` CLI.
 

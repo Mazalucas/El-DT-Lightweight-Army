@@ -1,0 +1,31 @@
+# Publicación al remoto oficial de El DT.
+# mode: canonical no autoriza el push. El permiso es local:
+# /oficial escribe vitals/ops/canonical-checkout.yaml (gitignored).
+version: 1
+publisher_github_login: Mazalucas
+official_remotes:
+  - https://github.com/Mazalucas/El-DT-Lightweight-Army.git
+  - git@github.com:Mazalucas/El-DT-Lightweight-Army.git
+
+# En un push al remoto oficial, estos paths no viajan.
+# Quien clona el framework no tiene que encontrar sesión, roster ni notas de esta máquina.
+private_prefixes:
+  - vitals/work/inbox/
+  - vitals/work/knowledge/
+  - vitals/work/audits/
+private_exact:
+  - vitals/ops/session.yaml
+  - vitals/ops/canonical-checkout.yaml
+  - vitals/ops/collaboration.local.yaml
+  - vitals/ops/context-profile.yaml
+  - vitals/ops/dt-upstream-state.md
+  - vitals/config/collaboration.yaml
+  - vitals/config/drive-context.yaml
+  - vitals/workspace.yaml
+  - .cursor/rules/99-perfil-local.mdc
+  - .claude/rules/99-perfil-local.md
+  - .agents/rules/99-perfil-local.md
+private_allow:
+  - vitals/work/knowledge/README.md
+  - vitals/work/audits/README.md
+  - vitals/work/inbox/.gitkeep

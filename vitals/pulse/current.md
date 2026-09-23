@@ -2,7 +2,7 @@
 
 **Último pulse_id:** [dt-20260923-004](entries/2026-09-23-dt-20260923-004.md)
 
-**Versión template:** 1.7.11
+**Versión template:** 1.8.0
 
 **Resumen:** Auditoría Atlas aceptada y compartida. El HTML queda local. Previo de otro hilo: `dt-20260923-003`.
 

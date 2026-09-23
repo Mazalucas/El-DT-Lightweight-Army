@@ -1,12 +1,12 @@
 ---
-description: "[Rutina] Subir a GitHub — bump patch, sync README/front/back, commit vX.Y.Z, tag."
+description: "[Rutina] Guardar cambios — bump, commit y push al remoto de este repo. El DT oficial solo con /oficial activo."
 dt_command: guardar
 ---
 # /guardar
 
 **Grupo:** Rutina del día a día
-**En una frase:** Subir a GitHub — bump patch, sync README/front/back, commit vX.Y.Z, tag.
-**Cuándo:** Al cerrar bloque con cambios. Minor: /guardar release minor.
+**En una frase:** Guardar cambios — bump, commit y push al remoto de este repo. El DT oficial solo con /oficial activo.
+**Cuándo:** Al cerrar bloque con cambios. El dígito lo elige la IA; si nombrás patch, minor o major, usa ese.
 **Quién:** Cualquier operador del repo.
 
 Ejecutá el skill **`git-guardar`** — `.cursor/skills/git-guardar/` y `.agents/skills/git-guardar/`.

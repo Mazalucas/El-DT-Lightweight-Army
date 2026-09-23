@@ -31,6 +31,10 @@ Antes de tareas tácticas (salvo crear/actualizar contexto):
 1. Leer `.agents/product-marketing.md` si existe.
 2. Si no existe, ofrecer ejecutar la skill **`product-marketing`** primero.
 
+### Video — elegir carril antes de la guía
+
+Si el pedido es un video, leé la skill **`video-routing`** y [`tools/video/ROUTING.md`](../../../tools/video/ROUTING.md) antes de `marketing/video/GUIDE.md`. Nombrá el carril (`recordly`, `brag`, `hyperframes`, `remotion`, `footage`, `avatar` o `edit`) y el motivo en una línea. La guía táctica describe herramientas; no elige el motor.
+
 ### Cómo usar las marketing skills
 
 1. Identificar la skill que coincide con el pedido (catálogo en `.cursor/skills/marketing/README.md`).

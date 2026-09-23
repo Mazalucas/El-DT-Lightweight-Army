@@ -3,6 +3,8 @@
 | Script | Uso |
 |--------|-----|
 | [dt-doctor.sh](dt-doctor.sh) | **Verificador read-only del orden** (frontmatter, enlaces, catálogo, paridad multi-IDE, pulse). Motor del loop de orden continuo. Exit 0 = verde |
+| [dt-publish-gate.sh](dt-publish-gate.sh) | Antes de `/guardar` o de un push: ¿este checkout puede publicar, y a qué remoto? Exit 30/40 = parar, sin pedir acceso al DT |
+| [dt-oficial.sh](dt-oficial.sh) | `/oficial` — marcar, apagar o inspeccionar el checkout que publica al DT (`activate`, `off`, `install-hook`) |
 | [sync-ide.sh](sync-ide.sh) | **Emisor único multi-IDE**: recorre `vitals/config/ide-targets.yaml` y emite reglas, skills, commands (Claude) y punteros (CLAUDE.md, Copilot, …) desde fuentes canónicas |
 | [sync-catalog.rb](sync-catalog.rb) | Deriva `docs/99_meta/catalog.yaml` del frontmatter; `--next <DOMINIO>` da el próximo ID libre |
 | [sync-commands-from-meta.sh](sync-commands-from-meta.sh) | YAML → `.cursor/commands/` + `.agents/workflows/` |
@@ -10,6 +12,7 @@
 | [atelier-detect.sh](atelier-detect.sh) | Anti-slop determinístico (Impeccable CLI, 44+ reglas) sobre archivos o URLs |
 | [dt-design-select.rb](dt-design-select.rb) | Selección de estilo/sistema Atelier según brief (motor de `/atelier select`) |
 | [setup-drive.sh](setup-drive.sh) | Instalador OAuth + MCP Google Drive (`--ide cursor\|antigravity\|all`; credenciales en `~/.config/`) |
+| [dt-context-profile.rb](dt-context-profile.rb) | `/dt-config` — perfil local de reglas siempre activas. No va a Git |
 
 Upstream DT (`/actualizar` Fase B, `/actualizar-dt`): instrucciones en **Markdown** — skills `git-actualizar` y `dt-actualizar` + `vitals/specs/dt-upstream-config.md`. **Sin scripts Ruby de sync.**
 

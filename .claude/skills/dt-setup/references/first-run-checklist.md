@@ -40,7 +40,8 @@ git remote -v
 
 - Si `git` no está instalado → instrucciones plain por OS; **no** instalar sin confirmación explícita.
 - Si no hay `origin` → puede ser repo post-`/bootstrap`; explicar que Fase A de `/actualizar` sincroniza el producto.
-- **dt-upstream:** si hay `origin`, no hay remote `dt-upstream`, y el repo es El DT → registrar según skill `dt-setup` (consumidor vs canónico). Copiar `vitals/config/dt-upstream.example.md` si falta config.
+- **dt-upstream:** si hay `origin`, no hay remote `dt-upstream`, y el repo es El DT → registrar según skill `dt-setup` (consumidor vs canónico). Copiar `vitals/config/dt-upstream.example.md` si falta config. `mode: canonical` no autoriza el push.
+- Instalar el pre-push local: `./scripts/dt-oficial.sh install-hook`. Frena un push al remoto oficial si esta carpeta no pasó por `/oficial`. Si no hay Ruby, seguí igual: `/guardar` corre el mismo gate y corta el push.
 - Estado local opcional: `vitals/ops/dt-upstream-state.md` (desde `.example.md`, gitignored).
 
 ## 5. Drift evidente (opcional → sugerir modo repair)

@@ -25,4 +25,5 @@ Referencia estable en docs: [`docs/03_reference/tools-registry.md`](../docs/03_r
 
 | Tool | Path | Agente |
 |------|------|--------|
-| Remotion | [`remotion/`](remotion/) | `remotion-producer` · command `/remotion` |
+| Remotion | [`remotion/`](remotion/) | `remotion-producer` · `/remotion` — carril React de [`video/ROUTING.md`](video/ROUTING.md) |
+| Video routing | [`video/ROUTING.md`](video/ROUTING.md) | skill `video-routing` · `/recordly` y `/brag` instalan fuera del git |

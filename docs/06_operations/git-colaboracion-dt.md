@@ -5,7 +5,7 @@ type: runbook
 status: canonical
 owner: dt-platform
 created: 2026-05-27
-updated: 2026-05-27
+updated: 2026-09-23
 tags:
   - git
   - collaboration
@@ -46,6 +46,9 @@ Dos personas **no editan el mismo archivo** al mismo tiempo sin coordinar. La se
 | Capturas `/ordenar` | `vitals/work/knowledge/` | Quien ejecuta `/ordenar` | Sí |
 | Borradores | `vitals/work/inbox/**/draft-*` | Local | **NO** |
 | Sesión | `vitals/ops/session.yaml` | Solo máquina local | **NO** |
+| Perfil de contexto | `vitals/ops/context-profile.yaml` y `99-perfil-local` en las reglas de cada IDE | `/dt-config` en esa máquina | **NO** |
+| Postura personal/team | `vitals/config/collaboration.yaml` | `/yo` (no `/bootstrap`) | **SÍ** |
+| Checkout oficial | `vitals/ops/canonical-checkout.yaml` | Solo el dueño, con `/oficial` | **NO** |
 | Workspace multi-repo | `vitals/workspace.yaml` | Solo máquina local | **NO** |
 
 ## Conflictos
@@ -53,6 +56,7 @@ Dos personas **no editan el mismo archivo** al mismo tiempo sin coordinar. La se
 1. **`docs/` o `vitals/pulse/current.md`:** hablar antes de mergear; preferir PR pequeños.
 2. **Tras `git pull` con conflicto:** listar archivos; no usar `push --force` en `main`/`master`.
 3. **Flujo:** `/actualizar` → resolver → `/guardar`.
+4. **Remoto oficial del DT:** `/guardar` corre `./scripts/dt-publish-gate.sh` antes del bump. Sin `/oficial` en esta carpeta no hay push a ese remoto, y no se pide acceso. Otro proyecto arranca con `/bootstrap`. Spec: `vitals/specs/canonical-publish.md`.
 
 ## Related docs
 

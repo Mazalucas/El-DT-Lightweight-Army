@@ -8,25 +8,28 @@ import { fileURLToPath } from 'node:url';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const HOOKS_PATH = path.join(REPO_ROOT, '.cursor', 'hooks.json');
-const HOOK_SCRIPT = 'node "tools/atelier/generated/scripts/hook-before-edit.mjs"';
+const LAUNCHER = 'tools/atelier/generated/scripts/impeccable';
+const HOOK_SCRIPT = `"${LAUNCHER}" hook-before-edit`;
 
 function loadJson(p) {
   if (!fs.existsSync(p)) return { version: 1, hooks: {} };
   return JSON.parse(fs.readFileSync(p, 'utf8'));
 }
 
+function isAtelierHook(hook) {
+  const cmd = String(hook.command || '');
+  return cmd.includes('hook-before-edit') || cmd.includes(LAUNCHER);
+}
+
 function hasAtelierHook(hooks) {
   const list = hooks?.hooks?.preToolUse || hooks?.preToolUse || [];
-  return list.some((h) => String(h.command || '').includes('hook-before-edit.mjs'));
+  return list.some((h) => isAtelierHook(h));
 }
 
 function main() {
-  const hookScriptPath = path.join(
-    REPO_ROOT,
-    'tools/atelier/generated/scripts/hook-before-edit.mjs',
-  );
-  if (!fs.existsSync(hookScriptPath)) {
-    console.warn('skip hooks merge: hook-before-edit.mjs not found');
+  const launcherPath = path.join(REPO_ROOT, LAUNCHER);
+  if (!fs.existsSync(launcherPath)) {
+    console.warn('skip hooks merge: impeccable launcher not found');
     return;
   }
 
@@ -36,7 +39,7 @@ function main() {
 
   if (hasAtelierHook(data)) {
     data.hooks.preToolUse = data.hooks.preToolUse.map((h) =>
-      String(h.command || '').includes('hook-before-edit.mjs')
+      isAtelierHook(h)
         ? { ...h, command: HOOK_SCRIPT, timeout: h.timeout ?? 5 }
         : h,
     );

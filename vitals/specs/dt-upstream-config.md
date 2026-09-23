@@ -23,6 +23,8 @@ Plantilla: [`vitals/config/dt-upstream.example.md`](../config/dt-upstream.exampl
 
 Fuente de verdad de la URL: `git remote get-url dt-upstream`. **No hardcodear URLs en skills.**
 
+`mode: canonical` no autoriza un push al repo oficial. Publicar exige `/oficial` en este checkout. Contrato: [`canonical-publish.md`](canonical-publish.md).
+
 Registro automático: `/bienvenida` o `/bootstrap` (ver skills `dt-setup`, `dt-bootstrap`).
 
 ## Estado local (no commitear)

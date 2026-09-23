@@ -59,13 +59,14 @@ def skill_command_body(cmd, cfg, groups)
   gkey = cfg["group"]
   gtitle = group_title(groups, gkey)
   skill = cfg["skill"]
+  who = cfg["who"] || "Cualquier operador del repo."
   <<~MD
     # /#{cmd}
 
     **Grupo:** #{gtitle}
     **En una frase:** #{cfg['tagline']}
     **Cuándo:** #{cfg['when']}
-    **Quién:** Cualquier operador del repo.
+    **Quién:** #{who}
 
     Ejecutá el skill **`#{skill}`** — `.cursor/skills/#{skill}/` y `.agents/skills/#{skill}/`.
     #{agent_activation(cfg)}

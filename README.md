@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.7.11**
+**v1.8.0**
 
 *Tu IA con equipo, criterio y herramientas — no un chat que dice “sí” a todo.*
 
@@ -13,7 +13,7 @@ Delega en **23 especialistas** (producto, diseño, marketing, documentación, ca
 
 - **Páginas web y productos digitales** — landings, dashboards, pantallas de login ([Atelier](#atelier--diseño-web-y-presentaciones))
 - **Presentaciones y pitches** — decks, slides, material para inversores ([Atelier](#atelier--diseño-web-y-presentaciones))
-- **Videos** — promos, explainers, motion graphics ([Remotion](#remotion--videos))
+- **Videos** — demo del producto, clip para compartir, HTML o asset React ([carriles](#video))
 - **Marketing** — copy, SEO, campañas, lanzamientos ([42 skills tácticas](#marketing--42-skills-tácticas))
 
 Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y más). **Empezá en 2 minutos:** [`/bienvenida`](#primera-vez) → [`/yo`](#ritual-del-día).
@@ -24,14 +24,32 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ## Índice
 
+- [Qué trae v1.8.0](#que-trae)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
 - [Qué puede hacer El DT](#qué-puede-hacer-el-dt)
 - [Comandos principales](#comandos-principales)
 - [Google Drive — `/drive`](#google-drive--drive)
-- [Ordenar · Hack · Atelier · Remotion · Marketing](#ordenar--captura-de-conocimiento)
+- [Ordenar · Hack · Atelier · Video · Marketing](#ordenar--captura-de-conocimiento)
 - [Quick setup (English)](#quick-setup-english)
 - [Para el equipo técnico](#para-el-equipo-técnico)
+
+---
+
+## Qué trae v1.8.0 {#que-trae}
+
+Capacidad nueva sobre **v1.7.11**. El uso anterior sigue igual.
+
+| Tema | Qué cambia |
+|------|------------|
+| **Publicar el DT** | `/oficial` marca esta carpeta como el único checkout que puede pushear al remoto oficial. `/guardar` corre el gate antes del bump e instala un `pre-push`. Sesión, inbox, postura y perfil de `/dt-config` quedan en la máquina. En ese remoto, `roster.yaml` viaja con `team: []` y el commit no lleva operador. |
+| **Cuánto contexto** | `/dt-config` elige qué reglas extra entran en cada mensaje (Recomendado, Docs, Código, Web, Números). El perfil queda en esta PC y no pide `/yo`. Las cuatro reglas fijas siguen siempre activas. |
+| **Video** | [`tools/video/ROUTING.md`](tools/video/ROUTING.md) elige el carril: `/recordly` (demo del producto corriendo), `/brag` (clip de 15–25 s para compartir), Hyperframes (composición HTML a medida) o `/remotion` (asset React que se mantiene, con props, lote o Lambda). Recordly y brag se instalan en caché local; el fuente no entra al repo. |
+| **Validar un plan** | `/analisis-propuesta` convoca un panel de modelos distintos al autor, en dos rondas, y se queda en el diagnóstico. Referencia: [analisis-propuesta.md](docs/03_reference/analisis-propuesta.md) (`DOC-REF-011`). |
+| **Postura** | `/yo` deja el trabajo en `personal` o `team`. En el checkout oficial esa postura vive en `vitals/ops/collaboration.local.yaml` y `/yo` no agrega personas a `roster.yaml`. |
+| **Atelier** | El router carga el context adapter de Impeccable y su playbook (`shape`, `live`, `critique`, `audit`, `polish` y el resto). La superficie se nombra Persuade, Operate, Read o Experience. Siguen `/atelier select`, tokens, templates y decks del pack DT. |
+
+Skills de esta entrega: `dt-oficial`, `dt-config`, `video-routing`, `recordly`, `brag`, `analisis-propuesta`. Specs: [canonical-publish.md](vitals/specs/canonical-publish.md) · [tools/REGISTRY.md](tools/REGISTRY.md).
 
 ---
 
@@ -44,10 +62,12 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 | Una tarea grande, paso a paso | `/orquestar` |
 | Algo puntual ya definido | `/fast-lane` |
 | Diseñar una web, dashboard o presentación | `/atelier` |
-| Crear un video | `/remotion` |
+| Crear un video | Leé [`tools/video/ROUTING.md`](tools/video/ROUTING.md): `/recordly`, `/brag`, Hyperframes o `/remotion` |
 | Consultar documentos en Google Drive | `/drive` (opcional — ver [abajo](#google-drive--drive)) |
 | Volcar briefs, notas o dumps al cerebro del repo | `/ordenar` |
 | Auditar seguridad del proyecto (auth, API, secrets…) | `/hack` |
+| Afinar qué reglas carga la IA en cada mensaje | `/dt-config` |
+| Validar un plan ya escrito, sin ejecutarlo | `/analisis-propuesta` |
 | Ver el equipo completo de especialistas | [Catálogo de 23](#catálogo-de-los-23-especialistas) |
 
 Este repo es **memoria compartida + reglas** para que varias personas trabajen con la misma IA sin pisarse. Guía humana: [cerebro del equipo](docs/00_overview/cerebro-equipo-mecanismos-dt.md). La IA lee **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
@@ -76,7 +96,7 @@ No hace falta `/actualizar` en un clone recién hecho — usalo cuando el remoto
 | **`/actualizar`** | Sincronizar tu proyecto (`origin`) y avisar si hay release nuevo del framework DT |
 | **`/yo`** | Decir quién sos en esta computadora |
 | **Trabajar** | Pedir lo que necesites (`/orquestar`, diseño, video, docs…) |
-| **`/guardar`** | Subir tu trabajo — bump de versión, sync y tag (sin secretos ni datos privados) |
+| **`/guardar`** | Guardar tu trabajo — bump, sync y tag. Publica en el remoto de este proyecto; el repo oficial del DT solo si el dueño activó esta carpeta con `/oficial` |
 | **`/drive`** | Conectar Google Drive y elegir carpetas como contexto del cerebro (opcional) |
 
 Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. Tu identidad en esta PC **no se sube a GitHub** — es privada.
@@ -88,6 +108,7 @@ Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. 
   actualizar = proyecto + aviso si hay DT nuevo
   actualizar-dt = cuando quieras incorporar el framework
   drive = Google Drive (carpetas que elijas, solo en tu PC)
+  dt-config = cuánto contexto del DT, solo en esta PC
   tu identidad en esta PC = solo local
 ```
 
@@ -102,7 +123,8 @@ Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. 
 | **Atelier (diseño)** | Landings, dashboards, login, presentaciones — con criterio estético y guardrails anti-“diseño genérico de IA”. |
 | **Captura de conocimiento** | Volcar archivos, carpetas y dumps del chat — clasificar, documentar en la capa correcta y dejar manifest recuperable (`/ordenar`). |
 | **Seguridad** | Auditoría ofensiva-defensiva del propio repo — auth, API, secrets, agentes/IA (`/hack` → subagente **hack-audit**). |
-| **Videos y contenido** | Videos promocionales; marketing con copy, SEO, lanzamientos y campañas. |
+| **Videos** | Carril según el pedido: `/recordly`, `/brag`, Hyperframes o `/remotion`. Matriz en [`tools/video/ROUTING.md`](tools/video/ROUTING.md). |
+| **Marketing** | Copy, SEO, lanzamientos y campañas — 42 skills tácticas. |
 
 ```mermaid
 flowchart TB
@@ -110,7 +132,7 @@ flowchart TB
   dt[El DT — orquestador]
   esp[23 especialistas]
   atelier[Atelier — webs y presentaciones]
-  video[Videos — Remotion]
+  video[Videos — cuatro carriles]
   mkt[Marketing — 42 skills]
   vos --> dt
   dt --> esp
@@ -141,18 +163,24 @@ Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc).
 | **`/actualizar`** | Sincronizar tu proyecto y avisar si hay DT nuevo |
 | **`/actualizar-dt`** | Incorporar release del framework DT (cuando /actualizar avise) |
 | **`/yo`** | Decir quién sos en esta máquina |
-| **`/guardar`** | Subir tu trabajo — bump patch, sync README/paquetes, tag `vX.Y.Z` |
+| **`/guardar`** | Guardar tu trabajo — la IA elige el bump, sync README/paquetes, tag `vX.Y.Z`. El repo oficial del DT solo con `/oficial` |
+| **`/bootstrap`** | Usar este clone como base de tu proyecto y soltar el remoto del DT |
+| **`/oficial`** | El dueño marca esta carpeta como el único checkout que publica al DT |
 | **`/drive`** | Conectar Google Drive y registrar carpetas para que la IA las consulte |
+| **`/dt-config`** | Elegir qué reglas van en cada mensaje. El perfil queda en esta PC |
 | **`/orquestar`** | Tarea grande — pipeline completo en 8 pasos |
 | **`/fast-lane`** | Algo puntual ya definido — menos preguntas rutinarias |
 | **`/cuestionar`** | Solo análisis — sin ejecutar |
+| **`/analisis-propuesta`** | Panel multi-modelo sobre un plan ya escrito — dos rondas, solo diagnóstico (skill `analisis-propuesta`) |
 | **`/contexto`** | Mapa del repo cuando entrás o después de un pull grande |
 | **`/ordenar`** | Volcar archivos y data — documentar en la capa correcta + manifest (skill `dt-ordenar`) |
 | **`/hack`** | Auditoría de seguridad — mentalidad de atacante, entrega defensiva (skill `hack-audit` → subagente **hack-audit**) |
 | **`/verificar`** | Verificar números de planillas y reportes con script (skill `data-auditor` → subagente **data-auditor**) |
 | **`/prepr`** | Preparar cambios como pull request |
 | **`/atelier`** | Diseñar webs, dashboards o presentaciones |
-| **`/remotion`** | Crear videos (promos, explainers, motion) |
+| **`/remotion`** | Asset de video en React (plantilla, props, lote) |
+| **`/recordly`** | Demo del producto corriendo; el binario de Recordly queda fuera del git |
+| **`/brag`** | Clip de lanzamiento de 15–25 s; la skill upstream queda en caché local |
 | **`/setup`** | Reparar configuración del editor tras un pull grande |
 
 Grupos completos y taglines: [commands-meta.yaml](vitals/config/commands-meta.yaml).
@@ -246,19 +274,21 @@ Orquestador: **ui-designer** · Implementación en código: **frontend**.
 
 ---
 
-## Remotion — videos
+## Video
 
-**Remotion** convierte videos en composiciones React: promos, explainers, motion graphics, renders MP4.
+El DT elige el carril en [`tools/video/ROUTING.md`](tools/video/ROUTING.md). Hyperframes no es el motor por defecto.
 
-| Comando | Ejemplo |
-|---------|---------|
-| `/remotion init` | Arrancar un proyecto de video |
-| `/remotion promo 30s 9:16` | Video promocional vertical |
+| Carril | Command | Cuándo |
+|--------|---------|--------|
+| Grabación del producto corriendo | `/recordly` | Clics, cursor, walkthrough, GIF. El binario oficial va a `output/.cache/recordly/` |
+| Clip de lanzamiento, 15–25 s, para compartir | `/brag` | El sujeto es este proyecto. La skill upstream se instala en `output/.cache/brag/` (gitignored) |
+| Composición HTML a medida | `npx hyperframes` | Explainer, PR, slideshow, captions, motion corto, pieza de más de 25 s |
+| Asset React que se mantiene | `/remotion` | Plantilla, props, lote, 3D, Lambda |
 
-Flujo típico: **marketing-strategist** (guion) → **remotion-producer** (composición y render).
+Flujo: **marketing-strategist** lee la matriz y deriva. Carril Remotion → **remotion-producer**.
 
-- Toolkit: [tools/remotion/](tools/remotion/)
-- Registro de tools: [tools/REGISTRY.md](tools/REGISTRY.md)
+- Matriz: [tools/video/ROUTING.md](tools/video/ROUTING.md)
+- Remotion: [tools/remotion/](tools/remotion/)
 
 ---
 
@@ -277,8 +307,8 @@ Flujo típico: **marketing-strategist** (guion) → **remotion-producer** (compo
 
 1. **Clone** this repo (or **Use this template** on GitHub).
 2. In chat: **`/bienvenida`** then **`/yo`** — see [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
-3. **Daily ritual:** `/actualizar` → `/yo` → work → `/guardar`
-4. **Design:** `/atelier` · **Video:** `/remotion` · **Knowledge:** `/ordenar` · **Security:** `/hack` · **Deep work:** `/orquestar` or `/fast-lane`
+3. **Daily ritual:** `/actualizar` → `/yo` → work → `/guardar` (pushes to this checkout's remote; the official DT repo only after the owner runs `/oficial` here. A new project starts with `/bootstrap`)
+4. **Design:** `/atelier` · **Video:** [`tools/video/ROUTING.md`](tools/video/ROUTING.md) (`/recordly`, `/brag` o `/remotion`) · **Knowledge:** `/ordenar` · **Security:** `/hack` · **Deep work:** `/orquestar` or `/fast-lane`
 5. **Repair IDE drift:** `/setup` — see [ide-setup.md](docs/02_guides/ide-setup.md)
 
 Adopting El DT in an existing repo: [adopt-dt-in-existing-repo.md](docs/02_guides/adopt-dt-in-existing-repo.md).
@@ -328,6 +358,9 @@ Seguridad y secretos **siempre** aplican, incluso bajo `/fast-lane`.
 | [sync-catalog.rb](scripts/sync-catalog.rb) | Catálogo de docs derivado del frontmatter |
 | [sync-commands-from-meta.sh](scripts/sync-commands-from-meta.sh) | Commands desde `commands-meta.yaml` |
 | [sync-skills-parity.sh](scripts/sync-skills-parity.sh) | Skills `.cursor/skills` → `.agents/skills` |
+| [dt-publish-gate.sh](scripts/dt-publish-gate.sh) | Antes de publicar: ¿este checkout puede, y a qué remoto? |
+| [dt-oficial.sh](scripts/dt-oficial.sh) | Marca local de `/oficial` (no va a Git) |
+| [dt-context-profile.rb](scripts/dt-context-profile.rb) | Perfil de `/dt-config` (no va a Git) |
 
 Detalle: [scripts/README.md](scripts/README.md).
 
@@ -346,9 +379,11 @@ Detalle: [scripts/README.md](scripts/README.md).
 
 Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigravity/Claude vía `sync-ide`). Reglas de delegación: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc).
 
-**Skills de rutina DT** (no son subagentes): `dt-setup`, `dt-session`, `dt-ordenar`, `git-actualizar`, `git-guardar`, `dt-drive`, `dt-actualizar`, `github-save-release`.
+**Skills de rutina DT** (no son subagentes): `dt-setup`, `dt-session`, `dt-config`, `dt-ordenar`, `git-actualizar`, `git-guardar`, `dt-drive`, `dt-actualizar`, `dt-oficial`, `github-save-release`.
 
-**Skills con subagente dedicado** (command → skill → agente): `/hack` → `hack-audit` · `/verificar` → `data-auditor`.
+**Skills de carril o diagnóstico** (sin subagente nuevo): `video-routing`, `recordly`, `brag`, `analisis-propuesta`.
+
+**Skills con subagente dedicado** (command → skill → agente): `/hack` → `hack-audit` · `/verificar` → `data-auditor`. `/remotion` → `remotion-producer`.
 
 #### Catálogo de los 23 especialistas
 
@@ -358,7 +393,7 @@ Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigra
 | 2 | **frontend** | Engineering | UI, componentes, accesibilidad | `frontend`, `ui`, `ux`, `interface`, `client`, `componentes` | [agente](.cursor/agents/frontend.md) | [`.cursor/skills/frontend/`](.cursor/skills/frontend/) |
 | 3 | **devops** | Engineering | CI/CD, infra, deploy | `deploy`, `infrastructure`, `ci/cd`, `devops`, `pipelines` | [agente](.cursor/agents/devops.md) | [`.cursor/skills/devops/`](.cursor/skills/devops/) |
 | 4 | **ui-designer** | Engineering | Orquestador **Atelier** + specs UI | `UI design`, `mockups`, `Atelier`, `landing`, `dashboard`, `design system` | [agente](.cursor/agents/ui-designer.md) | [`.cursor/skills/ui-designer/`](.cursor/skills/ui-designer/) |
-| 5 | **remotion-producer** | Engineering | Video programático **Remotion** | `Remotion`, `video programático`, `motion graphics`, `render MP4` | [agente](.cursor/agents/remotion-producer.md) | [`.cursor/skills/remotion-producer/`](.cursor/skills/remotion-producer/) |
+| 5 | **remotion-producer** | Engineering | Carril **Remotion** — asset React | `Remotion`, `plantilla de video`, `Lambda`, `useCurrentFrame` | [agente](.cursor/agents/remotion-producer.md) | [`.cursor/skills/remotion-producer/`](.cursor/skills/remotion-producer/) |
 | 6 | **prd-creator** | Planning | PRD, visión de producto, user stories | `product idea`, `requirements`, `PRD` | [agente](.cursor/agents/prd-creator.md) | [`.agents/skills/prd-creator/`](.agents/skills/prd-creator/) |
 | 7 | **srd-creator** | Planning | SRD y specs técnicas desde PRD | `technical spec`, `SRD`, `PRD to technical` | [agente](.cursor/agents/srd-creator.md) | [`.agents/skills/srd-creator/`](.agents/skills/srd-creator/) |
 | 8 | **development-planner** | Planning | Fases, MVP, roadmap, timelines | `development plan`, `phases`, `MVP`, `roadmap` | [agente](.cursor/agents/development-planner.md) | [`.agents/skills/development-planner/`](.agents/skills/development-planner/) |
@@ -430,7 +465,7 @@ Origen: [marketingskills](https://github.com/coreyhaines31/marketingskills) v2. 
 | `site-architecture` | Arquitectura del sitio |
 | `sms` | SMS/MMS marketing |
 | `social` | Redes sociales |
-| `video` | Video marketing (IA) |
+| `video` | Video — carril en `tools/video/ROUTING.md` |
 
 #### Atelier — detalle técnico
 
@@ -444,9 +479,11 @@ Motores: `ruby scripts/dt-design-select.rb` · `./scripts/atelier-detect.sh` (Im
 
 Actualizar Impeccable: `./tools/atelier/scripts/sync-from-impeccable.sh --latest` → `./scripts/sync-ide.sh` (ver `DOC-GUIDE-008`)
 
-#### Remotion — detalle técnico
+#### Video — detalle técnico
 
-Toolkit en **[`tools/remotion/`](tools/remotion/)** (starter + primitivas). Best practices vendor: **`remotion-best-practices`**.
+Carril en [`tools/video/ROUTING.md`](tools/video/ROUTING.md). `/recordly` baja el binario oficial de Recordly a `output/.cache/recordly/` (`./tools/video/install-recordly.sh`); no se clona el repo. `/brag` instala la skill upstream en `output/.cache/brag/` (`./tools/video/install-brag.sh`).
+
+Remotion, cuando ese es el carril: toolkit en **[`tools/remotion/`](tools/remotion/)** (starter + primitivas). Best practices vendor: **`remotion-best-practices`**.
 
 Actualizar vendor skill: `./tools/remotion/scripts/update-vendor-skills.sh` → `./scripts/sync-ide.sh`
 
@@ -455,7 +492,11 @@ Actualizar vendor skill: `./tools/remotion/scripts/update-vendor-skills.sh` → 
 | Path | ¿En Git? | Por qué |
 |------|----------|---------|
 | `vitals/ops/session.yaml` | **No** | Quién está en **esta** PC ahora |
-| `vitals/config/roster.yaml` | **Sí** | Equipo registrado |
+| `vitals/ops/canonical-checkout.yaml` | **No** | Marca de `/oficial`: esta carpeta puede publicar al DT |
+| `vitals/ops/context-profile.yaml`, `99-perfil-local` | **No** | Qué reglas extra carga `/dt-config` |
+| `vitals/ops/collaboration.local.yaml` | **No** | Postura `personal` o `team` en el checkout oficial |
+| `vitals/config/roster.yaml` | **Sí** | Equipo registrado. En el remoto oficial viaja con `team: []` |
+| `vitals/config/collaboration.yaml` | **Sí** en un proyecto propio | Postura del equipo. No entra al remoto oficial del DT |
 | `vitals/workspace.yaml` | **No** | Multi-repo local (plantilla: `.example`) |
 | `.env`, `*.credentials` | **No** | Secretos |
 | `.agents/product-marketing.md` | **No** | Contexto de producto local |
@@ -473,7 +514,7 @@ vitals/
   config/                           # commands-meta.yaml, roster.yaml, rules-manifest.yaml
   specs/rule-bodies/                # Cuerpos de reglas (fuente única)
   data/                             # Registries (design, engineering)
-  ops/                              # session.yaml = local (/yo)
+  ops/                              # local: session (/yo), /oficial, /dt-config
   pulse/ memory/ specs/
   work/inbox/{operator_id}/
 

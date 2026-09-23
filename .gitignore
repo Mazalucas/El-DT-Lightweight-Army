@@ -37,6 +37,12 @@ logs/
 vitals/workspace.yaml
 vitals/ops/session.yaml
 vitals/ops/dt-upstream-state.md
+vitals/ops/canonical-checkout.yaml
+vitals/ops/collaboration.local.yaml
+vitals/ops/context-profile.yaml
+.cursor/rules/99-perfil-local.mdc
+.claude/rules/99-perfil-local.md
+.agents/rules/99-perfil-local.md
 vitals/config/drive-context.yaml
 
 # Borradores personales temporales (si usás vitals/work/inbox/)
@@ -66,6 +72,8 @@ client_secret*.json
 
 # Generaciones locales (nunca en plantilla clonable)
 output/
+brag-output*/
+*.recordly
 tools/**/node_modules/
 tools/**/out/
 
