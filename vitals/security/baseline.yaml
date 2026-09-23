@@ -6,35 +6,237 @@
 #
 # Estados que usa el informe: NUEVO · PERSISTENTE · RESUELTO · ACEPTADO
 version: 1
-updated: ""
+updated: "2026-09-23"
 
 # Última auditoría corrida (la completa el subagente hack-audit)
 last_audit:
-  date: ""
-  scope: "" # full · <dominio> · diff
-  verdict: ""
-  counts: { critical: 0, high: 0, medium: 0, low: 0, info: 0 }
+  date: "2026-09-21"
+  shared_on: "2026-09-23"
+  report_status: accepted_shared
+  report_note: "Lucas aceptó el informe y lo circuló al equipo. El HTML y el markdown viven en vitals/work/audits/ y no se versionan."
+  scope: full
+  verdict: "Plataforma usable; 1 CRITICAL bundle Nexo; authz Mazcom/Px ancha; P0 agosto persistentes. Previene más de lo que detecta. Hosting indexable. GA4 uid en prod; Fonts CDN en login; email+password sin MFA. Deploys: ritual OK; CLI full stack. Prod no inspeccionada."
+  counts: { critical: 1, high: 14, medium: 16, low: 6, info: 0 }
+  project: Mazalucas/CRM-Contactos-Mazcom
+  git_ref: "44fd188"
+  product_version: "0.1.117"
 
 # Hallazgos abiertos que se arrastran entre auditorías.
 # id: kebab-case estable para poder diffear entre corridas.
-open: []
-# - id: firestore-users-read-any-auth
-#   severity: HIGH
-#   priority: P1
-#   domain: authz
-#   summary: "Lectura de perfiles ajenos con cualquier token válido"
-#   first_seen: 2026-08-04
-#   owner: ""
+open:
+  - id: nexo-static-pii-public-bundle
+    severity: CRITICAL
+    priority: P0
+    domain: frontend
+    summary: "Dump estático Nexo (nombres + horas) viaja en el JS público de Hosting"
+    first_seen: 2026-08-19
+    last_seen: 2026-09-10
+    state: PERSISTENTE
+    owner: ""
+  - id: hermes-webhook-unauthenticated
+    severity: HIGH
+    priority: P0
+    domain: api
+    summary: "Webhook de campañas HTTP sin secreto ni firma"
+    first_seen: 2026-08-19
+    last_seen: 2026-09-10
+    state: PERSISTENTE
+    owner: ""
+  - id: dedup-demo-bypass-plus-interaction-read
+    severity: HIGH
+    priority: P0
+    domain: authz
+    summary: "Rules DEMO: contacto en caso de duplicados legible con solo login; hitos sin filtro de visibilidad"
+    first_seen: 2026-08-19
+    last_seen: 2026-09-10
+    state: PERSISTENTE
+    owner: ""
+  - id: list-cd-slim-wider-than-rules
+    severity: HIGH
+    priority: P1
+    domain: authz
+    summary: "Callable de listado CD más ancha que las rules para administración"
+    first_seen: 2026-08-19
+    last_seen: 2026-09-10
+    state: PERSISTENTE
+    owner: ""
+  - id: nexo-firestore-readable-by-px
+    severity: HIGH
+    priority: P1
+    domain: authz
+    summary: "Rules de Nexo permiten lectura a módulo Px; la UI no"
+    first_seen: 2026-09-10
+    last_seen: 2026-09-10
+    state: NUEVO
+    owner: ""
+  - id: mazcom-over-read-employee-crm
+    severity: HIGH
+    priority: P0
+    domain: authz
+    summary: "Mail Mazcom (sin alta Atlas) lee ficha empleado, hitos RRHH y fotos"
+    first_seen: 2026-09-10
+    last_seen: 2026-09-10
+    state: NUEVO
+    owner: ""
+  - id: facet-index-px-bypasses-salud-atom
+    severity: HIGH
+    priority: P1
+    domain: authz
+    summary: "facet_index/px expone salud/religión sin can_read_px_salud"
+    first_seen: 2026-09-10
+    last_seen: 2026-09-10
+    state: NUEVO
+    owner: ""
+  - id: delete-px-employee-any-px-module
+    severity: HIGH
+    priority: P1
+    domain: api
+    summary: "Cualquier módulo Px puede borrar empleado, salud y forms 360"
+    first_seen: 2026-09-10
+    last_seen: 2026-09-10
+    state: NUEVO
+    owner: ""
+  - id: hermes-third-party-keys-in-browser
+    severity: HIGH
+    priority: P1
+    domain: frontend
+    summary: "Fallback Hermes lee API keys Gemini/EnvíaloSimple en el browser"
+    first_seen: 2026-09-10
+    last_seen: 2026-09-10
+    state: NUEVO
+    owner: ""
+  - id: inbound-ssrf-sin-allowlist
+    severity: HIGH
+    priority: P1
+    domain: api
+    summary: "Copia de CV/mediakit post-Bearer sin allowlist de URL"
+    first_seen: 2026-08-19
+    last_seen: 2026-09-10
+    state: PERSISTENTE
+    owner: ""
+  - id: hiring-applications-unrestricted-client-update
+    severity: HIGH
+    priority: P1
+    domain: authz
+    summary: "SDK cliente puede update completo de hiring_applications"
+    first_seen: 2026-09-10
+    last_seen: 2026-09-10
+    state: NUEVO
+    owner: ""
+  - id: wipe-catalog-stale
+    severity: HIGH
+    priority: P1
+    domain: infra
+    summary: "Catálogo wipe/restore desfasado respecto de colecciones vivas"
+    first_seen: 2026-08-19
+    last_seen: 2026-09-10
+    state: PERSISTENTE
+    owner: ""
+  - id: sync-worker-is-ping
+    severity: HIGH
+    priority: P2
+    domain: arquitectura
+    summary: "Worker de sync no ejecuta el trabajo; callable inline 1800s"
+    first_seen: 2026-08-19
+    last_seen: 2026-09-10
+    state: PERSISTENTE
+    owner: ""
+  - id: node-20-decommission
+    severity: HIGH
+    priority: P1
+    domain: infra
+    summary: "Runtime Functions Node 20 — decommission GCP 2026-10-30"
+    first_seen: 2026-08-19
+    last_seen: 2026-09-15
+    state: PERSISTENTE
+    owner: ""
+  - id: atlas-dev-always-full-firebase-deploy
+    severity: HIGH
+    priority: P2
+    domain: infra
+    summary: "atlas-dev siempre corre firebase deploy completo (hosting+rules+~119 Functions) aunque el diff sea solo UI"
+    first_seen: 2026-09-15
+    last_seen: 2026-09-15
+    state: NUEVO
+    owner: ""
+  - id: no-app-check
+    severity: MEDIUM
+    priority: P2
+    domain: api
+    summary: "Sin Firebase App Check en cliente ni enforce en callables"
+    first_seen: 2026-08-19
+    last_seen: 2026-09-15
+    state: PERSISTENTE
+    owner: ""
+  - id: no-structured-logs-or-alerts
+    severity: MEDIUM
+    priority: P2
+    domain: infra
+    summary: "Functions sin logger estructurado ni alertas GCP en el repo; incidentes se ven al abrir el panel"
+    first_seen: 2026-08-19
+    last_seen: 2026-09-15
+    state: PERSISTENTE
+    owner: ""
+  - id: security-audit-trail-parcial
+    severity: MEDIUM
+    priority: P2
+    domain: infra
+    summary: "Hay audit de export/API keys/fotos; no de claims, 360, deletePx ni wipe/promote"
+    first_seen: 2026-09-15
+    last_seen: 2026-09-15
+    state: NUEVO
+    owner: ""
+  - id: hosting-publicly-indexable
+    severity: MEDIUM
+    priority: P1
+    domain: frontend
+    summary: "Hosting sin robots.txt / noindex / X-Robots-Tag; shell Atlas CRM y manuales Px crawleables"
+    first_seen: 2026-09-15
+    last_seen: 2026-09-15
+    state: NUEVO
+    owner: ""
+  - id: google-fonts-third-party-cdn
+    severity: MEDIUM
+    priority: P1
+    domain: frontend
+    summary: "index.html carga Inter desde fonts.googleapis.com en el login, sin auth"
+    first_seen: 2026-09-15
+    last_seen: 2026-09-15
+    state: NUEVO
+    owner: ""
+  - id: email-password-auth-no-mfa
+    severity: MEDIUM
+    priority: P1
+    domain: auth
+    summary: "Login email+password (mín. 6) sin MFA; 2FA Workspace no cubre este camino"
+    first_seen: 2026-09-15
+    last_seen: 2026-09-15
+    state: NUEVO
+    owner: ""
+  - id: ga4-identity-and-spa-paths
+    severity: MEDIUM
+    priority: P2
+    domain: frontend
+    summary: "GA4 en prod 0.1.117 envía uid, rol, dominio y page_path; 0.1.118 solo apaga testing"
+    first_seen: 2026-09-15
+    last_seen: 2026-09-15
+    state: NUEVO
+    owner: ""
+  - id: sheets-ids-in-web-catalog
+    severity: LOW
+    priority: P3
+    domain: frontend
+    summary: "77 spreadsheetId de planillas internas en el catálogo web (recon, no acceso)"
+    first_seen: 2026-09-15
+    last_seen: 2026-09-15
+    state: NUEVO
+    owner: ""
 
-# Riesgos aceptados con decisión explícita: no cuentan en el veredicto,
-# pero se listan en cada informe para que la aceptación no se olvide.
 accepted: []
-# - id: source-maps-en-staging
-#   severity: LOW
-#   reason: "Staging es interno y ayuda a depurar"
-#   owner: lucas
-#   accepted_on: 2026-08-04
-#   review_on: 2027-02-01
 
-# Hallazgos cerrados (histórico corto; podar cuando crezca).
-resolved: []
+resolved:
+  - id: interaction-write-requires-atlas-access
+    severity: HIGH
+    summary: "Notas de timeline: la callable ahora exige alta Atlas (hasAtlasAccess). Queda IDOR de contacto si el módulo permite el tipo."
+    resolved_on: 2026-08-19
+    notes: "Mitigación parcial de A-002; no cierra canReadContact en createInteraction."
