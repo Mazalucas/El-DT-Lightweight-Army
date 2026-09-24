@@ -1,0 +1,34 @@
+# Archivo diario del tráfico de GitHub (clones, visitas, estrellas, forks).
+# GitHub solo guarda 14 días. Esta corrida actualiza la rama `analytics` por fecha,
+# así que un día fallido se recupera en la siguiente mientras siga en la ventana.
+#
+# El GITHUB_TOKEN no puede leer /traffic/*. Hace falta un secreto TRAFFIC_TOKEN:
+# PAT fino con Administration: Read, solo en este repo.
+# https://github.com/settings/personal-access-tokens/new
+name: Repo traffic archive
+
+on:
+  schedule:
+    - cron: "15 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-traffic-archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Archive traffic onto analytics
+        env:
+          TRAFFIC_TOKEN: ${{ secrets.TRAFFIC_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: ruby scripts/repo-traffic-archive.rb
