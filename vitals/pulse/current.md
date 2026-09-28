@@ -1,10 +1,10 @@
 # Pulse — puntero actual
 
-**Último pulse_id:** [dt-20260923-004](entries/2026-09-23-dt-20260923-004.md)
+**Último pulse_id:** [dt-20260928-001](entries/2026-09-28-dt-20260928-001.md)
 
-**Versión template:** 1.8.0
+**Versión template:** 1.9.0
 
-**Resumen:** Auditoría Atlas aceptada y compartida. El HTML queda local. Previo de otro hilo: `dt-20260923-003`.
+**Resumen:** Gmail, Calendar y la página de novedades. El semver del producto queda aislado del framework. Previo: `dt-20260923-004`.
 
 **Proyecto / contexto Git:** Atlas `Mazalucas/CRM-Contactos-Mazcom` @ 44fd188 (informe en este cerebro, gitignoreado).
 

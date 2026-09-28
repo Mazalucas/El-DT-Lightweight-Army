@@ -16,7 +16,7 @@ Cerebro compartido de **El DT**. Reglas operativas: **`.cursor/rules/`** (Cursor
 | Docs IA | `docs/99_meta/protocolo-documentacion-ia.md` · regla `02-documentacion` |
 | Pulso / specs DT | `vitals/INDEX.md` |
 | Captura de conocimiento | `/ordenar` · `docs/02_guides/ordenar-captura-conocimiento.md` (`DOC-GUIDE-016`) |
-| Google Drive (opcional) | `docs/02_guides/drive-cerebro-setup.md` · `/drive` |
+| Google Drive / Gmail / Calendar (opcional) | `docs/02_guides/drive-cerebro-setup.md` · `/drive` `/gmail` `/calendar` |
 | Atelier / marketing táctico | `.cursor/skills/atelier/` · guías `design/*/GUIDE.md`, `marketing/*/GUIDE.md` |
 | Paridad multi-IDE | `vitals/config/ide-targets.yaml` · `./scripts/sync-ide.sh` |
 

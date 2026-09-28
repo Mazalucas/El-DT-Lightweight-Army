@@ -1,6 +1,6 @@
 # Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agents/workflows
 version: 1
-updated: "2026-09-23"
+updated: "2026-09-28"
 locale: es
 
 groups:
@@ -51,6 +51,18 @@ commands:
     when: "Primera vez que querés consultar documentos en Drive con el DT; o para cambiar qué carpetas compartís."
     example: "/drive"
     skill: dt-drive
+  gmail:
+    group: routine
+    tagline: "Conectar Gmail — mismo login que Drive/Calendar; etiquetas y borradores."
+    when: "Querés que el DT busque mail o deje un borrador. Pregunta si es solo Gmail o las tres apps."
+    example: "/gmail"
+    skill: dt-gmail
+  calendar:
+    group: routine
+    tagline: "Conectar Google Calendar — mismo login que Drive/Gmail; listar y crear eventos."
+    when: "Querés agenda o crear un evento. Pregunta si es solo Calendar o las tres apps."
+    example: "/calendar"
+    skill: dt-calendar
   dt-config:
     group: routine
     tagline: "Elegir qué reglas van en cada mensaje. El perfil queda en esta PC."

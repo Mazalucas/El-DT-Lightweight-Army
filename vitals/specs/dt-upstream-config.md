@@ -14,7 +14,7 @@ Plantilla: [`vitals/config/dt-upstream.example.md`](../config/dt-upstream.exampl
 |-------|---------|-----|
 | `version` | `1` | Schema |
 | `mode` | `consumer` \| `canonical` | `canonical` = repo plantilla; omitir Fase B de `/actualizar` |
-| `framework_version` | semver string | Última versión DT incorporada. Tras `/bootstrap` vive aquí (no en `VERSION` raíz del proyecto) |
+| `framework_version` | semver string | Última versión DT incorporada. Tras `/bootstrap` vive aquí (no en `VERSION` raíz del proyecto). `/guardar` del producto nunca la copia ni la pisa. |
 | `source.remote` | nombre Git | Default: `dt-upstream` |
 | `source.ref` | rama | Fallback si no hay tags (`main`) |
 | `preserve_paths` | lista paths | Docs/archivos locales que `/actualizar-dt` no sobrescribe |

@@ -11,7 +11,12 @@
 | [sync-skills-parity.sh](sync-skills-parity.sh) | `.cursor/skills/` → `.agents/skills/` (raíz: solo `SKILL.md`; `marketing/*`: árbol completo) |
 | [atelier-detect.sh](atelier-detect.sh) | Anti-slop determinístico (Impeccable CLI, 44+ reglas) sobre archivos o URLs |
 | [dt-design-select.rb](dt-design-select.rb) | Selección de estilo/sistema Atelier según brief (motor de `/atelier select`) |
-| [setup-drive.sh](setup-drive.sh) | Instalador OAuth + MCP Google Drive (`--ide cursor\|antigravity\|all`; credenciales en `~/.config/`) |
+| [setup-drive.sh](setup-drive.sh) | MCP Google Drive/Gmail/Calendar (`--apps`, `--ide`; credenciales en `~/.config/`) |
+| [project-version.rb](project-version.rb) | Motor de aislamiento product vs DT (`resolve`, `guard`, `doctor`) |
+| [project-bump-version.sh](project-bump-version.sh) | Incrementa `VERSION` (aborta en consumer si todavía es la del DT) |
+| [project-sync-version.sh](project-sync-version.sh) | Propaga `VERSION` al producto; en consumer no escribe `framework_version` |
+| [dt-publish-github-release.sh](dt-publish-github-release.sh) | Publica en GitHub Releases la entrada de `CHANGELOG.md` del tag ya pusheado |
+| [test-project-version-isolation.sh](test-project-version-isolation.sh) | Tests: el semver del DT no puede aterrizar en la app |
 | [dt-context-profile.rb](dt-context-profile.rb) | `/dt-config` — perfil local de reglas siempre activas. No va a Git |
 
 Upstream DT (`/actualizar` Fase B, `/actualizar-dt`): instrucciones en **Markdown** — skills `git-actualizar` y `dt-actualizar` + `vitals/specs/dt-upstream-config.md`. **Sin scripts Ruby de sync.**

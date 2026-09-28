@@ -1,0 +1,13 @@
+# Plantilla — copiar a vitals/config/calendar-context.yaml (local, gitignoreado).
+# Registrar con /calendar tras el OAuth.
+version: 1
+updated: "2026-09-28T00:00:00Z"
+operator_id: "<slug-del-operador>"
+sync_mode: selective  # selective | all_calendars
+time_zone: "Europe/Madrid"
+calendars:
+  - id: "primary"
+    name: "Principal"
+    purpose: "Agenda de trabajo"
+    write: true
+registered_at: "2026-09-28T00:00:00Z"

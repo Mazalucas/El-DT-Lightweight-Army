@@ -14,7 +14,7 @@ Copiá este archivo a `vitals/config/dt-upstream.md` y ajustá.
 
 - **`mode: consumer`** — proyecto propio que recibe avisos de release en `/actualizar`.
 - **`mode: canonical`** — este repo es la plantilla (publicás con `/github-save-small`); Fase B se omite.
-- **`framework_version`** — semver del framework DT que tenés incorporado.
+- **`framework_version`** — semver del framework DT que tenés incorporado. No es la versión de tu app: `/guardar` nunca la copia a `VERSION` ni a `package.json`.
 - **`preserve_paths`** — rutas extra que `/actualizar-dt` no debe pisar (docs de producto, etc.).
 
 Remote Git (no va en este archivo): `git remote add dt-upstream <url-del-repo-canónico>`.

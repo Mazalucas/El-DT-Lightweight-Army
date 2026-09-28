@@ -1,0 +1,16 @@
+# Plantilla — copiar a vitals/config/gmail-context.yaml (local, gitignoreado).
+# Registrar con /gmail tras el OAuth.
+version: 1
+updated: "2026-09-28T00:00:00Z"
+operator_id: "<slug-del-operador>"
+sync_mode: selective  # selective | full_mailbox
+labels:
+  - name: "Clientes"
+    purpose: "Hilos con clientes activos"
+    keywords:
+      - cliente
+      - propuesta
+queries:
+  - q: "newer_than:30d"
+    purpose: "Últimos 30 días (acotar búsquedas)"
+registered_at: "2026-09-28T00:00:00Z"

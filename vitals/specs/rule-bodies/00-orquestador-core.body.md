@@ -36,6 +36,9 @@ Detalle de `/orquestar` (8 pasos): `.cursor/commands/orquestar.md`. Vitals: `vit
 | `08-stack-web-default` | App web, API, deploy | — |
 | `16-numeric-grounding` | Planillas, totales | — |
 | `17-canvas-first` | Auditorías, planes grandes | — |
+| `18-drive-contexto` | Google Drive MCP | `vitals/config/drive-context.yaml*` |
+| `19-gmail-contexto` | Gmail MCP | `vitals/config/gmail-context.yaml*` |
+| `21-calendar-contexto` | Calendar MCP | `vitals/config/calendar-context.yaml*` |
 
 Si la tarea lo implica pero aún no hay archivos abiertos, **leé la regla** (`.cursor/rules/<stem>.mdc`) antes de actuar.
 

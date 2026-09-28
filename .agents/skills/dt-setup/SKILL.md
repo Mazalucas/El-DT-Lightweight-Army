@@ -39,7 +39,7 @@ Si el repo parece El DT (`AGENTS.md` + `vitals/config/commands-meta.yaml`) **y**
    git remote add dt-upstream "$(git remote get-url origin)"
    ```
 
-   Copiar `vitals/config/dt-upstream.example.md` → `vitals/config/dt-upstream.md` con `mode: consumer` y `framework_version` = contenido de `VERSION`.
+   Copiar `vitals/config/dt-upstream.example.md` → `vitals/config/dt-upstream.md` con `mode: consumer` y `framework_version` = contenido de `VERSION` **en ese momento** (el clone todavía trae el semver del DT). Eso **no** autoriza a escribir ese número en la app. Después de `/bootstrap`, `VERSION` es del producto y no se vuelve a copiar a `framework_version` desde `/guardar`.
 
 3. **Canónico:** `mode: canonical` en el frontmatter (Fase B de `/actualizar` se omite). Eso no habilita el push. Publicar al remoto oficial exige `/oficial` en este checkout, con la sesión de GitHub del dueño.
 

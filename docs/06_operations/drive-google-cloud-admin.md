@@ -1,20 +1,22 @@
 ---
 id: DOC-OPS-002
-title: "Google Drive — administración OAuth (Google Cloud)"
+title: "Google Workspace — administración OAuth (Google Cloud)"
 type: runbook
 status: canonical
 owner: dt-platform
 created: 2026-07-30
-updated: 2026-07-30
+updated: 2026-09-28
 tags:
   - drive
+  - gmail
+  - calendar
   - google-cloud
   - oauth
   - security
   - mcp
 domain:
   - meta
-summary: Crear proyecto Google Cloud, OAuth interno y distribuir credenciales para la integración Drive del DT — una sola vez por organización.
+summary: Crear proyecto Google Cloud, OAuth interno y distribuir credenciales para Drive, Gmail y Calendar del DT — una sola vez por organización.
 related:
   - DOC-GUIDE-009
   - DOC-OPS-001
@@ -23,6 +25,8 @@ keywords:
   - google cloud
   - oauth
   - drive
+  - gmail
+  - calendar
   - credentials
   - workspace
 priority: high
@@ -34,11 +38,11 @@ source_of_truth: true
 review_cycle_days: 90
 ---
 
-# Google Drive — administración OAuth (Google Cloud)
+# Google Workspace — administración OAuth (Google Cloud)
 
 ## Summary
 
-Runbook **una sola vez por organización** para habilitar que usuarios del DT conecten Google Drive vía MCP. El resultado es un archivo JSON (`dt-drive-credentials.json`) distribuido por canal interno — **nunca en el repo público**.
+Runbook **una sola vez por organización** para que usuarios del DT conecten Drive, Gmail y/o Calendar vía el mismo MCP. El resultado es un JSON (`dt-drive-credentials.json`) por canal interno — **nunca en el repo público**. No registrar en Git cuentas, Client IDs ni IDs de proyecto reales.
 
 ## Prerequisito IT (validar primero)
 
@@ -63,30 +67,38 @@ Acceso: [console.cloud.google.com](https://console.cloud.google.com) con cuenta 
 
 ### 2. Habilitar API
 
-1. **APIs y servicios → Biblioteca**
-2. Buscar **Google Drive API**
-3. **Habilitar**
+**APIs y servicios → Biblioteca** — habilitar las que la org vaya a usar:
 
-> Opcional para fase 2 (lectura avanzada de Docs/Sheets): habilitar también Google Docs API, Google Sheets API y Google Slides API. Para lectura básica vía export, Drive API suele alcanzar.
+| API | Para |
+|-----|------|
+| Google Drive API | `/drive` |
+| Gmail API | `/gmail` |
+| Google Calendar API | `/calendar` |
 
-### 3. Pantalla de consentimiento OAuth
+Opcional (edición rica de Docs/Sheets/Slides): Google Docs API, Google Sheets API, Google Slides API. El DT mantiene Drive en **solo lectura**.
 
-1. **APIs y servicios → Pantalla de consentimiento OAuth**
-2. **Crear**
+### 3. Consentimiento OAuth (Google Auth Platform)
+
+1. **APIs y servicios → Pantalla de consentimiento OAuth** (en consolas nuevas: **Google Auth Platform**).
+2. App **Interna** (solo cuentas `@<TUEMPRESA>.com`).
 
 | Campo | Valor a completar |
 |-------|-------------------|
-| Tipo de usuario | **Interno** (solo cuentas `@<TUEMPRESA>.com`) |
-| Nombre de la app | `El DT — Cerebro Drive` |
+| Nombre de la app | `El DT — Cerebro Google` |
 | Correo de asistencia | `<EMAIL_ADMIN>` |
-| Logo | Opcional |
 | Dominio autorizado | `<TUEMPRESA>.com` (si aplica) |
 | Correo del desarrollador | `<EMAIL_ADMIN>` |
 
-3. **Scopes → Agregar o quitar scopes**
-4. Agregar: `https://www.googleapis.com/auth/drive.readonly` — **Ver y descargar todos tus archivos de Google Drive**
+3. **Scopes** — en la UI nueva están en **Acceso a los datos** (no en Descripción general). Agregar los que correspondan:
 
-5. **Guardar y continuar** hasta finalizar.
+| Scope | App |
+|-------|-----|
+| `https://www.googleapis.com/auth/drive.readonly` | Drive |
+| `https://www.googleapis.com/auth/gmail.readonly` | Gmail lectura |
+| `https://www.googleapis.com/auth/gmail.compose` | Gmail borradores (Google no ofrece un scope “solo draft”; el MCP no envía) |
+| `https://www.googleapis.com/auth/calendar` | Calendar |
+
+4. Guardar hasta finalizar.
 
 ### 4. Crear credenciales OAuth
 
@@ -113,8 +125,9 @@ Enviar enlace al archivo + guía [drive-cerebro-setup.md](../02_guides/drive-cer
 ```text
 1. Descargá dt-drive-credentials.json (canal interno)
 2. /yo
-3. ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json
-4. Reiniciá Cursor → /drive → elegí carpetas
+3. /drive, /gmail o /calendar — el DT pregunta si es una app o las tres
+4. ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --apps …
+5. Reiniciá Cursor
 ```
 
 **Mensaje sugerido (Antigravity):**
@@ -122,8 +135,9 @@ Enviar enlace al archivo + guía [drive-cerebro-setup.md](../02_guides/drive-cer
 ```text
 1. Descargá dt-drive-credentials.json (canal interno)
 2. /yo
-3. ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --ide antigravity
-4. Reiniciá Antigravity → /drive → elegí carpetas
+3. /drive, /gmail o /calendar
+4. ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --ide antigravity --apps …
+5. Reiniciá Antigravity
 ```
 
 **Ambos IDEs en la misma PC:** usar `--ide all` en el paso 3.
@@ -132,8 +146,8 @@ Enviar enlace al archivo + guía [drive-cerebro-setup.md](../02_guides/drive-cer
 
 | Qué | ¿Hace falta? |
 |-----|--------------|
-| **Google Drive API** en GCP | **Sí** — habilitada en el proyecto |
-| Plugin "Google Drive MCP" del marketplace Cursor | **No** — usamos `google-drive-dt` + credenciales Desktop |
+| **Google Drive API** (y Gmail / Calendar si aplica) | **Sí** |
+| Plugin marketplace Cursor | **No** — `google-drive-dt` + Desktop OAuth |
 
 ## Qué contiene el JSON (referencia)
 
@@ -156,10 +170,12 @@ El archivo incluye campos como:
 
 | Práctica | Motivo |
 |----------|--------|
-| Scope `drive.readonly` | El DT no escribe en Drive en fase 1 |
-| App **Interna** | Sin verificación pública de Google; solo cuentas del Workspace |
-| Tokens por usuario en `~/.config/` | Cada persona autoriza su cuenta; permisos = los de su Drive |
-| Registro de carpetas local | Política del DT; limita consultas a lo elegido |
+| Scope `drive.readonly` | El DT no escribe en Drive |
+| Scopes Gmail `readonly` + `compose` | Lectura + borradores; el servidor no envía |
+| Scope `calendar` | Eventos |
+| App **Interna** | Sin verificación pública; solo Workspace |
+| Tokens por usuario en `~/.config/` | Cada persona autoriza **su** cuenta (no la del admin GCP, salvo que sea la misma) |
+| Selectores locales | Política del DT; no es un sandbox de Google |
 
 ## Rotación y revocación
 
@@ -167,16 +183,16 @@ El archivo incluye campos como:
 |--------|--------|
 | Filtración de client_secret | Revocar credencial en Cloud Console → crear nueva → redistribuir |
 | Usuario deja la empresa | Revocar acceso en [myaccount.google.com/permissions](https://myaccount.google.com/permissions) |
-| Cambio de scope | Actualizar consent screen → usuarios re-autorizan con `/drive` |
+| Cambio de scope | Acceso a los datos → usuarios re-autorizan con `/drive`, `/gmail` o `/calendar` |
 
 ## Verificación
 
 1. Un usuario piloto descarga `dt-drive-credentials.json`
 2. Corre `./scripts/setup-drive.sh ruta/al/dt-drive-credentials.json`
 3. Completa OAuth en navegador
-4. En Cursor: `/drive` → selector de carpetas → pregunta de prueba al DT
+4. En Cursor: `/drive`, `/gmail` o `/calendar` → selector → prueba
 
 ## Related docs
 
-- [Setup usuario — Drive cerebro](../02_guides/drive-cerebro-setup.md) (`DOC-GUIDE-009`)
+- [Setup usuario — Drive / Gmail / Calendar](../02_guides/drive-cerebro-setup.md) (`DOC-GUIDE-009`)
 - [Colaboración Git](git-colaboracion-dt.md) (`DOC-OPS-001`)

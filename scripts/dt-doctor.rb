@@ -16,6 +16,7 @@
 require "yaml"
 require "date"
 require "open3"
+require_relative "project-version"
 
 ROOT = File.expand_path("..", __dir__)
 DOCS = File.join(ROOT, "docs")
@@ -328,6 +329,14 @@ def check_upstream
   _out, _err, status = Open3.capture3("git", "-C", ROOT, "remote", "get-url", remote)
   unless status.success?
     warn_("upstream", "mode consumer pero falta remote Git '#{remote}' — /actualizar no puede avisar releases DT")
+  end
+
+  DtProjectVersion.doctor_findings(ROOT).each do |level, msg|
+    if level == :error
+      err("version", msg)
+    else
+      warn_("version", msg)
+    end
   end
 rescue StandardError
   nil

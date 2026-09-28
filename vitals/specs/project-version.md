@@ -12,21 +12,37 @@ Exit **30** o **40**: no hay bump, commit, push ni tag, y no se ofrece acceso al
 
 ## Fuente de verdad
 
-**`VERSION`** (raíz) — el script de sync propaga a README, YAML y `package.json`.
+**`VERSION`** (raíz) — semver del **producto de este repo**. El script de sync lo propaga a README y `package.json` del producto.
+
+**`framework_version`** en `vitals/config/dt-upstream.md` — semver del **framework DT** incorporado. Viven aparte. Nunca se copian entre sí.
+
+### Aislamiento (consumer)
+
+En `mode: canonical` el producto es el DT: `resolve` deja `VERSION` como está (coincide con `framework_version`).
+
+En `mode: consumer`, `/guardar` **no** puede imponer el número del DT sobre la app.
+
+1. Correr `./scripts/project-resolve-version.sh` **antes** del bump.
+2. Si el producto ya tiene semver (`package.json` en raíz / `frontend` / `backend` / `apps/*`, o un `VERSION` distinto del DT) → esa es la base; después se bump según el dígito.
+3. Si no hay semver de producto (proyecto nuevo, o `VERSION` todavía igual a `framework_version` sin app) → `initial_semver` (`0.1.0`). No se hereda el número del DT.
+4. `project-bump-version.sh` y `project-sync-version.sh` abortan si `VERSION` sigue igual a `framework_version`.
+5. El sync consumer **no** escribe `framework_version` desde `VERSION`.
 
 ## Reglas de `/guardar`
 
 1. **Sin cambios** → no bump, no commit.
-2. **Con cambios** → un bump. Precedencia del dígito:
+2. **Con cambios** → resolver VERSION (paso de aislamiento) y un bump. Precedencia del dígito:
    1. El mensaje nombra **patch**, **minor** o **major** (incluye `/guardar release minor|major|patch`). `/guardar release` a secas = **patch**.
    2. Si no, `auto_bump` en `vitals/config/project-version.yaml`:
       - `classify` → la IA clasifica el diff (abajo).
       - `patch` | `minor` | `major` → ese dígito fijo.
       - `none` con `initialized: true` → commit y push **sin** bump ni tag nuevo.
-3. **Consumer, primer guardar** (`initialized: false`) → no incrementa: escribe `initial_semver` en `VERSION`, marca `initialized: true` y, si `auto_bump` era `none`, lo pasa a `classify`. Luego sync, commit y tag de esa versión inicial.
-4. **Sync** → `./scripts/project-sync-version.sh` tras el bump (o tras el reset inicial).
-5. **Commit** → empieza con `v{X.Y.Z}:` (versión ya escrita). Cuerpo con `Bump: {dígito} — {motivo}`.
-6. **Tag** → `./scripts/dt-tag-version.sh --push` tras push OK, cuando hubo bump o reset inicial.
+3. **Consumer, proyecto nuevo** (`DT_VERSION_ACTION=initial`) → no incrementa: deja `initial_semver` en `VERSION`, marca `initialized: true` y, si `auto_bump` era `none`, lo pasa a `classify`. Luego sync, commit y tag de esa versión inicial.
+4. **Consumer, app con semver** (`DT_VERSION_ACTION=keep`) → no escribas `initial_semver` ni el número del DT. Base = versión de la app; bump con el dígito.
+5. **Sync** → `./scripts/project-sync-version.sh` tras el bump (o tras el reset inicial). En consumer no toca `framework_version`.
+6. **Commit** → empieza con `v{X.Y.Z}:` (versión ya escrita). Cuerpo con `Bump: {dígito} — {motivo}`.
+7. **Tag** → `./scripts/dt-tag-version.sh --push` tras push OK, cuando hubo bump o reset inicial.
+8. **Novedades** → si hubo bump o versión inicial, una entrada nueva al tope de `CHANGELOG.md` (y el README enlaza ese historial; «Qué trae» resume solo la versión nueva). Tras el tag en `origin`, `./scripts/dt-publish-github-release.sh` publica esa entrada en GitHub Releases.
 
 ## Clasificación (`auto_bump: classify`)
 
@@ -50,10 +66,11 @@ Al subir un dígito, los de la derecha vuelven a cero.
 
 | Evento | Script |
 |--------|--------|
+| Resolver (consumer, antes del bump) | `./scripts/project-resolve-version.sh` |
 | Patch | `./scripts/project-bump-version.sh patch` |
 | Minor | `./scripts/project-bump-version.sh minor` |
 | Major | `./scripts/project-bump-version.sh major` |
-| Reset consumer (primer guardar) | escribir `initial_semver` en `VERSION` |
+| Reset consumer (proyecto nuevo) | `resolve` escribe `initial_semver` en `VERSION` |
 
 `auto_bump: classify` en canónico. Un equipo puede fijar `patch`, `minor` o `major`, o dejar `none` con `initialized: true` para no incrementar.
 
@@ -62,16 +79,19 @@ Al subir un dígito, los de la derecha vuelven a cero.
 | Tipo | Archivo |
 |------|---------|
 | `readme_badge` | `README.md` → `**vX.Y.Z**` |
-| `yaml_frontmatter` | `dt-upstream.md` → `framework_version` (= VERSION en canónico) |
+| `yaml_frontmatter` | `dt-upstream.md` → `framework_version` (= VERSION **solo en canónico**; en consumer el sync lo saltea) |
 | `json` | front/back/apps `package.json` |
 
 Discover: `frontend/`, `backend/`, `apps/*/package.json`.
 
 ## Scripts
 
+- [`scripts/project-version.rb`](../../scripts/project-version.rb)
+- [`scripts/project-resolve-version.sh`](../../scripts/project-resolve-version.sh)
 - [`scripts/project-bump-version.sh`](../../scripts/project-bump-version.sh)
 - [`scripts/project-sync-version.sh`](../../scripts/project-sync-version.sh)
 - [`scripts/dt-tag-version.sh`](../../scripts/dt-tag-version.sh)
+- [`scripts/dt-publish-github-release.sh`](../../scripts/dt-publish-github-release.sh)
 - [`scripts/dt-publish-gate.sh`](../../scripts/dt-publish-gate.sh)
 
 ## Skills

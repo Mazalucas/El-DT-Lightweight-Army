@@ -41,7 +41,9 @@ CHOICES = [
   { "id" => "secretos", "stem" => "90-seguridad-secrets", "title" => "Secretos", "note" => "No guardar claves en el repo. Se activa sola al tocar .env o credenciales." },
   { "id" => "canvas", "stem" => "17-canvas-first", "title" => "Canvas", "note" => "Planes y auditorías grandes van a un panel al lado del chat." },
   { "id" => "repos", "stem" => "05-multi-project-git", "title" => "Varios repos", "note" => "Antes de un commit, confirma en qué proyecto estás." },
-  { "id" => "drive", "stem" => "18-drive-contexto", "title" => "Drive", "note" => "Consulta solo las carpetas de Drive que registraste, sin modificarlas." }
+  { "id" => "drive", "stem" => "18-drive-contexto", "title" => "Drive", "note" => "Consulta solo las carpetas de Drive que registraste, sin modificarlas." },
+  { "id" => "gmail", "stem" => "19-gmail-contexto", "title" => "Gmail", "note" => "Mail acotado a etiquetas; solo borradores, no envía." },
+  { "id" => "calendar", "stem" => "21-calendar-contexto", "title" => "Calendar", "note" => "Agenda de los calendarios que registraste." }
 ].freeze
 
 PRESETS = [

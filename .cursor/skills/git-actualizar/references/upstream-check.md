@@ -17,7 +17,7 @@ Si `vitals/ops/dt-upstream-state.md` tiene `snooze_until` **posterior a ahora** 
 
 ## Pasos (bash — la IA los ejecuta)
 
-1. Leer versión local desde frontmatter de `vitals/config/dt-upstream.md` → campo `framework_version`. Fallback: archivo `VERSION` en raíz.
+1. Leer versión **del framework** desde frontmatter de `vitals/config/dt-upstream.md` → campo `framework_version`. En consumer **no** uses el archivo `VERSION` (eso es el producto). Fallback `VERSION` solo si `mode: canonical` o todavía no existe `dt-upstream.md`.
 
 2. Obtener versión remota (intentar en orden):
 

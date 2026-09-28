@@ -5,7 +5,7 @@ type: overview
 status: canonical
 owner: dt-platform
 created: 2026-05-27
-updated: 2026-09-23
+updated: 2026-09-28
 tags:
   - dt
   - evolution
@@ -312,7 +312,7 @@ Guía: [actualizar-framework-dt.md](../02_guides/actualizar-framework-dt.md) (`D
 | **Pre-requisitos** | `session.yaml` con `operator.id` |
 | **Staging** | Cambios del operador + producto, `docs/`, etc. |
 | **Excluye** | `session.yaml`, `canonical-checkout.yaml`, `context-profile.yaml`, `99-perfil-local`, `.env`, credenciales |
-| **Versión** | Cada `/guardar` con cambios: la IA elige patch, minor o major, sync README/front/back, commit `vX.Y.Z:`, tag |
+| **Versión** | Cada `/guardar` con cambios: resolver VERSION del **producto** (nunca la del DT), bump patch/minor/major, sync README/`package.json` de la app, commit `vX.Y.Z:`, tag. `framework_version` es otro número. |
 | **Override** | Si el mensaje nombra patch, minor o major, usa ese dígito |
 | **Push** | Al `origin` de este checkout, solo si el gate sale 0 o 10. El remoto oficial del DT exige `/oficial` en esta carpeta. Si el push se rechaza por permisos, no se pide acceso |
 

@@ -21,6 +21,9 @@ private_exact:
   - vitals/ops/dt-upstream-state.md
   - vitals/config/collaboration.yaml
   - vitals/config/drive-context.yaml
+  - vitals/config/gmail-context.yaml
+  - vitals/config/calendar-context.yaml
+  - vitals/config/google-apps.yaml
   - vitals/workspace.yaml
   - .cursor/rules/99-perfil-local.mdc
   - .claude/rules/99-perfil-local.md

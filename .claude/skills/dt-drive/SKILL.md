@@ -5,9 +5,9 @@ description: "[Rutina] Conectar Google Drive al cerebro del DT — OAuth, select
 
 # dt-drive
 
-Integración **opcional** de Google Drive vía MCP (`@ibarcarty/mcp-server-google-drive`). Sin credenciales en el repo; tokens y registro de carpetas solo en la máquina local.
+Integración **opcional** de Google Drive vía MCP (`@ibarcarty/mcp-server-google-drive`). Mismo servidor y token que Gmail y Calendar. Sin credenciales en el repo; tokens y registro de carpetas solo en la máquina local.
 
-**Guías:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`) · admin Cloud: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`).
+**Spec del embudo:** `vitals/specs/google-apps-mcp.md`. **Guías:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`) · admin Cloud: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`).
 
 ## Prerequisitos
 
@@ -24,22 +24,24 @@ Integración **opcional** de Google Drive vía MCP (`@ibarcarty/mcp-server-googl
 |---------|-----|-----|
 | `~/.config/mcp-server-google-drive/oauth-credentials.json` | No | Client ID/secret de la app interna |
 | `~/.config/mcp-server-google-drive/tokens.json` | No | Token OAuth del usuario |
+| `vitals/config/google-apps.yaml` | No | Qué apps (Drive/Gmail/Calendar) habilitó |
 | `vitals/config/drive-context.yaml` | No | Carpetas elegidas + propósito |
 | `vitals/config/drive-context.yaml.example` | Sí | Plantilla de schema |
 
 ## Flujo `/drive` — conexión inicial
 
 1. Confirmar sesión (`/yo` si falta).
-2. Preguntar si ya tiene `dt-drive-credentials.json` del canal interno de la empresa.
-3. Ejecutar `./scripts/setup-drive.sh [ruta/credenciales.json] [--ide cursor|antigravity|all]`:
+2. **Embudo** (no saltear): *¿solo Drive o también Gmail y Calendar?* Spec `google-apps-mcp.md`. Unión con lo ya habilitado en `google-apps.yaml`.
+3. Preguntar si ya tiene `dt-drive-credentials.json` del canal interno de la empresa.
+4. Ejecutar `./scripts/setup-drive.sh [ruta/credenciales.json] --apps <lista> [--ide cursor|antigravity|all]`:
    - Valida Node 18+
    - Copia credenciales a `~/.config/mcp-server-google-drive/oauth-credentials.json` (chmod 600)
-   - Fija `GDRIVE_MCP_SCOPES=https://www.googleapis.com/auth/drive.readonly`
-   - Corre `npx @ibarcarty/mcp-server-google-drive auth` si no hay token (abre navegador)
+   - Fija `GDRIVE_MCP_SCOPES` según `--apps` (Drive = `drive.readonly`)
+   - Corre `npx @ibarcarty/mcp-server-google-drive auth` si no hay token o faltan scopes
    - Registra MCP: Cursor → `~/.cursor/mcp.json` · Antigravity → `~/.gemini/config/mcp_config.json` (y legacy si aplica)
-4. Preguntar qué IDE usa. **Antigravity:** verificar Manage MCP Servers → raw config. **Cursor:** Settings → MCP.
-5. Pedir **reiniciar el IDE** si las tools no aparecen.
-6. Continuar con **selector de carpetas** (abajo).
+5. Preguntar qué IDE usa. **Antigravity:** verificar Manage MCP Servers → raw config. **Cursor:** Settings → MCP.
+6. Pedir **reiniciar el IDE** si las tools no aparecen.
+7. Escribir/actualizar `google-apps.yaml` (`drive: true`). Continuar con **selector de carpetas** (abajo). Si eligió las tres apps, ofrecer `/gmail` y `/calendar` en el mismo turno.
 
 Si el usuario ya está autenticado y solo quiere cambiar carpetas → ir directo al selector.
 
@@ -80,7 +82,7 @@ registered_at: "<ISO8601>"
 
 - **Agregar carpetas:** repetir selector; merge sin duplicar `id`.
 - **Quitar carpetas:** editar `drive-context.yaml` con confirmación del usuario.
-- **Desvincular cuenta:** borrar `tokens.json` local; opcionalmente vaciar `drive-context.yaml`. No tocar credenciales OAuth de la empresa (son compartidas).
+- **Desvincular cuenta:** borrar `tokens.json` local; opcionalmente vaciar `drive-context.yaml` y `google-apps.yaml`. No tocar credenciales OAuth de la empresa (son compartidas). Desvincula Gmail/Calendar del mismo token.
 
 ## Protocolo de uso diario (DT)
 
@@ -112,7 +114,8 @@ Cuando `vitals/config/drive-context.yaml` existe y el MCP está activo:
 
 ## No hacer
 
-- No commitear `drive-context.yaml`, credenciales ni tokens.
-- No hardcodear client ID/secret en el repo.
+- No commitear `drive-context.yaml`, `google-apps.yaml`, credenciales ni tokens.
+- No hardcodear client ID/secret ni cuentas/proyectos GCP en el repo.
 - No asumir que todos tienen Drive conectado — es opt-in.
-- No escribir en Drive en esta fase.
+- No escribir en Drive.
+- No saltear la pregunta solo-esta-app vs las tres.

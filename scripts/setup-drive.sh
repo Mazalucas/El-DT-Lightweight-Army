@@ -1,33 +1,86 @@
 #!/usr/bin/env bash
-# setup-drive — Instalador idempotente de Google Drive MCP para El DT.
+# setup-drive — Instalador idempotente del MCP Google (Drive / Gmail / Calendar) para El DT.
 # Credenciales y tokens quedan en ~/.config/ (nunca en el repo).
 # Uso:
-#   ./scripts/setup-drive.sh [ruta/al/dt-drive-credentials.json] [--ide cursor|antigravity|all]
+#   ./scripts/setup-drive.sh [ruta/al/dt-drive-credentials.json] [--apps drive|gmail|calendar|all] [--ide cursor|antigravity|all] [--reauth]
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CONFIG_DIR="${GDRIVE_MCP_CONFIG_DIR:-$HOME/.config/mcp-server-google-drive}"
 OAUTH_PATH="${GDRIVE_MCP_OAUTH_PATH:-$CONFIG_DIR/oauth-credentials.json}"
 TOKEN_PATH="${GDRIVE_MCP_TOKEN_PATH:-$CONFIG_DIR/tokens.json}"
-READONLY_SCOPE="https://www.googleapis.com/auth/drive.readonly"
 MCP_SERVER_NAME="google-drive-dt"
 IDE_TARGET="all"
+APPS_ARG="drive"
+FORCE_REAUTH=0
+SCOPES=""
 
-info() { printf '→ %s\n' "$*"; }
+SCOPE_DRIVE="https://www.googleapis.com/auth/drive.readonly"
+SCOPE_GMAIL_RO="https://www.googleapis.com/auth/gmail.readonly"
+SCOPE_GMAIL_COMPOSE="https://www.googleapis.com/auth/gmail.compose"
+SCOPE_CALENDAR="https://www.googleapis.com/auth/calendar"
+
+info() { printf '→ %s\n' "$*" >&2; }
 warn() { printf '⚠ %s\n' "$*" >&2; }
 die() { printf '✗ %s\n' "$*" >&2; exit 1; }
 
 usage() {
   cat <<EOF
-Uso: ./scripts/setup-drive.sh [ruta/credenciales.json] [--ide cursor|antigravity|all]
+Uso: ./scripts/setup-drive.sh [ruta/credenciales.json] [--apps LISTA] [--ide cursor|antigravity|all] [--reauth]
 
-  --ide cursor       Solo ~/.cursor/mcp.json
-  --ide antigravity  Solo config MCP de Antigravity (~/.gemini/...)
-  --ide all          Ambos (default)
+  --apps drive            Solo Drive lectura (default, compatible con /drive viejo)
+  --apps gmail            Gmail lectura + borradores
+  --apps calendar         Calendar
+  --apps drive,gmail      Unión (coma o 'all' = las tres)
+  --ide cursor            Solo ~/.cursor/mcp.json
+  --ide antigravity       Solo config MCP de Antigravity (~/.gemini/...)
+  --ide all               Ambos (default)
+  --reauth                Borrar token local y volver a abrir el navegador
 
-Credenciales y token OAuth son comunes; solo cambia dónde se registra el MCP.
+Un token OAuth para las tres apps. Preguntá en el chat si es una o todas (vitals/specs/google-apps-mcp.md).
 Guía: docs/02_guides/drive-cerebro-setup.md
 EOF
+}
+
+normalize_apps() {
+  local raw="${1:-drive}"
+  raw="$(printf '%s' "$raw" | tr '[:upper:]' '[:lower:]' | tr ' ' ',')"
+  if [[ "$raw" == "all" || "$raw" == "todas" || "$raw" == "tres" ]]; then
+    printf '%s' "drive,gmail,calendar"
+    return
+  fi
+  printf '%s' "$raw"
+}
+
+build_scopes() {
+  local apps="$1"
+  local -a out=()
+  local part
+  IFS=',' read -ra parts <<< "$apps"
+  for part in "${parts[@]}"; do
+    part="${part// /}"
+    [[ -z "$part" ]] && continue
+    case "$part" in
+      drive) out+=("$SCOPE_DRIVE") ;;
+      gmail) out+=("$SCOPE_GMAIL_RO" "$SCOPE_GMAIL_COMPOSE") ;;
+      calendar) out+=("$SCOPE_CALENDAR") ;;
+      *) die "App desconocida en --apps: $part (usar drive, gmail, calendar o all)" ;;
+    esac
+  done
+  local seen=""
+  local s
+  local -a uniq=()
+  for s in "${out[@]}"; do
+    case " $seen " in
+      *" $s "*) ;;
+      *)
+        seen+=" $s"
+        uniq+=("$s")
+        ;;
+    esac
+  done
+  local IFS=','
+  printf '%s' "${uniq[*]}"
 }
 
 parse_args() {
@@ -38,6 +91,15 @@ parse_args() {
         [[ $# -ge 2 ]] || die "Falta valor para --ide"
         IDE_TARGET="$2"
         shift 2
+        ;;
+      --apps)
+        [[ $# -ge 2 ]] || die "Falta valor para --apps"
+        APPS_ARG="$2"
+        shift 2
+        ;;
+      --reauth)
+        FORCE_REAUTH=1
+        shift
         ;;
       -h|--help)
         usage
@@ -57,6 +119,8 @@ parse_args() {
     cursor|antigravity|all) ;;
     *) die "Valor inválido para --ide: $IDE_TARGET (usar cursor, antigravity o all)" ;;
   esac
+  APPS_ARG="$(normalize_apps "$APPS_ARG")"
+  SCOPES="$(build_scopes "$APPS_ARG")"
   CREDENTIALS_ARG="$creds"
 }
 
@@ -98,15 +162,48 @@ install_credentials() {
   info "Credenciales instaladas en $OAUTH_PATH"
 }
 
-run_auth() {
-  if [[ -f "$TOKEN_PATH" ]]; then
-    info "Token existente en $TOKEN_PATH — omitiendo login (borrá el archivo para re-autorizar)"
+token_missing_scopes() {
+  local token_path="$1"
+  local needed="$2"
+  if ! command -v ruby >/dev/null 2>&1; then
+    printf '%s' "ruby-missing"
     return
   fi
-  info "Abriendo navegador para autorizar Google Drive (solo lectura)..."
+  ruby - "$token_path" "$needed" <<'RUBY'
+require "json"
+path, needed = ARGV
+begin
+  data = JSON.parse(File.read(path))
+rescue StandardError
+  puts "unreadable"
+  exit 0
+end
+have = (data["scope"] || "").split(/\s+/)
+need = needed.split(",").map(&:strip).reject(&:empty?)
+missing = need - have
+puts missing.empty? ? "ok" : missing.join(",")
+RUBY
+}
+
+run_auth() {
+  mkdir -p "$CONFIG_DIR"
+  local missing="needed"
+  if [[ -f "$TOKEN_PATH" && "$FORCE_REAUTH" -eq 0 ]]; then
+    missing="$(token_missing_scopes "$TOKEN_PATH" "$SCOPES")"
+    if [[ "$missing" == "ok" ]]; then
+      info "Token existente con los scopes pedidos — omitiendo login (usá --reauth para forzar)"
+      return
+    fi
+    info "El token no cubre todos los scopes ($missing). Hay que volver a autorizar en el navegador."
+    rm -f "$TOKEN_PATH"
+  elif [[ "$FORCE_REAUTH" -eq 1 && -f "$TOKEN_PATH" ]]; then
+    info "--reauth: borrando token local"
+    rm -f "$TOKEN_PATH"
+  fi
+  info "Abriendo navegador para autorizar Google (apps: $APPS_ARG)..."
   export GDRIVE_MCP_OAUTH_PATH="$OAUTH_PATH"
   export GDRIVE_MCP_TOKEN_PATH="$TOKEN_PATH"
-  export GDRIVE_MCP_SCOPES="$READONLY_SCOPE"
+  export GDRIVE_MCP_SCOPES="$SCOPES"
   npx -y @ibarcarty/mcp-server-google-drive auth
   if [[ -f "$TOKEN_PATH" ]]; then
     chmod 600 "$TOKEN_PATH"
@@ -124,7 +221,7 @@ merge_mcp_json_file() {
     return 1
   fi
 
-  ruby - "$mcp_path" "$MCP_SERVER_NAME" "$OAUTH_PATH" "$TOKEN_PATH" "$READONLY_SCOPE" <<'RUBY'
+  ruby - "$mcp_path" "$MCP_SERVER_NAME" "$OAUTH_PATH" "$TOKEN_PATH" "$SCOPES" <<'RUBY'
 require "json"
 require "fileutils"
 
@@ -183,15 +280,15 @@ print_next_steps() {
 Listo. Próximos pasos:
   1. Reiniciá tu IDE (Cursor y/o Antigravity).
   2. Verificá MCP: google-drive-dt activo.
-  3. En el chat: /yo → /drive → selector de carpetas.
-  4. Guía completa: docs/02_guides/drive-cerebro-setup.md
+  3. En el chat: /yo → /drive, /gmail o /calendar (selector de esa app).
+  4. Guía: docs/02_guides/drive-cerebro-setup.md · spec: vitals/specs/google-apps-mcp.md
 
 EOF
 }
 
 main() {
   parse_args "$@"
-  info "El DT — setup Google Drive MCP (IDE: $IDE_TARGET)"
+  info "El DT — setup Google MCP (apps: $APPS_ARG; IDE: $IDE_TARGET)"
   require_node
   local creds
   creds="$(resolve_credentials_path)"

@@ -3,7 +3,9 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.8.0**
+**v1.9.0**
+
+Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
 *Tu IA con equipo, criterio y herramientas — no un chat que dice “sí” a todo.*
 
@@ -24,32 +26,30 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ## Índice
 
-- [Qué trae v1.8.0](#que-trae)
+- [Qué trae v1.9.0](#que-trae)
+- [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
 - [Qué puede hacer El DT](#qué-puede-hacer-el-dt)
 - [Comandos principales](#comandos-principales)
-- [Google Drive — `/drive`](#google-drive--drive)
+- [Google — `/drive` `/gmail` `/calendar`](#google-drive--drive)
 - [Ordenar · Hack · Atelier · Video · Marketing](#ordenar--captura-de-conocimiento)
 - [Quick setup (English)](#quick-setup-english)
 - [Para el equipo técnico](#para-el-equipo-técnico)
 
 ---
 
-## Qué trae v1.8.0 {#que-trae}
+## Qué trae v1.9.0 {#que-trae}
 
-Capacidad nueva sobre **v1.7.11**. El uso anterior sigue igual.
+Capacidad nueva sobre **v1.8.0**. Quien ya usa el DT sigue con los mismos comandos. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **Publicar el DT** | `/oficial` marca esta carpeta como el único checkout que puede pushear al remoto oficial. `/guardar` corre el gate antes del bump e instala un `pre-push`. Sesión, inbox, postura y perfil de `/dt-config` quedan en la máquina. En ese remoto, `roster.yaml` viaja con `team: []` y el commit no lleva operador. |
-| **Cuánto contexto** | `/dt-config` elige qué reglas extra entran en cada mensaje (Recomendado, Docs, Código, Web, Números). El perfil queda en esta PC y no pide `/yo`. Las cuatro reglas fijas siguen siempre activas. |
-| **Video** | [`tools/video/ROUTING.md`](tools/video/ROUTING.md) elige el carril: `/recordly` (demo del producto corriendo), `/brag` (clip de 15–25 s para compartir), Hyperframes (composición HTML a medida) o `/remotion` (asset React que se mantiene, con props, lote o Lambda). Recordly y brag se instalan en caché local; el fuente no entra al repo. |
-| **Validar un plan** | `/analisis-propuesta` convoca un panel de modelos distintos al autor, en dos rondas, y se queda en el diagnóstico. Referencia: [analisis-propuesta.md](docs/03_reference/analisis-propuesta.md) (`DOC-REF-011`). |
-| **Postura** | `/yo` deja el trabajo en `personal` o `team`. En el checkout oficial esa postura vive en `vitals/ops/collaboration.local.yaml` y `/yo` no agrega personas a `roster.yaml`. |
-| **Atelier** | El router carga el context adapter de Impeccable y su playbook (`shape`, `live`, `critique`, `audit`, `polish` y el resto). La superficie se nombra Persuade, Operate, Read o Experience. Siguen `/atelier select`, tokens, templates y decks del pack DT. |
+| **Gmail y Calendar** | `/gmail` y `/calendar` usan el mismo login que `/drive`. El DT pregunta si autorizás una app o las tres. Gmail prepara borradores y no envía mail. Calendar lista y crea eventos. Guía: [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md). |
+| **Versión del producto** | En un repo que adopta el DT, `/guardar` conserva el semver de la app. No copia el número del framework. Spec: [project-version.md](vitals/specs/project-version.md). |
+| **Novedades** | Cada release queda en [CHANGELOG.md](CHANGELOG.md) y en [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases). |
 
-Skills de esta entrega: `dt-oficial`, `dt-config`, `video-routing`, `recordly`, `brag`, `analisis-propuesta`. Specs: [canonical-publish.md](vitals/specs/canonical-publish.md) · [tools/REGISTRY.md](tools/REGISTRY.md).
+Skills de esta entrega: `dt-gmail`, `dt-calendar`. Spec: [google-apps-mcp.md](vitals/specs/google-apps-mcp.md).
 
 ---
 
@@ -63,7 +63,7 @@ Skills de esta entrega: `dt-oficial`, `dt-config`, `video-routing`, `recordly`, 
 | Algo puntual ya definido | `/fast-lane` |
 | Diseñar una web, dashboard o presentación | `/atelier` |
 | Crear un video | Leé [`tools/video/ROUTING.md`](tools/video/ROUTING.md): `/recordly`, `/brag`, Hyperframes o `/remotion` |
-| Consultar documentos en Google Drive | `/drive` (opcional — ver [abajo](#google-drive--drive)) |
+| Consultar Drive, Gmail o Calendar | `/drive`, `/gmail` o `/calendar` (opcional — ver [abajo](#google-drive--drive)) |
 | Volcar briefs, notas o dumps al cerebro del repo | `/ordenar` |
 | Auditar seguridad del proyecto (auth, API, secrets…) | `/hack` |
 | Afinar qué reglas carga la IA en cada mensaje | `/dt-config` |
@@ -167,6 +167,8 @@ Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc).
 | **`/bootstrap`** | Usar este clone como base de tu proyecto y soltar el remoto del DT |
 | **`/oficial`** | El dueño marca esta carpeta como el único checkout que publica al DT |
 | **`/drive`** | Conectar Google Drive y registrar carpetas para que la IA las consulte |
+| **`/gmail`** | Mismo login que Drive. Etiquetas y borradores; no envía mail |
+| **`/calendar`** | Mismo login que Drive. Listar y crear eventos |
 | **`/dt-config`** | Elegir qué reglas van en cada mensaje. El perfil queda en esta PC |
 | **`/orquestar`** | Tarea grande — pipeline completo en 8 pasos |
 | **`/fast-lane`** | Algo puntual ya definido — menos preguntas rutinarias |
@@ -187,30 +189,22 @@ Grupos completos y taglines: [commands-meta.yaml](vitals/config/commands-meta.ya
 
 ---
 
-## Google Drive — `/drive` {#google-drive--drive}
+## Google Drive, Gmail y Calendar — `/drive` `/gmail` `/calendar` {#google-drive--drive}
 
-Integración **opcional**: conectá **solo las carpetas que elijas** de Google Drive para que el DT las use como contexto al responder (briefs, reportes, docs de cliente). **No movés archivos al repo** y **nada de Drive se sube a GitHub** — credenciales, tokens y la lista de carpetas viven solo en tu máquina.
+Integración **opcional**: un solo MCP (`google-drive-dt`) y un solo login Google. El DT **pregunta si autorizás una app o las tres**. Nada de eso se sube a GitHub.
 
-### Para qué sirve
+| Command | Qué hace |
+|---------|----------|
+| `/drive` | Carpetas de Drive (solo lectura) |
+| `/gmail` | Etiquetas / queries; borradores (no envía) |
+| `/calendar` | Calendarios; listar y crear eventos |
 
-| Situación | Qué hace `/drive` |
-|-----------|-------------------|
-| Primera vez | OAuth con tu cuenta Google, registra el MCP en Cursor/Antigravity, elegís carpetas |
-| Ya conectado | Cambiar qué carpetas compartís al cerebro o revisar la config local |
-| En el chat | La IA lee Docs/Sheets/Slides/PDF de esas carpetas vía MCP cuando el pedido lo amerita |
+1. **`/yo`**
+2. El command de la app — embudo una vs todas
+3. **`./scripts/setup-drive.sh … --apps …`** y reiniciar el IDE
+4. Selector local (`vitals/config/*-context.yaml`, no Git)
 
-### Cómo usarlo
-
-1. **`/yo`** — identidad local (requisito del DT).
-2. **`/drive`** — el DT te guía paso a paso:
-   - Pedí el archivo **`dt-drive-credentials.json`** al canal interno de tu empresa (nunca va al repo).
-   - Corre **`./scripts/setup-drive.sh`** (o dejá que la IA lo ejecute) y reiniciá el IDE si hace falta.
-   - Elegí **Shared Drives** o carpetas de “Mi unidad” y describí en una frase qué contiene cada una.
-3. **Trabajá normal** — pedí en lenguaje natural: *“según el brief en Drive…”*, *“resume el doc de la carpeta X”*.
-
-La selección queda en **`vitals/config/drive-context.yaml`** (local, no Git). Alcance de lectura: **solo lectura** (`drive.readonly`).
-
-**Guía completa:** [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md) · **Admin GCP:** [drive-google-cloud-admin.md](docs/06_operations/drive-google-cloud-admin.md)
+**Guía:** [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md) · **Admin GCP:** [drive-google-cloud-admin.md](docs/06_operations/drive-google-cloud-admin.md)
 
 ---
 
@@ -359,6 +353,7 @@ Seguridad y secretos **siempre** aplican, incluso bajo `/fast-lane`.
 | [sync-commands-from-meta.sh](scripts/sync-commands-from-meta.sh) | Commands desde `commands-meta.yaml` |
 | [sync-skills-parity.sh](scripts/sync-skills-parity.sh) | Skills `.cursor/skills` → `.agents/skills` |
 | [dt-publish-gate.sh](scripts/dt-publish-gate.sh) | Antes de publicar: ¿este checkout puede, y a qué remoto? |
+| [dt-publish-github-release.sh](scripts/dt-publish-github-release.sh) | Publica en GitHub Releases la entrada de `CHANGELOG.md` de esta versión |
 | [dt-oficial.sh](scripts/dt-oficial.sh) | Marca local de `/oficial` (no va a Git) |
 | [dt-context-profile.rb](scripts/dt-context-profile.rb) | Perfil de `/dt-config` (no va a Git) |
 
@@ -379,7 +374,7 @@ Detalle: [scripts/README.md](scripts/README.md).
 
 Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigravity/Claude vía `sync-ide`). Reglas de delegación: [`.cursor/rules/03-catalogo-subagentes.mdc`](.cursor/rules/03-catalogo-subagentes.mdc).
 
-**Skills de rutina DT** (no son subagentes): `dt-setup`, `dt-session`, `dt-config`, `dt-ordenar`, `git-actualizar`, `git-guardar`, `dt-drive`, `dt-actualizar`, `dt-oficial`, `github-save-release`.
+**Skills de rutina DT** (no son subagentes): `dt-setup`, `dt-session`, `dt-config`, `dt-ordenar`, `git-actualizar`, `git-guardar`, `dt-drive`, `dt-gmail`, `dt-calendar`, `dt-actualizar`, `dt-oficial`, `github-save-release`.
 
 **Skills de carril o diagnóstico** (sin subagente nuevo): `video-routing`, `recordly`, `brag`, `analisis-propuesta`.
 

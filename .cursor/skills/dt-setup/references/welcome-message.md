@@ -59,7 +59,7 @@ Hola — este repo ya trae el **Director Técnico (DT)**: reglas, skills y comma
 | Command | Para qué |
 |---------|----------|
 | **`/orquestar`** | Tarea grande — pipeline DT en 8 pasos |
-| **`/drive`** | Conectar Google Drive como contexto (opcional) |
+| **`/drive`** `/gmail` `/calendar` | Google (opcional) — un login; el DT pregunta si es una app o las tres |
 | **`/dt-config`** | Elegir cuánto contexto queda activo. Recomendado deja el resto para cuando haga falta |
 | **`/atelier`** | Diseño UI / mockups / anti-slop |
 | **`/verificar`** | Planillas y totales (con script, no a ojo) |

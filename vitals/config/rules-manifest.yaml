@@ -3,7 +3,7 @@
 # El emisor (scripts/sync-ide) combina esta metadata con el cuerpo para
 # generar el frontmatter correcto en cada IDE. No editar rules a mano.
 version: 1
-updated: "2026-07-30"
+updated: "2026-09-28"
 
 rules:
   - stem: 00-orquestador-core
@@ -44,7 +44,15 @@ rules:
     alwaysApply: false
   - stem: 18-drive-contexto
     description: "OBLIGATORIO al consultar Google Drive vía MCP — solo carpetas registradas, solo lectura, consulta dirigida"
-    globs: "vitals/config/drive-context.yaml, vitals/config/drive-context.yaml.example"
+    globs: "vitals/config/drive-context.yaml, vitals/config/drive-context.yaml.example, vitals/config/google-apps.yaml, vitals/config/google-apps.yaml.example"
+    alwaysApply: false
+  - stem: 19-gmail-contexto
+    description: "OBLIGATORIO al consultar Gmail vía MCP — política de labels/queries, borradores, nunca enviar"
+    globs: "vitals/config/gmail-context.yaml, vitals/config/gmail-context.yaml.example, vitals/config/google-apps.yaml, vitals/config/google-apps.yaml.example"
+    alwaysApply: false
+  - stem: 21-calendar-contexto
+    description: "OBLIGATORIO al consultar Google Calendar vía MCP — calendarios registrados, confirmar antes de borrar"
+    globs: "vitals/config/calendar-context.yaml, vitals/config/calendar-context.yaml.example, vitals/config/google-apps.yaml, vitals/config/google-apps.yaml.example"
     alwaysApply: false
   - stem: 10-arquitectura-backend
     description: "Convenciones de arquitectura backend, APIs, capas, manejo de errores"

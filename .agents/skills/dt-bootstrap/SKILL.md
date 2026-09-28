@@ -50,11 +50,13 @@ Convierte el template El DT en la **base de tu propio proyecto**: lo promueve a 
    Ofrecer: `git remote add origin <tu-repo>` y/o `git init` fresco si el usuario quiere historial limpio (sin el del template).
 
 5. **Resetear estado del template**:
-   - `VERSION` → reiniciar a `0.1.0` del nuevo proyecto (preguntar). **La versión del framework queda en `framework_version` de `vitals/config/dt-upstream.md`**, no en `VERSION` raíz.
+   - Capturá `FRAMEWORK_VERSION` **antes** de tocar `VERSION`. Queda en `framework_version` de `dt-upstream.md`, no en `VERSION` raíz.
+   - Si el destino **ya tiene** semver de producto (`package.json` en raíz/`frontend`/`backend`/`apps/*`) → `VERSION` = esa versión. **No** copies la del DT. **No** preguntes si conviene “usar la del framework”.
+   - Si el proyecto es **nuevo** (sin semver de producto) → `VERSION` → `0.1.0` (preguntar solo el número inicial, default `0.1.0`).
    - **`vitals/config/project-version.yaml`** — crear desde [`project-version.yaml.example`](../../../vitals/config/project-version.yaml.example):
-     - `initialized: false`, `auto_bump: none`, `initial_semver: "0.1.0"`
-     - **Discover** `package.json` en raíz, `frontend/`, `backend/`, `apps/*/package.json` → `sync_paths`
-     - `./scripts/project-sync-version.sh` — unificar semver en front/back/monorepo
+     - `initialized: false`, `auto_bump: none`, `initial_semver` = el `VERSION` que acabás de fijar
+     - **Discover** `package.json` en raíz, `frontend/`, `backend/`, `apps/*/package.json` → `sync_paths` (producto). **No** agregues `framework_version` a `sync_paths`.
+     - `./scripts/project-resolve-version.sh` y `./scripts/project-sync-version.sh` — unificar semver del producto; el DT no se copia
      - Spec: [`vitals/specs/project-version.md`](../../../vitals/specs/project-version.md)
    - `vitals/config/roster.yaml` → `team: []`.
    - Borrar `vitals/config/collaboration.yaml` si existe (conservar el `.example`). No preguntar postura: el proyecto nuevo la responde en el primer `/yo`, con el roster ya vacío.
@@ -63,7 +65,7 @@ Convierte el template El DT en la **base de tu propio proyecto**: lo promueve a 
 
 6. **Garantizar estructura**: correr el skill `dt-setup` (`/setup`) para el/los IDE(s) elegido(s).
 7. **Verificar**: `./scripts/dt-doctor.sh` en verde.
-8. **Resumen**: remoto nuevo + `dt-upstream`, versión proyecto `0.1.0` + `project-version.yaml`, primer **`/guardar`** (tag inicial; si `auto_bump` era `none`, pasa a `classify`) y los siguientes los clasifica la IA, y que `/actualizar` avisará releases del DT. Este checkout ya no publica al DT: `/guardar` empuja solo al `origin` propio. El framework entra por `/actualizar-dt`.
+8. **Resumen**: remoto nuevo + `dt-upstream`, `VERSION` del **producto** (existente o `0.1.0`) + `project-version.yaml`, primer **`/guardar`** (resolve + bump o tag inicial; si `auto_bump` era `none`, pasa a `classify`). Este checkout ya no publica al DT: `/guardar` empuja solo al `origin` propio. El framework entra por `/actualizar-dt`. La versión del DT queda en `framework_version`, nunca en la app.
 
 ## Gate duro (no saltear)
 

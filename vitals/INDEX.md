@@ -18,7 +18,7 @@ Usá este archivo para decidir **qué leer primero** y no inflar el contexto.
 | ¿Commands y taglines (YAML canónico)? | [config/commands-meta.yaml](config/commands-meta.yaml) |
 | ¿Quién trabaja en esta máquina? | `ops/session.yaml` (local; usar `/yo`) |
 | ¿Equipo en Git? | [config/roster.yaml](config/roster.yaml) (vacío al clonar) |
-| ¿Google Drive como contexto? | `/drive` · [config/drive-context.yaml.example](config/drive-context.yaml.example) (local: `drive-context.yaml`) · `DOC-GUIDE-009` |
+| ¿Google Drive / Gmail / Calendar? | `/drive` `/gmail` `/calendar` · [config/drive-context.yaml.example](config/drive-context.yaml.example) · spec [google-apps-mcp.md](specs/google-apps-mcp.md) · `DOC-GUIDE-009` |
 | ¿Roles del proyecto? | [config/roles.yaml](config/roles.yaml) (`roles: []` = texto libre en /yo) |
 | ¿Forma de session.yaml? | [ops/README.md](ops/README.md) · DOC-REF-001 |
 | ¿Postura personal o team? | [config/collaboration.yaml.example](config/collaboration.yaml.example) · la escribe `/yo` en `config/collaboration.yaml` · [precedence.md](specs/precedence.md) |

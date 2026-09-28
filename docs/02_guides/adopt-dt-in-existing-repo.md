@@ -5,7 +5,7 @@ type: guide
 status: canonical
 owner: dt-platform
 created: 2026-04-19
-updated: 2026-06-23
+updated: 2026-09-28
 tags:
   - adoption
   - cursor
@@ -51,12 +51,13 @@ Integrar El DT sin romper flujos del equipo y manteniendo trazabilidad (`vitals/
 
 ## Modo drop-in (repo sin rules DT)
 
-1. Copiá desde el template: `.cursor/`, `.agents/` + `.antigravity/`, `vitals/` (`config/commands-meta.yaml`, `config/dt-upstream.example.md`, `config/roster.yaml`, `config/roles.yaml` vacíos, `ops/README.md`), `AGENTS.md`, `vitals/specs/dt-upstream-config.md`, y lo que necesités de `docs/99_meta/` y `scripts/`.
-2. Configurá upstream: `git remote add dt-upstream <url-repo-canónico-DT>` y copiá `dt-upstream.example.md` → `vitals/config/dt-upstream.md` con `mode: consumer` y `framework_version` del tag adoptado.
-3. Ritual primera vez: **`/bienvenida`** → **`/yo`** → `/guardar` cuando corresponda (ver `DOC-GUIDE-006`).
-4. Ritual diario: `/actualizar` → `/yo` → `/guardar` (ver `DOC-OV-004`).
-5. Registrá un primer pulso opcional en `vitals/pulse/entries/` y actualizá `vitals/pulse/current.md`.
-6. Paridad IDE (maintainers): `./scripts/sync-commands-from-meta.sh` y `./scripts/sync-skills-parity.sh` tras cambiar meta o skills.
+1. Copiá desde el template: `.cursor/`, `.agents/` + `.antigravity/`, `vitals/` (`config/commands-meta.yaml`, `config/dt-upstream.example.md`, `config/roster.yaml`, `config/roles.yaml` vacíos, `ops/README.md`), `AGENTS.md`, `vitals/specs/dt-upstream-config.md`, y lo que necesités de `docs/99_meta/` y `scripts/`. **No copies** el `VERSION` del DT ni el `project-version.yaml` canónico. Si el repo ya tiene `package.json`/`VERSION`, ese semver es el de la app.
+2. Configurá upstream: `git remote add dt-upstream <url-repo-canónico-DT>` y copiá `dt-upstream.example.md` → `vitals/config/dt-upstream.md` con `mode: consumer` y `framework_version` del tag adoptado (**solo** ahí vive el número del DT).
+3. Creá `vitals/config/project-version.yaml` desde `project-version.yaml.example` (sin `framework_version` en `sync_paths`). Corré `./scripts/project-resolve-version.sh` — conserva la versión de la app o arranca en `0.1.0`. Nunca sugieras la del DT.
+4. Ritual primera vez: **`/bienvenida`** → **`/yo`** → `/guardar` cuando corresponda (ver `DOC-GUIDE-006`). `/guardar` hace bump de la app, no del framework.
+5. Ritual diario: `/actualizar` → `/yo` → `/guardar` (ver `DOC-OV-004`).
+6. Registrá un primer pulso opcional en `vitals/pulse/entries/` y actualizá `vitals/pulse/current.md`.
+7. Paridad IDE (maintainers): `./scripts/sync-commands-from-meta.sh` y `./scripts/sync-skills-parity.sh` tras cambiar meta o skills.
 
 ## Adopción mínima (solo ritual Git)
 

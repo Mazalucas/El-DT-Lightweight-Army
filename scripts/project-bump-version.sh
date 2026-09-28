@@ -2,12 +2,15 @@
 # project-bump-version — incrementa semver en VERSION (raíz).
 # Uso: ./scripts/project-bump-version.sh patch|minor|major
 # El dígito lo elige /guardar (skill git-guardar). Este script solo suma.
+# En consumer aborta si VERSION es la del DT (framework_version): hay que resolver primero.
 # Escribe la nueva versión en stdout.
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 KIND="${1:-}"
 VERSION_FILE="$ROOT/VERSION"
+
+ruby "$ROOT/scripts/project-version.rb" guard --root "$ROOT" >/dev/null
 
 if [[ ! -f "$VERSION_FILE" ]]; then
   echo "ERROR: falta $VERSION_FILE" >&2

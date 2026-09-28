@@ -44,6 +44,9 @@ vitals/ops/context-profile.yaml
 .claude/rules/99-perfil-local.md
 .agents/rules/99-perfil-local.md
 vitals/config/drive-context.yaml
+vitals/config/gmail-context.yaml
+vitals/config/calendar-context.yaml
+vitals/config/google-apps.yaml
 
 # Borradores personales temporales (si usás vitals/work/inbox/)
 vitals/work/inbox/**/draft-*

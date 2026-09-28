@@ -3,7 +3,7 @@
 # Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
 
 version: 1
-updated: "2026-09-23"
+updated: "2026-09-28"
 documents:
   - id: DOC-ARCH-002
     title: "Arquitectura de la capacidad Atelier"
@@ -86,10 +86,10 @@ documents:
     type: guide
     tags: [atelier, impeccable, guide, vendor]
   - id: DOC-GUIDE-009
-    title: "Google Drive como cerebro — setup para usuarios"
+    title: "Google Drive, Gmail y Calendar como cerebro — setup para usuarios"
     path: 02_guides/drive-cerebro-setup.md
     type: guide
-    tags: [drive, google, onboarding, cerebro, mcp, antigravity, cursor]
+    tags: [drive, gmail, calendar, google, onboarding, cerebro, mcp, antigravity, cursor]
   - id: DOC-GUIDE-016
     title: "Capturar y ordenar conocimiento con /ordenar"
     path: 02_guides/ordenar-captura-conocimiento.md
@@ -111,10 +111,10 @@ documents:
     type: runbook
     tags: [git, collaboration, session]
   - id: DOC-OPS-002
-    title: "Google Drive — administración OAuth (Google Cloud)"
+    title: "Google Workspace — administración OAuth (Google Cloud)"
     path: 06_operations/drive-google-cloud-admin.md
     type: runbook
-    tags: [drive, google-cloud, oauth, security, mcp]
+    tags: [drive, gmail, calendar, google-cloud, oauth, security, mcp]
   - id: DOC-OV-001
     title: "Portal de documentación del proyecto"
     path: README.md

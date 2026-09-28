@@ -1,13 +1,15 @@
 ---
 id: DOC-GUIDE-009
-title: "Google Drive como cerebro — setup para usuarios"
+title: "Google Drive, Gmail y Calendar como cerebro — setup para usuarios"
 type: guide
 status: canonical
 owner: dt-platform
 created: 2026-07-30
-updated: 2026-07-30
+updated: 2026-09-28
 tags:
   - drive
+  - gmail
+  - calendar
   - google
   - onboarding
   - cerebro
@@ -16,7 +18,7 @@ tags:
   - cursor
 domain:
   - meta
-summary: Conectar Google Drive al DT — OAuth, MCP por IDE (Cursor o Antigravity), selector de carpetas y consulta de contexto sin Git.
+summary: Conectar Drive, Gmail o Calendar al DT — un OAuth, MCP por IDE, preguntar una app o las tres, selectores locales sin Git.
 related:
   - DOC-OPS-002
   - DOC-GUIDE-001
@@ -25,6 +27,8 @@ related:
   - DOC-OPS-001
 keywords:
   - drive
+  - gmail
+  - calendar
   - google
   - mcp
   - cerebro
@@ -40,24 +44,41 @@ source_of_truth: true
 review_cycle_days: 90
 ---
 
-# Google Drive como cerebro — setup para usuarios
+# Google Drive, Gmail y Calendar como cerebro — setup para usuarios
 
 ## Summary
 
-Conectá **solo las carpetas que elijas** de tu Google Drive para que el DT las consulte como contexto. No hace falta Git ni mover archivos. Credenciales de la empresa se instalan **fuera del repo**; tu selección de carpetas queda **solo en tu PC**.
+Conectá Drive, Gmail y/o Calendar para que el DT los consulte (y, en Calendar, cree eventos; en Gmail, deje **borradores**). **Un solo login de Google.** En `/drive`, `/gmail` o `/calendar` el DT **pregunta siempre** si autorizás solo esa app o las tres. Credenciales de la empresa fuera del repo; selectores solo en tu PC.
 
-**No confundir:** en Google Cloud habilitás la **Google Drive API**. No hace falta instalar el plugin "Google Drive MCP" del marketplace de Cursor — usamos el servidor MCP del DT (`google-drive-dt`) con credenciales Desktop de tu empresa.
+**No confundir:** en Google Cloud habilitás las APIs (Drive, y si aplica Gmail y Calendar). No hace falta el plugin "Google Drive MCP" del marketplace de Cursor — usamos `google-drive-dt` (`npx @ibarcarty/mcp-server-google-drive`).
 
-## Qué instala `/drive` (4 capas)
+Spec interno: `vitals/specs/google-apps-mcp.md`.
+
+## Qué instala el setup (4 capas)
 
 | Capa | Qué es | ¿Por persona? | ¿Dónde vive? |
 |------|--------|---------------|--------------|
 | 1. Credenciales OAuth | JSON de la app interna de la empresa | No — una para todos | Canal interno → `~/.config/mcp-server-google-drive/oauth-credentials.json` |
-| 2. Login Google | Token de **tu** cuenta (solo lectura) | Sí | `~/.config/mcp-server-google-drive/tokens.json` |
-| 3. MCP en el IDE | Le dice al IDE cómo arrancar el servidor Drive | Sí — por IDE | Cursor: `~/.cursor/mcp.json` · Antigravity: `~/.gemini/config/mcp_config.json` |
-| 4. Selector de carpetas | Qué carpetas compartís al cerebro | Sí | `vitals/config/drive-context.yaml` (local, no Git) |
+| 2. Login Google | Token de **tu** cuenta (la que hace clic en el consentimiento) | Sí | `~/.config/mcp-server-google-drive/tokens.json` |
+| 3. MCP en el IDE | Cómo arrancar el servidor | Sí — por IDE | Cursor: `~/.cursor/mcp.json` · Antigravity: `~/.gemini/config/mcp_config.json` |
+| 4. Selectores | Carpetas / etiquetas / calendarios | Sí | `vitals/config/*-context.yaml` + `google-apps.yaml` (local, no Git) |
 
-El MCP **no se clona al repo**: corre con `npx` cuando el IDE lo necesita.
+El MCP **no se clona al repo**: corre con `npx`. No hace falta desplegar Cloud Run para uso en el IDE.
+
+## Embudo (una app o las tres)
+
+Al invocar `/drive`, `/gmail` o `/calendar` el DT pregunta si el acceso es **solo esa app** o **las tres**. Después:
+
+```bash
+./scripts/setup-drive.sh ruta/al/dt-drive-credentials.json --apps drive
+./scripts/setup-drive.sh --apps gmail
+./scripts/setup-drive.sh --apps calendar
+./scripts/setup-drive.sh --apps all
+```
+
+`--apps` se puede combinar (`drive,gmail`). Si el token no tiene esos scopes, se reabre el navegador.
+
+Drive en el DT queda **solo lectura**. Gmail: lectura (si el MCP trae esas tools) + borradores, **sin enviar**. Calendar: leer y escribir eventos.
 
 ## Antes de empezar
 
@@ -79,9 +100,10 @@ El MCP **no se clona al repo**: corre con `npx` cuando el IDE lo necesita.
 ```text
 1. Descargá dt-drive-credentials.json (canal interno)
 2. /yo
-3. ./scripts/setup-drive.sh ruta/al/dt-drive-credentials.json
-4. Reiniciá Cursor
-5. /drive → elegí carpetas y describí qué hay en cada una
+3. /drive (o /gmail o /calendar) — el DT pregunta si es una app o las tres
+4. ./scripts/setup-drive.sh ruta/al/dt-drive-credentials.json --apps …
+5. Reiniciá Cursor
+6. Completá el selector de esa app
 ```
 
 ### Detalle paso a paso
@@ -91,16 +113,16 @@ El MCP **no se clona al repo**: corre con `npx` cuando el IDE lo necesita.
 3. **Setup** — en terminal, desde la raíz del repo:
 
    ```bash
-   ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json
+   ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --apps drive
    ```
 
    El script:
    - Copia credenciales a `~/.config/` (chmod 600)
-   - Abre el navegador para login Google (**solo lectura**)
+   - Abre el navegador para login Google (scopes según `--apps`)
    - Registra `google-drive-dt` en `~/.cursor/mcp.json`
 
 4. **Reiniciar Cursor** — Settings → MCP → `google-drive-dt` en verde.
-5. **Selector** — en el chat: `/drive`. El DT lista carpetas; elegís por número; describís el propósito de cada una.
+5. **Selector** — `/drive` (carpetas), `/gmail` (etiquetas) o `/calendar` (calendarios).
 
 ### Verificar en Cursor
 
@@ -110,14 +132,14 @@ Settings → MCP → servidor **`google-drive-dt`** activo (indicador verde).
 
 ## Opción B — Antigravity
 
-El command **`/drive`** y el skill **`dt-drive`** ya están en el repo (`.agents/workflows/drive.md`, `.agents/skills/dt-drive/`). El OAuth es el mismo; solo cambia dónde se registra el MCP.
+El command **`/drive`** (y `/gmail`, `/calendar`) y las skills **`dt-drive`**, **`dt-gmail`**, **`dt-calendar`** ya están en el repo. El OAuth es el mismo; solo cambia dónde se registra el MCP.
 
 ### Tarjeta rápida
 
 ```text
 1. Descargá dt-drive-credentials.json (canal interno)
 2. /yo
-3. ./scripts/setup-drive.sh ruta/al/dt-drive-credentials.json --ide antigravity
+3. ./scripts/setup-drive.sh ruta/al/dt-drive-credentials.json --ide antigravity --apps drive
    (o --ide all si también usás Cursor)
 4. Reiniciá Antigravity
 5. /drive → elegí carpetas
@@ -128,7 +150,7 @@ El command **`/drive`** y el skill **`dt-drive`** ya están en el repo (`.agents
 1. **Credenciales + OAuth** — mismo script que Cursor:
 
    ```bash
-   ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --ide antigravity
+   ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --ide antigravity --apps drive
    ```
 
    Escribe en `~/.gemini/config/mcp_config.json` (Antigravity 2.0+). Si tu versión es anterior, el script también prueba `~/.gemini/antigravity/mcp_config.json`.
@@ -149,9 +171,11 @@ El command **`/drive`** y el skill **`dt-drive`** ya están en el repo (`.agents
    }
    ```
 
+   `GDRIVE_MCP_SCOPES` es una lista separada por comas. El script la arma según `--apps` (Drive, Gmail, Calendar). No pongas secretos ni IDs de proyecto en el repo.
+
 4. **Reiniciar Antigravity** tras guardar la config.
 
-5. **Selector** — `/drive` en el chat → elegir carpetas.
+5. **Selector** — `/drive`, `/gmail` o `/calendar`.
 
 ### Rutas MCP Antigravity (referencia)
 
@@ -168,31 +192,28 @@ Para equipos: preferí **global** (`~/.gemini/config/`) para no commitear config
 ## Opción C — Cursor y Antigravity en la misma máquina
 
 ```bash
-./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --ide all
+./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --ide all --apps drive
 ```
 
 OAuth y credenciales son **una sola vez**; el script registra el MCP en ambos IDEs. Reiniciá **ambos** clientes.
 
 ---
 
-## Qué hace el selector de carpetas (`/drive`)
+## Selectores (`/drive`, `/gmail`, `/calendar`)
 
-1. Lista **Unidades compartidas** y carpetas **raíz** de "Mi unidad".
-2. Vos elegís por número (ej. `1, 3, 5`) — no hace falta compartir todo el Drive.
-3. Por cada carpeta: una frase de qué contiene + keywords opcionales.
-4. Guarda `vitals/config/drive-context.yaml` (**no va a GitHub**).
+**Drive:** unidades compartidas y carpetas raíz; propósito por carpeta; `drive-context.yaml`. `full_drive` solo si lo pedís.
 
-Modo **`full_drive`**: solo si lo pedís explícitamente ("todo mi Drive").
+**Gmail:** etiquetas y/o queries; `gmail-context.yaml`. `full_mailbox` solo si lo pedís. El DT no envía mail.
+
+**Calendar:** por defecto `primary`; IDs extra si los pegás; `calendar-context.yaml`.
+
+Nada de eso va a GitHub. También se actualiza `google-apps.yaml`.
 
 ## Uso diario (después del setup)
 
-Ejemplos de prompts:
-
-- *"Buscá en mis briefs de clientes el documento de Acme"*
-- *"Resumí el reporte de marzo en la carpeta Reportes"*
-- *"¿Qué propuestas tenemos pendientes según Drive?"*
-
-El DT consulta **solo** las carpetas registradas (regla `18-drive-contexto`).
+- Drive: *“según el brief en Drive…”* — regla `18-drive-contexto`.
+- Gmail: *“dejame un borrador a…”* / búsqueda si el MCP tiene tools de lectura — regla `19-gmail-contexto`.
+- Calendar: *“qué tengo mañana”* / *“agendá 30 min…”* — regla `21-calendar-contexto`.
 
 ## Qué NO se comparte
 
@@ -200,15 +221,16 @@ El DT consulta **solo** las carpetas registradas (regla `18-drive-contexto`).
 |------|----------------------|
 | Credenciales OAuth de la empresa | **No** |
 | Tu token de Google | **No** |
-| Carpetas que elegiste | **No** |
-| Contenido de archivos | **No** — lectura bajo demanda |
+| Carpetas, etiquetas, calendarios elegidos | **No** |
+| Contenido de archivos, mails o eventos | **No** — bajo demanda |
+| Cuenta o proyecto GCP usados en esta máquina | **No** |
 
-## Cambiar carpetas / desvincular
+## Cambiar selectores / desvincular
 
 | Acción | Cómo |
 |--------|------|
-| Agregar o quitar carpetas | `/drive` de nuevo |
-| Desvincular cuenta | Borrar `tokens.json` y opcionalmente `drive-context.yaml` |
+| Agregar o quitar carpetas / labels / calendarios | El command de esa app de nuevo |
+| Desvincular cuenta | Borrar `tokens.json` y los YAML locales (`drive-context`, `gmail-context`, `calendar-context`, `google-apps`) |
 | Rotar credenciales empresa | Admin regenera secret en GCP → redistribuir JSON |
 
 ## Problemas frecuentes

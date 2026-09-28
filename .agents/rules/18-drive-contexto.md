@@ -1,6 +1,6 @@
 ---
 description: OBLIGATORIO al consultar Google Drive vía MCP — solo carpetas registradas, solo lectura, consulta dirigida
-globs: "vitals/config/drive-context.yaml, vitals/config/drive-context.yaml.example"
+globs: "vitals/config/drive-context.yaml, vitals/config/drive-context.yaml.example, vitals/config/google-apps.yaml, vitals/config/google-apps.yaml.example"
 alwaysApply: false
 ---
 
@@ -21,6 +21,7 @@ Integración **opcional** vía MCP. Aplica cuando existe `vitals/config/drive-co
 3. **Consulta dirigida** — listar/buscar primero; leer solo archivos relevantes. No volcar carpetas enteras al contexto.
 4. **Charter no-secrets** — no persistir en Git tokens, credenciales ni contenido sensible de Drive sin confirmación (`vitals/charter/no-secrets.md`).
 5. **Drive ≠ memoria del repo** — Drive es biblioteca consultable; destilar a `vitals/` o `docs/` solo si el usuario pide guardar algo en el cerebro compartido.
+6. **Embudo** — Drive, Gmail y Calendar comparten token. Preguntar siempre si el acceso es solo Drive o también las otras apps (`vitals/specs/google-apps-mcp.md`).
 
 ## Resolución de carpeta
 
@@ -32,6 +33,7 @@ Antes de buscar, leer `vitals/config/drive-context.yaml`:
 
 ## Referencias
 
-- Skill: `.cursor/skills/dt-drive/` · command `/drive`
+- Skill: `.cursor/skills/dt-drive/` · command `/drive` · Gmail `/gmail` · Calendar `/calendar`
+- Spec embudo: `vitals/specs/google-apps-mcp.md`
 - Guía usuario: `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`)
 - Admin OAuth: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`)

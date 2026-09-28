@@ -1,5 +1,7 @@
 # Manifest de sincronización semver — repo canónico El DT.
 # Fuente de verdad: VERSION (raíz). Spec: vitals/specs/project-version.md
+# No copiar este archivo a un producto: ahí VERSION es la app, no el DT.
+# Consumidores: project-version.yaml.example
 
 version: 1
 initialized: true

@@ -2,6 +2,7 @@
 # project-sync-version — alinea semver desde VERSION (raíz) a README, YAML, package.json, etc.
 # Uso: ./scripts/project-sync-version.sh [--dry-run]
 # Manifest: vitals/config/project-version.yaml (sync_paths)
+# En consumer no escribe framework_version y aborta si VERSION es la del DT.
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -20,6 +21,8 @@ if [[ ! -f "$VERSION_FILE" ]]; then
   exit 1
 fi
 
+ruby "$ROOT/scripts/project-version.rb" guard --root "$ROOT" >/dev/null
+
 SEMVER="$(tr -d '[:space:]' < "$VERSION_FILE")"
 if [[ ! "$SEMVER" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   echo "ERROR: VERSION no semver: '$SEMVER'" >&2
@@ -32,8 +35,17 @@ require "json"
 require "yaml"
 
 root = ENV.fetch("ROOT")
+require File.join(root, "scripts/project-version.rb")
+
 semver = ENV.fetch("SEMVER")
 dry = ENV["DRY"] == "true"
+upstream = DtProjectVersion.upstream(root)
+mode = upstream[:mode]
+fw = upstream[:framework_version]
+if mode == "consumer" && fw && semver == fw
+  warn "ERROR: refuse to sync DT framework_version #{fw} onto product files. Run ./scripts/project-resolve-version.sh"
+  exit 3
+end
 manifest_path = File.join(root, "vitals/config/project-version.yaml")
 
 entries = []
@@ -56,18 +68,22 @@ discover.each do |rel|
   entries << { "path" => rel, "type" => "json", "field" => "version" }
 end
 
-# Defaults canónicos DT si manifest vacío
+# Defaults si manifest vacío. En consumer nunca se escribe framework_version.
 if entries.empty?
   entries = [
     { "path" => "README.md", "type" => "readme_badge" },
-    { "path" => "vitals/config/dt-upstream.md", "type" => "yaml_frontmatter", "field" => "framework_version" },
     { "path" => "package.json", "type" => "json", "field" => "version" }
   ]
+  if mode != "consumer"
+    entries.insert(1, { "path" => "vitals/config/dt-upstream.md", "type" => "yaml_frontmatter", "field" => "framework_version" })
+  end
 end
 
 updated = 0
 
 entries.each do |entry|
+  next if DtProjectVersion.consumer_sync_forbidden?(entry, mode)
+
   rel = entry["path"]
   type = entry["type"] || (rel.end_with?(".json") ? "json" : nil)
   field = entry["field"] || "version"
