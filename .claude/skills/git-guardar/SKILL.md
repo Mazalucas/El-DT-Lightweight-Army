@@ -66,7 +66,7 @@ Corré `./scripts/dt-publish-gate.sh`. El exit es una decisión. Leé la línea 
 | **0** | Este checkout está activado con `/oficial` y el árbol no lleva rastros personales. Seguí el flujo completo, incluido push y tag al DT. El commit **no** lleva `operator_id`. |
 | **10** | `origin` es otro repo. Seguí el flujo y pusheá a ese `origin`. No hables del remoto oficial ni de pedir acceso. El commit sí puede llevar `operator_id`. |
 | **20** | No hay `origin`. Podés commitear en local. Sin `git push` y sin `dt-tag-version.sh --push`. No agregues el remoto oficial. Siguiente paso: un repo propio o `/bootstrap`. |
-| **30** o **40** | **Pará.** Sin bump, sin commit, sin push, sin tag. Copiá el mensaje del script. No ofrezcas acceso, invitación ni `gh auth` para publicar el DT. |
+| **30** o **40** | **Pará.** Sin bump, sin commit, sin push, sin tag. Copiá el mensaje del script. No ofrezcas acceso, invitación ni `gh auth` para publicar el DT. Si el 40 dice **keyring o sandbox** y el operador acaba de mostrar `gh api user` = publisher en su terminal, reintentá el gate **una vez** sin sandbox (el agente necesita el llavero). No es un rechazo de identidad. |
 | **50** | El checkout es oficial, pero hay sesión, roster con personas, inbox, postura o notas locales en el árbol. **Pará.** No las stagees ni las borres. El `roster.yaml` versionado sigue en `team: []`. Cuando eso no esté en el commit, volvé a correr el gate. |
 | otro | Pará y mostrá la salida. |
 

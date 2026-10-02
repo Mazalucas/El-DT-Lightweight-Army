@@ -17,6 +17,8 @@
 | [project-sync-version.sh](project-sync-version.sh) | Propaga `VERSION` al producto; en consumer no escribe `framework_version` |
 | [dt-publish-github-release.sh](dt-publish-github-release.sh) | Publica en GitHub Releases la entrada de `CHANGELOG.md` del tag ya pusheado |
 | [test-project-version-isolation.sh](test-project-version-isolation.sh) | Tests: el semver del DT no puede aterrizar en la app |
+| [test-ruby-utf8-locale.sh](test-ruby-utf8-locale.sh) | Tests: los scripts Ruby sobreviven `LANG=C` (Claude Code / CI) |
+| [lib/force_utf8.sh](lib/force_utf8.sh) / [lib/force_utf8.rb](lib/force_utf8.rb) | Candado UTF-8 para entrypoints Ruby (`RUBYOPT=-EUTF-8:UTF-8`) |
 | [dt-context-profile.rb](dt-context-profile.rb) | `/dt-config` — perfil local de reglas siempre activas. No va a Git |
 
 Upstream DT (`/actualizar` Fase B, `/actualizar-dt`): instrucciones en **Markdown** — skills `git-actualizar` y `dt-actualizar` + `vitals/specs/dt-upstream-config.md`. **Sin scripts Ruby de sync.**
@@ -46,4 +48,5 @@ Upstream DT (`/actualizar` Fase B, `/actualizar-dt`): instrucciones en **Markdow
 ./scripts/sync-ide.sh --check    # solo paridad multi-IDE
 ./scripts/sync-commands-from-meta.sh --check
 ruby scripts/sync-catalog.rb --check
+./scripts/test-ruby-utf8-locale.sh
 ```

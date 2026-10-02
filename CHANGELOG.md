@@ -6,6 +6,14 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.10.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.10.0) - 2026-10-02
+
+Minor. Quien ya usa el DT sigue con los mismos comandos.
+
+- **`/auditoria-legal`.** Especialista #24: territorio antes de puntuar, catálogo fechado y lo que el código no cubre. Informe gitignoreado en `vitals/work/audits/`.
+- **Locale UTF-8.** `/guardar` y `dt-doctor` ya no revienten si la máquina está en `LANG=C` (Claude Code, CI). Los scripts fuerzan UTF-8.
+- **Gate de publicación.** Si el agente no puede leer el llavero de `gh`, el mensaje dice sandbox/keyring. No te trata como si no fueras el publisher.
+
 ## [1.9.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.9.0) - 2026-09-28
 
 Minor. Quien ya usa el DT sigue con los mismos comandos.

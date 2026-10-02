@@ -10,6 +10,7 @@
 #   ruby scripts/dt-design-select.rb "shopify admin app" --format markdown
 #   ruby scripts/dt-design-select.rb "..." --context .agents/design-context.md
 
+require_relative "lib/force_utf8"
 require "yaml"
 require "optparse"
 

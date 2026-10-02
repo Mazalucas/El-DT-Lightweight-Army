@@ -1,6 +1,6 @@
 # Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agents/workflows
 version: 1
-updated: "2026-09-28"
+updated: "2026-10-02"
 locale: es
 
 groups:
@@ -130,6 +130,13 @@ commands:
     example: "/hack  ·  /hack auth  ·  /hack api  ·  /hack agents  ·  /hack diff"
     skill: hack-audit
     agent: hack-audit
+  auditoria-legal:
+    group: work
+    tagline: "Auditoría de cumplimiento legal del producto — territorio, evidencia y lo que el código no cubre."
+    when: "Antes de publicar una app o web: registro, cookies, analítica, emails, suscripciones, contenido de usuarios."
+    example: "/auditoria-legal  ·  /auditoria-legal eu  ·  /auditoria-legal pagos"
+    skill: auditoria-legal
+    agent: auditoria-legal
   ordenar:
     group: work
     tagline: "Capturar archivos, carpetas y dumps del chat — documentar en la capa correcta y dejar manifest recuperable."

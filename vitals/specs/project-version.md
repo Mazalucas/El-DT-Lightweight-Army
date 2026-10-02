@@ -84,8 +84,13 @@ Al subir un dígito, los de la derecha vuelven a cero.
 
 Discover: `frontend/`, `backend/`, `apps/*/package.json`.
 
+## Encoding
+
+Los scripts Ruby no heredan el locale del host. Claude Code, CI y Docker suelen correr con `LANG=C` (US-ASCII); `File.read` de markdown/YAML entonces revienta. `scripts/lib/force_utf8.rb` + `scripts/lib/force_utf8.sh` fuerzan UTF-8 (`RUBYOPT=-EUTF-8:UTF-8`) en `/guardar`, `dt-doctor` y el resto de entrypoints. No hace falta cambiar el locale de la máquina.
+
 ## Scripts
 
+- [`scripts/lib/force_utf8.rb`](../../scripts/lib/force_utf8.rb) / [`scripts/lib/force_utf8.sh`](../../scripts/lib/force_utf8.sh)
 - [`scripts/project-version.rb`](../../scripts/project-version.rb)
 - [`scripts/project-resolve-version.sh`](../../scripts/project-resolve-version.sh)
 - [`scripts/project-bump-version.sh`](../../scripts/project-bump-version.sh)

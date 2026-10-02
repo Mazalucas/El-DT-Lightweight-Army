@@ -5,7 +5,7 @@ type: overview
 status: canonical
 owner: dt-platform
 created: 2026-05-27
-updated: 2026-09-28
+updated: 2026-10-02
 tags:
   - dt
   - evolution
@@ -336,6 +336,8 @@ Archivos: src/, package.json
 | Command | Grupo | ¿Necesita /yo? |
 |---------|-------|----------------|
 | `/orquestar` | work | Recomendado |
+| `/hack` | work | Recomendado |
+| `/auditoria-legal` | work | Recomendado |
 | `/fast-lane` | work | Recomendado |
 | `/cuestionar` | work | No |
 | `/contexto` | work | No |

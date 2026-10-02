@@ -8,6 +8,7 @@
 # Genera previews HTML: homepage (marketing), pitch scroll (presentación), dashboard (app).
 # Uso legacy: ruby scripts/generate-atelier-previews.rb
 
+require_relative "lib/force_utf8"
 require "yaml"
 
 ROOT = File.expand_path("..", __dir__)

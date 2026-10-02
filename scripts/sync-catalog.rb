@@ -9,6 +9,7 @@
 #   ruby scripts/sync-catalog.rb --check    # falla (exit 1) si hay drift
 #   ruby scripts/sync-catalog.rb --next OV  # imprime el próximo DOC-OV-NNN libre
 
+require_relative "lib/force_utf8"
 require "yaml"
 require "date"
 

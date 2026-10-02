@@ -6,6 +6,8 @@
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/force_utf8.sh
+. "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/lib/force_utf8.sh"
 DRY=false
 
 while [[ $# -gt 0 ]]; do
@@ -31,10 +33,10 @@ fi
 
 export ROOT SEMVER DRY
 ruby <<'RUBY'
+root = ENV.fetch("ROOT")
+require File.join(root, "scripts/lib/force_utf8")
 require "json"
 require "yaml"
-
-root = ENV.fetch("ROOT")
 require File.join(root, "scripts/project-version.rb")
 
 semver = ENV.fetch("SEMVER")

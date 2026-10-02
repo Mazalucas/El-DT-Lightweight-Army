@@ -6,6 +6,8 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/force_utf8.sh
+. "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/lib/force_utf8.sh"
 CONFIG_DIR="${GDRIVE_MCP_CONFIG_DIR:-$HOME/.config/mcp-server-google-drive}"
 OAUTH_PATH="${GDRIVE_MCP_OAUTH_PATH:-$CONFIG_DIR/oauth-credentials.json}"
 TOKEN_PATH="${GDRIVE_MCP_TOKEN_PATH:-$CONFIG_DIR/tokens.json}"

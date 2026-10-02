@@ -11,6 +11,7 @@
 # Uso: TRAFFIC_TOKEN=... ruby scripts/repo-traffic-archive.rb
 #      ruby scripts/repo-traffic-archive.rb --self-check
 
+require_relative "lib/force_utf8"
 require "json"
 require "open3"
 require "time"

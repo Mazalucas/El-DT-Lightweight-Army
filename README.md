@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.9.0**
+**v1.10.0**
 
 Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
@@ -11,7 +11,7 @@ Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](htt
 
 **El DT** es un Director de Proyecto para tu IA: no solo ejecuta — **organiza el trabajo**, **te hace preguntas antes de avanzar**, **propone alternativas** y **te avisa de riesgos** antes de cerrar.
 
-Delega en **23 especialistas** (producto, diseño, marketing, documentación, calidad, seguridad…) y trae herramientas listas para:
+Delega en **24 especialistas** (producto, diseño, marketing, documentación, calidad, seguridad, cumplimiento…) y trae herramientas listas para:
 
 - **Páginas web y productos digitales** — landings, dashboards, pantallas de login ([Atelier](#atelier--diseño-web-y-presentaciones))
 - **Presentaciones y pitches** — decks, slides, material para inversores ([Atelier](#atelier--diseño-web-y-presentaciones))
@@ -20,36 +20,36 @@ Delega en **23 especialistas** (producto, diseño, marketing, documentación, ca
 
 Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y más). **Empezá en 2 minutos:** [`/bienvenida`](#primera-vez) → [`/yo`](#ritual-del-día).
 
-> **El DT no es un prompt:** es un cerebro operativo con ~1.400 documentos canónicos, ~56.000 líneas de orquestación, 23 especialistas, 105 skills y un ecosistema de diseño/marketing/video que suma cientos de miles de líneas de plantillas listas para usar.
+> **El DT no es un prompt:** es un cerebro operativo con ~1.400 documentos canónicos, ~56.000 líneas de orquestación, 24 especialistas, 105 skills y un ecosistema de diseño/marketing/video que suma cientos de miles de líneas de plantillas listas para usar.
 
 ---
 
 ## Índice
 
-- [Qué trae v1.9.0](#que-trae)
+- [Qué trae v1.10.0](#que-trae)
 - [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
 - [Qué puede hacer El DT](#qué-puede-hacer-el-dt)
 - [Comandos principales](#comandos-principales)
 - [Google — `/drive` `/gmail` `/calendar`](#google-drive--drive)
-- [Ordenar · Hack · Atelier · Video · Marketing](#ordenar--captura-de-conocimiento)
+- [Ordenar · Hack · Legal · Atelier · Video · Marketing](#ordenar--captura-de-conocimiento)
 - [Quick setup (English)](#quick-setup-english)
 - [Para el equipo técnico](#para-el-equipo-técnico)
 
 ---
 
-## Qué trae v1.9.0 {#que-trae}
+## Qué trae v1.10.0 {#que-trae}
 
-Capacidad nueva sobre **v1.8.0**. Quien ya usa el DT sigue con los mismos comandos. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
+Capacidad nueva sobre **v1.9.0**. Quien ya usa el DT sigue con los mismos comandos. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **Gmail y Calendar** | `/gmail` y `/calendar` usan el mismo login que `/drive`. El DT pregunta si autorizás una app o las tres. Gmail prepara borradores y no envía mail. Calendar lista y crea eventos. Guía: [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md). |
-| **Versión del producto** | En un repo que adopta el DT, `/guardar` conserva el semver de la app. No copia el número del framework. Spec: [project-version.md](vitals/specs/project-version.md). |
-| **Novedades** | Cada release queda en [CHANGELOG.md](CHANGELOG.md) y en [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases). |
+| **`/auditoria-legal`** | Especialista #24. Territorio antes de puntuar; el informe separa lo que el código cubre de lo que no (contrato, registro, email). Guía: [auditoria-legal.md](docs/03_reference/auditoria-legal.md). |
+| **Locale UTF-8** | `/guardar` y `dt-doctor` no dependen del locale de la máquina. Claude Code / CI con `LANG=C` ya no rompen el sync de versión. |
+| **Gate** | Si el agente no lee el llavero de `gh`, el mensaje dice sandbox — no “no sos el publisher”. |
 
-Skills de esta entrega: `dt-gmail`, `dt-calendar`. Spec: [google-apps-mcp.md](vitals/specs/google-apps-mcp.md).
+Skills de esta entrega: `auditoria-legal`. Spec: [canonical-publish.md](vitals/specs/canonical-publish.md) · [project-version.md](vitals/specs/project-version.md).
 
 ---
 
@@ -66,9 +66,10 @@ Skills de esta entrega: `dt-gmail`, `dt-calendar`. Spec: [google-apps-mcp.md](vi
 | Consultar Drive, Gmail o Calendar | `/drive`, `/gmail` o `/calendar` (opcional — ver [abajo](#google-drive--drive)) |
 | Volcar briefs, notas o dumps al cerebro del repo | `/ordenar` |
 | Auditar seguridad del proyecto (auth, API, secrets…) | `/hack` |
+| Auditar cumplimiento legal (privacidad, cookies, cobros, menores) | `/auditoria-legal` |
 | Afinar qué reglas carga la IA en cada mensaje | `/dt-config` |
 | Validar un plan ya escrito, sin ejecutarlo | `/analisis-propuesta` |
-| Ver el equipo completo de especialistas | [Catálogo de 23](#catálogo-de-los-23-especialistas) |
+| Ver el equipo completo de especialistas | [Catálogo de 24](#catálogo-de-los-24-especialistas) |
 
 Este repo es **memoria compartida + reglas** para que varias personas trabajen con la misma IA sin pisarse. Guía humana: [cerebro del equipo](docs/00_overview/cerebro-equipo-mecanismos-dt.md). La IA lee **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
 
@@ -119,10 +120,11 @@ Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. 
 | Bloque | En pocas palabras |
 |--------|-------------------|
 | **Orquestación** | Clarifica qué querés, planifica, ejecuta y cierra señalando riesgos. Comando principal: `/orquestar`. |
-| **23 especialistas** | Producto, diseño, marketing, documentación, calidad, seguridad… El DT elige quién ayuda según tu pedido. |
+| **24 especialistas** | Producto, diseño, marketing, documentación, calidad, seguridad, cumplimiento… El DT elige quién ayuda según tu pedido. |
 | **Atelier (diseño)** | Landings, dashboards, login, presentaciones — con criterio estético y guardrails anti-“diseño genérico de IA”. |
 | **Captura de conocimiento** | Volcar archivos, carpetas y dumps del chat — clasificar, documentar en la capa correcta y dejar manifest recuperable (`/ordenar`). |
 | **Seguridad** | Auditoría ofensiva-defensiva del propio repo — auth, API, secrets, agentes/IA (`/hack` → subagente **hack-audit**). |
+| **Cumplimiento** | Auditoría legal del producto — territorio, evidencia y lo que el código no cubre (`/auditoria-legal`). |
 | **Videos** | Carril según el pedido: `/recordly`, `/brag`, Hyperframes o `/remotion`. Matriz en [`tools/video/ROUTING.md`](tools/video/ROUTING.md). |
 | **Marketing** | Copy, SEO, lanzamientos y campañas — 42 skills tácticas. |
 
@@ -130,7 +132,7 @@ Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. 
 flowchart TB
   vos[Vos en el chat]
   dt[El DT — orquestador]
-  esp[23 especialistas]
+  esp[24 especialistas]
   atelier[Atelier — webs y presentaciones]
   video[Videos — cuatro carriles]
   mkt[Marketing — 42 skills]
@@ -177,6 +179,7 @@ Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc).
 | **`/contexto`** | Mapa del repo cuando entrás o después de un pull grande |
 | **`/ordenar`** | Volcar archivos y data — documentar en la capa correcta + manifest (skill `dt-ordenar`) |
 | **`/hack`** | Auditoría de seguridad — mentalidad de atacante, entrega defensiva (skill `hack-audit` → subagente **hack-audit**) |
+| **`/auditoria-legal`** | Auditoría de cumplimiento — territorio, evidencia y lo que el código no cubre (skill `auditoria-legal` → subagente **auditoria-legal**) |
 | **`/verificar`** | Verificar números de planillas y reportes con script (skill `data-auditor` → subagente **data-auditor**) |
 | **`/prepr`** | Preparar cambios como pull request |
 | **`/atelier`** | Diseñar webs, dashboards o presentaciones |
@@ -244,6 +247,27 @@ Flujo típico: skill **`hack-audit`** → subagente **`hack-audit`** (evidencia 
 - Referencia: [hack-audit-default.md](docs/03_reference/hack-audit-default.md) (`DOC-REF-010`)
 - Informes locales (gitignored): [`vitals/work/audits/`](vitals/work/audits/)
 - Scanners: [`tools/security/`](tools/security/)
+
+---
+
+## Auditoría legal — `/auditoria-legal`
+
+**`/auditoria-legal`** recorre un catálogo de cumplimiento (privacidad, cookies, edad, email, suscripciones, contenido de usuarios) y entrega cada hallazgo con severidad y arreglo. No es un dictamen: las cifras son techos o un fallo concreto, con fecha.
+
+Si el repo no dice en qué países están los usuarios, la skill pregunta antes de cerrar el informe. España implica la UE. La UE no implica los deberes que son solo de España.
+
+| Comando | Ejemplo |
+|---------|---------|
+| `/auditoria-legal` | Catálogo entero, filtrado por territorio |
+| `/auditoria-legal es` · `eu` · `us` | Un territorio |
+| `/auditoria-legal pagos` · `ugc` · `email` | Solo ese disparador |
+
+La sección **Qué el código no cubre** es obligatoria: contrato con el proveedor, registro del agente de copyright, panel de Stripe, email ya enviado, backups. Un "pasa" en el repositorio no cierra eso.
+
+- Skill: [`.cursor/skills/auditoria-legal/`](.cursor/skills/auditoria-legal/)
+- Subagente: [`.cursor/agents/auditoria-legal.md`](.cursor/agents/auditoria-legal.md)
+- Referencia: [auditoria-legal.md](docs/03_reference/auditoria-legal.md) (`DOC-REF-012`)
+- Informes locales (gitignored): [`vitals/work/audits/`](vitals/work/audits/)
 
 ---
 
@@ -359,13 +383,13 @@ Seguridad y secretos **siempre** aplican, incluso bajo `/fast-lane`.
 
 Detalle: [scripts/README.md](scripts/README.md).
 
-### Subagentes (23) — resumen por grupo
+### Subagentes (24) — resumen por grupo
 
 | Grupo | Especialistas | Ejemplos de uso |
 |-------|---------------|-----------------|
 | **Engineering** | arquitecto, frontend, devops, ui-designer, remotion-producer | APIs, UI, deploy, Atelier, video |
 | **Planning** | prd-creator, srd-creator, development-planner | PRD, specs técnicas, roadmap |
-| **Testing** | qa, data-auditor, hack-audit | Tests, números, auditoría de seguridad |
+| **Testing** | qa, data-auditor, hack-audit, auditoria-legal | Tests, números, auditoría de seguridad, cumplimiento |
 | **Design & UX** | ux-researcher | Personas, journey mapping |
 | **Product** | product-strategist, feedback-synthesizer, researcher | Priorización, research |
 | **Documentation** | doc | README, ADRs, docs por niveles |
@@ -378,9 +402,9 @@ Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigra
 
 **Skills de carril o diagnóstico** (sin subagente nuevo): `video-routing`, `recordly`, `brag`, `analisis-propuesta`.
 
-**Skills con subagente dedicado** (command → skill → agente): `/hack` → `hack-audit` · `/verificar` → `data-auditor`. `/remotion` → `remotion-producer`.
+**Skills con subagente dedicado** (command → skill → agente): `/hack` → `hack-audit` · `/auditoria-legal` → `auditoria-legal` · `/verificar` → `data-auditor`. `/remotion` → `remotion-producer`.
 
-#### Catálogo de los 23 especialistas
+#### Catálogo de los 24 especialistas
 
 | # | Subagente | Grupo | Rol | Invocar cuando (keywords) | Agente (Cursor) | Skill de rol |
 |---|-----------|-------|-----|---------------------------|-----------------|--------------|
@@ -407,6 +431,7 @@ Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigra
 | 21 | **operations-maintainer** | Operations | Monitoreo, incidentes, mantenimiento | `operations`, `monitoring`, `incidentes` | [agente](.cursor/agents/operations-maintainer.md) | [`.agents/skills/operations-maintainer/`](.agents/skills/operations-maintainer/) |
 | 22 | **data-auditor** | Testing | Verificación de números y planillas con script (regla `16-numeric-grounding`) | `planilla`, `csv`, `excel`, `reporte`, `totales`, `reconciliar`, `verificar cifras` | [agente](.cursor/agents/data-auditor.md) | [`.cursor/skills/data-auditor/`](.cursor/skills/data-auditor/) |
 | 23 | **hack-audit** | Testing | Auditoría de seguridad ofensiva-defensiva (`/hack`) | `hack`, `seguridad`, `vulnerabilidades`, `pentest`, `auth`, `permisos`, `IDOR`, `secrets`, `API security` | [agente](.cursor/agents/hack-audit.md) | [`.cursor/skills/hack-audit/`](.cursor/skills/hack-audit/) |
+| 24 | **auditoria-legal** | Testing | Auditoría de cumplimiento legal (`/auditoria-legal`) | `legal`, `RGPD`, `LSSI`, `COPPA`, `cookies`, `privacidad`, `multa`, `suscripción` | [agente](.cursor/agents/auditoria-legal.md) | [`.cursor/skills/auditoria-legal/`](.cursor/skills/auditoria-legal/) |
 
 #### Marketing strategist — 42 skills tácticas
 

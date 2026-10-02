@@ -26,6 +26,7 @@ Usá este archivo para decidir **qué leer primero** y no inflar el contexto.
 | ¿Colaboración Git y zonas? | [../docs/06_operations/git-colaboracion-dt.md](../docs/06_operations/git-colaboracion-dt.md) (`DOC-OPS-001`) |
 | ¿Capturar archivos/dumps y ordenar conocimiento? | `/ordenar` · [../docs/02_guides/ordenar-captura-conocimiento.md](../docs/02_guides/ordenar-captura-conocimiento.md) (`DOC-GUIDE-016`) · [work/knowledge/](work/knowledge/) |
 | ¿Estado de seguridad / riesgos aceptados? | [security/baseline.yaml](security/baseline.yaml) · `/hack` · `DOC-REF-010` (informes en `work/audits/`, gitignoreados) |
+| ¿Cumplimiento legal de una app (RGPD, cookies, cobros, menores)? | `/auditoria-legal` · [../docs/03_reference/auditoria-legal.md](../docs/03_reference/auditoria-legal.md) (`DOC-REF-012`) · informes en `work/audits/`, gitignoreados |
 
 **Ritual de jornada:** `/actualizar` → `/yo` → trabajar → `/guardar` (ver `AGENTS.md`).
 

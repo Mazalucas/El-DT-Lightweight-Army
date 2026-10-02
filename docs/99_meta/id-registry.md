@@ -5,7 +5,7 @@ type: reference
 status: canonical
 owner: dt-platform
 created: 2026-04-19
-updated: 2026-07-02
+updated: 2026-10-02
 tags:
   - documentation
   - ids
@@ -37,7 +37,7 @@ Antes de crear un documento con un prefijo nuevo, añadí una fila a esta tabla 
 | OV | Overview, índices de capa, quickstart, portal `docs/README` | DOC-OV-001 … DOC-OV-010 (DOC-OV-004 = cerebro DT; DOC-OV-010 = índice de guías) |
 | OPS | Operaciones, runbooks en `06_operations` | DOC-OPS-001 … DOC-OPS-002 |
 | CONCEPT | Conceptos en `01_concepts` | DOC-CONCEPT-001 |
-| REF | Referencia técnica en `03_reference` | DOC-REF-001 … DOC-REF-011 |
+| REF | Referencia técnica en `03_reference` | DOC-REF-001 … DOC-REF-012 |
 | ARCH | Arquitectura en `04_architecture` | DOC-ARCH-002 |
 | DEC | Decisiones / ADRs en `05_decisions` | DOC-DEC-001 … DOC-DEC-004 |
 | DESIGN | Conceptos, guías y referencia Atelier | DOC-DESIGN-001 … |

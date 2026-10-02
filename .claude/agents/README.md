@@ -1,8 +1,8 @@
-# Subagentes del DT (23)
+# Subagentes del DT (24)
 
 Definiciones de agente para delegación en Cursor. Cada agente tiene su **skill de rol** canónica en `.cursor/skills/{nombre}/` (espejos generados: `.agents/skills/`, `.claude/skills/` vía `sync-ide`).
 
-**Catálogo completo** (tabla, keywords, skills tácticas): [README raíz — Subagentes (23)](../../README.md#catálogo-de-los-23-especialistas).
+**Catálogo completo** (tabla, keywords, skills tácticas): [README raíz — Subagentes (24)](../../README.md#catálogo-de-los-24-especialistas).
 
 | # | Agente | Archivo |
 |---|--------|---------|
@@ -29,5 +29,6 @@ Definiciones de agente para delegación en Cursor. Cada agente tiene su **skill 
 | 21 | operations-maintainer | [operations-maintainer.md](operations-maintainer.md) |
 | 22 | data-auditor | [data-auditor.md](data-auditor.md) |
 | 23 | hack-audit | [hack-audit.md](hack-audit.md) |
+| 24 | auditoria-legal | [auditoria-legal.md](auditoria-legal.md) |
 
-Plantilla para nuevos roles: [_plantilla-subagente.md](_plantilla-subagente.md) (no cuenta en los 23).
+Plantilla para nuevos roles: [_plantilla-subagente.md](_plantilla-subagente.md) (no cuenta en los 24).

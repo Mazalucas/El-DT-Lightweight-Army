@@ -13,6 +13,7 @@
 #   ruby scripts/dt-doctor.rb            # reporte legible + exit code
 #   ruby scripts/dt-doctor.rb --quiet    # solo el resumen final
 
+require_relative "lib/force_utf8"
 require "yaml"
 require "date"
 require "open3"
@@ -117,6 +118,9 @@ def run_check(label, *cmd)
 end
 
 def check_subscripts
+  %w[scripts/lib/force_utf8.rb scripts/lib/force_utf8.sh].each do |rel|
+    err("scripts", "falta #{rel}") unless File.exist?(File.join(ROOT, rel))
+  end
   run_check("catalog", "ruby", File.join(ROOT, "scripts/sync-catalog.rb"), "--check")
   run_check("commands-parity", "ruby", File.join(ROOT, "scripts/sync-commands-from-meta.rb"), "--check")
   run_check("ide-parity", "ruby", File.join(ROOT, "scripts/sync-ide.rb"), "--check")

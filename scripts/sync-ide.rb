@@ -15,6 +15,7 @@
 #   ruby scripts/sync-ide.rb           # genera/actualiza
 #   ruby scripts/sync-ide.rb --check   # falla (exit 1) si hay drift
 
+require_relative "lib/force_utf8"
 require "yaml"
 require "fileutils"
 

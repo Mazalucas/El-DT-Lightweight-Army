@@ -33,7 +33,7 @@ Lo corre `/guardar` antes del bump, y cualquier push. También instala `.git/hoo
 | 10 | El destino no es el DT | Push a ese remoto |
 | 20 | No hay `origin` | Commit local. Sin push. No agregar el remoto oficial |
 | 30 | El destino es el DT y esta carpeta no está activada, o la marca no coincide | Parar. Sin bump, commit ni push. Sin pedir acceso |
-| 40 | La marca coincide y la sesión de GitHub no es el dueño | Parar. Sin pedir acceso ni cambiar de usuario para publicar |
+| 40 | La marca coincide y la sesión de GitHub no es el dueño, **o** este proceso no pudo leer `gh` (keyring/sandbox) | Parar. Si el mensaje dice keyring/sandbox y en la terminal del operador `gh api user` es el publisher, reintentar el gate sin sandbox. No pedir acceso ni cambiar de usuario |
 | 50 | El checkout es oficial, pero el árbol lleva rastros locales (sesión, roster con personas, inbox, postura, notas) | Parar. Esos paths no entran al commit. El template sigue con `team: []` |
 | 2 | `/oficial` esperando el sí de la ruta | Preguntar y esperar |
 

@@ -14,6 +14,7 @@ Cursor inyecta la descripción de cada subagente en la herramienta **Task**. Us�
 - deploy, ci/cd → **devops** · test, qa → **qa**
 - planilla, csv, totales → **data-auditor** (`/verificar`, regla `16`)
 - seguridad, vulnerabilidades, pentest, /hack → **hack-audit** (`/hack`, canvas-first)
+- legal, cumplimiento, RGPD, LSSI, COPPA, cookies, privacidad, multa, /auditoria-legal → **auditoria-legal** (`/auditoria-legal`, canvas-first)
 - plan o propuesta ya escrita, validar approach, panel multi-modelo → skill **analisis-propuesta** (`/analisis-propuesta`; sin subagente nuevo)
 - ordenar, capturar conocimiento, volcar archivos, dump → **`/ordenar`** (skill `dt-ordenar`; redacción pesada → **doc**)
 - docs, readme → **doc** · research → **researcher**
@@ -25,7 +26,7 @@ Cursor inyecta la descripción de cada subagente en la herramienta **Task**. Us�
 - carril `/brag` → skill **brag** (caché en `output/.cache/brag/`, sin subagente nuevo)
 - operations, monitoring → **operations-maintainer**
 
-Lista completa y keywords: [README — Subagentes](README.md#catálogo-de-los-23-especialistas).
+Lista completa y keywords: [README — Subagentes](README.md#catálogo-de-los-24-especialistas).
 
 ## Prompt de delegación (compacto)
 
@@ -35,6 +36,7 @@ Lista completa y keywords: [README — Subagentes](README.md#catálogo-de-los-23
 4. Si **código** (`arquitecto`, `frontend`, `devops`, `qa`, `remotion-producer`): bloque reuse — skill `engineering-reuse`, diff mínimo, sección **Qué reutilicé**.
 5. Si **cifras**: bloque numérico — regla `16`, script ejecutado, etiquetas de procedencia.
 6. Si **seguridad** (`hack-audit`): bloque defensivo — sin exploits/PoCs; secretos redactados; **hallazgo sin traza origen→sink va a Sospechas** (tope MEDIUM); evidencia determinista (`tools/security/scan-repo.sh`) antes del juicio; canvas-first (`17`) e informe gitignoreado.
+7. Si **cumplimiento** (`auditoria-legal`): territorio antes de puntuar; cifras solo del catálogo fechado; lo que vive fuera del repo va a **No verificable**, explicado en castellano; canvas-first (`17`) e informe gitignoreado.
 
 Varios pedidos en un mensaje: cada agente solo su rol; fuera de alcance → `DEFER: <rol>`.
 

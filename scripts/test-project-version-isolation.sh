@@ -3,6 +3,8 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/force_utf8.sh
+. "$ROOT/scripts/lib/force_utf8.sh"
 RUBY=(ruby "$ROOT/scripts/project-version.rb")
 FAILS=0
 
@@ -43,6 +45,7 @@ assert_file_has() {
 make_consumer() {
   local dir="$1"
   mkdir -p "$dir/vitals/config" "$dir/scripts"
+  ln -s "$ROOT/scripts/lib" "$dir/scripts/lib"
   ln -s "$ROOT/scripts/project-version.rb" "$dir/scripts/project-version.rb"
   ln -s "$ROOT/scripts/project-bump-version.sh" "$dir/scripts/project-bump-version.sh"
   ln -s "$ROOT/scripts/project-sync-version.sh" "$dir/scripts/project-sync-version.sh"
@@ -128,6 +131,7 @@ assert_file_has "$TMP/pv-new.txt" "era la del DT" "message says DT version was d
 # --- 4. canonical: VERSION is the DT, bump still works ---
 C4="$TMP/canonical"
 mkdir -p "$C4/vitals/config" "$C4/scripts"
+ln -s "$ROOT/scripts/lib" "$C4/scripts/lib"
 ln -s "$ROOT/scripts/project-version.rb" "$C4/scripts/project-version.rb"
 ln -s "$ROOT/scripts/project-bump-version.sh" "$C4/scripts/project-bump-version.sh"
 cat >"$C4/vitals/config/dt-upstream.md" <<'EOF'

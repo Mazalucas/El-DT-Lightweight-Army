@@ -10,11 +10,12 @@ Cerebro compartido de **El DT**. Reglas operativas: **`.cursor/rules/`** (Cursor
 | Sesión local | `vitals/ops/session.yaml` — sin `operator.id` → **`/yo`** |
 | Cuánto contexto | `/dt-config` — perfil local, no va a Git |
 | Commands | `vitals/config/commands-meta.yaml` |
-| Reglas y subagentes | `.cursor/rules/` · [README — 23 especialistas](README.md#catálogo-de-los-23-especialistas) |
+| Reglas y subagentes | `.cursor/rules/` · [README — 24 especialistas](README.md#catálogo-de-los-24-especialistas) |
 | Stack web | `docs/03_reference/web-stack-default.md` · regla `08-stack-web-default` |
 | Reuse / números | reglas `15-engineering-reuse`, `16-numeric-grounding` |
 | Docs IA | `docs/99_meta/protocolo-documentacion-ia.md` · regla `02-documentacion` |
 | Pulso / specs DT | `vitals/INDEX.md` |
+| Cumplimiento legal de una app | `/auditoria-legal` · `docs/03_reference/auditoria-legal.md` (`DOC-REF-012`) |
 | Captura de conocimiento | `/ordenar` · `docs/02_guides/ordenar-captura-conocimiento.md` (`DOC-GUIDE-016`) |
 | Google Drive / Gmail / Calendar (opcional) | `docs/02_guides/drive-cerebro-setup.md` · `/drive` `/gmail` `/calendar` |
 | Atelier / marketing táctico | `.cursor/skills/atelier/` · guías `design/*/GUIDE.md`, `marketing/*/GUIDE.md` |

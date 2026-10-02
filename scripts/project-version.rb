@@ -13,6 +13,7 @@
 #   3  VERSION coincide con framework_version (guard: hay que resolver antes)
 #   64 uso
 
+require_relative "lib/force_utf8"
 require "json"
 require "yaml"
 

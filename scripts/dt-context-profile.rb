@@ -10,6 +10,7 @@
 #   ruby scripts/dt-context-profile.rb apply --phrase "Docs"
 #   ruby scripts/dt-context-profile.rb self-check
 
+require_relative "lib/force_utf8"
 require "fileutils"
 require "json"
 require "time"

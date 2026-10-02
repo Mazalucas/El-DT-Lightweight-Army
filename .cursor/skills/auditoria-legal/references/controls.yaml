@@ -1,0 +1,566 @@
+# Catálogo de /auditoria-legal. La skill recorre esta lista; no la parafrasea de memoria.
+# Las cifras son techos o un fallo concreto, con fecha. No son multas ya aplicadas.
+version: 1
+updated: "2026-10-02"
+figures_as_of_note: "Si la fecha de hoy es posterior a figure.as_of, no actualices el número de memoria."
+
+# ES implica EU. Un estado de EEUU implica US. EU no implica ES.
+# ANY entra con cualquier territorio declarado.
+assumption_if_user_declines: [ES, EU, US]
+
+standing_gaps:
+  - id: PUBLIC-REGISTRY
+    title: "Un registro en un organismo no está en el repositorio"
+    when: "Territorio US y hay contenido de usuarios, o territorio EU y hay encargados en EEUU"
+    what: "Hay actos que solo existen si un organismo o una lista oficial los tienen anotados. El agente de copyright del DMCA se registra en la Oficina de Copyright de EEUU. La adhesión al Data Privacy Framework es una certificación pública del proveedor, no un import en el código."
+    code_can: "Si hay una página de aviso con nombre y email del agente, o si el proveedor está nombrado en la política de privacidad."
+    real_world: "Esa página no demuestra que el registro esté pagado y activo, ni que el proveedor siga en la lista oficial. Hasta mirar el directorio, el ítem queda en no verificable."
+  - id: SIGNED-CONTRACT
+    title: "El SDK no es el contrato con quien trata los datos"
+    when: "Territorio EU y hay terceros (base de datos, cobro, email, analítica, errores)"
+    what: "El RGPD pide un contrato con cada encargado: qué datos toca, para qué, y qué pasa si hay una brecha. Firebase, Stripe, el email y la analítica son encargados cuando tratan datos por tu cuenta."
+    code_can: "Qué paquetes y qué claves de servicio usa la app."
+    real_world: "package.json no es la firma. El contrato está en el panel del proveedor o en un PDF que alguien aceptó. Si no está en el repo, no digas que cumple."
+  - id: MESSAGE-SENT
+    title: "La plantilla del repo no es el mensaje que la persona recibió"
+    when: "Hay email comercial o SMS"
+    what: "La baja, la dirección postal y el texto de consentimiento tienen que estar en el mensaje que salió, no solo en un componente que quizá no se usa."
+    code_can: "Plantillas, componentes de email y textos de alta de SMS que estén en el repo."
+    real_world: "Una campaña armada en Mailchimp, Resend o Twilio puede ignorar esa plantilla. Hay que abrir un envío real o el editor del proveedor."
+  - id: VENDOR-DASHBOARD
+    title: "El interruptor del proveedor suele vivir fuera de Git"
+    when: "Hay analítica, session replay, Stripe u otro cobro recurrente"
+    what: "Grabar sesiones, enmascarar teclas, el texto de renovación junto al botón de pago y la prueba de baja son ajustes del panel de Hotjar, PostHog, Stripe u otro. Muchas veces no están en el código."
+    code_can: "Si el SDK se inicializa en el repo y con qué opciones (si esas opciones están escritas)."
+    real_world: "Si la opción no está en el código, no asumas el default benigno ni el dañino. Queda no verificable y se pregunta."
+  - id: LEGAL-ENTITY
+    title: "Quién responde es una persona jurídica, no un archivo"
+    when: "Territorio ES, o hay venta a consumidores"
+    what: "El aviso legal español pide denominación, NIF, domicilio y un medio de contacto. El desistimiento y las facturas también salen de esa identidad."
+    code_can: "Si esos datos están escritos en una página del repo."
+    real_world: "Si no están, el código no sabe quién es el prestador. Hay que pedirlos. Inventarlos es peor que dejar el hueco marcado."
+  - id: DELETION-COPIES
+    title: "Borrar en tu base no borra las copias"
+    when: "Hay cuentas de usuario"
+    what: "El derecho de supresión y el borrado de cuenta de las tiendas piden que el dato deje de estar también en backups, en el email, en la analítica y en el cobro, dentro de un plazo."
+    code_can: "Si existe un botón o un endpoint de borrar cuenta y qué tablas toca."
+    real_world: "Ese endpoint no enseña la política de backups ni si Stripe, el ESP o el session replay borran al mismo usuario."
+  - id: CONSENT-PROOF
+    title: "Un banner no es la prueba de qué aceptó esa persona"
+    when: "Territorio EU y hay cookies, newsletter o alta de cuenta"
+    what: "Si hay un conflicto, hace falta poder mostrar qué texto vio, cuándo, y qué opción eligió. Sin ese registro, el banner es una pantalla, no una prueba."
+    code_can: "Si el componente existe y si guarda un identificador, una fecha y la versión del texto."
+    real_world: "El diseño del banner no demuestra que ese registro exista en producción ni que rechazar sea tan fácil como aceptar en el sitio publicado."
+  - id: BUSINESS-FACTS
+    title: "Los umbrales de negocio no están en el código"
+    when: "Territorio US"
+    what: "Varias leyes de EEUU solo aplican si facturás por encima de un umbral, si tenés cierto volumen de personas o si vendés datos. El CCPA/CPRA es el caso típico. Por debajo, California igual suele pedir una política de privacidad (CalOPPA)."
+    code_can: "Nada fiable sobre facturación o número de usuarios."
+    real_world: "No marques Crítico por CCPA solo porque hay un usuario en internet. Preguntá el umbral. Mientras, el control queda no verificable."
+  - id: HUMAN-RUNBOOK
+    title: "Avisar una brecha es un procedimiento de personas"
+    when: "Se tratan datos personales"
+    what: "En la UE hay 72 horas para avisar a la autoridad cuando la brecha lo exige. En EEUU cada estado tiene su propio aviso a las personas afectadas."
+    code_can: "Logs, alertas, o un runbook si está escrito en el repo."
+    real_world: "Un logger no es el teléfono de quien avisa, ni el criterio de qué es grave, ni el texto al usuario. Si no hay runbook, dilo."
+  - id: AGE-IS-A-CLAIM
+    title: "Una casilla de edad es una declaración, no una comprobación"
+    when: "Hay registro o recogida de datos y el producto puede llegar a menores"
+    what: "COPPA (EEUU, menores de 13) y la edad europea (España 14, varios países 16) no se cierran con un checkbox que cualquiera marca. Si el servicio se dirige a niños o sabés que hay niños, el listón sube a consentimiento de madre, padre o tutor."
+    code_can: "Si el formulario pregunta fecha de nacimiento o bloquea el alta por debajo de una edad."
+    real_world: "Eso no demuestra verificación parental ni que la edad elegida coincida con el país del usuario. Una sola puerta a los 13 deja fuera a España y a los países de 16."
+
+controls:
+  - id: COPPA-AGE
+    band: video
+    title: "Registro o recogida de datos sin pregunta de edad"
+    severity: critico
+    jurisdictions: [US]
+    triggers: [signup, minors]
+    applies_when: "Hay cuenta, formulario o analítica que identifica, y el producto puede llegar a menores en EEUU."
+    look_for:
+      - "formularios de alta, dateOfBirth, age, birthday"
+      - "coppa, parental, under 13"
+    pass: "Hay puerta de edad antes de recoger datos y, si el servicio se dirige a menores de 13, un flujo de consentimiento parental. La casilla sola no alcanza: ver AGE-IS-A-CLAIM."
+    remedy: "Preguntar la edad antes del dato. Si puede haber menores de 13, no recoger la cuenta hasta el consentimiento del tutor, o no dirigir el producto a ese público."
+    figure:
+      as_of: "2025-01"
+      text: "Techo civil de la FTC por infracción, unos 53.088 USD a enero de 2025, ajustado por inflación. No es una multa automática por cada alta."
+    gap: AGE-IS-A-CLAIM
+  - id: THIRD-PARTY-IP
+    band: video
+    title: "Fuentes o scripts que envían la IP a un tercero antes del consentimiento"
+    severity: alto
+    jurisdictions: [EU]
+    triggers: []
+    applies_when: "Cualquier web o app que cargue recursos no esenciales desde el servidor de otro."
+    look_for:
+      - "fonts.googleapis.com, fonts.gstatic.com"
+      - "scripts de mapas, píxeles, CDNs de analítica en el primer HTML"
+    pass: "Fuentes autoalojadas. Nada no esencial carga antes de que la persona elija."
+    remedy: "Autoalojar las fuentes. Retrasar el resto de terceros hasta el consentimiento."
+    figure:
+      as_of: "2022-01"
+      text: "Un fallo de Múnich de enero de 2022 (3 O 17493/20) concedió 100 EUR a un demandante por la IP enviada a Google Fonts. No es una tarifa por visita."
+    gap: CONSENT-PROOF
+  - id: SESSION-REPLAY
+    band: video
+    title: "Grabación de sesión o de teclas"
+    severity: critico
+    jurisdictions: [US]
+    triggers: [analitica]
+    applies_when: "Hay analítica que puede grabar la pantalla o el teclado (Hotjar, FullStory, Clarity, PostHog replay, LogRocket y similares)."
+    look_for:
+      - "hotjar, fullstory, clarity, logrocket, posthog session, rrweb"
+      - "maskAllInputs, blockSelector, recordCrossOriginIframes"
+    pass: "No hay replay, o está apagado hasta un consentimiento previo y las teclas de campos sensibles van enmascaradas en la config del repo."
+    remedy: "Apagar el replay por defecto. Si se usa, consentimiento antes de grabar y máscara de inputs. No grabar contraseñas ni pagos."
+    figure:
+      as_of: "2024-01"
+      text: "La CIPA de California (Penal Code 631) prevé 5.000 USD por violación o el triple del daño, lo que sea mayor. Es la teoría de las demandas por session replay, no una factura por sesión."
+    gap: VENDOR-DASHBOARD
+  - id: CAN-SPAM
+    band: video
+    title: "Correo comercial sin baja ni dirección postal"
+    severity: alto
+    jurisdictions: [US]
+    triggers: [email]
+    applies_when: "Emails de lanzamiento, newsletter o promociones a destinatarios en EEUU."
+    look_for:
+      - "plantillas de email, unsubscribe, List-Unsubscribe"
+      - "dirección postal en el pie"
+    pass: "El mensaje se identifica como comercial, tiene dirección postal física y una baja que deja de enviar en el plazo de la ley."
+    remedy: "Pie con dirección postal, enlace de baja real, y asunto que no disimule la publicidad."
+    figure:
+      as_of: "2025-01"
+      text: "Techo civil de CAN-SPAM por email, en la misma escala de ajuste de la FTC (unos 53.088 USD a enero de 2025). No es una multa por cada envío ya cursada."
+    gap: MESSAGE-SENT
+  - id: AUTO-RENEW
+    band: video
+    title: "Suscripción sin las condiciones de renovación junto al botón"
+    severity: critico
+    jurisdictions: [US]
+    triggers: [pagos]
+    applies_when: "Cobro recurrente con Stripe u otro."
+    look_for:
+      - "stripe checkout, subscription, mode: subscription"
+      - "texto de renovación, precio, periodo, cancelación junto al CTA"
+    pass: "Antes del botón se ven precio, cada cuánto renueva, cómo cancelar, y el acto es afirmativo. En California el aviso tiene que estar claro y junto al consentimiento."
+    remedy: "Poner las condiciones al lado del botón, no solo en un enlace a términos. Guardar la prueba de ese consentimiento."
+    figure:
+      as_of: "2025-07"
+      text: "La ley de renovación automática de California puede tratar el cargo mal informado como un regalo a devolver. A nivel federal sigue ROSCA. La regla FTC «click to cancel» no se da por vigente: su estado hay que verificarlo, no hardcodearlo."
+    gap: VENDOR-DASHBOARD
+  - id: DMCA-AGENT
+    band: video
+    title: "Contenido de usuarios sin agente de copyright"
+    severity: critico
+    jurisdictions: [US]
+    triggers: [ugc]
+    applies_when: "Los usuarios suben fotos, vídeo o texto en un servicio dirigido a EEUU."
+    look_for:
+      - "upload, storage de imágenes de usuarios"
+      - "designated agent, dmca, copyright notice"
+    pass: "Hay una página de agente designado con datos de contacto y el registro ante la Oficina de Copyright está confirmado fuera del repo."
+    remedy: "Publicar el aviso y registrar el agente. Sin el registro no hay puerto seguro: una imagen de otro puede reclamarse al operador."
+    figure:
+      as_of: "2024-01"
+      text: "El daño estatutario por obra va de 750 a 30.000 USD, y puede llegar a 150.000 USD si la infracción es dolosa. No es el resultado habitual. La tasa del agente fue históricamente de 6 USD; confirmar el importe vigente en la Oficina de Copyright."
+    gap: PUBLIC-REGISTRY
+  - id: LAWFUL-BASIS
+    band: core
+    title: "Una base jurídica por cada finalidad"
+    severity: alto
+    jurisdictions: [EU]
+    triggers: []
+    applies_when: "Hay personas en la UE. Analítica, marketing y cobro no comparten un único banner."
+    look_for:
+      - "política de privacidad, bases jurídicas, legitimate interest, consent"
+    pass: "Cada finalidad (cuenta, cobro, analítica, marketing) tiene su base escrita y el producto se comporta así."
+    remedy: "Separar fines. El cobro puede ser contrato. La analítica no esencial y el marketing piden consentimiento."
+    figure:
+      as_of: "2018-05"
+      text: "RGPD art. 6. Las sanciones del reglamento dependen de la autoridad y del caso. No cites un importe genérico."
+    gap: CONSENT-PROOF
+  - id: PRIVACY-NOTICE
+    band: core
+    title: "Información clara antes de recoger el dato"
+    severity: alto
+    jurisdictions: [EU, US]
+    triggers: []
+    applies_when: "Cualquier formulario, cuenta o SDK que recoja datos."
+    look_for:
+      - "privacy, privacidad, política de privacidad"
+    pass: "Antes de recoger: quién es, para qué, base, destinatarios, transferencias, plazos, derechos y autoridad de control. En California, política aunque no llegues al umbral del CCPA."
+    remedy: "Publicar la política y enlazarla en el alta y en el pie."
+    figure:
+      as_of: "2018-05"
+      text: "RGPD art. 13 y 14. CalOPPA exige política en sitios comerciales que recogen datos de residentes de California, por debajo del umbral del CCPA."
+    gap: LEGAL-ENTITY
+  - id: COOKIES
+    band: core
+    title: "Cookies y píxeles con consentimiento previo y rechazo equivalente"
+    severity: alto
+    jurisdictions: [EU]
+    triggers: []
+    applies_when: "Algo no esencial (analítica, ads, replay) puede cargarse al entrar."
+    look_for:
+      - "cookie banner, consent, gtag, Consent Mode"
+      - "cookies no esenciales en el primer load"
+    pass: "Nada no esencial carga antes de elegir. Rechazar está en la misma capa que aceptar. No hay casillas premarcadas."
+    remedy: "Bloquear terceros hasta el sí. Botón de rechazo visible al mismo nivel que aceptar."
+    figure:
+      as_of: "2024-01"
+      text: "LSSI en España y ePrivacy. La AEPD pide que rechazar no sea más difícil que aceptar. No es un porcentaje de la facturación: son requerimientos y, si hay procedimiento, sanciones del régimen de protección de datos."
+    gap: CONSENT-PROOF
+  - id: AVISO-LEGAL
+    band: core
+    title: "Aviso legal con identificación del prestador"
+    severity: medio
+    jurisdictions: [ES]
+    triggers: []
+    applies_when: "Sitio o app comercial dirigida a España."
+    look_for:
+      - "aviso legal, aviso-legal, NIF, CIF, domicilio"
+    pass: "Denominación, NIF, domicilio, email y, si aplica, datos registrales, visibles en el sitio."
+    remedy: "Página de aviso legal con esos datos reales, enlazada desde el pie."
+    figure:
+      as_of: "2002-07"
+      text: "LSSI art. 10. Es un deber de identificación del prestador de servicios de la sociedad de la información en España."
+    gap: LEGAL-ENTITY
+  - id: EMAIL-OPT-IN
+    band: core
+    title: "El email comercial en la UE es opt-in"
+    severity: alto
+    jurisdictions: [EU]
+    triggers: [email]
+    applies_when: "Hay emails promocionales a personas en la UE. La baja posterior de CAN-SPAM no alcanza."
+    look_for:
+      - "checkbox de newsletter sin premarcar"
+      - "alta a lista en el registro, separada del contrato"
+    pass: "Consentimiento previo, o la excepción estrecha de cliente anterior y producto similar, con baja desde el origen."
+    remedy: "Casilla separada, sin premarcar. No meter a toda la base de usuarios en la lista de marketing."
+    figure:
+      as_of: "2002-07"
+      text: "ePrivacy y LSSI art. 21. El régimen europeo es de entrada con permiso. CAN-SPAM (baja después) vale para EEUU y no sustituye a este control."
+    gap: MESSAGE-SENT
+  - id: DPA
+    band: core
+    title: "Contrato con cada encargado del tratamiento"
+    severity: alto
+    jurisdictions: [EU]
+    triggers: []
+    applies_when: "Firebase, Stripe, email, analítica, errores o soporte tratan datos por cuenta del producto."
+    look_for:
+      - "menciones de DPA en docs del repo"
+      - "lista de encargados en la política"
+    pass: "Hay contrato art. 28 con cada encargado, localizado o confirmado fuera del repo. La política nombra a los principales."
+    remedy: "Aceptar el DPA en el panel de cada proveedor y listar encargados en la política."
+    figure:
+      as_of: "2018-05"
+      text: "RGPD art. 28. Sin contrato, el encargado no debería tratar esos datos."
+    gap: SIGNED-CONTRACT
+  - id: TRANSFERS
+    band: core
+    title: "Salida de datos de la UE hacia EEUU u otro país"
+    severity: alto
+    jurisdictions: [EU]
+    triggers: []
+    applies_when: "Un proveedor fuera del Espacio Económico Europeo ve datos de personas de la UE."
+    look_for:
+      - "firebase, stripe, sentry, resend, posthog y región configurada"
+      - "mención de Data Privacy Framework o cláusulas tipo en la política"
+    pass: "El proveedor está en el Data Privacy Framework o hay cláusulas tipo, y la política lo dice. La región de hosting, si se puede elegir, está en la UE cuando el producto lo promete."
+    remedy: "Confirmar la certificación en la lista oficial o firmar cláusulas tipo. No basta con que la marca sea conocida."
+    figure:
+      as_of: "2023-07"
+      text: "RGPD capítulo V. El EU-US Data Privacy Framework es una vía desde julio de 2023 para quien está certificado. Quien no está, necesita otra garantía."
+    gap: PUBLIC-REGISTRY
+  - id: DSR-DELETE
+    band: core
+    title: "Derechos de acceso, supresión y portabilidad, con borrado real"
+    severity: alto
+    jurisdictions: [EU, US]
+    triggers: [signup]
+    applies_when: "Hay cuentas. En una app de Apple, si hay alta de cuenta tiene que poder borrarse desde la app."
+    look_for:
+      - "delete account, export data, supresión"
+    pass: "La persona puede exportar y borrar desde el producto, y el borrado alcanza a los encargados en un plazo escrito."
+    remedy: "Endpoint o flujo de borrado que no se limite a ocultar el perfil, más exportación."
+    figure:
+      as_of: "2018-05"
+      text: "RGPD art. 15 a 20. Apple exige borrado de cuenta in-app cuando la app permite crear una. CCPA suma derecho de supresión si el umbral entra."
+    gap: DELETION-COPIES
+  - id: BREACH
+    band: core
+    title: "Aviso de brecha"
+    severity: medio
+    jurisdictions: [EU, US]
+    triggers: []
+    applies_when: "Se tratan datos personales."
+    look_for:
+      - "runbook de incidente, breach, notificación"
+    pass: "Hay un procedimiento escrito: quién decide, en qué plazo se avisa a la autoridad y cuándo se avisa a las personas."
+    remedy: "Dejar un runbook corto en el repo de operaciones, con el plazo de 72 horas de la UE y el recordatorio de las leyes estatales de EEUU."
+    figure:
+      as_of: "2018-05"
+      text: "RGPD art. 33: 72 horas a la autoridad cuando la brecha lo exige. En EEUU el aviso a las personas depende del estado."
+    gap: HUMAN-RUNBOOK
+  - id: RETENTION
+    band: core
+    title: "Plazos de conservación y minimización"
+    severity: medio
+    jurisdictions: [EU]
+    triggers: []
+    applies_when: "Logs, IP, grabaciones, backups o listas de email."
+    look_for:
+      - "retention, TTL, plazos en la política"
+    pass: "Cada categoría de dato tiene un plazo en la política y el sistema se acerca a ese plazo (borrado de logs, de listas, de replays)."
+    remedy: "Escribir los plazos y alinear logs y backups. Una grabación de sesión sin caducidad no cumple el relato de la política."
+    figure:
+      as_of: "2018-05"
+      text: "RGPD art. 5. Conservar «por si acaso» sin plazo es el hallazgo típico."
+    gap: DELETION-COPIES
+  - id: AGE-EU
+    band: core
+    title: "Edad de consentimiento en la UE, distinta de los 13 de COPPA"
+    severity: critico
+    jurisdictions: [EU]
+    triggers: [signup, minors]
+    applies_when: "Registro abierto a personas en la UE."
+    look_for:
+      - "edad mínima 13, 14, 16 en el alta o en los términos"
+    pass: "La puerta respeta el país. España: 14 (LOPDGDD). Varios Estados miembros fijan 16, entre ellos Alemania, Países Bajos e Irlanda."
+    remedy: "No usar solo la puerta de 13 de COPPA para usuarios europeos. Si no geolocalizás, la puerta conservadora para la UE es 16, y decirlo."
+    figure:
+      as_of: "2018-12"
+      text: "RGPD art. 8 deja a cada país entre 13 y 16. España fijó 14 en la LOPDGDD. Un alta a los 13 puede ser válida en EEUU para COPPA y no serlo en España."
+    gap: AGE-IS-A-CLAIM
+  - id: WITHDRAWAL
+    band: core
+    title: "Desistimiento de 14 días y botón de pago inequívoco"
+    severity: alto
+    jurisdictions: [EU]
+    triggers: [pagos]
+    applies_when: "Venta a consumidores en la UE."
+    look_for:
+      - "checkout, botón de pago, obligación de pago"
+      - "desistimiento, withdrawal, contenido digital"
+    pass: "Información precontractual, botón que deja claro que hay obligación de pagar, y desistimiento de 14 días. El contenido digital solo pierde ese derecho si la persona lo pide expresamente y se le advierte que lo pierde."
+    remedy: "Texto del botón explícito. Casilla aparte para empezar el contenido digital ya, con el aviso de pérdida del desistimiento."
+    figure:
+      as_of: "2011-10"
+      text: "Directiva de derechos de los consumidores. El botón ambiguo («Continuar», «Suscribirme» sin decir que se paga) es un hallazgo clásico en la UE."
+    gap: LEGAL-ENTITY
+  - id: CCPA
+    band: core
+    title: "Privacidad de California por umbral, y política aunque no llegues"
+    severity: alto
+    jurisdictions: [US]
+    triggers: []
+    applies_when: "Puede haber residentes de California."
+    look_for:
+      - "do not sell, do not share, GPC, privacidad California"
+    pass: "Hay política (CalOPPA). El régimen completo del CPRA —no vender o compartir, señal GPC, datos sensibles— solo se exige si entra el umbral, y eso se confirma fuera del repo."
+    remedy: "Política siempre si hay californianos. No vender/compartir y honrar Global Privacy Control solo si el umbral entra o si igual compartís datos con ads."
+    figure:
+      as_of: "2023-01"
+      text: "CPRA: el umbral clásico es 25 millones USD de ingresos, o datos de 100.000 consumidores, o 50% de ingresos por vender o compartir datos. Confirmar la cifra vigente. Por debajo, no marques Crítico automático."
+    gap: BUSINESS-FACTS
+  - id: CANCEL-SYMMETRY
+    band: core
+    title: "Cancelar tan fácil como contratar"
+    severity: alto
+    jurisdictions: [EU, US]
+    triggers: [pagos]
+    applies_when: "Suscripción o prueba que pasa a cobro."
+    look_for:
+      - "cancel subscription, customer portal, baja"
+      - "flujo de alta en un clic y baja por email o teléfono solo"
+    pass: "La baja se hace por el mismo canal que el alta, en pocos pasos, sin patrón oscuro."
+    remedy: "Portal de cancelación self-service. No esconder la baja detrás de un correo a soporte si el alta fue un botón."
+    figure:
+      as_of: "2025-07"
+      text: "Ley de renovación automática de California, prácticas desleales en la UE y, si sigue vigente al revisar, la regla federal de opciones negativas. No des por cerrada la regla FTC sin mirarla."
+    gap: VENDOR-DASHBOARD
+  - id: A11Y
+    band: core
+    title: "Accesibilidad del servicio al consumidor"
+    severity: medio
+    jurisdictions: [EU, US]
+    triggers: []
+    applies_when: "Web o app de cara al público que vende o presta un servicio."
+    look_for:
+      - "lang en html, labels de formularios, contraste, skip link"
+    pass: "El flujo principal se puede usar con teclado y lector, con etiquetas en los controles. No hace falta certificar WCAG en esta pasada: sí señalar barreras obvias del flujo de alta y de pago."
+    remedy: "Cerrar las barreras del alta, el consentimiento y el pago. El estándar práctico de referencia es WCAG 2.1 AA."
+    figure:
+      as_of: "2025-06"
+      text: "El Acta Europea de Accesibilidad aplica desde el 28 de junio de 2025 a buena parte del comercio electrónico. En EEUU el riesgo típico son demandas bajo el ADA por webs que el público no puede usar."
+    gap: null
+  - id: PCI
+    band: core
+    title: "El número de tarjeta no pasa por tu servidor"
+    severity: critico
+    jurisdictions: [ANY]
+    triggers: [pagos]
+    applies_when: "Hay cobro con tarjeta."
+    look_for:
+      - "card number, PAN, stripe elements, checkout session"
+      - "inputs de tarjeta en tu propio backend"
+    pass: "Stripe Checkout o Elements tokenizan. Tu servidor no ve el PAN."
+    remedy: "Sacar el formulario de tarjeta de tu backend. Si el PAN toca tu servidor, el hallazgo es Crítico."
+    figure:
+      as_of: "2024-01"
+      text: "PCI DSS. Con Checkout o Elements el alcance baja mucho. Guardar el número en tu base es el caso grave."
+    gap: VENDOR-DASHBOARD
+  - id: ENDORSEMENTS
+    band: core
+    title: "Reseñas, testimonios y urgencia que no son reales"
+    severity: medio
+    jurisdictions: [EU, US]
+    triggers: []
+    applies_when: "La propia interfaz muestra testimonios, cuentas atrás o plazas restantes."
+    look_for:
+      - "testimonial, queda solo, countdown, fake review"
+    pass: "Los testimonios son reales o están marcados como ejemplo. La escasez y el contador reflejan un dato de verdad. Si hubo pago o regalo por la reseña, se dice."
+    remedy: "Quitar urgencia inventada. Marcar la relación material con quien recomienda."
+    figure:
+      as_of: "2023-06"
+      text: "Guías de endorsements de la FTC y normas de prácticas desleales en la UE. Una reseña inventada es publicidad engañosa."
+    gap: null
+  - id: TCPA
+    band: conditional
+    title: "SMS o llamadas comerciales"
+    severity: critico
+    jurisdictions: [US]
+    triggers: [sms]
+    applies_when: "Solo si hay SMS o llamadas automáticas a EEUU."
+    look_for:
+      - "twilio, sns, sms, otp comercial versus transaccional"
+    pass: "Consentimiento expreso y por escrito antes del SMS de marketing, y baja por el mismo canal."
+    remedy: "Separar el SMS de una transacción (un código de acceso) del SMS promocional. El segundo pide permiso claro."
+    figure:
+      as_of: "2024-01"
+      text: "TCPA: 500 USD por violación, hasta 1.500 USD si es dolosa. En la práctica duele más que el email."
+    gap: MESSAGE-SENT
+  - id: CALL-RECORD
+    band: conditional
+    title: "Grabación de llamadas de soporte"
+    severity: critico
+    jurisdictions: [US]
+    triggers: [grabacion]
+    applies_when: "Solo si se graba audio. Varios estados exigen consentimiento de las dos partes (California, Florida, Illinois, Pensilvania, Washington, entre otros)."
+    look_for:
+      - "call recording, twilio record, intercom calls"
+    pass: "Aviso al inicio, antes de grabar, no escondido en una política."
+    remedy: "Aviso hablado o en el widget antes de grabar, y opción de seguir sin grabación si el estado lo exige."
+    figure:
+      as_of: "2024-01"
+      text: "Leyes estatales de consentimiento de las dos partes. El daño estatutario de California en interceptación está en la misma familia que la CIPA (5.000 USD o el triple)."
+    gap: VENDOR-DASHBOARD
+  - id: BIPA
+    band: conditional
+    title: "Biometría: cara, voz o huella"
+    severity: critico
+    jurisdictions: [US]
+    triggers: [biometria]
+    applies_when: "Solo si hay selfie identificable, voz biométrica o huella propia. Illinois es el foco (BIPA)."
+    look_for:
+      - "face, rekognition, voiceprint, fingerprint, biometric"
+    pass: "Política escrita, consentimiento informado y plazo de destrucción, antes de capturar el identificador biométrico."
+    remedy: "No capturar biometría sin ese flujo. Un SDK de reconocimiento facial encendido por defecto es el hallazgo."
+    figure:
+      as_of: "2008-10"
+      text: "BIPA (Illinois): 1.000 USD por violación negligente y 5.000 USD por violación intencional o temeraria, por persona. Texas y Washington tienen regímenes parecidos, con otro enforcement."
+    gap: CONSENT-PROOF
+  - id: DSA
+    band: conditional
+    title: "Plataforma con contenido de terceros en la UE"
+    severity: alto
+    jurisdictions: [EU]
+    triggers: [ugc]
+    applies_when: "Usuarios publican contenido para otros usuarios y hay público en la UE. El DMCA no cubre este régimen."
+    look_for:
+      - "notice and action, contenido ilegal, punto de contacto"
+    pass: "Términos claros, un canal de aviso y un punto de contacto para autoridades y usuarios."
+    remedy: "Página de aviso de contenido ilegal y condiciones que expliquen la moderación. No sustituye al agente DMCA si también hay EEUU."
+    figure:
+      as_of: "2024-02"
+      text: "Reglamento de Servicios Digitales. Las obligaciones básicas de los prestadores de alojamiento aplican desde febrero de 2024. Las plataformas muy grandes tienen un régimen aparte."
+    gap: HUMAN-RUNBOOK
+  - id: AI-DISCLOSE
+    band: conditional
+    title: "Chat o contenido generado por IA de cara al usuario"
+    severity: medio
+    jurisdictions: [EU]
+    triggers: [ia]
+    applies_when: "Hay chatbot o generación que la persona puede tomar por humana."
+    look_for:
+      - "chat, openai, anthropic, gemini, assistant"
+    pass: "Se dice que está hablando con un sistema de IA, en el propio flujo, no solo en los términos."
+    remedy: "Aviso visible en el chat. No presentes el bot como una persona del equipo."
+    figure:
+      as_of: "2025-01"
+      text: "Reglamento de IA de la UE, deberes de transparencia hacia la persona. La fecha fina de aplicación se verifica; no la des por cerrada si el catálogo está por detrás."
+    gap: null
+  - id: AI-TRAINING
+    band: conditional
+    title: "Entrenar o mejorar el modelo con datos del usuario"
+    severity: alto
+    jurisdictions: [EU, US]
+    triggers: [ia]
+    applies_when: "El producto manda prompts, archivos o historial a un modelo y eso puede usarse para entrenar."
+    look_for:
+      - "training opt-out, zero data retention, store: false"
+    pass: "La config del proveedor desactiva el entrenamiento con datos de clientes, y la política lo dice."
+    remedy: "Cerrar el uso para entrenamiento en el contrato o en la API, y no mandar datos que no hagan falta al prompt."
+    figure:
+      as_of: "2018-05"
+      text: "RGPD si hay datos personales en el prompt. Además, las condiciones del proveedor (OpenAI, Google, Anthropic y otros) cambian: se leen, no se suponen."
+    gap: SIGNED-CONTRACT
+  - id: APP-STORES
+    band: conditional
+    title: "Reglas de Apple y Google"
+    severity: alto
+    jurisdictions: [ANY]
+    triggers: [mobile]
+    applies_when: "Hay app en App Store o Play."
+    look_for:
+      - "account deletion, ATT, privacy nutrition, Play Data safety"
+    pass: "Si hay alta de cuenta, se puede borrar. Las etiquetas de privacidad coinciden con los SDK reales. En iOS, el rastreo entre apps pide el permiso de ATT."
+    remedy: "Alinear etiquetas y SDK. Borrado de cuenta in-app. No marcar «no rastreamos» si hay analítica que sí lo hace."
+    figure:
+      as_of: "2022-06"
+      text: "No es una ley de multas por visitante: es la condición para seguir publicados. Apple exige borrado de cuenta desde junio de 2022 cuando la app crea cuentas."
+    gap: DELETION-COPIES
+  - id: SECTOR
+    band: conditional
+    title: "Salud, finanzas u otro sector regulado"
+    severity: critico
+    jurisdictions: [ANY]
+    triggers: [salud, finanzas]
+    applies_when: "El producto huele a historia clínica, banco, seguro, juego o cripto."
+    look_for:
+      - "hipaa, phi, diagnóstico, iban, kyc de valores"
+    pass: "No se da por cumplido en esta skill. Se marca y se para."
+    remedy: "Derivar a especialista del régimen. No improvisar HIPAA, GLBA ni licencia de juego."
+    figure:
+      as_of: "2024-01"
+      text: "HIPAA, GLBA y los regímenes de juego o cripto quedan fuera del catálogo general. La skill solo enciende la bandera."
+    gap: null
+  - id: TAX-FLAG
+    band: conditional
+    title: "IVA y sales tax como bandera, no como cálculo"
+    severity: medio
+    jurisdictions: [EU, US]
+    triggers: [pagos]
+    applies_when: "Hay venta a consumidores."
+    look_for:
+      - "tax, IVA, VAT, stripe tax"
+    pass: "Alguien decidió el tratamiento fiscal y está configurado en el cobro. Esta skill no calcula el impuesto."
+    remedy: "Avisar que hace falta criterio fiscal (IVA OSS en la UE, nexo de sales tax en EEUU). No inventar el tipo."
+    figure:
+      as_of: "2021-07"
+      text: "El régimen de IVA de comercio electrónico de la UE (OSS) está en vigor desde julio de 2021. No es una multa por visita: es una obligación de repercutir e ingresar."
+    gap: BUSINESS-FACTS

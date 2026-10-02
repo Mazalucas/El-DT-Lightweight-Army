@@ -24,6 +24,7 @@
 #   2  activate esperando confirmación (--yes)
 #   1  error o activate rechazado
 
+require_relative "lib/force_utf8"
 require "fileutils"
 require "open3"
 require "time"
@@ -86,7 +87,9 @@ module DtCanonicalPublish
   end
 
   def github_login
-    out, _err, status = Open3.capture3("gh", "api", "user", "--jq", ".login")
+    out, err, status = Open3.capture3("gh", "api", "user", "--jq", ".login")
+    @github_probe_failed = !status.success?
+    @github_probe_err = err.to_s.strip
     return nil unless status.success?
 
     login = out.strip
@@ -150,8 +153,11 @@ module DtCanonicalPublish
 
     login = github_login
     unless login == publisher
-      shown = login.nil? || login.empty? ? "ausente" : login
-      return [40, wrong_login_message(shown, publisher)]
+      if @github_probe_failed || login.nil? || login.empty?
+        return [40, unread_github_message(publisher)]
+      end
+
+      return [40, wrong_login_message(login, publisher)]
     end
 
     [0, allowed_message(current, destination_url, login)]
@@ -197,6 +203,16 @@ module DtCanonicalPublish
       Hay una marca de /oficial para otro remoto (#{saved_url}).
       El destino actual es #{current_url}.
       No publico. No pidas acceso al repo.
+    MSG
+  end
+
+  def unread_github_message(publisher)
+    <<~MSG.strip
+      Este remoto es el DT oficial. No pude leer `gh api user` desde este proceso (keyring o sandbox).
+      Eso no significa que no seas #{publisher}. En una terminal de esta máquina:
+        gh api user --jq .login
+      Si imprime #{publisher}, reintentá el gate sin sandbox (el agente necesita el llavero).
+      No hago bump, ni commit, ni push.
     MSG
   end
 
@@ -508,8 +524,10 @@ module DtCanonicalPublish
     publisher = config["login"]
     login = github_login
     unless login == publisher
-      shown = login.nil? || login.empty? ? "ausente" : login
-      exit report(1, wrong_login_message(shown, publisher))
+      if @github_probe_failed || login.nil? || login.empty?
+        exit report(1, unread_github_message(publisher))
+      end
+      exit report(1, wrong_login_message(login, publisher))
     end
 
     toplevel = git_toplevel

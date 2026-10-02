@@ -3,7 +3,7 @@
 # Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
 
 version: 1
-updated: "2026-09-28"
+updated: "2026-10-02"
 documents:
   - id: DOC-ARCH-002
     title: "Arquitectura de la capacidad Atelier"
@@ -220,3 +220,8 @@ documents:
     path: 03_reference/analisis-propuesta.md
     type: reference
     tags: [planning, review, multi-agent, dt-commands]
+  - id: DOC-REF-012
+    title: "Auditoría legal del producto (/auditoria-legal)"
+    path: 03_reference/auditoria-legal.md
+    type: reference
+    tags: [legal, privacy, compliance, audit, rgpd]

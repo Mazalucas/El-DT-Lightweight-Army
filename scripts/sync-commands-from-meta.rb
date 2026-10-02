@@ -5,6 +5,7 @@
 # Una definición en YAML → .cursor/commands/{cmd}.md + .agents/workflows/{cmd}.md
 # Uso: ruby scripts/sync-commands-from-meta.rb [--check]
 
+require_relative "lib/force_utf8"
 require "yaml"
 require "fileutils"
 
