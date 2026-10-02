@@ -1,0 +1,26 @@
+[
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army",
+    "title": "Overview",
+    "count": 21,
+    "uniques": 3
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.claude/agents/devops.md",
+    "title": "/blob/main/.claude/agents/devops.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/docs/IDE-SETUP.md",
+    "title": "/blob/main/docs/IDE-SETUP.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/commits/main",
+    "title": "/commits/main",
+    "count": 1,
+    "uniques": 1
+  }
+]
