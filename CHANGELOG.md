@@ -6,6 +6,15 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.11.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.11.0) - 2026-10-05
+
+Minor. Quien ya usa el DT sigue con `/drive`, `/gmail` y `/calendar`.
+
+- **MCP oficiales de Google.** Esos commands instalan el plugin o conector del IDE (marketplace en Cursor; MCP remoto de Google en Antigravity/Claude). `google-drive-dt` queda descontinuado.
+- **Postura igual.** Drive solo lectura; Gmail no envía (sí borrador en hilo y etiquetas); Calendar borra solo con confirmación.
+- **`setup-drive.sh`.** Ya no pide JSON Desktop. Imprime la guía del IDE o saca el servidor viejo con `--remove-legacy`.
+- **ADR-006** (`DOC-DEC-006`). Guía y runbook de admin actualizados.
+
 ## [1.10.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.10.0) - 2026-10-02
 
 Minor. Quien ya usa el DT sigue con los mismos comandos.

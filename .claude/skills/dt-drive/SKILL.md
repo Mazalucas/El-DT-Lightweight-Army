@@ -1,121 +1,91 @@
 ---
 name: dt-drive
-description: "[Rutina] Conectar Google Drive al cerebro del DT — OAuth, selector de carpetas, contexto de lectura. Use when the user invokes /drive or wants to sync Drive folders as organizational context."
+description: "[Rutina] Conectar Google Drive al cerebro del DT — plugin oficial del IDE, selector de carpetas, solo lectura. Use when the user invokes /drive or wants to sync Drive folders as organizational context."
 ---
 
 # dt-drive
 
-Integración **opcional** de Google Drive vía MCP (`@ibarcarty/mcp-server-google-drive`). Mismo servidor y token que Gmail y Calendar. Sin credenciales en el repo; tokens y registro de carpetas solo en la máquina local.
+Integración **opcional** de Google Drive vía el **MCP oficial del IDE**. El servidor propio `google-drive-dt` está descontinuado.
 
-**Spec del embudo:** `vitals/specs/google-apps-mcp.md`. **Guías:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`) · admin Cloud: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`).
+**Spec (embudo + install por IDE):** `vitals/specs/google-apps-mcp.md`. **Guías:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`) · admin: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`). **ADR:** `DOC-DEC-006`.
 
 ## Prerequisitos
 
 | Requisito | Verificación |
 |-----------|--------------|
-| Sesión local | `vitals/ops/session.yaml` con `operator.id` — si falta → **`/yo`** primero |
-| Node.js 18+ | `node -v` |
-| Credenciales OAuth de la empresa | Archivo JSON distribuido por canal interno (nunca en Git) |
-| MCP Google Drive | Entrada en el IDE: Cursor `~/.cursor/mcp.json` · Antigravity `~/.gemini/config/mcp_config.json` (`setup-drive.sh --ide …`) |
+| Sesión local | `vitals/ops/session.yaml` con `operator.id` — si falta → **`/yo`** |
+| MCP oficial Drive | Cursor: plugin `google-drive`. Antigravity/Claude: `drivemcp.googleapis.com` |
+| Cuenta Google | La que el operador autoriza en el plugin / conector |
+
+Ya no hace falta Node, ni `dt-drive-credentials.json`, ni `npx @ibarcarty/…`.
 
 ## Archivos
 
 | Archivo | Git | Rol |
 |---------|-----|-----|
-| `~/.config/mcp-server-google-drive/oauth-credentials.json` | No | Client ID/secret de la app interna |
-| `~/.config/mcp-server-google-drive/tokens.json` | No | Token OAuth del usuario |
-| `vitals/config/google-apps.yaml` | No | Qué apps (Drive/Gmail/Calendar) habilitó |
-| `vitals/config/drive-context.yaml` | No | Carpetas elegidas + propósito |
-| `vitals/config/drive-context.yaml.example` | Sí | Plantilla de schema |
+| `vitals/config/google-apps.yaml` | No | Qué apps habilitó |
+| `vitals/config/drive-context.yaml` | No | Carpetas + propósito |
+| `vitals/config/drive-context.yaml.example` | Sí | Plantilla |
 
 ## Flujo `/drive` — conexión inicial
 
 1. Confirmar sesión (`/yo` si falta).
-2. **Embudo** (no saltear): *¿solo Drive o también Gmail y Calendar?* Spec `google-apps-mcp.md`. Unión con lo ya habilitado en `google-apps.yaml`.
-3. Preguntar si ya tiene `dt-drive-credentials.json` del canal interno de la empresa.
-4. Ejecutar `./scripts/setup-drive.sh [ruta/credenciales.json] --apps <lista> [--ide cursor|antigravity|all]`:
-   - Valida Node 18+
-   - Copia credenciales a `~/.config/mcp-server-google-drive/oauth-credentials.json` (chmod 600)
-   - Fija `GDRIVE_MCP_SCOPES` según `--apps` (Drive = `drive.readonly`)
-   - Corre `npx @ibarcarty/mcp-server-google-drive auth` si no hay token o faltan scopes
-   - Registra MCP: Cursor → `~/.cursor/mcp.json` · Antigravity → `~/.gemini/config/mcp_config.json` (y legacy si aplica)
-5. Preguntar qué IDE usa. **Antigravity:** verificar Manage MCP Servers → raw config. **Cursor:** Settings → MCP.
-6. Pedir **reiniciar el IDE** si las tools no aparecen.
-7. Escribir/actualizar `google-apps.yaml` (`drive: true`). Continuar con **selector de carpetas** (abajo). Si eligió las tres apps, ofrecer `/gmail` y `/calendar` en el mismo turno.
+2. **Embudo** (no saltear): *¿solo Drive o también Gmail y Calendar?* Spec.
+3. Detectar el IDE de esta conversación.
+4. **Instalar el oficial de Drive:**
+   - **Cursor:** tool `install_plugin` con `pluginName: google-drive`. Si ya está y `needsAuth` → el operador autentica. No digas que quedó instalado si cancela.
+   - **Antigravity / Claude:** spec § Instalar por IDE (URL remota + OAuth). No inventes Client IDs. Si IT no habilitó el MCP remoto, decí el límite.
+5. Esperar tools reales (`search_files` / `drive_search` / equivalentes). Si no hay, parar.
+6. Escribir/actualizar `google-apps.yaml` (`drive: true`). **Selector de carpetas** (abajo). Si eligió las tres, ofrecer `/gmail` y `/calendar`.
+7. Si existe el servidor legado `google-drive-dt` en `mcp.json`, ofrecer `./scripts/setup-drive.sh --remove-legacy` **después** de que el oficial responda.
 
-Si el usuario ya está autenticado y solo quiere cambiar carpetas → ir directo al selector.
+Si ya está autenticado y solo quiere cambiar carpetas → selector.
 
 ## Flujo `/drive` — selector de carpetas
 
-Objetivo: el usuario elige **qué carpetas** comparte al cerebro (no todo el Drive salvo que lo pida explícitamente).
+Objetivo: el usuario elige **qué carpetas** comparte al cerebro (no todo el Drive salvo que lo pida).
 
-1. Leer `vitals/config/drive-context.yaml` si existe (mostrar resumen actual).
-2. Via MCP `drive_list_files`:
-   - Listar **Shared Drives** accesibles (`corpora: drive`, `includeItemsFromAllDrives: true`, `supportsAllDrives: true`, `q: mimeType='application/vnd.google-apps.folder'`).
-   - Listar carpetas de **primer nivel** en "Mi unidad" (`q: 'root' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`).
-3. Presentar lista **numerada** agrupada:
-   - **Unidades compartidas** (nombre + id)
-   - **Mi unidad — carpetas raíz** (nombre + id)
-   - Opción final: **"Todo mi Drive"** (`sync_mode: full_drive`) — solo si el usuario lo pide explícitamente; advertir que las consultas serán más amplias.
-4. El usuario elige por número (ej. `1, 3, 5`) o nombres.
-5. Por **cada carpeta elegida**, preguntar: *"¿Qué vive acá? (1 frase)"* y opcionalmente keywords (ej. brief, cliente, reporte).
-6. Escribir `vitals/config/drive-context.yaml`:
+1. Leer `vitals/config/drive-context.yaml` si existe.
+2. Con las tools oficiales, listar unidades compartidas y carpetas raíz de Mi unidad (nombres + ids).
+3. Lista **numerada**. Opción final: **"Todo mi Drive"** (`sync_mode: full_drive`) solo si lo pide; advertir.
+4. Elige por número o nombre.
+5. Por cada carpeta: *"¿Qué vive acá? (1 frase)"* + keywords opcionales.
+6. Escribir `drive-context.yaml` (schema del `.example`). No va a Git.
+7. Confirmar resumen.
 
-```yaml
-version: 1
-updated: "<ISO8601>"
-operator_id: "<desde session.yaml>"
-sync_mode: selective  # o full_drive si eligió todo
-folders:
-  - id: "<folderId>"
-    name: "<nombre visible>"
-    drive: "<my_drive|shared:<driveName>>"
-    purpose: "<qué contiene>"
-    keywords:
-      - "<tag>"
-registered_at: "<ISO8601>"
-```
+## Reconfigurar o desvincular
 
-7. Confirmar resumen: carpetas registradas, modo, operador. Recordar que el archivo **no va a Git**.
+- **Agregar/quitar carpetas:** selector de nuevo; merge sin duplicar `id`.
+- **Desvincular:** el operador cierra sesión en el plugin / conector del IDE. Vaciar `drive-context.yaml` y el flag en `google-apps.yaml` si lo pide. No borrar configs de otros MCP.
 
-## Flujo `/drive` — reconfigurar o desvincular
+## Uso diario
 
-- **Agregar carpetas:** repetir selector; merge sin duplicar `id`.
-- **Quitar carpetas:** editar `drive-context.yaml` con confirmación del usuario.
-- **Desvincular cuenta:** borrar `tokens.json` local; opcionalmente vaciar `drive-context.yaml` y `google-apps.yaml`. No tocar credenciales OAuth de la empresa (son compartidas). Desvincula Gmail/Calendar del mismo token.
+Cuando `drive-context.yaml` existe y el MCP está activo:
 
-## Protocolo de uso diario (DT)
+1. Priorizar carpetas registradas.
+2. No volcar carpetas enteras al chat.
+3. **Solo lectura** — aunque el oficial tenga create/share. No crear/editar/borrar/compartir.
+4. Charter no-secrets (`vitals/charter/no-secrets.md`).
+5. Drive = contexto, no memoria del repo.
+6. El token ve todo lo que la cuenta ve; el YAML es política DT.
 
-Cuando `vitals/config/drive-context.yaml` existe y el MCP está activo:
+## Tools
 
-1. **Consulta dirigida** — priorizar carpetas registradas usando queries con `'<folderId>' in parents` o búsqueda acotada por nombre/purpose/keywords del registro.
-2. **No ingesta masiva** — leer solo archivos relevantes a la pregunta; no volcar carpetas enteras al chat.
-3. **Solo lectura** — scope `drive.readonly`; no crear/editar/borrar en Drive (fase 2).
-4. **Charter no-secrets** — no copiar al repo tokens, credenciales ni contenido sensible de Drive sin confirmación; ver `vitals/charter/no-secrets.md`.
-5. **Drive = contexto, no memoria** — destilar a `vitals/` o `docs/` solo si el usuario pide persistir algo en el cerebro compartido.
-6. **Límite honesto** — el token OAuth técnicamente ve todo lo que la cuenta ve; el registro de carpetas es la política del DT, no un sandbox de Google.
-
-## Tools MCP útiles
-
-| Tool | Uso |
-|------|-----|
-| `drive_list_files` | Listar carpetas/archivos con filtros |
-| `drive_search` | Búsqueda por nombre o contenido (acotar a carpetas registradas) |
-| `drive_read_file` | Leer Docs (→ Markdown), Sheets (→ CSV), PDFs de texto |
+Usar las que existan (spec § Tools). Típico: `search_files` / `drive_search`, `read_file_content` / `drive_read_file`, `get_file_metadata` / `drive_get_file_info`.
 
 ## Errores frecuentes
 
 | Síntoma | Acción |
 |---------|--------|
-| MCP sin tools | Reiniciar IDE; Cursor: `~/.cursor/mcp.json` · Antigravity: Manage MCP Servers → raw config |
-| `access_denied` en OAuth | App interna no aprobada por IT; ver `DOC-OPS-002` |
-| Token expirado | Re-correr `./scripts/setup-drive.sh` o `npx @ibarcarty/mcp-server-google-drive auth` |
-| Carpeta no aparece | Permisos de Drive de esa cuenta; probar otra carpeta |
+| Plugin cancelado | No seguir al selector. Ofrecer `/add-plugin google-drive` |
+| `needsAuth` | El operador autentica el plugin; no fingir listados |
+| Antigravity sin tools | Preview + GCP — `DOC-OPS-002`. No caer a `google-drive-dt` |
+| Quedan dos Drive | Oficial OK → `--remove-legacy` |
 
 ## No hacer
 
-- No commitear `drive-context.yaml`, `google-apps.yaml`, credenciales ni tokens.
-- No hardcodear client ID/secret ni cuentas/proyectos GCP en el repo.
-- No asumir que todos tienen Drive conectado — es opt-in.
+- No commitear contextos ni cuentas/proyectos GCP.
+- No reinstalar `@ibarcarty/mcp-server-google-drive`.
 - No escribir en Drive.
-- No saltear la pregunta solo-esta-app vs las tres.
+- No saltear el embudo una app vs las tres.
+- No asumir que todos tienen Drive — opt-in.

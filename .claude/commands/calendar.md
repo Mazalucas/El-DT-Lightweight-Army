@@ -2,14 +2,14 @@
 dt_command: calendar
 group: routine
 group_title: "Rutina del día a día"
-tagline: "Conectar Google Calendar — mismo login que Drive/Gmail; listar y crear eventos."
+tagline: "Conectar Calendar (plugin oficial) — listar y crear eventos."
 skill: dt-calendar
 ---
 
 # /calendar
 
 **Grupo:** Rutina del día a día
-**En una frase:** Conectar Google Calendar — mismo login que Drive/Gmail; listar y crear eventos.
+**En una frase:** Conectar Calendar (plugin oficial) — listar y crear eventos.
 **Cuándo:** Querés agenda o crear un evento. Pregunta si es solo Calendar o las tres apps.
 **Quién:** Cualquier operador del repo.
 

@@ -47,19 +47,19 @@ commands:
     skill: deploy
   drive:
     group: routine
-    tagline: "Conectar Google Drive y elegir carpetas como contexto del cerebro."
+    tagline: "Conectar Drive (plugin oficial) y elegir carpetas como contexto. Solo lectura."
     when: "Primera vez que querés consultar documentos en Drive con el DT; o para cambiar qué carpetas compartís."
     example: "/drive"
     skill: dt-drive
   gmail:
     group: routine
-    tagline: "Conectar Gmail — mismo login que Drive/Calendar; etiquetas y borradores."
-    when: "Querés que el DT busque mail o deje un borrador. Pregunta si es solo Gmail o las tres apps."
+    tagline: "Conectar Gmail (plugin oficial) — etiquetas, hilos y borradores; no envía."
+    when: "Querés que el DT busque mail, responda en un hilo o etiquete. Pregunta si es solo Gmail o las tres apps."
     example: "/gmail"
     skill: dt-gmail
   calendar:
     group: routine
-    tagline: "Conectar Google Calendar — mismo login que Drive/Gmail; listar y crear eventos."
+    tagline: "Conectar Calendar (plugin oficial) — listar y crear eventos."
     when: "Querés agenda o crear un evento. Pregunta si es solo Calendar o las tres apps."
     example: "/calendar"
     skill: dt-calendar

@@ -40,6 +40,7 @@ vitals/ops/dt-upstream-state.md
 vitals/ops/canonical-checkout.yaml
 vitals/ops/collaboration.local.yaml
 vitals/ops/context-profile.yaml
+.cursor/settings.json
 .cursor/rules/99-perfil-local.mdc
 .claude/rules/99-perfil-local.md
 .agents/rules/99-perfil-local.md

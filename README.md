@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.10.0**
+**v1.11.0**
 
 Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
@@ -26,7 +26,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ## Índice
 
-- [Qué trae v1.10.0](#que-trae)
+- [Qué trae v1.11.0](#que-trae)
 - [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
@@ -39,17 +39,17 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ---
 
-## Qué trae v1.10.0 {#que-trae}
+## Qué trae v1.11.0 {#que-trae}
 
-Capacidad nueva sobre **v1.9.0**. Quien ya usa el DT sigue con los mismos comandos. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
+Capacidad nueva sobre **v1.10.0**. Quien ya usa el DT sigue con `/drive`, `/gmail` y `/calendar`. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **`/auditoria-legal`** | Especialista #24. Territorio antes de puntuar; el informe separa lo que el código cubre de lo que no (contrato, registro, email). Guía: [auditoria-legal.md](docs/03_reference/auditoria-legal.md). |
-| **Locale UTF-8** | `/guardar` y `dt-doctor` no dependen del locale de la máquina. Claude Code / CI con `LANG=C` ya no rompen el sync de versión. |
-| **Gate** | Si el agente no lee el llavero de `gh`, el mensaje dice sandbox — no “no sos el publisher”. |
+| **MCP oficiales** | Esos commands instalan el plugin o conector del IDE. Cursor: marketplace. Antigravity/Claude: MCP remoto de Google. |
+| **`google-drive-dt`** | Descontinuado. `setup-drive.sh --remove-legacy` saca el servidor viejo. |
+| **Postura** | Drive solo lectura; Gmail no envía (sí reply en hilo y etiquetas). |
 
-Skills de esta entrega: `auditoria-legal`. Spec: [canonical-publish.md](vitals/specs/canonical-publish.md) · [project-version.md](vitals/specs/project-version.md).
+ADR: [DOC-DEC-006](docs/05_decisions/adr-006-mcp-google-oficial.md). Spec: [google-apps-mcp.md](vitals/specs/google-apps-mcp.md).
 
 ---
 
@@ -169,8 +169,8 @@ Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc).
 | **`/bootstrap`** | Usar este clone como base de tu proyecto y soltar el remoto del DT |
 | **`/oficial`** | El dueño marca esta carpeta como el único checkout que publica al DT |
 | **`/drive`** | Conectar Google Drive y registrar carpetas para que la IA las consulte |
-| **`/gmail`** | Mismo login que Drive. Etiquetas y borradores; no envía mail |
-| **`/calendar`** | Mismo login que Drive. Listar y crear eventos |
+| **`/gmail`** | Plugin oficial. Etiquetas, hilos y borradores; no envía mail |
+| **`/calendar`** | Plugin oficial. Listar y crear eventos |
 | **`/dt-config`** | Elegir qué reglas van en cada mensaje. El perfil queda en esta PC |
 | **`/orquestar`** | Tarea grande — pipeline completo en 8 pasos |
 | **`/fast-lane`** | Algo puntual ya definido — menos preguntas rutinarias |
@@ -194,20 +194,20 @@ Grupos completos y taglines: [commands-meta.yaml](vitals/config/commands-meta.ya
 
 ## Google Drive, Gmail y Calendar — `/drive` `/gmail` `/calendar` {#google-drive--drive}
 
-Integración **opcional**: un solo MCP (`google-drive-dt`) y un solo login Google. El DT **pregunta si autorizás una app o las tres**. Nada de eso se sube a GitHub.
+Integración **opcional** con el **MCP oficial del IDE** (marketplace en Cursor; remoto Google en Antigravity/Claude). El DT **pregunta si autorizás una app o las tres**. Nada de eso se sube a GitHub.
 
 | Command | Qué hace |
 |---------|----------|
 | `/drive` | Carpetas de Drive (solo lectura) |
-| `/gmail` | Etiquetas / queries; borradores (no envía) |
+| `/gmail` | Etiquetas / queries; borradores en hilo (no envía) |
 | `/calendar` | Calendarios; listar y crear eventos |
 
 1. **`/yo`**
 2. El command de la app — embudo una vs todas
-3. **`./scripts/setup-drive.sh … --apps …`** y reiniciar el IDE
+3. Instalar y autenticar el plugin o conector oficial
 4. Selector local (`vitals/config/*-context.yaml`, no Git)
 
-**Guía:** [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md) · **Admin GCP:** [drive-google-cloud-admin.md](docs/06_operations/drive-google-cloud-admin.md)
+**Guía:** [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md) · **Admin Workspace:** [drive-google-cloud-admin.md](docs/06_operations/drive-google-cloud-admin.md) · **ADR:** [DOC-DEC-006](docs/05_decisions/adr-006-mcp-google-oficial.md)
 
 ---
 

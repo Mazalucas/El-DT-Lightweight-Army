@@ -39,7 +39,7 @@ Antes de crear un documento con un prefijo nuevo, añadí una fila a esta tabla 
 | CONCEPT | Conceptos en `01_concepts` | DOC-CONCEPT-001 |
 | REF | Referencia técnica en `03_reference` | DOC-REF-001 … DOC-REF-012 |
 | ARCH | Arquitectura en `04_architecture` | DOC-ARCH-002 |
-| DEC | Decisiones / ADRs en `05_decisions` | DOC-DEC-001 … DOC-DEC-004 |
+| DEC | Decisiones / ADRs en `05_decisions` | DOC-DEC-001 … DOC-DEC-006 |
 | DESIGN | Conceptos, guías y referencia Atelier | DOC-DESIGN-001 … |
 | GLOSS | Glosario en `07_glossary` | DOC-GLOSS-001 |
 | FAQ | Preguntas frecuentes (plantilla `template-faq.md`) | DOC-FAQ-001 … (aún sin docs publicados) |

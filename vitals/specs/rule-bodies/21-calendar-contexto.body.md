@@ -1,8 +1,8 @@
 # Google Calendar como contexto del cerebro
 
-Integración **opcional** vía el MCP `google-drive-dt`. Aplica cuando existe `vitals/config/calendar-context.yaml` o el usuario invocó `/calendar`.
+Integración **opcional** vía el MCP **oficial del IDE**. Aplica cuando existe `vitals/config/calendar-context.yaml` o el usuario invocó `/calendar`.
 
-Spec del embudo (un token, preguntar una app vs todas): `vitals/specs/google-apps-mcp.md`.
+`google-drive-dt` está descontinuado. Spec: `vitals/specs/google-apps-mcp.md`.
 
 ## Cuándo consultar Calendar
 

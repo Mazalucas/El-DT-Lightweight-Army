@@ -1,11 +1,11 @@
 ---
 id: DOC-OPS-002
-title: "Google Workspace — administración OAuth (Google Cloud)"
+title: "Google Workspace — permitir los MCP oficiales (Cursor / Antigravity / Claude)"
 type: runbook
 status: canonical
 owner: dt-platform
 created: 2026-07-30
-updated: 2026-09-28
+updated: 2026-10-02
 tags:
   - drive
   - gmail
@@ -16,18 +16,19 @@ tags:
   - mcp
 domain:
   - meta
-summary: Crear proyecto Google Cloud, OAuth interno y distribuir credenciales para Drive, Gmail y Calendar del DT — una sola vez por organización.
+summary: Qué tiene que habilitar IT para que el DT use los MCP oficiales de Google — plugins Cursor o MCP remoto Workspace. Sin servidor propio ni JSON Desktop.
 related:
   - DOC-GUIDE-009
   - DOC-OPS-001
   - DOC-OV-004
+  - DOC-DEC-006
 keywords:
   - google cloud
   - oauth
   - drive
   - gmail
   - calendar
-  - credentials
+  - marketplace
   - workspace
 priority: high
 intended_audience:
@@ -38,161 +39,103 @@ source_of_truth: true
 review_cycle_days: 90
 ---
 
-# Google Workspace — administración OAuth (Google Cloud)
+# Google Workspace — permitir los MCP oficiales
 
 ## Summary
 
-Runbook **una sola vez por organización** para que usuarios del DT conecten Drive, Gmail y/o Calendar vía el mismo MCP. El resultado es un JSON (`dt-drive-credentials.json`) por canal interno — **nunca en el repo público**. No registrar en Git cuentas, Client IDs ni IDs de proyecto reales.
+El DT **ya no** distribuye un JSON OAuth Desktop ni mantiene `google-drive-dt`. IT habilita las apps oficiales (Cursor y/o MCP remoto de Google) para que cada persona conecte Drive, Gmail y Calendar desde `/drive`, `/gmail`, `/calendar`.
 
-## Prerequisito IT (validar primero)
+No registrar en Git cuentas, Client IDs ni IDs de proyecto.
 
-En **Google Workspace Admin Console** → Seguridad → Controles de acceso y datos → Controles de API:
+ADR: `DOC-DEC-006`. Guía usuario: `DOC-GUIDE-009`.
 
-- Confirmar que las apps OAuth **internas** están permitidas para la organización `<TU_ORGANIZACION>`.
-- Si hay restricción estricta, agregar el Client ID de la app cuando exista.
+## Prerequisito — Admin Console
 
-Sin esto, los usuarios verán `access_denied` aunque el setup sea correcto.
+**Google Workspace Admin** → Seguridad → Controles de acceso y datos → Controles de API:
 
-## Paso a paso — Google Cloud Console
+- Permitir las apps OAuth de **Cursor** (plugins Gmail / Drive / Calendar) para el dominio.
+- Si van a usar Antigravity o Claude: permitir el client OAuth **web** del MCP remoto de Google Workspace (el que cree IT, interno).
+- Si hay lista de allow: agregar esos Client IDs cuando existan. Sin esto, `access_denied`.
 
-Acceso: [console.cloud.google.com](https://console.cloud.google.com) con cuenta admin del Workspace.
+No documentar los IDs reales en este repo.
 
-### 1. Crear proyecto
+## Camino A — Solo Cursor (el más simple)
 
-| Campo | Valor a completar |
-|-------|-------------------|
-| Nombre del proyecto | `dt-cerebro-drive` |
-| Organización | `<TU_ORGANIZACION>` |
-| Ubicación | `<CARPETA_O_BILLING>` (según política de la empresa) |
+No hace falta un proyecto GCP de la empresa ni credenciales para el usuario.
 
-### 2. Habilitar API
+1. Confirmar el allow de las apps Cursor (arriba).
+2. Comunicar: `/yo` → `/drive` / `/gmail` / `/calendar` → aceptar el plugin del marketplace → login Google.
+3. Listo. Cada persona autoriza **su** cuenta.
 
-**APIs y servicios → Biblioteca** — habilitar las que la org vaya a usar:
+## Camino B — Antigravity o Claude (MCP remoto Google)
 
-| API | Para |
-|-----|------|
-| Google Drive API | `/drive` |
-| Gmail API | `/gmail` |
-| Google Calendar API | `/calendar` |
+Developer Preview. Guía canónica de Google: [Configure the Google Workspace MCP servers](https://developers.google.com/workspace/guides/configure-mcp-servers).
 
-Opcional (edición rica de Docs/Sheets/Slides): Google Docs API, Google Sheets API, Google Slides API. El DT mantiene Drive en **solo lectura**.
+En el proyecto GCP de la **organización** (no en el repo):
 
-### 3. Consentimiento OAuth (Google Auth Platform)
+1. Habilitar las APIs de producto que vayan a usar: Drive, Gmail, Calendar (y Docs/Sheets/Slides si aplica).
+2. Habilitar los servicios MCP: Gmail MCP API, Drive MCP API, Calendar MCP API (nombres en la consola / `gcloud services enable …mcp.googleapis.com`).
+3. Consentimiento OAuth **interno**, scopes según la doc de Google para esos servidores (no copiar la lista viva acá: se desactualiza).
+4. Client OAuth tipo **Aplicación web**, con los redirect URI que pida el IDE (Antigravity y Claude publican los suyos en esa guía).
+5. Entregar Client ID/secret por canal interno. **Nunca** al repo público.
 
-1. **APIs y servicios → Pantalla de consentimiento OAuth** (en consolas nuevas: **Google Auth Platform**).
-2. App **Interna** (solo cuentas `@<TUEMPRESA>.com`).
+El DT ayuda a pegar las URLs (`drivemcp` / `gmailmcp` / `calendarmcp`) en la config del IDE. No commitear el secret.
 
-| Campo | Valor a completar |
-|-------|-------------------|
-| Nombre de la app | `El DT — Cerebro Google` |
-| Correo de asistencia | `<EMAIL_ADMIN>` |
-| Dominio autorizado | `<TUEMPRESA>.com` (si aplica) |
-| Correo del desarrollador | `<EMAIL_ADMIN>` |
+## Qué decirle a la gente
 
-3. **Scopes** — en la UI nueva están en **Acceso a los datos** (no en Descripción general). Agregar los que correspondan:
-
-| Scope | App |
-|-------|-----|
-| `https://www.googleapis.com/auth/drive.readonly` | Drive |
-| `https://www.googleapis.com/auth/gmail.readonly` | Gmail lectura |
-| `https://www.googleapis.com/auth/gmail.compose` | Gmail borradores (Google no ofrece un scope “solo draft”; el MCP no envía) |
-| `https://www.googleapis.com/auth/calendar` | Calendar |
-
-4. Guardar hasta finalizar.
-
-### 4. Crear credenciales OAuth
-
-1. **APIs y servicios → Credenciales**
-2. **Crear credenciales → ID de cliente OAuth**
-3. Tipo de aplicación: **App de escritorio** (Desktop app)
-4. Nombre: `dt-drive-desktop`
-5. **Crear** → **Descargar JSON**
-
-### 5. Renombrar y distribuir
-
-| Acción | Detalle |
-|--------|---------|
-| Renombrar archivo descargado | `dt-drive-credentials.json` |
-| Canal de distribución | 1Password / carpeta Drive restringida / wiki interna |
-| **Prohibido** | Subir al repo público de El DT, Slack público, email sin cifrar |
-
-### 6. Comunicar a usuarios
-
-Enviar enlace al archivo + guía [drive-cerebro-setup.md](../02_guides/drive-cerebro-setup.md) (`DOC-GUIDE-009`).
-
-**Mensaje sugerido (Cursor):**
+**Cursor:**
 
 ```text
-1. Descargá dt-drive-credentials.json (canal interno)
-2. /yo
-3. /drive, /gmail o /calendar — el DT pregunta si es una app o las tres
-4. ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --apps …
-5. Reiniciá Cursor
+1. /yo
+2. /drive, /gmail o /calendar — el DT pregunta si es una app o las tres
+3. Aceptá el plugin del marketplace
+4. Autenticá tu cuenta Google
 ```
 
-**Mensaje sugerido (Antigravity):**
+**Antigravity / Claude:**
 
 ```text
-1. Descargá dt-drive-credentials.json (canal interno)
-2. /yo
-3. /drive, /gmail o /calendar
-4. ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --ide antigravity --apps …
-5. Reiniciá Antigravity
+1. Pedile a IT el alta del MCP remoto (este runbook, camino B)
+2. /yo → /drive /gmail /calendar
+3. Completá OAuth en el IDE
 ```
 
-**Ambos IDEs en la misma PC:** usar `--ide all` en el paso 3.
-
-### 7. API vs MCP en GCP / marketplace
-
-| Qué | ¿Hace falta? |
-|-----|--------------|
-| **Google Drive API** (y Gmail / Calendar si aplica) | **Sí** |
-| Plugin marketplace Cursor | **No** — `google-drive-dt` + Desktop OAuth |
-
-## Qué contiene el JSON (referencia)
-
-El archivo incluye campos como:
-
-```json
-{
-  "installed": {
-    "client_id": "<CLIENT_ID>.apps.googleusercontent.com",
-    "client_secret": "<CLIENT_SECRET>",
-    "redirect_uris": ["http://localhost"]
-  }
-}
-```
-
-- **client_id** — identificador público de la app (puede compartirse internamente).
-- **client_secret** — distribuir solo por canal interno; nunca en Git.
-
-## Seguridad
+## Seguridad (postura DT)
 
 | Práctica | Motivo |
 |----------|--------|
-| Scope `drive.readonly` | El DT no escribe en Drive |
-| Scopes Gmail `readonly` + `compose` | Lectura + borradores; el servidor no envía |
-| Scope `calendar` | Eventos |
-| App **Interna** | Sin verificación pública; solo Workspace |
-| Tokens por usuario en `~/.config/` | Cada persona autoriza **su** cuenta (no la del admin GCP, salvo que sea la misma) |
-| Selectores locales | Política del DT; no es un sandbox de Google |
+| Drive solo lectura en skills | El plugin oficial puede crear archivos; el DT no las usa |
+| Gmail sin send en skills | Cursor Gmail puede enviar; el humano envía el borrador |
+| App interna / allow de dominio | Solo cuentas de la org |
+| Selectores locales | Política DT; no es un sandbox de Google |
+| Sin JSON en Git | Nada de `dt-drive-credentials.json` en el framework |
 
-## Rotación y revocación
+## Legado (descontinuado)
+
+Si la org todavía tiene un Desktop OAuth y `google-drive-dt` en `mcp.json`:
+
+1. Conectar el oficial.
+2. `./scripts/setup-drive.sh --remove-legacy`
+3. Dejar de distribuir `dt-drive-credentials.json`.
+4. Cada persona puede borrar `~/.config/mcp-server-google-drive/` en su máquina.
+5. Revocar el client Desktop viejo en Cloud Console cuando nadie lo use.
+
+## Rotación
 
 | Evento | Acción |
 |--------|--------|
-| Filtración de client_secret | Revocar credencial en Cloud Console → crear nueva → redistribuir |
-| Usuario deja la empresa | Revocar acceso en [myaccount.google.com/permissions](https://myaccount.google.com/permissions) |
-| Cambio de scope | Acceso a los datos → usuarios re-autorizan con `/drive`, `/gmail` o `/calendar` |
+| Alguien deja la empresa | Revocar la app en la cuenta Google / Admin |
+| Filtración de client web (camino B) | Rotar secret en GCP; no está en Git |
+| Usuario quiere desconectar | Cerrar sesión del plugin / conector |
 
 ## Verificación
 
-1. Un usuario piloto descarga `dt-drive-credentials.json`
-2. Corre `./scripts/setup-drive.sh ruta/al/dt-drive-credentials.json`
-3. Completa OAuth en navegador
-4. En Cursor: `/drive`, `/gmail` o `/calendar` → selector → prueba
+1. Piloto en Cursor: `/gmail` → plugin → busca un hilo de prueba → deja un **borrador** (no enviar).
+2. Si aplica Antigravity: mismas tools vía MCP remoto.
+3. Confirmá que `google-drive-dt` ya no está en la config MCP.
 
 ## Related docs
 
-- [Setup usuario — Drive / Gmail / Calendar](../02_guides/drive-cerebro-setup.md) (`DOC-GUIDE-009`)
+- [Setup usuario](../02_guides/drive-cerebro-setup.md) (`DOC-GUIDE-009`)
+- [ADR-006](../05_decisions/adr-006-mcp-google-oficial.md) (`DOC-DEC-006`)
 - [Colaboración Git](git-colaboracion-dt.md) (`DOC-OPS-001`)

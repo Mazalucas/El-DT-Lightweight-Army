@@ -1,11 +1,11 @@
 ---
-description: "[Rutina] Conectar Google Calendar — mismo login que Drive/Gmail; listar y crear eventos."
+description: "[Rutina] Conectar Calendar (plugin oficial) — listar y crear eventos."
 dt_command: calendar
 ---
 # /calendar
 
 **Grupo:** Rutina del día a día
-**En una frase:** Conectar Google Calendar — mismo login que Drive/Gmail; listar y crear eventos.
+**En una frase:** Conectar Calendar (plugin oficial) — listar y crear eventos.
 **Cuándo:** Querés agenda o crear un evento. Pregunta si es solo Calendar o las tres apps.
 **Quién:** Cualquier operador del repo.
 

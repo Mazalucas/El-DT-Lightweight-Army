@@ -3,7 +3,7 @@
 # Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
 
 version: 1
-updated: "2026-10-02"
+updated: "2026-10-05"
 documents:
   - id: DOC-ARCH-002
     title: "Arquitectura de la capacidad Atelier"
@@ -40,6 +40,11 @@ documents:
     path: 05_decisions/adr-005-optimizacion-contexto-dt.md
     type: decision
     tags: [adr, context, tokens, rules]
+  - id: DOC-DEC-006
+    title: "ADR-006: Descontinuar google-drive-dt — MCP oficiales de Google por IDE"
+    path: 05_decisions/adr-006-mcp-google-oficial.md
+    type: decision
+    tags: [adr, google, mcp, drive, gmail, calendar]
   - id: DOC-DESIGN-001
     title: "Atelier — design intelligence en El DT"
     path: 01_concepts/design-atelier-el-dt.md
@@ -111,7 +116,7 @@ documents:
     type: runbook
     tags: [git, collaboration, session]
   - id: DOC-OPS-002
-    title: "Google Workspace — administración OAuth (Google Cloud)"
+    title: "Google Workspace — permitir los MCP oficiales (Cursor / Antigravity / Claude)"
     path: 06_operations/drive-google-cloud-admin.md
     type: runbook
     tags: [drive, gmail, calendar, google-cloud, oauth, security, mcp]

@@ -11,7 +11,7 @@
 | [sync-skills-parity.sh](sync-skills-parity.sh) | `.cursor/skills/` → `.agents/skills/` (raíz: solo `SKILL.md`; `marketing/*`: árbol completo) |
 | [atelier-detect.sh](atelier-detect.sh) | Anti-slop determinístico (Impeccable CLI, 44+ reglas) sobre archivos o URLs |
 | [dt-design-select.rb](dt-design-select.rb) | Selección de estilo/sistema Atelier según brief (motor de `/atelier select`) |
-| [setup-drive.sh](setup-drive.sh) | MCP Google Drive/Gmail/Calendar (`--apps`, `--ide`; credenciales en `~/.config/`) |
+| [setup-drive.sh](setup-drive.sh) | Guía MCP Google oficial por IDE; `--remove-legacy` saca `google-drive-dt` |
 | [project-version.rb](project-version.rb) | Motor de aislamiento product vs DT (`resolve`, `guard`, `doctor`) |
 | [project-bump-version.sh](project-bump-version.sh) | Incrementa `VERSION` (aborta en consumer si todavía es la del DT) |
 | [project-sync-version.sh](project-sync-version.sh) | Propaga `VERSION` al producto; en consumer no escribe `framework_version` |

@@ -2,14 +2,14 @@
 dt_command: drive
 group: routine
 group_title: "Rutina del día a día"
-tagline: "Conectar Google Drive y elegir carpetas como contexto del cerebro."
+tagline: "Conectar Drive (plugin oficial) y elegir carpetas como contexto. Solo lectura."
 skill: dt-drive
 ---
 
 # /drive
 
 **Grupo:** Rutina del día a día
-**En una frase:** Conectar Google Drive y elegir carpetas como contexto del cerebro.
+**En una frase:** Conectar Drive (plugin oficial) y elegir carpetas como contexto. Solo lectura.
 **Cuándo:** Primera vez que querés consultar documentos en Drive con el DT; o para cambiar qué carpetas compartís.
 **Quién:** Cualquier operador del repo.
 

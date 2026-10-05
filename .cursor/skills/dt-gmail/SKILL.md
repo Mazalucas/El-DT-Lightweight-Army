@@ -1,24 +1,22 @@
 ---
 name: dt-gmail
-description: "[Rutina] Conectar Gmail al cerebro del DT — OAuth compartido con Drive/Calendar, política de lectura, borradores. Use when the user invokes /gmail or wants the DT to search mail or leave drafts."
+description: "[Rutina] Conectar Gmail al cerebro del DT — plugin oficial del IDE, etiquetas, borradores en hilo. Use when the user invokes /gmail or wants the DT to search mail or leave drafts."
 ---
 
 # dt-gmail
 
-Integración **opcional** de Gmail vía el mismo MCP que Drive (`google-drive-dt`). Un token, varios scopes. Spec: `vitals/specs/google-apps-mcp.md`.
+Integración **opcional** de Gmail vía el **MCP oficial del IDE**. `google-drive-dt` está descontinuado.
 
-**Guías:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`) · admin: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`).
+**Spec:** `vitals/specs/google-apps-mcp.md`. **Guías:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`) · admin: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`). **ADR:** `DOC-DEC-006`.
 
 ## Prerequisitos
 
-Igual que `/drive`: sesión (`/yo`), Node 18+, JSON OAuth de la empresa, MCP en el IDE.
+Sesión (`/yo`). Plugin o conector oficial de Gmail. Sin JSON Desktop ni Node.
 
 ## Archivos
 
 | Archivo | Git | Rol |
 |---------|-----|-----|
-| `~/.config/mcp-server-google-drive/oauth-credentials.json` | No | App interna (compartida) |
-| `~/.config/mcp-server-google-drive/tokens.json` | No | Token de la cuenta que autorizó |
 | `vitals/config/google-apps.yaml` | No | Apps habilitadas |
 | `vitals/config/gmail-context.yaml` | No | Etiquetas / queries |
 | `vitals/config/gmail-context.yaml.example` | Sí | Plantilla |
@@ -26,44 +24,41 @@ Igual que `/drive`: sesión (`/yo`), Node 18+, JSON OAuth de la empresa, MCP en 
 ## Flujo `/gmail`
 
 1. Confirmar `/yo`.
-2. **Embudo** (no saltear): *¿solo Gmail o también Drive y Calendar?* Ver spec.
-3. Armar `--apps` (unión con `google-apps.yaml` si ya hay otras apps).
-4. `./scripts/setup-drive.sh [creds] --apps <lista> [--ide …]` — re-auth si faltan scopes.
-5. Reiniciar IDE si las tools no aparecen.
-6. **Selector de contexto Gmail** (abajo).
-7. Actualizar `google-apps.yaml` (`gmail: true`) y `gmail-context.yaml`.
+2. **Embudo:** *¿solo Gmail o también Drive y Calendar?*
+3. **Instalar el oficial:**
+   - **Cursor:** `install_plugin` con `pluginName: gmail`. Auth si `needsAuth`.
+   - **Antigravity / Claude:** URL `https://gmailmcp.googleapis.com/mcp/v1` (spec). Preview + OAuth web.
+4. Esperar tools de búsqueda/lectura/draft. Si no hay, parar — no inventar el inbox.
+5. **Selector de contexto.** Actualizar `google-apps.yaml` (`gmail: true`) y `gmail-context.yaml`.
+6. Legado `google-drive-dt` → ofrecer `--remove-legacy` cuando el oficial ya lea mail.
 
-Si ya hay Gmail conectado y solo quieren cambiar etiquetas → selector, sin re-auth.
+Si solo quieren cambiar etiquetas y Gmail ya está → selector.
 
 ## Selector de contexto
 
-Objetivo: no leer “todo el correo” salvo que lo pidan (`sync_mode: full_mailbox`).
+No leer “todo el correo” salvo `sync_mode: full_mailbox` pedido explícito.
 
 1. Mostrar `gmail-context.yaml` si existe.
-2. Pedir **etiquetas** (nombres) y/o queries Gmail (`from:`, `newer_than:`, `label:`) con una frase de propósito cada una.
-3. Si existen tools MCP de listado/búsqueda, ayudar a elegir; si no, registrar lo que el usuario dicte.
+2. Pedir etiquetas y/o queries (`from:`, `newer_than:`, `label:`) con propósito.
+3. Si hay `list_labels` / `list_email_labels`, ayudar a elegir.
 4. Escribir el YAML (schema del `.example`). No va a Git.
 
 ## Uso diario
 
-Cuando `gmail-context.yaml` existe y el MCP está activo:
-
-1. Acotar búsquedas a labels/queries registradas (`selective`).
-2. **Borradores** con `gmail_create_draft` — el humano envía en Gmail. Nunca `messages.send`.
-3. Si no hay `gmail_search` / `gmail_get_message`, no fingir lectura del inbox.
-4. No copiar hilos sensibles al repo (`vitals/charter/no-secrets.md`).
-5. El token ve todo el buzón de esa cuenta; el YAML es política DT.
+1. Acotar a labels/queries (`selective`).
+2. **Borradores** — `create_draft` / `draft_email` / `gmail_create_draft`. Reply en cadena: `replyToMessageId` o `threadId` + `inReplyTo`. El humano envía en Gmail.
+3. **Etiquetar** mails/hilos existentes si lo piden. Crear label nuevo solo con pedido explícito y tool real.
+4. **Nunca enviar** — no `send_email`, no `messages.send`, no `drafts.send`.
+5. No copiar hilos sensibles al repo.
+6. El token ve todo el buzón; el YAML es política DT.
 
 ## Tools
 
-| Tool | Uso |
-|------|-----|
-| `gmail_create_draft` | Dejar un borrador (to, subject, body) |
-| `gmail_search` / `gmail_get_message` | Solo si el MCP las expone |
+Usar las que existan (spec). Típico oficial Google: `search_threads`, `get_thread`, `create_draft`, `list_labels`, `label_message`, `label_thread`. Cursor puede exponer nombres distintos (`search_emails`, `read_email`, `draft_email`).
 
 ## No hacer
 
-- No commitear contextos, tokens ni credenciales.
+- No commitear contextos ni cuentas GCP.
 - No enviar mail.
+- No reinstalar `google-drive-dt`.
 - No asumir Gmail conectado — opt-in.
-- No documentar en el repo qué cuenta o proyecto GCP se usó.

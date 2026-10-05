@@ -5,7 +5,7 @@ type: guide
 status: canonical
 owner: dt-platform
 created: 2026-07-30
-updated: 2026-09-28
+updated: 2026-10-02
 tags:
   - drive
   - gmail
@@ -18,13 +18,14 @@ tags:
   - cursor
 domain:
   - meta
-summary: Conectar Drive, Gmail o Calendar al DT — un OAuth, MCP por IDE, preguntar una app o las tres, selectores locales sin Git.
+summary: Conectar Drive, Gmail o Calendar al DT con el MCP oficial de cada IDE — marketplace en Cursor, remoto Google en Antigravity/Claude. Selectores locales sin Git.
 related:
   - DOC-OPS-002
   - DOC-GUIDE-001
   - DOC-OV-004
   - DOC-GUIDE-006
   - DOC-OPS-001
+  - DOC-DEC-006
 keywords:
   - drive
   - gmail
@@ -32,7 +33,7 @@ keywords:
   - google
   - mcp
   - cerebro
-  - carpetas
+  - marketplace
   - antigravity
   - cursor
 priority: high
@@ -48,154 +49,89 @@ review_cycle_days: 90
 
 ## Summary
 
-Conectá Drive, Gmail y/o Calendar para que el DT los consulte (y, en Calendar, cree eventos; en Gmail, deje **borradores**). **Un solo login de Google.** En `/drive`, `/gmail` o `/calendar` el DT **pregunta siempre** si autorizás solo esa app o las tres. Credenciales de la empresa fuera del repo; selectores solo en tu PC.
+Conectá Drive, Gmail y/o Calendar para que el DT los consulte (Calendar: crear eventos; Gmail: **borradores**, también en una cadena; etiquetas). El DT usa el **MCP oficial de tu IDE**, no un servidor propio.
 
-**No confundir:** en Google Cloud habilitás las APIs (Drive, y si aplica Gmail y Calendar). No hace falta el plugin "Google Drive MCP" del marketplace de Cursor — usamos `google-drive-dt` (`npx @ibarcarty/mcp-server-google-drive`).
+En `/drive`, `/gmail` o `/calendar` el DT **pregunta si autorizás solo esa app o las tres**. Los selectores quedan en tu PC; no van a Git.
 
-Spec interno: `vitals/specs/google-apps-mcp.md`.
+Spec: `vitals/specs/google-apps-mcp.md`. Decisión: `DOC-DEC-006`.
 
-## Qué instala el setup (4 capas)
+**Descontinuado:** `google-drive-dt` / `@ibarcarty/mcp-server-google-drive` / `dt-drive-credentials.json`. Si todavía lo tenés, autenticá el oficial y corré `./scripts/setup-drive.sh --remove-legacy`.
+
+## Qué queda en tu máquina
 
 | Capa | Qué es | ¿Por persona? | ¿Dónde vive? |
 |------|--------|---------------|--------------|
-| 1. Credenciales OAuth | JSON de la app interna de la empresa | No — una para todos | Canal interno → `~/.config/mcp-server-google-drive/oauth-credentials.json` |
-| 2. Login Google | Token de **tu** cuenta (la que hace clic en el consentimiento) | Sí | `~/.config/mcp-server-google-drive/tokens.json` |
-| 3. MCP en el IDE | Cómo arrancar el servidor | Sí — por IDE | Cursor: `~/.cursor/mcp.json` · Antigravity: `~/.gemini/config/mcp_config.json` |
-| 4. Selectores | Carpetas / etiquetas / calendarios | Sí | `vitals/config/*-context.yaml` + `google-apps.yaml` (local, no Git) |
-
-El MCP **no se clona al repo**: corre con `npx`. No hace falta desplegar Cloud Run para uso en el IDE.
+| 1. Plugin o conector | MCP oficial del IDE | Sí | Cursor: marketplace · Antigravity/Claude: config MCP del IDE |
+| 2. Login Google | Consentimiento de **tu** cuenta | Sí | Lo guarda el IDE / Google |
+| 3. Selectores | Carpetas / etiquetas / calendarios | Sí | `vitals/config/*-context.yaml` + `google-apps.yaml` (local, no Git) |
 
 ## Embudo (una app o las tres)
 
-Al invocar `/drive`, `/gmail` o `/calendar` el DT pregunta si el acceso es **solo esa app** o **las tres**. Después:
+Al invocar `/drive`, `/gmail` o `/calendar` el DT pregunta si el acceso es **solo esa app** o **las tres**. Después instala el plugin o el conector que falte.
 
-```bash
-./scripts/setup-drive.sh ruta/al/dt-drive-credentials.json --apps drive
-./scripts/setup-drive.sh --apps gmail
-./scripts/setup-drive.sh --apps calendar
-./scripts/setup-drive.sh --apps all
-```
+Postura del DT (aunque el oficial permita más):
 
-`--apps` se puede combinar (`drive,gmail`). Si el token no tiene esos scopes, se reabre el navegador.
-
-Drive en el DT queda **solo lectura**. Gmail: lectura (si el MCP trae esas tools) + borradores, **sin enviar**. Calendar: leer y escribir eventos.
+- Drive: **solo lectura**
+- Gmail: leer, borrador (incl. reply), etiquetar; **no envía**
+- Calendar: leer y escribir eventos; borrar solo si lo confirmás
 
 ## Antes de empezar
 
-| Requisito | Quién lo provee |
-|-----------|-----------------|
-| Cuenta Google de la empresa (`@<TUEMPRESA>.com`) | Tu organización |
-| Archivo `dt-drive-credentials.json` | Admin / IT (1Password o Drive restringido) |
-| Node.js 18+ | Instalación local (`node -v`) |
-| Sesión DT | `/yo` en Cursor o Antigravity |
+| Requisito | Quién |
+|-----------|--------|
+| Cuenta Google de trabajo | Tu organización |
+| IDE con marketplace o conector MCP | Cursor, Antigravity o Claude |
+| Sesión DT | `/yo` |
 
-**Admin:** proyecto OAuth en GCP → [drive-google-cloud-admin.md](../06_operations/drive-google-cloud-admin.md) (`DOC-OPS-002`).
+**IT / Workspace:** permitir las apps oficiales y, si usás Antigravity o Claude, el MCP remoto de Google — [drive-google-cloud-admin.md](../06_operations/drive-google-cloud-admin.md) (`DOC-OPS-002`).
 
 ---
 
-## Opción A — Cursor
+## Opción A — Cursor (recomendado)
+
+Plugins: **Google Drive**, **Gmail**, **Google Calendar** (marketplace, verificados por Cursor).
 
 ### Tarjeta rápida
 
 ```text
-1. Descargá dt-drive-credentials.json (canal interno)
-2. /yo
-3. /drive (o /gmail o /calendar) — el DT pregunta si es una app o las tres
-4. ./scripts/setup-drive.sh ruta/al/dt-drive-credentials.json --apps …
-5. Reiniciá Cursor
-6. Completá el selector de esa app
+1. /yo
+2. /drive (o /gmail o /calendar) — el DT pregunta si es una app o las tres
+3. Aceptá el plugin del marketplace cuando el DT lo ofrezca
+   (o a mano: /add-plugin google-drive · /add-plugin gmail · /add-plugin google-calendar)
+4. Autenticá la cuenta Google cuando el plugin lo pida
+5. Completá el selector de esa app
 ```
 
-### Detalle paso a paso
+### Verificar
 
-1. **Credenciales** — guardá el JSON en un lugar seguro (Downloads, 1Password, etc.).
-2. **Identidad** — en el chat: `/yo` → "Soy Ana García, rol …".
-3. **Setup** — en terminal, desde la raíz del repo:
-
-   ```bash
-   ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --apps drive
-   ```
-
-   El script:
-   - Copia credenciales a `~/.config/` (chmod 600)
-   - Abre el navegador para login Google (scopes según `--apps`)
-   - Registra `google-drive-dt` en `~/.cursor/mcp.json`
-
-4. **Reiniciar Cursor** — Settings → MCP → `google-drive-dt` en verde.
-5. **Selector** — `/drive` (carpetas), `/gmail` (etiquetas) o `/calendar` (calendarios).
-
-### Verificar en Cursor
-
-Settings → MCP → servidor **`google-drive-dt`** activo (indicador verde).
+Settings → MCP / Plugins: Drive, Gmail y/o Calendar autenticados. El servidor **`google-drive-dt` no debería estar**.
 
 ---
 
 ## Opción B — Antigravity
 
-El command **`/drive`** (y `/gmail`, `/calendar`) y las skills **`dt-drive`**, **`dt-gmail`**, **`dt-calendar`** ya están en el repo. El OAuth es el mismo; solo cambia dónde se registra el MCP.
+No hay marketplace de Cursor. Se usa el **MCP remoto de Google Workspace** (Developer Preview).
 
 ### Tarjeta rápida
 
 ```text
-1. Descargá dt-drive-credentials.json (canal interno)
+1. IT habilita las APIs MCP en el proyecto GCP de la org (DOC-OPS-002)
 2. /yo
-3. ./scripts/setup-drive.sh ruta/al/dt-drive-credentials.json --ide antigravity --apps drive
-   (o --ide all si también usás Cursor)
-4. Reiniciá Antigravity
-5. /drive → elegí carpetas
+3. /drive · /gmail · /calendar — el DT te arma el bloque para
+   ~/.gemini/config/mcp_config.json (URLs drivemcp / gmailmcp / calendarmcp)
+4. Autenticá en Manage MCP Servers
+5. Completá el selector
 ```
 
-### Detalle paso a paso
+Guía Google: [Configure the Google Workspace MCP servers](https://developers.google.com/workspace/guides/configure-mcp-servers).
 
-1. **Credenciales + OAuth** — mismo script que Cursor:
-
-   ```bash
-   ./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --ide antigravity --apps drive
-   ```
-
-   Escribe en `~/.gemini/config/mcp_config.json` (Antigravity 2.0+). Si tu versión es anterior, el script también prueba `~/.gemini/antigravity/mcp_config.json`.
-
-2. **Verificar MCP en Antigravity** — panel del agente → **⋯** → **Manage MCP Servers** → **View raw config**. Debe aparecer `google-drive-dt`.
-
-3. **Alternativa manual** — si el script no encuentra tu ruta de config, pegá este bloque en el JSON de MCP (ajustá `<usuario>`):
-
-   ```json
-   "google-drive-dt": {
-     "command": "npx",
-     "args": ["-y", "@ibarcarty/mcp-server-google-drive"],
-     "env": {
-       "GDRIVE_MCP_OAUTH_PATH": "/Users/<usuario>/.config/mcp-server-google-drive/oauth-credentials.json",
-       "GDRIVE_MCP_TOKEN_PATH": "/Users/<usuario>/.config/mcp-server-google-drive/tokens.json",
-       "GDRIVE_MCP_SCOPES": "https://www.googleapis.com/auth/drive.readonly"
-     }
-   }
-   ```
-
-   `GDRIVE_MCP_SCOPES` es una lista separada por comas. El script la arma según `--apps` (Drive, Gmail, Calendar). No pongas secretos ni IDs de proyecto en el repo.
-
-4. **Reiniciar Antigravity** tras guardar la config.
-
-5. **Selector** — `/drive`, `/gmail` o `/calendar`.
-
-### Rutas MCP Antigravity (referencia)
-
-| Versión / alcance | Archivo |
-|-------------------|---------|
-| Global (2.0+, recomendado) | `~/.gemini/config/mcp_config.json` |
-| Global (legacy pre-2.0) | `~/.gemini/antigravity/mcp_config.json` |
-| Solo este proyecto | `.agents/mcp_config.json` en la raíz del repo |
-
-Para equipos: preferí **global** (`~/.gemini/config/`) para no commitear config personal.
+No pongas Client ID ni secret en el repo.
 
 ---
 
-## Opción C — Cursor y Antigravity en la misma máquina
+## Opción C — Claude Code / Claude.ai
 
-```bash
-./scripts/setup-drive.sh ~/Downloads/dt-drive-credentials.json --ide all --apps drive
-```
-
-OAuth y credenciales son **una sola vez**; el script registra el MCP en ambos IDEs. Reiniciá **ambos** clientes.
+Mismas URLs remotas. En Claude: Settings → Connectors → custom connector. Hace falta un plan que permita conectores. El DT no inventa credenciales.
 
 ---
 
@@ -209,42 +145,42 @@ OAuth y credenciales son **una sola vez**; el script registra el MCP en ambos ID
 
 Nada de eso va a GitHub. También se actualiza `google-apps.yaml`.
 
-## Uso diario (después del setup)
+## Uso diario
 
 - Drive: *“según el brief en Drive…”* — regla `18-drive-contexto`.
-- Gmail: *“dejame un borrador a…”* / búsqueda si el MCP tiene tools de lectura — regla `19-gmail-contexto`.
+- Gmail: *“respondé este hilo en un borrador”* / *“etiquetá…”* — regla `19-gmail-contexto`.
 - Calendar: *“qué tengo mañana”* / *“agendá 30 min…”* — regla `21-calendar-contexto`.
 
 ## Qué NO se comparte
 
 | Dato | ¿Va al repo público? |
 |------|----------------------|
-| Credenciales OAuth de la empresa | **No** |
-| Tu token de Google | **No** |
+| Tokens o Client IDs | **No** |
 | Carpetas, etiquetas, calendarios elegidos | **No** |
 | Contenido de archivos, mails o eventos | **No** — bajo demanda |
-| Cuenta o proyecto GCP usados en esta máquina | **No** |
+| Cuenta o proyecto GCP | **No** |
 
 ## Cambiar selectores / desvincular
 
 | Acción | Cómo |
 |--------|------|
 | Agregar o quitar carpetas / labels / calendarios | El command de esa app de nuevo |
-| Desvincular cuenta | Borrar `tokens.json` y los YAML locales (`drive-context`, `gmail-context`, `calendar-context`, `google-apps`) |
-| Rotar credenciales empresa | Admin regenera secret en GCP → redistribuir JSON |
+| Desvincular cuenta | Cerrar sesión en el plugin o conector del IDE; vaciar los YAML locales si querés |
+| Sacar el MCP viejo | `./scripts/setup-drive.sh --remove-legacy` |
 
 ## Problemas frecuentes
 
 | Problema | Solución |
 |----------|----------|
-| No aparecen tools de Drive | Reiniciar IDE; verificar MCP config del IDE |
-| `access_denied` en login | App OAuth interna + IT — `DOC-OPS-002` |
-| Carpeta no listada | Tu cuenta no tiene permiso en Drive |
-| Antigravity no ve el servidor | Manage MCP Servers → raw config; usar `--ide antigravity` |
-| Cursor OK, Antigravity no | Correr setup con `--ide all` |
+| No aparecen tools | Autenticar el plugin; reiniciar el IDE |
+| Cursor: plugin cancelado | `/add-plugin …` a mano o repetir el command |
+| Antigravity sin servidor | Preview + IT (`DOC-OPS-002`); no reinstalar `google-drive-dt` |
+| Siguen tools del MCP viejo | `--remove-legacy` cuando el oficial ya funciona |
+| `access_denied` | Workspace no permite la app oficial — IT |
 
 ## Related docs
 
-- [Admin Google Cloud — OAuth](../06_operations/drive-google-cloud-admin.md) (`DOC-OPS-002`)
-- [Multi-IDE — Cursor y Antigravity](ide-setup.md) (`DOC-GUIDE-001`)
-- [Cerebro equipo — mecanismos DT](../00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
+- [Admin Workspace / Google Cloud](../06_operations/drive-google-cloud-admin.md) (`DOC-OPS-002`)
+- [Multi-IDE](ide-setup.md) (`DOC-GUIDE-001`)
+- [Cerebro equipo](../00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
+- [ADR-006](../05_decisions/adr-006-mcp-google-oficial.md) (`DOC-DEC-006`)
