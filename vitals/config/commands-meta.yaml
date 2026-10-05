@@ -1,6 +1,6 @@
 # Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agents/workflows
 version: 1
-updated: "2026-10-02"
+updated: "2026-10-05"
 locale: es
 
 groups:
@@ -144,6 +144,12 @@ commands:
     example: "/ordenar  ·  /ordenar quick  ·  /ordenar inbox  ·  /ordenar docs onboarding"
     skill: dt-ordenar
 
+  skills:
+    group: framework
+    tagline: "Dejar las skills iguales en todos los IDE — una sola copia canónica."
+    when: "Creaste o editaste una skill, o un IDE no ve una skill que en otro sí."
+    example: "/skills"
+    skill: dt-skills
   setup:
     group: framework
     tagline: "Verificar o reparar la estructura multi-IDE del DT."

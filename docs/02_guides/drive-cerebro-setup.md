@@ -5,7 +5,7 @@ type: guide
 status: canonical
 owner: dt-platform
 created: 2026-07-30
-updated: 2026-10-02
+updated: 2026-10-05
 tags:
   - drive
   - gmail
@@ -18,7 +18,7 @@ tags:
   - cursor
 domain:
   - meta
-summary: Conectar Drive, Gmail o Calendar al DT con el MCP oficial de cada IDE — marketplace en Cursor, remoto Google en Antigravity/Claude. Selectores locales sin Git.
+summary: Conectar Drive, Gmail o Calendar al DT desde el marketplace o Store oficial del IDE. Si Authenticate no aparece, parar; el DT no recorre Cloud Console.
 related:
   - DOC-OPS-002
   - DOC-GUIDE-001
@@ -49,7 +49,7 @@ review_cycle_days: 90
 
 ## Summary
 
-Conectá Drive, Gmail y/o Calendar para que el DT los consulte (Calendar: crear eventos; Gmail: **borradores**, también en una cadena; etiquetas). El DT usa el **MCP oficial de tu IDE**, no un servidor propio.
+Conectá Drive, Gmail y/o Calendar para que el DT los consulte (Calendar: crear eventos; Gmail: **borradores**, también en una cadena; etiquetas). El DT usa el **MCP oficial de tu IDE** (marketplace, MCP Store o Connectors), no un servidor propio.
 
 En `/drive`, `/gmail` o `/calendar` el DT **pregunta si autorizás solo esa app o las tres**. Los selectores quedan en tu PC; no van a Git.
 
@@ -61,13 +61,13 @@ Spec: `vitals/specs/google-apps-mcp.md`. Decisión: `DOC-DEC-006`.
 
 | Capa | Qué es | ¿Por persona? | ¿Dónde vive? |
 |------|--------|---------------|--------------|
-| 1. Plugin o conector | MCP oficial del IDE | Sí | Cursor: marketplace · Antigravity/Claude: config MCP del IDE |
+| 1. Plugin o conector | MCP oficial del IDE | Sí | Cursor: marketplace · Antigravity: MCP Store / Marketplace · Claude: Connectors |
 | 2. Login Google | Consentimiento de **tu** cuenta | Sí | Lo guarda el IDE / Google |
 | 3. Selectores | Carpetas / etiquetas / calendarios | Sí | `vitals/config/*-context.yaml` + `google-apps.yaml` (local, no Git) |
 
 ## Embudo (una app o las tres)
 
-Al invocar `/drive`, `/gmail` o `/calendar` el DT pregunta si el acceso es **solo esa app** o **las tres**. Después instala el plugin o el conector que falte.
+Al invocar `/drive`, `/gmail` o `/calendar` el DT pregunta si el acceso es **solo esa app** o **las tres**. Después instala el plugin o el conector **del marketplace / Store** de ese IDE.
 
 Postura del DT (aunque el oficial permita más):
 
@@ -83,55 +83,39 @@ Postura del DT (aunque el oficial permita más):
 | IDE con marketplace o conector MCP | Cursor, Antigravity o Claude |
 | Sesión DT | `/yo` |
 
-**IT / Workspace:** permitir las apps oficiales y, si usás Antigravity o Claude, el MCP remoto de Google — [drive-google-cloud-admin.md](../06_operations/drive-google-cloud-admin.md) (`DOC-OPS-002`).
+**IT / Workspace:** permitir las apps oficiales. Si usás Antigravity o Claude y no aparece Authenticate, el alta del client es de IT (fuera de este chat).
 
 ---
 
-## Opción A — Cursor (recomendado)
-
-Plugins: **Google Drive**, **Gmail**, **Google Calendar** (marketplace, verificados por Cursor).
-
-### Tarjeta rápida
+## El mismo flujo en todos los IDE
 
 ```text
 1. /yo
-2. /drive (o /gmail o /calendar) — el DT pregunta si es una app o las tres
-3. Aceptá el plugin del marketplace cuando el DT lo ofrezca
-   (o a mano: /add-plugin google-drive · /add-plugin gmail · /add-plugin google-calendar)
-4. Autenticá la cuenta Google cuando el plugin lo pida
-5. Completá el selector de esa app
-```
-
-### Verificar
-
-Settings → MCP / Plugins: Drive, Gmail y/o Calendar autenticados. El servidor **`google-drive-dt` no debería estar**.
-
----
-
-## Opción B — Antigravity
-
-No hay marketplace de Cursor. Se usa el **MCP remoto de Google Workspace** (Developer Preview).
-
-### Tarjeta rápida
-
-```text
-1. IT habilita las APIs MCP en el proyecto GCP de la org (DOC-OPS-002)
-2. /yo
-3. /drive · /gmail · /calendar — el DT te arma el bloque para
-   ~/.gemini/config/mcp_config.json (URLs drivemcp / gmailmcp / calendarmcp)
-4. Autenticá en Manage MCP Servers
+2. /drive, /gmail o /calendar — el DT pregunta si es una app o las tres
+3. Instalá el conector oficial de ese IDE (tabla)
+4. Autenticá tu cuenta Google
 5. Completá el selector
 ```
 
-Guía Google: [Configure the Google Workspace MCP servers](https://developers.google.com/workspace/guides/configure-mcp-servers).
+| IDE | Conector oficial |
+|-----|------------------|
+| Cursor | Marketplace: `/add-plugin google-drive` · `gmail` · `google-calendar` |
+| Antigravity | Customizations → Marketplace, o Settings → Add MCP / MCP Servers. Buscar Gmail, Drive, Calendar |
+| Claude | Settings → Connectors. Conector oficial si existe; si no, la URL remota de Google. Plan con conectores |
 
-No pongas Client ID ni secret en el repo.
+Spec para la IA: `vitals/specs/google-apps-mcp.md`.
 
----
+### Si no aparece Authenticate
 
-## Opción C — Claude Code / Claude.ai
+Pará. No armes un proyecto en Google Cloud ni un client OAuth en este chat. En Antigravity y Claude Google puede pedir un client que **IT crea una vez** para la organización. Cuando te lo pasen, pegalo en tu config local. No lo subas al repo.
 
-Mismas URLs remotas. En Claude: Settings → Connectors → custom connector. Hace falta un plan que permita conectores. El DT no inventa credenciales.
+En Cursor ese paso no existe: el marketplace autentica solo.
+
+Si no hay IT, abrí en el navegador la documentación oficial de Google Workspace MCP. El DT no recorre esos pasos.
+
+### Verificar
+
+El plugin o el servidor de esa app está autenticado. **`google-drive-dt` no debería estar.**
 
 ---
 
@@ -174,13 +158,13 @@ Nada de eso va a GitHub. También se actualiza `google-apps.yaml`.
 |----------|----------|
 | No aparecen tools | Autenticar el plugin; reiniciar el IDE |
 | Cursor: plugin cancelado | `/add-plugin …` a mano o repetir el command |
-| Antigravity sin servidor | Preview + IT (`DOC-OPS-002`); no reinstalar `google-drive-dt` |
+| No aparece Authenticate | Falta el client de IT. No crear un proyecto Cloud en el chat. No reinstalar `google-drive-dt` |
 | Siguen tools del MCP viejo | `--remove-legacy` cuando el oficial ya funciona |
 | `access_denied` | Workspace no permite la app oficial — IT |
 
 ## Related docs
 
-- [Admin Workspace / Google Cloud](../06_operations/drive-google-cloud-admin.md) (`DOC-OPS-002`)
+- [Admin Workspace / Google Cloud](../06_operations/drive-google-cloud-admin.md) (`DOC-OPS-002`) — solo IT, no el chat de `/gmail`
 - [Multi-IDE](ide-setup.md) (`DOC-GUIDE-001`)
 - [Cerebro equipo](../00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
 - [ADR-006](../05_decisions/adr-006-mcp-google-oficial.md) (`DOC-DEC-006`)

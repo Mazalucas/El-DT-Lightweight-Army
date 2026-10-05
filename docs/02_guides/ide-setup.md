@@ -5,7 +5,7 @@ type: guide
 status: canonical
 owner: dt-platform
 created: 2026-04-19
-updated: 2026-06-23
+updated: 2026-10-05
 tags:
   - cursor
   - antigravity
@@ -96,7 +96,7 @@ Tras repair o edición de fuentes canónicas: **`./scripts/dt-doctor.sh`** en ve
 
 - **Reglas:** `vitals/specs/rule-bodies/` + `vitals/config/rules-manifest.yaml` → `./scripts/sync-ide.sh`
 - **Commands:** `vitals/config/commands-meta.yaml` → `./scripts/sync-commands-from-meta.sh`
-- **Skills:** `.cursor/skills/` → espejo vía `sync-skills-parity.sh` / `sync-ide.sh`
+- **Skills:** `.cursor/skills/` → espejo vía `/skills` o `sync-ide.sh` (`sync-skills-parity.sh` solo llena `.agents/skills/`)
 
 ## Related docs
 

@@ -38,4 +38,4 @@ Antes de buscar, leer `vitals/config/drive-context.yaml`:
 - Skill: `.cursor/skills/dt-drive/` · command `/drive` · Gmail `/gmail` · Calendar `/calendar`
 - Spec: `vitals/specs/google-apps-mcp.md`
 - Guía usuario: `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`)
-- Admin Workspace: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`)
+- Paridad de skills: `/skills` · `vitals/specs/skill-standard.md`

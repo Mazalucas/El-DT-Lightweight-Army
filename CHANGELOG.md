@@ -6,6 +6,13 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.12.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.12.0) - 2026-10-05
+
+Minor. Quien ya usa el DT sigue con `/drive`, `/gmail` y `/calendar`.
+
+- **`/skills`.** Una skill se escribe en `.cursor/skills/` y se copia a todos los IDE. `audit-skills.rb` entra en `dt-doctor`.
+- **Google sin Cloud Console.** Si Antigravity o Claude no muestran Authenticate, el DT para. Marketplace / Store / Connectors primero. No recorre el runbook de IT en ese chat.
+
 ## [1.11.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.11.0) - 2026-10-05
 
 Minor. Quien ya usa el DT sigue con `/drive`, `/gmail` y `/calendar`.

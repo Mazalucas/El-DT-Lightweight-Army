@@ -52,15 +52,18 @@ EOF
 print_antigravity() {
   cat <<'EOF'
 
-Antigravity — MCP remoto de Google (Developer Preview)
+Antigravity — Marketplace o MCP Store primero, después Authenticate.
+  Customizations → Marketplace, o Settings → Add MCP / MCP Servers.
+  Buscá Gmail, Drive, Calendar.
+
+Si el Store no lista la app, URL oficial (sin bloque oauth):
   Drive:     https://drivemcp.googleapis.com/mcp/v1
   Gmail:     https://gmailmcp.googleapis.com/mcp/v1
   Calendar:  https://calendarmcp.googleapis.com/mcp/v1
+  Config: ~/.gemini/config/mcp_config.json
 
-Config típica: ~/.gemini/config/mcp_config.json
-Hace falta proyecto GCP + client OAuth web (IT). Ver DOC-OPS-002.
-Guía Google: https://developers.google.com/workspace/guides/configure-mcp-servers
-No pongas Client ID/secret en el repo.
+Si no aparece Authenticate, parar. El client OAuth lo da IT.
+No recorras Google Cloud Console en el chat. No pongas el secret en el repo.
 
 EOF
 }
@@ -68,10 +71,12 @@ EOF
 print_claude() {
   cat <<'EOF'
 
-Claude — conector remoto (mismas URLs que Antigravity)
-  Settings → Connectors → custom connector
-  Plan que permita conectores. IT entrega el client OAuth web.
-  No commitear el secret.
+Claude — Connectors / marketplace del plan
+  Settings → Connectors. Conector oficial si existe.
+  Si no, custom connector con las mismas URLs que Antigravity.
+  Plan que permita conectores.
+  Si pide Client ID o no aparece Authenticate, parar: el client lo da IT.
+  No recorras Google Cloud Console. No commitear el secret.
 
 EOF
 }

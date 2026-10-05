@@ -1,10 +1,10 @@
 # Pulse — puntero actual
 
-**Último pulse_id:** [dt-20261005-001](entries/2026-10-05-dt-20261005-001.md)
+**Último pulse_id:** [dt-20261005-003](entries/2026-10-05-dt-20261005-003.md)
 
-**Versión template:** 1.11.0
+**Versión template:** 1.12.0
 
-**Resumen:** v1.11.0 — `/drive` `/gmail` `/calendar` instalan el MCP oficial del IDE; `google-drive-dt` descontinuado. Previo: `dt-20261002-001`.
+**Resumen:** Marketplace / Store primero en `/drive` `/gmail` `/calendar`. Si falta Authenticate, el DT para y no abre el runbook de IT. Previo: `dt-20261005-002`.
 
 **Proyecto / contexto Git:** El DT, checkout oficial de esta carpeta.
 

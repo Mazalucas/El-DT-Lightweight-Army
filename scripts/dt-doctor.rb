@@ -124,6 +124,7 @@ def check_subscripts
   run_check("catalog", "ruby", File.join(ROOT, "scripts/sync-catalog.rb"), "--check")
   run_check("commands-parity", "ruby", File.join(ROOT, "scripts/sync-commands-from-meta.rb"), "--check")
   run_check("ide-parity", "ruby", File.join(ROOT, "scripts/sync-ide.rb"), "--check")
+  run_check("skills-standard", "ruby", File.join(ROOT, "scripts/audit-skills.rb"))
 end
 
 # 4) Frescura de telemetría (WARN, auto-fixable; no bloquea el loop)

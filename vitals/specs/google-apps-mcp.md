@@ -2,7 +2,7 @@
 
 El DT **no mantiene** un servidor MCP propio. `google-drive-dt` (`@ibarcarty/mcp-server-google-drive`) está **descontinuado**.
 
-Drive, Gmail y Calendar se conectan con el **MCP oficial de cada IDE**. Cada app tiene su propio consentimiento Google. No documentar en Git cuentas, Client IDs, proyectos GCP ni tokens.
+Drive, Gmail y Calendar se conectan con el **MCP oficial de cada IDE** (marketplace, MCP Store o conector del fabricante). Cada app tiene su propio consentimiento Google. No documentar en Git cuentas, Client IDs, proyectos GCP ni tokens.
 
 ADR: `docs/05_decisions/adr-006-mcp-google-oficial.md` (`DOC-DEC-006`).
 
@@ -23,22 +23,31 @@ Luego:
 3. Si el IDE pide reinicio o auth, esperar a que las tools existan. No inventar el inbox, el Drive ni la agenda.
 4. Seguir con el **selector** de esa app (carpetas / etiquetas / calendarios). Si eligió “las tres”, completar el selector de la app del command y ofrecer los otros dos en el mismo turno.
 
-## Instalar por IDE
+## Instalar (el mismo procedimiento en todos los IDE)
 
-| IDE | Cómo | Slug / URL | Qué hace el DT |
-|-----|------|------------|----------------|
-| **Cursor** | Plugin del marketplace | `google-drive` · `gmail` · `google-calendar` | Tool nativa `install_plugin` con ese slug. No afirmar que quedó instalado si el usuario cancela. Después: autenticar el plugin si está en `needsAuth`. |
-| **Antigravity** | MCP remoto de Google Workspace | `https://drivemcp.googleapis.com/mcp/v1` · `https://gmailmcp.googleapis.com/mcp/v1` · `https://calendarmcp.googleapis.com/mcp/v1` | Ayudar a pegar el bloque en `~/.gemini/config/mcp_config.json` y completar OAuth del IDE. Las APIs MCP de Google están en **Developer Preview**; hace falta proyecto GCP y client OAuth **web** (IT). |
-| **Claude Code / Claude.ai** | Conector remoto (mismo host Google) | Mismas URLs | Settings → Connectors → custom connector. Plan Claude que permita conectores. |
-| **Otros** | Si el IDE no tiene plugin ni conector remoto | — | Decir el límite. No reinstalar `google-drive-dt`. |
+Detectá el IDE de esta conversación y usá **solo** la fila que corresponde. Embudo, espera de tools, selector y postura son iguales en todos.
 
-Cursor — atajo humano: `/add-plugin google-drive`, `/add-plugin gmail`, `/add-plugin google-calendar`.
+**Marketplace / Store primero.** El agente no edita `mcp_config.json` salvo para **nombrar la URL oficial** si el Store no lista esa app. Nunca escribe un bloque `oauth`.
 
-Guías Google (no copiar Client IDs al repo):
+| IDE | Conector oficial | Qué hace el agente |
+|-----|------------------|--------------------|
+| **Cursor** | Plugin del marketplace. Slugs: `google-drive` · `gmail` · `google-calendar` | `install_plugin` con ese slug. Atajo humano: `/add-plugin <slug>`. Si `needsAuth`, autentica el operador. No afirmar que quedó instalado si cancela. |
+| **Antigravity** | MCP Store o Marketplace; si no está listada, URL remota de Google | 1) Customizations → Marketplace, o Settings → Add MCP / panel MCP Servers. Buscar Gmail, Drive o Calendar. Instalar. 2) Si ya está la URL oficial y no hay tools: Settings → Installed MCP Servers → Refresh → **Authenticate**. 3) URLs solo si el Store no la ofrece: Drive `https://drivemcp.googleapis.com/mcp/v1` · Gmail `https://gmailmcp.googleapis.com/mcp/v1` · Calendar `https://calendarmcp.googleapis.com/mcp/v1` (`~/.gemini/config/mcp_config.json`). |
+| **Claude Code / Claude.ai** | Connectors / marketplace del plan | Settings → Connectors. Si hay conector oficial de esa app, usarlo. Si no, custom connector con la **misma URL** de la fila Antigravity. Plan con conectores. Si el alta pide Client ID: **Freno**. |
+| **Otro IDE con `receives_skills`** | El conector oficial que ese IDE publique para el mismo slug o la misma URL | Si no hay conector, decir el límite. |
+| **Sin conector** | — | Parar. No reinstalar `google-drive-dt`. |
 
-- Workspace MCP: <https://developers.google.com/workspace/guides/configure-mcp-servers>
-- Gmail MCP: <https://developers.google.com/workspace/gmail/api/guides/configure-mcp-server>
-- Drive MCP: <https://developers.google.com/workspace/drive/api/guides/configure-mcp-server>
+### Freno: no aparece Authenticate
+
+Si la URL o el plugin ya está y el IDE no muestra **Authenticate** (o no hay tools):
+
+1. **Parar.** No seguir al selector. No inventar el inbox, el Drive ni la agenda.
+2. **No recorras Google Cloud Console.** No habilites APIs, no crees un client OAuth, no dictes redirect URIs y no pidas un proyecto GCP personal.
+3. **No abras** el runbook de IT ni las fichas de Google Cloud MCP. No transcribas esos pasos. No armes un JSON con credenciales OAuth.
+4. Decí **solo** esto (sin expandirlo): *Falta el client OAuth de la organización. Pedíselo a IT. Si no hay IT, usá la documentación oficial de Google Workspace MCP en tu navegador. El DT no recorre Google Cloud Console ni pega secrets.*
+5. Seguir solo cuando haya tools reales.
+
+Ese client no es el servidor propio del DT. Es un requisito que Google pide hoy en Antigravity y Claude (Developer Preview, sin registro dinámico). En Cursor el marketplace no pide ese paso. Lo entrega IT **una vez** para la org, fuera de este chat.
 
 ## Postura DT (aunque el oficial permita más)
 
@@ -93,5 +102,5 @@ Si `~/.cursor/mcp.json` o la config de Antigravity todavía tienen el servidor `
 ## Referencias
 
 - Skills: `.cursor/skills/dt-drive/` · `dt-gmail/` · `dt-calendar/`
-- Guía: `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`)
-- Admin Workspace: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`)
+- Guía usuario: `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`)
+- Paridad de skills: `/skills` · `vitals/specs/skill-standard.md`

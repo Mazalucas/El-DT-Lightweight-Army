@@ -1,17 +1,19 @@
 ---
 name: dt-gmail
-description: "[Rutina] Conectar Gmail al cerebro del DT — plugin oficial del IDE, etiquetas, borradores en hilo. Use when the user invokes /gmail or wants the DT to search mail or leave drafts."
+description: "[Rutina] Conectar Gmail al cerebro del DT — marketplace oficial del IDE, etiquetas, borradores en hilo. Use when the user invokes /gmail or wants the DT to search mail or leave drafts."
 ---
 
 # dt-gmail
 
 Integración **opcional** de Gmail vía el **MCP oficial del IDE**. `google-drive-dt` está descontinuado.
 
-**Spec:** `vitals/specs/google-apps-mcp.md`. **Guías:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`) · admin: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`). **ADR:** `DOC-DEC-006`.
+**Spec:** `vitals/specs/google-apps-mcp.md`. **Guía usuario:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`). **ADR:** `DOC-DEC-006`.
+
+No abras el runbook de IT ni fichas de Google Cloud en este chat.
 
 ## Prerequisitos
 
-Sesión (`/yo`). Plugin o conector oficial de Gmail. Sin JSON Desktop ni Node.
+Sesión (`/yo`). Plugin, MCP Store o conector oficial de Gmail. Sin JSON Desktop ni Node.
 
 ## Archivos
 
@@ -25,14 +27,21 @@ Sesión (`/yo`). Plugin o conector oficial de Gmail. Sin JSON Desktop ni Node.
 
 1. Confirmar `/yo`.
 2. **Embudo:** *¿solo Gmail o también Drive y Calendar?*
-3. **Instalar el oficial:**
-   - **Cursor:** `install_plugin` con `pluginName: gmail`. Auth si `needsAuth`.
-   - **Antigravity / Claude:** URL `https://gmailmcp.googleapis.com/mcp/v1` (spec). Preview + OAuth web.
-4. Esperar tools de búsqueda/lectura/draft. Si no hay, parar — no inventar el inbox.
+3. **Instalar el oficial** con el procedimiento único de `vitals/specs/google-apps-mcp.md` § Instalar. Slug en Cursor: `gmail`. Marketplace / Store primero. No recorras Google Cloud Console.
+4. Esperar tools de búsqueda/lectura/draft. Si no hay, **Freno** — no inventar el inbox.
 5. **Selector de contexto.** Actualizar `google-apps.yaml` (`gmail: true`) y `gmail-context.yaml`.
 6. Legado `google-drive-dt` → ofrecer `--remove-legacy` cuando el oficial ya lea mail.
 
 Si solo quieren cambiar etiquetas y Gmail ya está → selector.
+
+## Freno
+
+Si no hay tools o no aparece **Authenticate**:
+
+1. Parar. No seguir al selector. No inventar el inbox.
+2. No recorras Google Cloud Console.
+3. No abras el runbook de IT. No armes un JSON con `clientId`.
+4. Decí solo: *Falta el client OAuth de la organización. Pedíselo a IT. Si no hay IT, usá la documentación oficial de Google Workspace MCP en tu navegador. El DT no recorre Google Cloud Console ni pega secrets.*
 
 ## Selector de contexto
 
@@ -56,9 +65,18 @@ No leer “todo el correo” salvo `sync_mode: full_mailbox` pedido explícito.
 
 Usar las que existan (spec). Típico oficial Google: `search_threads`, `get_thread`, `create_draft`, `list_labels`, `label_message`, `label_thread`. Cursor puede exponer nombres distintos (`search_emails`, `read_email`, `draft_email`).
 
+## Errores frecuentes
+
+| Síntoma | Acción |
+|---------|--------|
+| Plugin cancelado | No seguir al selector. Ofrecer `/add-plugin gmail` |
+| `needsAuth` | El operador autentica el plugin; no fingir el inbox |
+| Antigravity o Claude sin Authenticate | **Freno.** No caer a `google-drive-dt` |
+
 ## No hacer
 
 - No commitear contextos ni cuentas GCP.
 - No enviar mail.
 - No reinstalar `google-drive-dt`.
 - No asumir Gmail conectado — opt-in.
+- No dictar el alta en Cloud.

@@ -18,6 +18,7 @@ Cerebro compartido de **El DT**. Reglas operativas: **`.cursor/rules/`** (Cursor
 | Cumplimiento legal de una app | `/auditoria-legal` · `docs/03_reference/auditoria-legal.md` (`DOC-REF-012`) |
 | Captura de conocimiento | `/ordenar` · `docs/02_guides/ordenar-captura-conocimiento.md` (`DOC-GUIDE-016`) |
 | Google Drive / Gmail / Calendar (opcional) | `docs/02_guides/drive-cerebro-setup.md` · `/drive` `/gmail` `/calendar` |
+| Skills en todos los IDE | `/skills` · `vitals/specs/skill-standard.md` · canon `.cursor/skills/` |
 | Atelier / marketing táctico | `.cursor/skills/atelier/` · guías `design/*/GUIDE.md`, `marketing/*/GUIDE.md` |
 | Paridad multi-IDE | `vitals/config/ide-targets.yaml` · `./scripts/sync-ide.sh` |
 

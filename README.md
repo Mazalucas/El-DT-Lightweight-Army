@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.11.0**
+**v1.12.0**
 
 Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
@@ -26,7 +26,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ## Índice
 
-- [Qué trae v1.11.0](#que-trae)
+- [Qué trae v1.12.0](#que-trae)
 - [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
@@ -39,17 +39,16 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ---
 
-## Qué trae v1.11.0 {#que-trae}
+## Qué trae v1.12.0 {#que-trae}
 
-Capacidad nueva sobre **v1.10.0**. Quien ya usa el DT sigue con `/drive`, `/gmail` y `/calendar`. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
+Capacidad nueva sobre **v1.11.0**. Quien ya usa el DT sigue con `/drive`, `/gmail` y `/calendar`. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **MCP oficiales** | Esos commands instalan el plugin o conector del IDE. Cursor: marketplace. Antigravity/Claude: MCP remoto de Google. |
-| **`google-drive-dt`** | Descontinuado. `setup-drive.sh --remove-legacy` saca el servidor viejo. |
-| **Postura** | Drive solo lectura; Gmail no envía (sí reply en hilo y etiquetas). |
+| **`/skills`** | Una skill, todos los IDE. Canon `.cursor/skills/`. El doctor audita el contrato. |
+| **Google** | Marketplace / Store / Connectors primero. Si no hay Authenticate, el DT para: no recorre Cloud Console. |
 
-ADR: [DOC-DEC-006](docs/05_decisions/adr-006-mcp-google-oficial.md). Spec: [google-apps-mcp.md](vitals/specs/google-apps-mcp.md).
+Spec: [skill-standard.md](vitals/specs/skill-standard.md) · [google-apps-mcp.md](vitals/specs/google-apps-mcp.md).
 
 ---
 
@@ -187,6 +186,7 @@ Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc).
 | **`/recordly`** | Demo del producto corriendo; el binario de Recordly queda fuera del git |
 | **`/brag`** | Clip de lanzamiento de 15–25 s; la skill upstream queda en caché local |
 | **`/setup`** | Reparar configuración del editor tras un pull grande |
+| **`/skills`** | Dejar las skills iguales en todos los IDE |
 
 Grupos completos y taglines: [commands-meta.yaml](vitals/config/commands-meta.yaml).
 
@@ -194,7 +194,7 @@ Grupos completos y taglines: [commands-meta.yaml](vitals/config/commands-meta.ya
 
 ## Google Drive, Gmail y Calendar — `/drive` `/gmail` `/calendar` {#google-drive--drive}
 
-Integración **opcional** con el **MCP oficial del IDE** (marketplace en Cursor; remoto Google en Antigravity/Claude). El DT **pregunta si autorizás una app o las tres**. Nada de eso se sube a GitHub.
+Integración **opcional** con el **MCP oficial del IDE** (marketplace Cursor, MCP Store Antigravity, Connectors Claude). El DT **pregunta si autorizás una app o las tres**. Nada de eso se sube a GitHub.
 
 | Command | Qué hace |
 |---------|----------|
@@ -207,7 +207,7 @@ Integración **opcional** con el **MCP oficial del IDE** (marketplace en Cursor;
 3. Instalar y autenticar el plugin o conector oficial
 4. Selector local (`vitals/config/*-context.yaml`, no Git)
 
-**Guía:** [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md) · **Admin Workspace:** [drive-google-cloud-admin.md](docs/06_operations/drive-google-cloud-admin.md) · **ADR:** [DOC-DEC-006](docs/05_decisions/adr-006-mcp-google-oficial.md)
+**Guía:** [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md) · **Admin (solo IT):** [drive-google-cloud-admin.md](docs/06_operations/drive-google-cloud-admin.md) · **ADR:** [DOC-DEC-006](docs/05_decisions/adr-006-mcp-google-oficial.md)
 
 ---
 
@@ -551,7 +551,7 @@ Multi-IDE: [ide-targets.yaml](vitals/config/ide-targets.yaml) · Guía: [ide-set
 
 1. **Reglas:** editar `vitals/specs/rule-bodies/<stem>.body.md` + `vitals/config/rules-manifest.yaml` → `./scripts/sync-ide.sh`
 2. **Commands:** editar `vitals/config/commands-meta.yaml` → `./scripts/sync-commands-from-meta.sh`
-3. **Skills:** canónico en `.cursor/skills/` → `./scripts/sync-ide.sh`
+3. **Skills:** canónico en `.cursor/skills/` → `/skills` o `./scripts/sync-ide.sh`
 4. **Multi-proyecto:** `vitals/workspace.yaml` desde [workspace.yaml.example](vitals/workspace.yaml.example)
 5. **Verificar:** `./scripts/dt-doctor.sh`
 

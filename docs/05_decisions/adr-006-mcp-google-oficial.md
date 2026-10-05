@@ -5,7 +5,7 @@ type: decision
 status: canonical
 owner: dt-platform
 created: 2026-10-02
-updated: 2026-10-02
+updated: 2026-10-05
 tags:
   - adr
   - google
@@ -15,7 +15,7 @@ tags:
   - calendar
 domain:
   - meta
-summary: El DT deja de mantener @ibarcarty/mcp-server-google-drive. /drive /gmail /calendar instalan el MCP oficial del IDE (marketplace Cursor o remoto Google).
+summary: El DT deja de mantener @ibarcarty/mcp-server-google-drive. /drive /gmail /calendar instalan el MCP oficial del IDE (marketplace, Store o Connectors).
 related:
   - DOC-GUIDE-009
   - DOC-OPS-002
@@ -46,7 +46,7 @@ El cerebro Google del DT usa los MCP **oficiales** de cada IDE. El paquete propi
 `google-drive-dt` unificaba Drive, Gmail y Calendar con un Desktop OAuth interno. Gmail ahí solo creaba un borrador suelto (sin hilo ni etiquetas). Ampliar ese paquete competía con:
 
 - Plugins de marketplace de Cursor (`google-drive`, `gmail`, `google-calendar`).
-- MCP remotos de Google Workspace (`gmailmcp`, `drivemcp`, `calendarmcp`), ya documentados para Antigravity y Claude.
+- MCP oficiales en los marketplaces / Stores de Cursor, Antigravity y Claude (hosts remotos `gmailmcp`, `drivemcp`, `calendarmcp` cuando el Store no lista la app).
 
 Mantener un servidor propio era costo continuo contra un producto que Google y Cursor ya publican.
 
@@ -67,7 +67,7 @@ Mantener un servidor propio era costo continuo contra un producto que Google y C
 ## Consecuencias
 
 - Cursor: un clic de plugin + auth. Sin JSON Desktop de la empresa.
-- Antigravity/Claude: MCP remoto de Google (Developer Preview + client OAuth web). IT deja de distribuir `dt-drive-credentials.json` para el flujo nuevo; puede tener que permitir las apps oficiales en Workspace.
+- Antigravity/Claude: Marketplace, MCP Store o Connectors; si Google pide un client web, lo crea IT una vez. Las skills no dictan la consola de Cloud: si no hay Authenticate, paran. No abren el runbook de IT en ese chat. IT deja de distribuir `dt-drive-credentials.json`.
 - Quien aún tenga `google-drive-dt` en `mcp.json` lo saca con `--remove-legacy` después de autenticar el oficial.
 - El agente **puede** enviar mail o escribir Drive si el oficial lo expone: el freno es la skill, no el servidor.
 

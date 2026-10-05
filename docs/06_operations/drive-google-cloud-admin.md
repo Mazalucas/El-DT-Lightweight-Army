@@ -5,7 +5,7 @@ type: runbook
 status: canonical
 owner: dt-platform
 created: 2026-07-30
-updated: 2026-10-02
+updated: 2026-10-05
 tags:
   - drive
   - gmail
@@ -16,7 +16,7 @@ tags:
   - mcp
 domain:
   - meta
-summary: Qué tiene que habilitar IT para que el DT use los MCP oficiales de Google — plugins Cursor o MCP remoto Workspace. Sin servidor propio ni JSON Desktop.
+summary: Runbook de IT (no del chat /gmail). Marketplace Cursor, MCP Store Antigravity, Connectors Claude. Sin servidor propio ni JSON Desktop.
 related:
   - DOC-GUIDE-009
   - DOC-OPS-001
@@ -41,9 +41,17 @@ review_cycle_days: 90
 
 # Google Workspace — permitir los MCP oficiales
 
+## STOP — no ejecutar en `/drive` `/gmail` `/calendar`
+
+Si el usuario invocó `/drive`, `/gmail` o `/calendar`: **cerrá este archivo**. No copies APIs, redirect URIs ni un JSON OAuth. Respondé solo: falta el client de la organización; pedíselo a IT; el DT no recorre Google Cloud Console.
+
+Este runbook es para un **admin de Workspace**, fuera del chat de conexión.
+
 ## Summary
 
-El DT **ya no** distribuye un JSON OAuth Desktop ni mantiene `google-drive-dt`. IT habilita las apps oficiales (Cursor y/o MCP remoto de Google) para que cada persona conecte Drive, Gmail y Calendar desde `/drive`, `/gmail`, `/calendar`.
+El DT **ya no** distribuye un JSON OAuth Desktop ni mantiene `google-drive-dt`. IT habilita las apps oficiales (marketplace Cursor, MCP Store de Antigravity, Connectors de Claude) para que cada persona conecte Drive, Gmail y Calendar desde `/drive`, `/gmail`, `/calendar`.
+
+**Quién ejecuta este runbook:** IT o un admin de Workspace, **una vez** por organización. Las skills `/drive`, `/gmail` y `/calendar` no lo recorren con un usuario final. Si no aparece Authenticate, la skill se detiene. No recorras Google Cloud Console en ese chat.
 
 No registrar en Git cuentas, Client IDs ni IDs de proyecto.
 
@@ -95,9 +103,11 @@ El DT ayuda a pegar las URLs (`drivemcp` / `gmailmcp` / `calendarmcp`) en la con
 **Antigravity / Claude:**
 
 ```text
-1. Pedile a IT el alta del MCP remoto (este runbook, camino B)
+1. Pedile a IT el alta (este runbook, camino B) si el Store/Connectors no autentica solo
 2. /yo → /drive /gmail /calendar
-3. Completá OAuth en el IDE
+3. Instalá desde el Marketplace, MCP Store o Connectors
+4. Si aparece Authenticate, completá el login
+5. Si no aparece, no abras Google Cloud: falta el client que entrega IT
 ```
 
 ## Seguridad (postura DT)

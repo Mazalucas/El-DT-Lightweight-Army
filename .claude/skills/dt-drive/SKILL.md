@@ -1,20 +1,22 @@
 ---
 name: dt-drive
-description: "[Rutina] Conectar Google Drive al cerebro del DT — plugin oficial del IDE, selector de carpetas, solo lectura. Use when the user invokes /drive or wants to sync Drive folders as organizational context."
+description: "[Rutina] Conectar Google Drive al cerebro del DT — marketplace oficial del IDE, selector de carpetas, solo lectura. Use when the user invokes /drive or wants to sync Drive folders as organizational context."
 ---
 
 # dt-drive
 
 Integración **opcional** de Google Drive vía el **MCP oficial del IDE**. El servidor propio `google-drive-dt` está descontinuado.
 
-**Spec (embudo + install por IDE):** `vitals/specs/google-apps-mcp.md`. **Guías:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`) · admin: `docs/06_operations/drive-google-cloud-admin.md` (`DOC-OPS-002`). **ADR:** `DOC-DEC-006`.
+**Spec (embudo + install por IDE):** `vitals/specs/google-apps-mcp.md`. **Guía usuario:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`). **ADR:** `DOC-DEC-006`.
+
+No abras el runbook de IT ni fichas de Google Cloud en este chat.
 
 ## Prerequisitos
 
 | Requisito | Verificación |
 |-----------|--------------|
 | Sesión local | `vitals/ops/session.yaml` con `operator.id` — si falta → **`/yo`** |
-| MCP oficial Drive | Cursor: plugin `google-drive`. Antigravity/Claude: `drivemcp.googleapis.com` |
+| MCP oficial Drive | Cursor: plugin `google-drive`. Antigravity: MCP Store / Marketplace o `drivemcp.googleapis.com`. Claude: Connectors |
 | Cuenta Google | La que el operador autoriza en el plugin / conector |
 
 Ya no hace falta Node, ni `dt-drive-credentials.json`, ni `npx @ibarcarty/…`.
@@ -32,14 +34,21 @@ Ya no hace falta Node, ni `dt-drive-credentials.json`, ni `npx @ibarcarty/…`.
 1. Confirmar sesión (`/yo` si falta).
 2. **Embudo** (no saltear): *¿solo Drive o también Gmail y Calendar?* Spec.
 3. Detectar el IDE de esta conversación.
-4. **Instalar el oficial de Drive:**
-   - **Cursor:** tool `install_plugin` con `pluginName: google-drive`. Si ya está y `needsAuth` → el operador autentica. No digas que quedó instalado si cancela.
-   - **Antigravity / Claude:** spec § Instalar por IDE (URL remota + OAuth). No inventes Client IDs. Si IT no habilitó el MCP remoto, decí el límite.
-5. Esperar tools reales (`search_files` / `drive_search` / equivalentes). Si no hay, parar.
+4. **Instalar el oficial de Drive** con el procedimiento único de `vitals/specs/google-apps-mcp.md` § Instalar. Slug en Cursor: `google-drive`. Marketplace / Store primero. No recorras Google Cloud Console.
+5. Esperar tools reales (`search_files` / `drive_search` / equivalentes). Si no hay, **Freno**.
 6. Escribir/actualizar `google-apps.yaml` (`drive: true`). **Selector de carpetas** (abajo). Si eligió las tres, ofrecer `/gmail` y `/calendar`.
 7. Si existe el servidor legado `google-drive-dt` en `mcp.json`, ofrecer `./scripts/setup-drive.sh --remove-legacy` **después** de que el oficial responda.
 
 Si ya está autenticado y solo quiere cambiar carpetas → selector.
+
+## Freno
+
+Si no hay tools o no aparece **Authenticate**:
+
+1. Parar. No seguir al selector. No inventar el Drive.
+2. No recorras Google Cloud Console.
+3. No abras el runbook de IT. No armes un JSON con `clientId`.
+4. Decí solo: *Falta el client OAuth de la organización. Pedíselo a IT. Si no hay IT, usá la documentación oficial de Google Workspace MCP en tu navegador. El DT no recorre Google Cloud Console ni pega secrets.*
 
 ## Flujo `/drive` — selector de carpetas
 
@@ -79,7 +88,7 @@ Usar las que existan (spec § Tools). Típico: `search_files` / `drive_search`, 
 |---------|--------|
 | Plugin cancelado | No seguir al selector. Ofrecer `/add-plugin google-drive` |
 | `needsAuth` | El operador autentica el plugin; no fingir listados |
-| Antigravity sin tools | Preview + GCP — `DOC-OPS-002`. No caer a `google-drive-dt` |
+| Antigravity o Claude sin Authenticate | **Freno.** No caer a `google-drive-dt` |
 | Quedan dos Drive | Oficial OK → `--remove-legacy` |
 
 ## No hacer
@@ -89,3 +98,4 @@ Usar las que existan (spec § Tools). Típico: `search_files` / `drive_search`, 
 - No escribir en Drive.
 - No saltear el embudo una app vs las tres.
 - No asumir que todos tienen Drive — opt-in.
+- No dictar el alta en Cloud.

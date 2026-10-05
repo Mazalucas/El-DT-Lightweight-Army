@@ -8,7 +8,8 @@
 | [sync-ide.sh](sync-ide.sh) | **Emisor único multi-IDE**: recorre `vitals/config/ide-targets.yaml` y emite reglas, skills, commands (Claude) y punteros (CLAUDE.md, Copilot, …) desde fuentes canónicas |
 | [sync-catalog.rb](sync-catalog.rb) | Deriva `docs/99_meta/catalog.yaml` del frontmatter; `--next <DOMINIO>` da el próximo ID libre |
 | [sync-commands-from-meta.sh](sync-commands-from-meta.sh) | YAML → `.cursor/commands/` + `.agents/workflows/` |
-| [sync-skills-parity.sh](sync-skills-parity.sh) | `.cursor/skills/` → `.agents/skills/` (raíz: solo `SKILL.md`; `marketing/*`: árbol completo) |
+| [sync-skills-parity.sh](sync-skills-parity.sh) | Solo `.agents/skills/`. Para todos los IDE usá `sync-ide.sh` o `/skills` |
+| [audit-skills.rb](audit-skills.rb) | Contrato de skills (frontmatter, commands, freno de Google Cloud) |
 | [atelier-detect.sh](atelier-detect.sh) | Anti-slop determinístico (Impeccable CLI, 44+ reglas) sobre archivos o URLs |
 | [dt-design-select.rb](dt-design-select.rb) | Selección de estilo/sistema Atelier según brief (motor de `/atelier select`) |
 | [setup-drive.sh](setup-drive.sh) | Guía MCP Google oficial por IDE; `--remove-legacy` saca `google-drive-dt` |
@@ -27,7 +28,7 @@ Upstream DT (`/actualizar` Fase B, `/actualizar-dt`): instrucciones en **Markdow
 
 1. Entrada en **`vitals/config/commands-meta.yaml`**.
 2. Si lleva lógica larga: un solo archivo canónico (`command_path` o `workflow_path`); el sync replica al otro IDE.
-3. Si lleva skill: carpeta en **`.cursor/skills/<nombre>/`** y corré `./scripts/sync-skills-parity.sh`.
+3. Si lleva skill: carpeta en **`.cursor/skills/<nombre>/`** y corré `/skills` (o `./scripts/sync-ide.sh`).
 4. `./scripts/sync-commands-from-meta.sh`
 
 ## Flujo al editar una regla
