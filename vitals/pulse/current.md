@@ -1,10 +1,10 @@
 # Pulse — puntero actual
 
-**Último pulse_id:** [dt-20261005-003](entries/2026-10-05-dt-20261005-003.md)
+**Último pulse_id:** [dt-20261024-001](entries/2026-10-24-dt-20261024-001.md)
 
-**Versión template:** 1.12.0
+**Versión template:** 1.12.1
 
-**Resumen:** Marketplace / Store primero en `/drive` `/gmail` `/calendar`. Si falta Authenticate, el DT para y no abre el runbook de IT. Previo: `dt-20261005-002`.
+**Resumen:** Cortes del loop en `07`, bugfix en `30-testing`, `/guardar` sincroniza pulse en canónico. Previo: `dt-20261005-003`.
 
 **Proyecto / contexto Git:** El DT, checkout oficial de esta carpeta.
 

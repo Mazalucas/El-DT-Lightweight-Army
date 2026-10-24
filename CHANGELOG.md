@@ -6,6 +6,15 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.12.1](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.12.1) - 2026-10-24
+
+Patch. Quien ya usa el DT sigue igual; el orden y el guardado quedan más explícitos.
+
+- **Loop `07`.** Cortes escritos: 3 pasadas de `dt-doctor`, no-progreso y freno `stop`/`pará`.
+- **Bugfix.** Regla `30-testing`: reproducir, causa raíz y test que falle antes del arreglo.
+- **`/guardar`.** En el repo canónico actualiza `vitals/pulse/`; `dt-doctor` falla si el pulse no refleja `VERSION`.
+- **Historial.** La tabla de evolución en DOC-OV-004 remite a `CHANGELOG.md` para releases recientes.
+
 ## [1.12.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.12.0) - 2026-10-05
 
 Minor. Quien ya usa el DT sigue con `/drive`, `/gmail` y `/calendar`.

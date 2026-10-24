@@ -136,7 +136,11 @@ def check_pulse_freshness
   version = File.read(version_file).strip
   body = File.read(pulse)
   unless body.include?(version)
-    warn_("pulse", "vitals/pulse/current.md no menciona VERSION #{version} (telemetría desactualizada)")
+    detail = "vitals/pulse/current.md no menciona VERSION #{version} (telemetría desactualizada)"
+    upstream = File.join(ROOT, "vitals/config/dt-upstream.md")
+    mode = File.exist?(upstream) ? (frontmatter(upstream) || {})["mode"] : nil
+    # En el repo canónico /guardar no puede cerrar con el pulse atrasado; en consumer sigue siendo aviso.
+    mode == "canonical" ? err("pulse", detail) : warn_("pulse", detail)
   end
 end
 

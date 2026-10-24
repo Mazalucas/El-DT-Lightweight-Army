@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.12.0**
+**v1.12.1**
 
 Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
@@ -26,7 +26,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ## Índice
 
-- [Qué trae v1.12.0](#que-trae)
+- [Qué trae v1.12.1](#que-trae)
 - [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
@@ -39,16 +39,17 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ---
 
-## Qué trae v1.12.0 {#que-trae}
+## Qué trae v1.12.1 {#que-trae}
 
-Capacidad nueva sobre **v1.11.0**. Quien ya usa el DT sigue con `/drive`, `/gmail` y `/calendar`. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
+Mantenimiento de normativa sobre **v1.12.0**. Sin comandos nuevos. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **`/skills`** | Una skill, todos los IDE. Canon `.cursor/skills/`. El doctor audita el contrato. |
-| **Google** | Marketplace / Store / Connectors primero. Si no hay Authenticate, el DT para: no recorre Cloud Console. |
+| **Loop `07`** | Cortes escritos: 3 pasadas de `dt-doctor`, no-progreso, freno `stop`/`pará`. |
+| **Bugfix** | Regla `30-testing`: reproducir, causa raíz, test rojo→verde antes del arreglo. |
+| **`/guardar`** | En canónico actualiza `vitals/pulse/`; `dt-doctor` error si el pulse no refleja `VERSION`. |
 
-Spec: [skill-standard.md](vitals/specs/skill-standard.md) · [google-apps-mcp.md](vitals/specs/google-apps-mcp.md).
+Spec: [precedence.md](vitals/specs/precedence.md) · [protocolo-vitals-ia.md](vitals/specs/protocolo-vitals-ia.md).
 
 ---
 
@@ -432,6 +433,8 @@ Fuente canónica de skills: [`.cursor/skills/`](.cursor/skills/) (espejo Antigra
 | 22 | **data-auditor** | Testing | Verificación de números y planillas con script (regla `16-numeric-grounding`) | `planilla`, `csv`, `excel`, `reporte`, `totales`, `reconciliar`, `verificar cifras` | [agente](.cursor/agents/data-auditor.md) | [`.cursor/skills/data-auditor/`](.cursor/skills/data-auditor/) |
 | 23 | **hack-audit** | Testing | Auditoría de seguridad ofensiva-defensiva (`/hack`) | `hack`, `seguridad`, `vulnerabilidades`, `pentest`, `auth`, `permisos`, `IDOR`, `secrets`, `API security` | [agente](.cursor/agents/hack-audit.md) | [`.cursor/skills/hack-audit/`](.cursor/skills/hack-audit/) |
 | 24 | **auditoria-legal** | Testing | Auditoría de cumplimiento legal (`/auditoria-legal`) | `legal`, `RGPD`, `LSSI`, `COPPA`, `cookies`, `privacidad`, `multa`, `suscripción` | [agente](.cursor/agents/auditoria-legal.md) | [`.cursor/skills/auditoria-legal/`](.cursor/skills/auditoria-legal/) |
+
+Revisión estructural de un diff (no suma un especialista): en Cursor, el subagente `thermo-nuclear-code-quality-review` del plugin `cursor-team-kit`. El DT lo usa solo si se lo piden; si el plugin no está, ofrece instalarlo (`/add-plugin cursor-team-kit`).
 
 #### Marketing strategist — 42 skills tácticas
 

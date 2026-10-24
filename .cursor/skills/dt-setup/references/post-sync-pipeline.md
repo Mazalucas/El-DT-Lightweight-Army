@@ -19,7 +19,7 @@ ruby scripts/sync-catalog.rb
 
 ## Loop orden continuo
 
-- Si `dt-doctor` falla → corregir según salida → repetir pipeline (máx. 5 iteraciones, regla `07-orden-continuo`).
+- Si `dt-doctor` falla → corregir según salida → repetir pipeline hasta el tope y los cortes de la sección «Condiciones de corte del loop» de la regla `07-orden-continuo`.
 - No tocar `vitals/ops/session.yaml`, `.env`, credenciales.
 
 ## Fuente de verdad

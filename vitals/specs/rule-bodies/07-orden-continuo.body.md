@@ -7,6 +7,15 @@ Tras cambios que toquen `docs/`, reglas, commands, skills, `vitals/specs/`, `vit
 3. Corregir hallazgos que no sean gate duro; si quedan pendientes, listarlos en **Puntos ciegos**.
 4. Loop completo (repetir hasta verde) solo si el usuario lo pide o el cambio es normativa DT mayor.
 
+## Condiciones de corte del loop
+
+Fuente única; `precedence.md`, el ADR-002 y `post-sync-pipeline.md` remiten acá.
+
+1. **Tope:** máximo **3** pasadas de `dt-doctor` por tarea.
+2. **No-progreso:** si una pasada devuelve los mismos errores que la anterior, cortar sin reintentar.
+3. **Freno:** si el usuario escribe `stop` o `pará`, frenar en el acto, sin otra pasada.
+4. **Al cortar:** listar lo pendiente en **Puntos ciegos**. No seguir corrigiendo.
+
 ## Orden en verde (DoD)
 
 Frontmatter en docs · capa correcta · `sync-catalog.rb` · IDs en id-registry · enlaces válidos · paridad multi-IDE (`sync-ide.sh --check`) · pulse fresco si cambió `VERSION`.

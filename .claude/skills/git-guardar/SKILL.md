@@ -94,7 +94,8 @@ Corré `./scripts/dt-publish-gate.sh`. El exit es una decisión. Leé la línea 
 
 6. **`./scripts/project-sync-version.sh`** — README y `package.json` del **producto**. En consumer **no** toques `framework_version` (el script lo saltea). En canónico sí alinea `framework_version` con `VERSION`.
 7. **Novedades** — si hubo bump o versión inicial, agregá al tope de `CHANGELOG.md` la entrada `## [X.Y.Z] - fecha` con lo que quien ya usa el proyecto puede hacer ahora. En el README, «Qué trae» queda solo con esa versión y el enlace al historial. Las notas salen del diff. No inventes releases que no se taguearon. Si no hubo bump, no toques el changelog.
-8. Stage selectivo + archivos tocados por resolve/bump/sync (`VERSION`, README, `CHANGELOG.md`, etc.).
+7b. **Pulse (solo `mode: canonical`, si hubo bump)** — crear `vitals/pulse/entries/YYYY-MM-DD-dt-YYYYMMDD-NNN.md` (formato en `vitals/specs/protocolo-vitals-ia.md`; resumen de 2–3 líneas salido del diff) y actualizar `vitals/pulse/current.md`: último `pulse_id`, `Versión template: X.Y.Z` y resumen. En consumer es opcional; `dt-doctor` solo avisa.
+8. Stage selectivo + archivos tocados por resolve/bump/sync (`VERSION`, README, `CHANGELOG.md`, pulse, etc.).
 9. `./scripts/dt-doctor.sh` — corregir ERRORES.
 10. **Commit** — primera línea **siempre** con la versión **nueva**.
 

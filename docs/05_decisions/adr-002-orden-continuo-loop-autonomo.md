@@ -42,7 +42,7 @@ El mayor talento del DT es ordenar, pero el orden estaba solo **descrito** (prot
 2. **Verificador (`dt-doctor`):** define objetivamente "orden cumplido" (DoD) y devuelve exit code.
 3. **Loop autónomo siempre activo:** la regla `07-orden-continuo` (`alwaysApply: true`) dispara, tras cualquier cambio sustantivo, el ciclo ejecutar → `dt-doctor` → corregir → reverificar, sin que el usuario lo pida.
 4. **Autonomía total con gate duro:** bajo autonomía el loop ejecuta y corrige incluso cambios de impacto **sin preguntar**, excepto el gate duro de `vitals/specs/precedence.md` (seguridad/secretos e irreversibles de FS/Git).
-5. **Condiciones de corte:** tope de iteraciones, detección de no-progreso y freno de emergencia (`stop`/`pará`).
+5. **Condiciones de corte:** tope de iteraciones, detección de no-progreso y freno de emergencia (`stop`/`pará`). Valores en la regla `07-orden-continuo` (3 pasadas).
 
 ## Alternativas consideradas
 

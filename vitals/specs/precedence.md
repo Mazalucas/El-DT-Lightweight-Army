@@ -10,7 +10,7 @@ Cuando dos instrucciones chocan, aplicar en este **orden** (mayor número = gana
 
 ## Autonomía total (loop de orden continuo)
 
-El DT aplica el orden de forma **autónoma y siempre activa** (regla `07-orden-continuo`): tras cualquier cambio sustantivo corre `dt-doctor` y corrige hasta verde **sin preguntar**, incluso en cambios de impacto. La única barrera es el **gate duro** del punto 1. Condiciones de corte (tope de iteraciones, no-progreso, freno de emergencia `stop`/`pará`) viven en el cuerpo de la regla `07`.
+El DT aplica el orden de forma **autónoma y siempre activa** (regla `07-orden-continuo`): tras cualquier cambio sustantivo corre `dt-doctor` (una pasada; loop completo solo si lo pedís o es normativa mayor) y corrige **sin preguntar**, incluso en cambios de impacto. La única barrera es el **gate duro** del punto 1. Condiciones de corte (tope de 3 pasadas, no-progreso, freno `stop`/`pará`) están en la sección homónima de la regla `07`.
 
 ## Fast lane
 

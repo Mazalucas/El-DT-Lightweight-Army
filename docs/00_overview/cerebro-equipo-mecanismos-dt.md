@@ -377,7 +377,9 @@ Listado completo y taglines: `vitals/config/commands-meta.yaml`.
 | v1.7.0 | **Orden continuo + multi-IDE inclusivo:** fuente única total (`rule-bodies/` + `rules-manifest.yaml`), `ide-targets.yaml`, `dt-doctor`, catálogo derivado (`sync-catalog`), emisor único `sync-ide` (Cursor, Antigravity, Claude, Codex, Copilot), regla `07-orden-continuo` (loop autónomo), `/setup` no destructivo, `/bootstrap` |
 | v1.7.2 | **Upstream DT:** Fase B en `/actualizar`, `/actualizar-dt`, config `dt-upstream.md`, instrucciones Markdown en skills, DOC-GUIDE-007 |
 | v1.7.8–v1.7.11 | Semver en cada `/guardar` con cambios; `/drive`; `/ordenar`; `/hack` con subagente **hack-audit** |
-| v1.8.0 | **Publicación, contexto y video.** `/oficial` y gate de push; `/dt-config`; carriles `/recordly`, `/brag`, Hyperframes y `/remotion`; `/analisis-propuesta`; postura `personal`/`team`; Atelier con el playbook de Impeccable. Texto: [Qué trae v1.8.0](../../README.md#que-trae). |
+| v1.8.0 | **Publicación, contexto y video.** `/oficial` y gate de push; `/dt-config`; carriles `/recordly`, `/brag`, Hyperframes y `/remotion`; `/analisis-propuesta`; postura `personal`/`team`; Atelier con el playbook de Impeccable. |
+
+Desde v1.8.0 el historial vive solo en [`CHANGELOG.md`](../../CHANGELOG.md) (una entrada por `/guardar` con bump). No se repite acá.
 
 Reutilizar en otro proyecto: [adopt-dt-in-existing-repo.md](../02_guides/adopt-dt-in-existing-repo.md).
 

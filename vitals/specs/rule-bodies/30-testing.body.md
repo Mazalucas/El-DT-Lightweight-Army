@@ -21,6 +21,17 @@
 - Un test file por módulo/componente
 - Nombres descriptivos: `describe('FeatureX', () => { it('should do Y when Z', ...) })`
 
+## Bugfix (causa raíz primero)
+
+Al corregir un bug, antes de tocar el código:
+
+1. **Reproducir** el fallo.
+2. **Nombrar la causa raíz** en una línea. Si solo ves el síntoma, seguí investigando.
+3. **Test que falle** antes del fix y pase después. Sin suite: un script de repro, o decir por qué no aplica.
+4. Reportar en la entrega: causa, test, resultado antes/después.
+
+No aplica a cambios triviales (typo, texto, formato).
+
 ## Reutilización (reuse-first)
 
 Regla transversal: `15-engineering-reuse` · skill `qa` · `DOC-REF-006`.

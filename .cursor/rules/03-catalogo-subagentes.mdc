@@ -25,6 +25,7 @@ Cursor inyecta la descripción de cada subagente en la herramienta **Task**. Us�
 - carril Remotion (plantilla React, lote, Lambda, 3D) → **remotion-producer**
 - carril `/brag` → skill **brag** (caché en `output/.cache/brag/`, sin subagente nuevo)
 - operations, monitoring → **operations-maintainer**
+- estructura de un diff, mantenibilidad, spaghetti, archivo que cruza 1000 líneas, code quality review → subagente **thermo-nuclear-code-quality-review** del plugin Cursor `cursor-team-kit` (no es especialista del DT). Solo si lo piden. Si ese subagente no está en la sesión: `install_plugin` con slug `cursor-team-kit` (atajo `/add-plugin cursor-team-kit`). Si cancelan, no afirmar que quedó instalado ni improvisar la auditoría. En otros IDE, decir que este plugin es solo de Cursor.
 
 Lista completa y keywords: [README — Subagentes](README.md#catálogo-de-los-24-especialistas).
 
