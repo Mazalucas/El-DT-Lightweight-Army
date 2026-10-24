@@ -40,10 +40,26 @@ Quien clona el DT no tiene que encontrar tu sesión, tu roster ni documentación
 5. `id` = slug minúsculas sin espacios (derivado del nombre si hace falta, confirmar con el usuario).
 6. **Rol:** leer `vitals/config/roles.yaml`. Si `roles` tiene ítems → ofrecer lista o aceptar si el usuario ya nombró uno válido. Si `roles: []` o no existe → guardar el rol **tal como lo diga el usuario** (sin imponer `contributor`/`maintainer`/etc.).
 7. **Postura, antes de tocar el roster.** En checkout oficial escribila solo en `vitals/ops/collaboration.local.yaml` y saltá el paso 8. Si no: mirar `collaboration.yaml` y `team[]` como están ahora, sin la persona de este turno. Reglas en la sección siguiente. Si falta y no se puede inferir → preguntar y no inventar. Mientras la respuesta no llegó: no escribas `collaboration.yaml` ni agregues a esta persona al roster (si no, el turno siguiente vería un roster con gente e inferiría `team`).
-8. Buscar `id` en `roster.yaml` → `team[]`. Si **nuevo**: append con `name`, `role`, `email` opcional, `registered_at` (ISO 8601) y actualizar `updated` en el archivo. Si **ya está**: no duplicar ni reescribir con datos de ejemplo. Este paso corre cuando la postura ya quedó resuelta. En checkout oficial no se ejecuta.
+8. Buscar `id` en `roster.yaml` → `team[]`. Si **nuevo**: append con `name`, `role`, `email` (usar `git config user.email`; obligatorio en la práctica si la persona va a ser owner de agentes: `dt-doctor` lo cruza con el autor del commit que cambia su estado), `registered_at` (ISO 8601) y actualizar `updated` en el archivo. Si **ya está**: no duplicar ni reescribir con datos de ejemplo. Este paso corre cuando la postura ya quedó resuelta. En checkout oficial no se ejecuta.
 9. Escribir `session.yaml` con `operator` (id, name, role, email, inbox_path), `identified_at`, `session_started`.
 10. `mkdir -p vitals/work/inbox/{id}/` solo fuera del checkout oficial.
-11. Confirmar id, nombre, rol, inbox y postura. Si hubo alta en roster o se escribió `collaboration.yaml`: recordar **`/guardar`** para subirlos. En checkout oficial no hay alta que subir.
+11. `./scripts/dt-agent.sh inbox --team --as {id}`. Si hay abiertos, una línea: «Tenés N abiertos; `release-bot` tiene M». Si hay agentes `pending` con `owner: {id}`, sumar: «`bot` pide alta: `dt-agent.sh activate bot`». Si no hay nada, no decir nada.
+12. Confirmar id, nombre, rol, inbox y postura. Si hubo alta en roster o se escribió `collaboration.yaml`: recordar **`/guardar`** para subirlos. En checkout oficial no hay alta que subir.
+
+## Modo agente
+
+Para un agente autónomo, sin persona en el chat. Contrato: [`vitals/specs/agent-inbox.md`](../../../vitals/specs/agent-inbox.md).
+
+Señal: `DT_AGENT_ID` en el entorno o instrucción explícita de quien lanzó al agente.
+
+1. No preguntar nada. No tocar la postura.
+2. `./scripts/dt-agent.sh login`.
+   - Exit 0 → sesión escrita con `operator.kind: agent`. Seguir.
+   - Exit 2, no registrado → `./scripts/dt-agent.sh register --id … --name … --owner … --runtime … --scope …` y terminar la corrida.
+   - Exit 2, `pending`/`paused`/`retired` → terminar.
+3. `./scripts/dt-agent.sh inbox`. Siguiente paso: sección 5 del contrato.
+
+Un agente nunca cambia su propio `status` ni el de otro miembro. En checkout oficial no hay alta: solo sesión local.
 
 ## Postura del proyecto
 

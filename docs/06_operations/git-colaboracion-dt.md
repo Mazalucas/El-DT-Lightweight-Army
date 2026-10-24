@@ -42,7 +42,7 @@ Dos personas **no editan el mismo archivo** al mismo tiempo sin coordinar. La se
 | Pulse current | `vitals/pulse/current.md` | Coordinar entre editores | Sí (coordinar) |
 | Docs canónicos | `docs/` | Quien toque el tema (coordinar) | Sí |
 | Rules / commands / skills | `.cursor/`, `.agents/` | Platform / innovation | Sí |
-| Cuaderno personal | `vitals/work/inbox/{operator_id}/` | Solo ese operador | Sí |
+| Inbox de miembro (humano o agente) | `vitals/work/inbox/{id}/` | Otros miembros **crean** mensajes; solo el dueño cambia `status` o archiva ([agent-inbox.md](../../vitals/specs/agent-inbox.md)) | Sí |
 | Capturas `/ordenar` | `vitals/work/knowledge/` | Quien ejecuta `/ordenar` | Sí |
 | Borradores | `vitals/work/inbox/**/draft-*` | Local | **NO** |
 | Sesión | `vitals/ops/session.yaml` | Solo máquina local | **NO** |

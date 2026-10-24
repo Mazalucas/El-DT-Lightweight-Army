@@ -52,6 +52,10 @@ team:
 
 Solo entradas **reales** añadidas cuando un operador nuevo pasa por `/yo`.
 
+### Miembros agente
+
+Una entrada sin `kind` es humana. Un agente persistente lleva `kind: agent` y además `owner` (id humano del roster), `runtime`, `scope` y `status` (`pending` | `active` | `paused` | `retired`). Entra `pending`; solo el owner lo activa. Flujo completo, inbox y límites: [`vitals/specs/agent-inbox.md`](../../vitals/specs/agent-inbox.md) (`DOC-DEC-007`).
+
 ## `vitals/config/roles.yaml` (opcional)
 
 ```yaml

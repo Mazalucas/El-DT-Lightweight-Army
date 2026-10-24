@@ -16,6 +16,7 @@
 require_relative "lib/force_utf8"
 require "yaml"
 require "date"
+require "time"
 require "open3"
 require_relative "project-version"
 
@@ -377,6 +378,145 @@ rescue StandardError => e
   err("collaboration", e.message)
 end
 
+# Contrato: vitals/specs/agent-inbox.md
+AGENT_STATUSES = %w[pending active paused retired].freeze
+MSG_TYPES = %w[request handoff question fyi cancel].freeze
+MSG_STATUSES = %w[open claimed done declined].freeze
+MSG_REQUIRED = %w[from to type status created].freeze
+STALE_OPEN_DAYS = 14
+STALE_CLAIMED_DAYS = 7
+MAX_THREAD = 5
+
+# Trailer `DT-Member: <id>` del commit que agregó el archivo; nil si no está versionado o no lo trae.
+def git_trailer_for_added(path)
+  out, status = Open3.capture2e("git", "-C", ROOT, "log", "--diff-filter=A", "--format=%B", "-1", "--", path)
+  return nil unless status.success?
+
+  out[/^DT-Member:\s*(\S+)/, 1]
+end
+
+# Email del autor del commit que escribió la línea; :uncommitted si aún no está commiteada; nil si no se puede saber.
+def blame_author_email(rel, line_no)
+  out, status = Open3.capture2e("git", "-C", ROOT, "blame", "-L", "#{line_no},#{line_no}", "--porcelain", "--", rel)
+  return nil unless status.success?
+  return :uncommitted if out.start_with?("0" * 40)
+
+  out[/^author-mail <(.*)>$/, 1]
+end
+
+# Línea (1-based) de `status:` dentro del bloque del miembro en el roster.
+def roster_status_line(id)
+  lines = File.read(File.join(ROOT, "vitals/config/roster.yaml")).lines
+  start = lines.index { |l| l =~ /^\s*-\s*id:\s*["']?#{Regexp.escape(id)}["']?\s*$/ }
+  return nil unless start
+
+  finish = (start + 1...lines.size).find { |i| lines[i] =~ /^\s*-\s/ || lines[i] =~ /^\S/ } || lines.size
+  idx = (start...finish).find { |i| lines[i] =~ /^\s+status:/ }
+  idx && idx + 1
+end
+
+# El commit que cambió el estado de un agente debe ser del email de su owner.
+def check_status_author(id, m, members)
+  return if m["status"].to_s == "pending"
+
+  owner = members[m["owner"].to_s]
+  owner_email = owner && owner["email"].to_s.strip.downcase
+  if owner_email.nil? || owner_email.empty?
+    warn_("agents", "roster #{id}: el owner #{m['owner']} no tiene email; no se puede verificar quién cambió el estado")
+    return
+  end
+  line = roster_status_line(id)
+  return unless line
+
+  author = blame_author_email("vitals/config/roster.yaml", line)
+  return if author.nil? || author == :uncommitted
+
+  unless author.downcase == owner_email
+    err("agents", "roster #{id}: el estado lo commiteó #{author}, no el owner #{m['owner']} (#{owner_email})")
+  end
+end
+
+def check_agent_inbox
+  roster_path = File.join(ROOT, "vitals/config/roster.yaml")
+  team = File.exist?(roster_path) ? (YAML.safe_load(File.read(roster_path), permitted_classes: [Date, Time]) || {})["team"] || [] : []
+  members = {}
+  team.each { |m| members[m["id"].to_s] = m if m.is_a?(Hash) && !m["id"].to_s.empty? }
+  humans = members.select { |_, m| (m["kind"] || "human") == "human" }.keys
+
+  members.each do |id, m|
+    kind = m["kind"] || "human"
+    unless %w[human agent].include?(kind)
+      err("agents", "roster #{id}: kind debe ser human o agent")
+      next
+    end
+    next unless kind == "agent"
+
+    missing = %w[owner runtime scope status].reject { |k| m[k].to_s.strip != "" }
+    err("agents", "roster #{id}: faltan #{missing.join(', ')}") unless missing.empty?
+    err("agents", "roster #{id}: status inválido (#{m['status']})") if m["status"] && !AGENT_STATUSES.include?(m["status"].to_s)
+    err("agents", "roster #{id}: owner #{m['owner']} no es un humano del roster") if m["owner"] && !humans.include?(m["owner"].to_s)
+    if m["status"].to_s != "pending" && m["status_by"].to_s != m["owner"].to_s
+      err("agents", "roster #{id}: status #{m['status']} sin status_by del owner — editado a mano; usar dt-agent.sh activate|pause|retire")
+    end
+    check_status_author(id, m, members)
+  end
+
+  msgs = Dir.glob(File.join(ROOT, "vitals/work/inbox/*/**/*.md")).reject do |p|
+    b = File.basename(p)
+    b.start_with?("draft-") || b.casecmp("README.md").zero?
+  end
+  by_name = {}
+  msgs.each do |path|
+    rel = path.sub("#{ROOT}#{File::SEPARATOR}", "")
+    owner_dir = rel.split("/")[3]
+    fm = frontmatter(path)
+    if fm.nil?
+      err("inbox", "#{rel}: sin frontmatter")
+      next
+    end
+    missing = MSG_REQUIRED.reject { |k| fm[k].to_s.strip != "" }
+    unless missing.empty?
+      err("inbox", "#{rel}: faltan #{missing.join(', ')}")
+      next
+    end
+    err("inbox", "#{rel}: to=#{fm['to']} no coincide con la carpeta #{owner_dir}") unless fm["to"].to_s == owner_dir
+    err("inbox", "#{rel}: type inválido (#{fm['type']})") unless MSG_TYPES.include?(fm["type"].to_s)
+    err("inbox", "#{rel}: status inválido (#{fm['status']})") unless MSG_STATUSES.include?(fm["status"].to_s)
+    warn_("inbox", "#{rel}: from=#{fm['from']} no está en el roster") unless members.key?(fm["from"].to_s)
+
+    created = fm["created"].is_a?(Time) ? fm["created"] : (Time.parse(fm["created"].to_s) rescue nil)
+    age_days = created ? (Time.now - created) / 86_400 : 0
+    case fm["status"].to_s
+    when "open"
+      warn_("inbox", "#{rel}: open hace más de #{STALE_OPEN_DAYS} días") if age_days > STALE_OPEN_DAYS
+      expires = (Time.parse(fm["expires"].to_s) rescue nil) if fm["expires"]
+      warn_("inbox", "#{rel}: venció (expires #{fm['expires']}); cerrar con decline") if expires && expires < Time.now
+    when "claimed"
+      warn_("inbox", "#{rel}: claimed hace más de #{STALE_CLAIMED_DAYS} días sin cerrar") if age_days > STALE_CLAIMED_DAYS
+    end
+
+    added_by = git_trailer_for_added(path)
+    if added_by && added_by != fm["from"].to_s
+      warn_("inbox", "#{rel}: from=#{fm['from']} pero el commit que lo agregó dice DT-Member: #{added_by}")
+    end
+    by_name[File.basename(path)] = fm
+  end
+
+  by_name.each do |name, fm|
+    depth = 1
+    seen = [name]
+    parent = fm["reply_to"].to_s
+    while !parent.empty? && by_name.key?(parent) && !seen.include?(parent)
+      seen << parent
+      depth += 1
+      parent = by_name[parent]["reply_to"].to_s
+    end
+    warn_("inbox", "#{name}: hilo de #{depth} mensajes (tope #{MAX_THREAD}); escalar al owner") if depth > MAX_THREAD
+  end
+rescue StandardError => e
+  err("agents", e.message)
+end
+
 # --- run ---
 say "dt-doctor — verificación de orden (#{Time.now.strftime('%H:%M:%S')})"
 check_frontmatter
@@ -388,6 +528,7 @@ check_agent_catalog
 check_upstream
 check_publish_gate
 check_collaboration
+check_agent_inbox
 check_pulse_freshness
 
 unless QUIET

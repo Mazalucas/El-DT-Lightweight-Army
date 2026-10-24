@@ -6,6 +6,16 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.13.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.13.0) - 2026-10-24
+
+Minor. Quien ya usa el DT sigue igual: sin agentes en el roster, nada cambia.
+
+- **Agentes miembro.** Un agente persistente se da de alta en `roster.yaml` (`kind: agent`) con un `owner` humano. Entra `pending`; solo su owner lo activa, pausa o retira.
+- **Inbox entre miembros.** `vitals/work/inbox/{id}/`, un archivo por mensaje. Estados `open`, `claimed`, `done`, `declined`; cancelación por el remitente, vencimiento y topes (duplicados, pendientes, hilos).
+- **`dt-agent.sh`.** Un comando para alta, login, envío y estados. Hace cumplir el contrato; los agentes no editan roster ni estados a mano.
+- **`dt-doctor`.** Valida roster e inbox, avisa mensajes olvidados o vencidos y cruza el estado de un agente con el autor del commit y el email del owner.
+- **`AGENTS.md`.** Sección para agentes autónomos: cómo darse de alta y qué hacer en cada corrida. ADR-007.
+
 ## [1.12.1](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.12.1) - 2026-10-24
 
 Patch. Quien ya usa el DT sigue igual; el orden y el guardado quedan más explícitos.

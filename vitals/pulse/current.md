@@ -1,10 +1,10 @@
 # Pulse — puntero actual
 
-**Último pulse_id:** [dt-20261024-001](entries/2026-10-24-dt-20261024-001.md)
+**Último pulse_id:** [dt-20261024-002](entries/2026-10-24-dt-20261024-002.md)
 
-**Versión template:** 1.12.1
+**Versión template:** 1.13.0
 
-**Resumen:** Cortes del loop en `07`, bugfix en `30-testing`, `/guardar` sincroniza pulse en canónico. Previo: `dt-20261005-003`.
+**Resumen:** Agentes miembro e inbox en Git (`dt-agent.sh`, contrato `agent-inbox.md`, ADR-007). Previo: `dt-20261024-001`.
 
 **Proyecto / contexto Git:** El DT, checkout oficial de esta carpeta.
 

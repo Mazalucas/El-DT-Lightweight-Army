@@ -1,4 +1,6 @@
-# Equipo en Git — solo entradas reales añadidas por /yo (skill dt-session). No commitear datos de ejemplo.
+# Equipo en Git — solo entradas reales. No commitear datos de ejemplo.
+# Humanos: los agrega /yo (skill dt-session). Agentes: kind: agent, alta pending + owner humano.
+# Contrato de agentes e inbox: vitals/specs/agent-inbox.md
 version: 1
 updated: "2026-07-30T16:15:00+02:00"
 team: []

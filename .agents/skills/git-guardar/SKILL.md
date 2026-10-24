@@ -113,7 +113,10 @@ Corré `./scripts/dt-publish-gate.sh`. El exit es una decisión. Leé la línea 
    v{X.Y.Z} ({operator_id}): {resumen corto}
 
    Bump: {patch|minor|major} — {motivo en una línea}
+   DT-Member: {operator_id}
    ```
+
+   `DT-Member` es obligatorio si el commit agrega mensajes en `vitals/work/inbox/`: `dt-doctor` lo cruza con el `from` de cada mensaje ([`agent-inbox.md`](../../../vitals/specs/agent-inbox.md)).
 
 11. `git push origin HEAD` — solo si el gate salió **0** o **10**. Sin `--force` en main/master. Si el remoto rechaza por permisos, pará: ese remoto no es de este checkout. No pidas acceso ni reintentes contra el DT oficial.
 12. **Tag** tras push OK, cuando hubo bump o reset inicial. En gate **20**, no corras el tag con `--push`:

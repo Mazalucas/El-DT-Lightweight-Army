@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.12.1**
+**v1.13.0**
 
 Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
@@ -26,7 +26,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ## Índice
 
-- [Qué trae v1.12.1](#que-trae)
+- [Qué trae v1.13.0](#que-trae)
 - [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
@@ -39,17 +39,19 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ---
 
-## Qué trae v1.12.1 {#que-trae}
+## Qué trae v1.13.0 {#que-trae}
 
-Mantenimiento de normativa sobre **v1.12.0**. Sin comandos nuevos. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
+Capacidad nueva sobre **v1.12.1**. Quien ya usa el DT sigue igual: sin agentes en el roster, nada cambia. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **Loop `07`** | Cortes escritos: 3 pasadas de `dt-doctor`, no-progreso, freno `stop`/`pará`. |
-| **Bugfix** | Regla `30-testing`: reproducir, causa raíz, test rojo→verde antes del arreglo. |
-| **`/guardar`** | En canónico actualiza `vitals/pulse/`; `dt-doctor` error si el pulse no refleja `VERSION`. |
+| **Agentes miembro** | Un agente persistente se da de alta en el roster (`kind: agent`, con `owner` humano) y solo su owner lo activa. |
+| **Inbox entre miembros** | `vitals/work/inbox/{id}/`: un archivo por mensaje, con estados `open` → `claimed` → `done`/`declined`, cancelación, vencimiento y topes. |
+| **`dt-agent.sh`** | Un comando hace cumplir el contrato (alta, login, envío, estados). Los agentes no editan roster ni estados a mano. |
+| **`dt-doctor`** | Valida roster e inbox, y cruza el estado de un agente con el autor del commit y el email del owner. |
+| **Loop `07`, bugfix y pulse** | Cortes del loop escritos, protocolo de causa raíz en `30-testing` y pulse al guardar (v1.12.1). |
 
-Spec: [precedence.md](vitals/specs/precedence.md) · [protocolo-vitals-ia.md](vitals/specs/protocolo-vitals-ia.md).
+Spec: [agent-inbox.md](vitals/specs/agent-inbox.md) · [ADR-007](docs/05_decisions/adr-007-agentes-miembro-inbox.md). Si sos un agente autónomo, empezá por [AGENTS.md](AGENTS.md).
 
 ---
 

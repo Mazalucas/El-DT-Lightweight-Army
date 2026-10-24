@@ -21,6 +21,18 @@ Cerebro compartido de **El DT**. Reglas operativas: **`.cursor/rules/`** (Cursor
 | Skills en todos los IDE | `/skills` · `vitals/specs/skill-standard.md` · canon `.cursor/skills/` |
 | Atelier / marketing táctico | `.cursor/skills/atelier/` · guías `design/*/GUIDE.md`, `marketing/*/GUIDE.md` |
 | Paridad multi-IDE | `vitals/config/ide-targets.yaml` · `./scripts/sync-ide.sh` |
+| Agentes miembro e inbox entre agentes | `vitals/specs/agent-inbox.md` · plantilla `vitals/relay/inbox-message-template.md` |
+
+## Si sos un agente autónomo
+
+Corrés sin una persona en el chat (agente cloud, automation, runner; señal: `DT_AGENT_ID`) y vas a escribir en este repo:
+
+1. Leé **`vitals/specs/agent-inbox.md`** entero. Todo pasa por `./scripts/dt-agent.sh`.
+2. `/actualizar` → `./scripts/dt-agent.sh login`.
+3. Exit 2 y no estás registrado → `./scripts/dt-agent.sh register ...` (queda `pending`, con `owner` humano) y terminá. Solo el owner te activa.
+4. Activo: `inbox` → `claim` → trabajar dentro de tu `scope` → `done`/`decline` → `/guardar` con `DT-Member: <id>`.
+
+Los especialistas del DT y los subagentes de un chat **no** se dan de alta: usan `vitals/relay/handoff-template.md`.
 
 ## Ritual
 

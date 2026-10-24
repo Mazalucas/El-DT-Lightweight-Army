@@ -12,13 +12,17 @@ Antes de **escribir** en el repo, proponer **commit/push**, crear pulse, o ejecu
 
 La sesión se **crea y completa solo con `/yo`** (skill `dt-session`).
 
+**Agente autónomo** (corre sin una persona en el chat): `/yo` en modo agente, con su `id` del roster `kind: agent` y `status: active`. Si no está en el roster o está `pending`, solo puede pedir el alta. Contrato: `vitals/specs/agent-inbox.md`.
+
+**Miembros e inbox solo por comando.** Altas, cambios de estado de un miembro, envíos y cambios de estado de mensajes pasan por `./scripts/dt-agent.sh`. No edites a mano las entradas `kind: agent` de `roster.yaml` ni el `status` de un mensaje: el comando aplica permisos y topes que la edición manual saltea. Si el comando falla, reportá el error; no lo rodees editando el archivo. `dt-doctor` marca error si un agente cambió de estado sin `status_by` de su owner.
+
 **`/actualizar`** solo sincroniza Git; **no** crea ni borra sesión.
 
 `vitals/ops/session.yaml` **no se versiona** — solo local.
 
 ## Roster y roles (sin hardcode del template)
 
-- **`roster.yaml`**: solo personas reales añadidas por `/yo`; el template parte con `team: []`. En el checkout oficial (`/oficial` activo) `/yo` no escribe este archivo: la identidad queda en `session.yaml` y la postura en `vitals/ops/collaboration.local.yaml`.
+- **`roster.yaml`**: solo miembros reales; el template parte con `team: []`. Humanos los agrega `/yo`. Agentes (`kind: agent`) se dan de alta `pending` con un `owner` humano, que es el único que los activa. En el checkout oficial (`/oficial` activo) `/yo` no escribe este archivo: la identidad queda en `session.yaml` y la postura en `vitals/ops/collaboration.local.yaml`.
 - **`roles.yaml`**: opcional; `roles: []` = rol en texto libre. Si el proyecto define roles, usarlos para validar/sugerir — **no** imponer roles del framework.
 
 ## Postura (personal | team)
@@ -35,7 +39,7 @@ Sin el archivo, las escrituras no se bloquean: la voz default es team (regla `01
 
 | Zona | Path |
 |------|------|
-| Inbox personal | `vitals/work/inbox/{operator_id}/` |
+| Inbox (humano o agente) | `vitals/work/inbox/{id}/` — otros crean mensajes; solo el dueño cambia `status` o archiva |
 | Pulse | `vitals/pulse/entries/` con `_meta.operator_id` si aplica |
 
 Detalle: `docs/06_operations/git-colaboracion-dt.md` (`DOC-OPS-001`), `docs/03_reference/dt-session-roster.md` (`DOC-REF-001`).

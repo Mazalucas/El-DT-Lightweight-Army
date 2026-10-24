@@ -45,6 +45,11 @@ documents:
     path: 05_decisions/adr-006-mcp-google-oficial.md
     type: decision
     tags: [adr, google, mcp, drive, gmail, calendar]
+  - id: DOC-DEC-007
+    title: "ADR-007: Agentes miembro e inbox en Git"
+    path: 05_decisions/adr-007-agentes-miembro-inbox.md
+    type: decision
+    tags: [adr, agents, roster, inbox]
   - id: DOC-DESIGN-001
     title: "Atelier — design intelligence en El DT"
     path: 01_concepts/design-atelier-el-dt.md
