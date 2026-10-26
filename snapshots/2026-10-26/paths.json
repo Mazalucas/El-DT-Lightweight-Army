@@ -1,0 +1,62 @@
+[
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army",
+    "title": "Overview",
+    "count": 2,
+    "uniques": 2
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/remotion-best-practices/rules/3d.md",
+    "title": "/blob/main/.agents/skills/remotion-best-practices/rules/3d.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/remotion-best-practices/rules/audio-visualization.md",
+    "title": "/blob/main/.agents/skills/remotion-best-practices/rules/audio-visualization.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/remotion-best-practices/rules/audio.md",
+    "title": "/blob/main/.agents/skills/remotion-best-practices/rules/audio.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/remotion-best-practices/rules/calculate-metadata.md",
+    "title": "/blob/main/.agents/skills/remotion-best-practices/rules/calculate-metadata.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/remotion-best-practices/rules/ffmpeg.md",
+    "title": "/blob/main/.agents/skills/remotion-best-practices/rules/ffmpeg.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/remotion-best-practices/rules/get-audio-duration.md",
+    "title": "/blob/main/.agents/skills/remotion-best-practices/rules/get-audio-duration.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/remotion-best-practices/rules/images.md",
+    "title": "/blob/main/.agents/skills/remotion-best-practices/rules/images.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/remotion-best-practices/rules/parameters.md",
+    "title": "/blob/main/.agents/skills/remotion-best-practices/rules/parameters.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/remotion-best-practices/rules/silence-detection.md",
+    "title": "/blob/main/.agents/skills/remotion-best-practices/rules/silence-detection.md",
+    "count": 1,
+    "uniques": 1
+  }
+]
