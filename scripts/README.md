@@ -4,7 +4,7 @@
 |--------|-----|
 | [dt-doctor.sh](dt-doctor.sh) | **Verificador read-only del orden** (frontmatter, enlaces, catálogo, paridad multi-IDE, pulse). Motor del loop de orden continuo. Exit 0 = verde |
 | [dt-publish-gate.sh](dt-publish-gate.sh) | Antes de `/guardar` o de un push: ¿este checkout puede publicar, y a qué remoto? Exit 30/40 = parar, sin pedir acceso al DT |
-| [dt-agent.sh](dt-agent.sh) | Miembros agente e inbox: `register`, `login`, `activate`, `members`, `inbox`, `send`, `claim`/`done`/`decline`, `cancel`, `archive`. Hace cumplir `vitals/specs/agent-inbox.md` |
+| [dt-agent.sh](dt-agent.sh) | Miembros agente e inbox: `register`, `login`, `activate`, `members`, `inbox`, `sent`, `send` (`--to` broadcast), `claim`/`done`/`decline`, `park`/`resume`, `escalate`, `cancel` (`cancelled`), `ack --fyi`, `sync` (sin bump), `archive`. `--on-behalf` del owner. `vitals/specs/agent-inbox.md` |
 | [test-dt-agent.sh](test-dt-agent.sh) | Tests: `dt-agent` rechaza lo que el contrato prohíbe (autoactivación, duplicados, topes, estados ajenos) |
 | [dt-oficial.sh](dt-oficial.sh) | `/oficial` — marcar, apagar o inspeccionar el checkout que publica al DT (`activate`, `off`, `install-hook`) |
 | [sync-ide.sh](sync-ide.sh) | **Emisor único multi-IDE**: recorre `vitals/config/ide-targets.yaml` y emite reglas, skills, commands (Claude) y punteros (CLAUDE.md, Copilot, …) desde fuentes canónicas |

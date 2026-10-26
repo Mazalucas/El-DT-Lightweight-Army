@@ -12,9 +12,7 @@ Antes de **escribir** en el repo, proponer **commit/push**, crear pulse, o ejecu
 
 La sesión se **crea y completa solo con `/yo`** (skill `dt-session`).
 
-**Agente autónomo** (corre sin una persona en el chat): `/yo` en modo agente, con su `id` del roster `kind: agent` y `status: active`. Si no está en el roster o está `pending`, solo puede pedir el alta. Contrato: `vitals/specs/agent-inbox.md`.
-
-**Miembros e inbox solo por comando.** Altas, cambios de estado de un miembro, envíos y cambios de estado de mensajes pasan por `./scripts/dt-agent.sh`. No edites a mano las entradas `kind: agent` de `roster.yaml` ni el `status` de un mensaje: el comando aplica permisos y topes que la edición manual saltea. Si el comando falla, reportá el error; no lo rodees editando el archivo. `dt-doctor` marca error si un agente cambió de estado sin `status_by` de su owner.
+**Agentes miembro e inbox:** regla `31-agent-inbox` y `vitals/specs/agent-inbox.md` (carga al tocar inbox, roster de agentes o `dt-agent`).
 
 **`/actualizar`** solo sincroniza Git; **no** crea ni borra sesión.
 

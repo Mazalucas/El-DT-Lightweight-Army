@@ -380,19 +380,48 @@ end
 
 # Contrato: vitals/specs/agent-inbox.md
 AGENT_STATUSES = %w[pending active paused retired].freeze
-MSG_TYPES = %w[request handoff question fyi cancel].freeze
-MSG_STATUSES = %w[open claimed done declined].freeze
+MSG_TYPES = %w[request handoff question fyi cancel escalate].freeze
+MSG_STATUSES = %w[open claimed paused done declined cancelled].freeze
 MSG_REQUIRED = %w[from to type status created].freeze
 STALE_OPEN_DAYS = 14
 STALE_CLAIMED_DAYS = 7
+STALE_CLAIMED_REG_DAYS = 3
+PAUSED_WARN_DAYS = 30
+MAX_PAUSED = 5
+MAX_PENDING_PER_SENDER = 3
+URGENT_OPEN_WARN_HOURS = 24
 MAX_THREAD = 5
+UNCOMMITTED_INBOX_MINUTES = 30
 
-# Trailer `DT-Member: <id>` del commit que agregó el archivo; nil si no está versionado o no lo trae.
+def shallow_repo?
+  out, status = Open3.capture2e("git", "-C", ROOT, "rev-parse", "--is-shallow-repository")
+  status.success? && out.strip == "true"
+end
+
+# Trailer `DT-Member: <id>` del commit que introdujo el archivo; nil si no está versionado o no lo trae.
 def git_trailer_for_added(path)
   out, status = Open3.capture2e("git", "-C", ROOT, "log", "--diff-filter=A", "--format=%B", "-1", "--", path)
-  return nil unless status.success?
+  return nil unless status.success? && !out.strip.empty?
 
   out[/^DT-Member:\s*(\S+)/, 1]
+end
+
+def shared_runtime_pair?(from_id, committer_id, members)
+  a = members[from_id.to_s]
+  b = members[committer_id.to_s]
+  return false unless a && b
+  return false if (a["kind"] || "human") == "human" || (b["kind"] || "human") == "human"
+
+  a["owner"].to_s == b["owner"].to_s && a["runtime"].to_s == b["runtime"].to_s && !a["runtime"].to_s.empty?
+end
+
+def registro_last_at(body)
+  return nil unless body.include?("## Registro")
+
+  times = body.scan(/^- (\d{4}-\d{2}-\d{2}T[^\s]+)/).flatten
+  return nil if times.empty?
+
+  Time.parse(times.last) rescue nil
 end
 
 # Email del autor del commit que escribió la línea; :uncommitted si aún no está commiteada; nil si no se puede saber.
@@ -427,6 +456,11 @@ def check_status_author(id, m, members)
   end
   line = roster_status_line(id)
   return unless line
+
+  if shallow_repo?
+    warn_("agents", "clone superficial: no se verifica blame del roster (corré git fetch --unshallow si aplica)")
+    return
+  end
 
   author = blame_author_email("vitals/config/roster.yaml", line)
   return if author.nil? || author == :uncommitted
@@ -466,13 +500,32 @@ def check_agent_inbox
     b.start_with?("draft-") || b.casecmp("README.md").zero?
   end
   by_name = {}
+  lane_open = Hash.new(0)   # urgentes open/claimed por miembro (carril de un solo lugar)
+  paused_count = Hash.new(0)
+  msgs.each do |path|
+    parts = path.sub("#{ROOT}#{File::SEPARATOR}", "").split("/")
+    pfm = frontmatter(path)
+    next unless pfm
+
+    lane_open[parts[3]] += 1 if parts[4] == "priority" && %w[open claimed].include?(pfm["status"].to_s)
+    paused_count[parts[3]] += 1 if pfm["status"].to_s == "paused"
+  end
+  lane_open.each { |id, n| err("inbox", "#{id}: #{n} urgentes abiertos en priority/ (el carril admite uno)") if n > 1 }
+  paused_count.each { |id, n| err("inbox", "#{id}: #{n} mensajes en pausa (tope #{MAX_PAUSED})") if n > MAX_PAUSED }
+
+  pending_pair = Hash.new(0)
   msgs.each do |path|
     rel = path.sub("#{ROOT}#{File::SEPARATOR}", "")
     owner_dir = rel.split("/")[3]
+    in_lane = rel.split("/")[4] == "priority"
     fm = frontmatter(path)
+    text = File.read(path)
     if fm.nil?
       err("inbox", "#{rel}: sin frontmatter")
       next
+    end
+    if !in_lane && %w[open claimed].include?(fm["status"].to_s)
+      pending_pair["#{fm['from']}→#{fm['to']}"] += 1
     end
     missing = MSG_REQUIRED.reject { |k| fm[k].to_s.strip != "" }
     unless missing.empty?
@@ -486,20 +539,68 @@ def check_agent_inbox
 
     created = fm["created"].is_a?(Time) ? fm["created"] : (Time.parse(fm["created"].to_s) rescue nil)
     age_days = created ? (Time.now - created) / 86_400 : 0
+    if in_lane
+      err("inbox", "#{rel}: en priority/ solo van mensajes type: escalate") unless fm["type"].to_s == "escalate"
+      %w[escalates reason expires].each { |k| err("inbox", "#{rel}: urgente sin #{k}") if fm[k].to_s.strip.empty? }
+      err("inbox", "#{rel}: el urgente no se pausa (tomarlo o rechazarlo)") if fm["status"].to_s == "paused"
+      if fm["escalates"].to_s != "" && !Dir.glob(File.join(ROOT, "vitals/work/inbox", owner_dir, "{,archive/}#{fm['escalates']}")).any?
+        warn_("inbox", "#{rel}: escalates #{fm['escalates']} no existe en el inbox de #{owner_dir}")
+      end
+    elsif fm["type"].to_s == "escalate"
+      err("inbox", "#{rel}: type escalate solo va en priority/")
+    end
+
     case fm["status"].to_s
     when "open"
-      warn_("inbox", "#{rel}: open hace más de #{STALE_OPEN_DAYS} días") if age_days > STALE_OPEN_DAYS
+      limit_h = in_lane ? URGENT_OPEN_WARN_HOURS : STALE_OPEN_DAYS * 24
+      warn_("inbox", "#{rel}: #{in_lane ? 'urgente sin tomar' : 'open'} hace más de #{in_lane ? "#{URGENT_OPEN_WARN_HOURS} horas" : "#{STALE_OPEN_DAYS} días"}") if age_days * 24 > limit_h
       expires = (Time.parse(fm["expires"].to_s) rescue nil) if fm["expires"]
       warn_("inbox", "#{rel}: venció (expires #{fm['expires']}); cerrar con decline") if expires && expires < Time.now
     when "claimed"
-      warn_("inbox", "#{rel}: claimed hace más de #{STALE_CLAIMED_DAYS} días sin cerrar") if age_days > STALE_CLAIMED_DAYS
+      # Mientras el carril urgente de ese miembro está ocupado, lo que tenía en curso no envejece.
+      busy = lane_open[owner_dir].positive? && !in_lane
+      warn_("inbox", "#{rel}: claimed hace más de #{STALE_CLAIMED_DAYS} días sin cerrar") if age_days > STALE_CLAIMED_DAYS && !busy
+      body_after = text[(text.index("\n---", 4) + 4)..].to_s
+      last_reg = registro_last_at(body_after) || created
+      reg_age = last_reg ? (Time.now - last_reg) / 86_400 : age_days
+      if reg_age > STALE_CLAIMED_REG_DAYS && !busy
+        warn_("inbox", "#{rel}: claimed sin actividad en ## Registro hace más de #{STALE_CLAIMED_REG_DAYS} días; considerá `park`")
+      end
+    when "cancelled"
+      err("inbox", "#{rel}: cancelled sin cancelled_by") if fm["cancelled_by"].to_s.strip.empty?
+    when "paused"
+      %w[paused_reason paused_from].each { |k| err("inbox", "#{rel}: en pausa sin #{k}") if fm[k].to_s.strip.empty? }
+      paused_at = (Time.parse(fm["paused_at"].to_s) rescue nil)
+      warn_("inbox", "#{rel}: en pausa hace más de #{PAUSED_WARN_DAYS} días; retomar o cerrar") if paused_at && (Time.now - paused_at) / 86_400 > PAUSED_WARN_DAYS
+      resume = (Time.parse(fm["resume_after"].to_s) rescue nil) if fm["resume_after"]
+      warn_("inbox", "#{rel}: ya pasó resume_after (#{fm['resume_after']}); es hora de retomar") if resume && resume < Time.now
     end
 
-    added_by = git_trailer_for_added(path)
-    if added_by && added_by != fm["from"].to_s
-      warn_("inbox", "#{rel}: from=#{fm['from']} pero el commit que lo agregó dice DT-Member: #{added_by}")
+    st = fm["status"].to_s
+    check_trailer = %w[open claimed paused].include?(st) || age_days < 7
+    if check_trailer && !rel.include?("/archive/") && !shallow_repo?
+      added_by = git_trailer_for_added(rel)
+      if added_by && added_by != fm["from"].to_s && !shared_runtime_pair?(fm["from"], added_by, members)
+        warn_("inbox", "#{rel}: from=#{fm['from']} pero el commit que lo agregó dice DT-Member: #{added_by}")
+      end
     end
     by_name[File.basename(path)] = fm
+  end
+
+  pending_pair.each do |pair, n|
+    err("inbox", "#{pair}: #{n} pendientes (tope #{MAX_PENDING_PER_SENDER})") if n > MAX_PENDING_PER_SENDER
+  end
+
+  git_inbox = Open3.capture2e("git", "-C", ROOT, "status", "--porcelain", "vitals/work/inbox")[0]
+  git_inbox.lines.each do |line|
+    rel = line[3..].strip.split(" -> ").last
+    next unless rel&.start_with?("vitals/work/inbox/") && rel.end_with?(".md")
+
+    full = File.join(ROOT, rel)
+    next unless File.exist?(full)
+
+    age_min = (Time.now - File.mtime(full)) / 60
+    warn_("inbox", "#{rel}: sin commitear hace #{age_min.round} min; publicá con `dt-agent sync`") if age_min > UNCOMMITTED_INBOX_MINUTES
   end
 
   by_name.each do |name, fm|

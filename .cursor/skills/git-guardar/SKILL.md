@@ -75,6 +75,7 @@ Corré `./scripts/dt-publish-gate.sh`. El exit es una decisión. Leé la línea 
 ## Flujo (ambos modos)
 
 1. `git status` — si **no hay cambios** (salvo archivos excluidos) → **detener** sin bump.
+   - Si los únicos cambios versionables son coordinación de agentes (`vitals/work/inbox/**` salvo `draft-*`, y opcionalmente `vitals/config/roster.yaml` o `vitals/pulse/**` solo por inbox) → **no** sigas este flujo con bump. Usá `./scripts/dt-agent.sh sync --message "chore(inbox): …"` (trailer `DT-Member`). Sin tag ni CHANGELOG de producto.
 2. **Gate** — `./scripts/dt-publish-gate.sh`. Aplicá la tabla de arriba antes de tocar `VERSION`.
 3. `git reset HEAD vitals/ops/session.yaml vitals/ops/canonical-checkout.yaml vitals/ops/collaboration.local.yaml vitals/ops/context-profile.yaml .cursor/rules/99-perfil-local.mdc .claude/rules/99-perfil-local.md .agents/rules/99-perfil-local.md` si quedaron staged. En gate **0**, tampoco stagees `roster.yaml` si `team` no está vacío, ni `vitals/work/inbox/`, ni `vitals/config/collaboration.yaml`.
 4. **Resolver VERSION del producto** (consumer: nunca la del DT):

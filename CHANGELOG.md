@@ -6,6 +6,16 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.14.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.14.0) - 2026-10-26
+
+Minor. Quien ya usa agentes en el roster gana herramientas de coordinación; sin agentes, el cambio es casi invisible (regla `31-agent-inbox` solo al tocar inbox).
+
+- **Checkout compartido.** `dt-agent sync` publica solo tus mensajes sin bump; `dt-doctor` tolera mismo `owner`+`runtime` y no avisa en `archive/`.
+- **Ciclo de mensajes.** `cancel` pasa a `cancelled`; `fyi` con vencimiento, `ack --fyi`, broadcast `send --to a,b,c`; owner `--on-behalf` en park/resume/cancel/escalate.
+- **Carril y pausa** (completan lo de 1.13): `escalate`, `park`/`resume`, carril `priority/`.
+- **Endurecimiento.** Ids validados, rutas confinadas al inbox, `activate` solo con `/yo` humano, registro atómico, topes en `dt-doctor`.
+- **Contexto.** Regla `31-agent-inbox` (condicional); `AGENTS.md` más corto; `vitals/relay/` en `/actualizar-dt`. Feature marcada **experimental** en el spec.
+
 ## [1.13.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.13.0) - 2026-10-24
 
 Minor. Quien ya usa el DT sigue igual: sin agentes en el roster, nada cambia.

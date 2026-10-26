@@ -10,6 +10,7 @@ La IA usa esta lista al hacer dry-run y apply. Respetar **`preserve_paths`** del
 - `.claude/`
 - `vitals/config/` (excepto exclusiones abajo)
 - `vitals/specs/`
+- `vitals/relay/`
 - `vitals/data/`
 - `scripts/`
 - `tools/`

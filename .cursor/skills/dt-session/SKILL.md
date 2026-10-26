@@ -43,7 +43,7 @@ Quien clona el DT no tiene que encontrar tu sesión, tu roster ni documentación
 8. Buscar `id` en `roster.yaml` → `team[]`. Si **nuevo**: append con `name`, `role`, `email` (usar `git config user.email`; obligatorio en la práctica si la persona va a ser owner de agentes: `dt-doctor` lo cruza con el autor del commit que cambia su estado), `registered_at` (ISO 8601) y actualizar `updated` en el archivo. Si **ya está**: no duplicar ni reescribir con datos de ejemplo. Este paso corre cuando la postura ya quedó resuelta. En checkout oficial no se ejecuta.
 9. Escribir `session.yaml` con `operator` (id, name, role, email, inbox_path), `identified_at`, `session_started`.
 10. `mkdir -p vitals/work/inbox/{id}/` solo fuera del checkout oficial.
-11. `./scripts/dt-agent.sh inbox --team --as {id}`. Si hay abiertos, una línea: «Tenés N abiertos; `release-bot` tiene M». Si hay agentes `pending` con `owner: {id}`, sumar: «`bot` pide alta: `dt-agent.sh activate bot`». Si no hay nada, no decir nada.
+11. `./scripts/dt-agent.sh inbox --team --as {id}`. Si hay un URGENTE, decirlo primero. Después, si hay abiertos, una línea: «Tenés N abiertos; `release-bot` tiene M». Si hay agentes `pending` con `owner: {id}`, sumar: «`bot` pide alta: `dt-agent.sh activate bot`». Si no hay nada, no decir nada.
 12. Confirmar id, nombre, rol, inbox y postura. Si hubo alta en roster o se escribió `collaboration.yaml`: recordar **`/guardar`** para subirlos. En checkout oficial no hay alta que subir.
 
 ## Modo agente

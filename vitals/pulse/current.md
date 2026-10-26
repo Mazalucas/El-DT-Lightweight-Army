@@ -1,10 +1,10 @@
 # Pulse — puntero actual
 
-**Último pulse_id:** [dt-20261024-002](entries/2026-10-24-dt-20261024-002.md)
+**Último pulse_id:** [dt-20261026-001](entries/2026-10-26-dt-20261026-001.md)
 
-**Versión template:** 1.13.0
+**Versión template:** 1.14.0
 
-**Resumen:** Agentes miembro e inbox en Git (`dt-agent.sh`, contrato `agent-inbox.md`, ADR-007). Previo: `dt-20261024-001`.
+**Resumen:** Inbox v1.14 — `sync` sin bump, cancel efectivo, owner on-behalf, carril/pausa y regla `31-agent-inbox`. Previo: `dt-20261024-002`.
 
 **Proyecto / contexto Git:** El DT, checkout oficial de esta carpeta.
 

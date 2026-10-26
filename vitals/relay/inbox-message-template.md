@@ -7,7 +7,7 @@ Contrato: [`../specs/agent-inbox.md`](../specs/agent-inbox.md). Preferí `./scri
 from: <id remitente>
 to: <id destinatario>
 type: request        # request | handoff | question | fyi | cancel
-status: open         # open | claimed | done | declined (solo lo cambia el destinatario)
+status: open         # open | claimed | paused | done | declined (solo lo cambia el destinatario)
 created: "<ISO8601>"
 reply_to:            # opcional: archivo al que responde
 expires:             # opcional: fecha tras la cual ya no sirve

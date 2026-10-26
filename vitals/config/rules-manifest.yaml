@@ -25,6 +25,10 @@ rules:
   - stem: 06-dt-colaboracion
     description: "Colaboración multiusuario — sesión solo con /yo, identidad obligatoria en conversación"
     alwaysApply: true
+  - stem: 31-agent-inbox
+    description: "OBLIGATORIO con inbox de agentes, roster kind:agent o dt-agent — contrato, sync, on-behalf del owner"
+    globs: "vitals/work/inbox/**, vitals/config/roster.yaml, scripts/dt-agent*"
+    alwaysApply: false
   - stem: 07-orden-continuo
     description: "OBLIGATORIO tras cambios en docs/, reglas, commands, skills o vitals/specs — una pasada dt-doctor y corregir hallazgos"
     globs: "docs/**, .cursor/**, vitals/**"
