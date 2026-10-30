@@ -1,0 +1,62 @@
+[
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army",
+    "title": "Overview",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/arquitecto/references/adr-triggers.md",
+    "title": "/blob/main/.agents/skills/arquitecto/references/adr-triggers.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/arquitecto/references/pattern-matrix.md",
+    "title": "/blob/main/.agents/skills/arquitecto/references/pattern-matrix.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/content-creator/SKILL.md",
+    "title": "/blob/main/.agents/skills/content-creator/SKILL.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/data-auditor/SKILL.md",
+    "title": "/blob/main/.agents/skills/data-auditor/SKILL.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/deploy/SKILL.md",
+    "title": "/blob/main/.agents/skills/deploy/SKILL.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/dt-bootstrap/SKILL.md",
+    "title": "/blob/main/.agents/skills/dt-bootstrap/SKILL.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/dt-calendar/SKILL.md",
+    "title": "/blob/main/.agents/skills/dt-calendar/SKILL.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/dt-setup/references/welcome-message.md",
+    "title": "/blob/main/.agents/skills/dt-setup/references/welcome-message.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/dt-skills/SKILL.md",
+    "title": "/blob/main/.agents/skills/dt-skills/SKILL.md",
+    "count": 1,
+    "uniques": 1
+  }
+]
