@@ -1,19 +1,19 @@
 {
   "repo": "Mazalucas/El-DT-Lightweight-Army",
-  "updated_at": "2026-11-08",
+  "updated_at": "2026-11-09",
   "note": "count suma los días archivados. uniques no se suman: son por día, en series/*.json.",
   "clones": {
-    "count": 500,
-    "days": 59
+    "count": 518,
+    "days": 60
   },
   "views": {
-    "count": 95,
-    "days": 59
+    "count": 97,
+    "days": 60
   },
   "latest": {
     "stars": 4,
     "forks": 0,
     "watchers": 0,
-    "date": "2026-11-08"
+    "date": "2026-11-09"
   }
 }
