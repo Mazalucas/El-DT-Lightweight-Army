@@ -1,0 +1,62 @@
+[
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army",
+    "title": "Overview",
+    "count": 5,
+    "uniques": 4
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/arquitecto/references/pattern-matrix.md",
+    "title": "/blob/main/.agents/skills/arquitecto/references/pattern-matrix.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/dt-calendar/SKILL.md",
+    "title": "/blob/main/.agents/skills/dt-calendar/SKILL.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/engineering-reuse/references/anti-patterns.md",
+    "title": "/blob/main/.agents/skills/engineering-reuse/references/anti-patterns.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.agents/skills/remotion-producer/references/reuse-compositions.md",
+    "title": "/blob/main/.agents/skills/remotion-producer/references/reuse-compositions.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.claude/agents/qa.md",
+    "title": "/blob/main/.claude/agents/qa.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.claude/commands/actualizar.md",
+    "title": "/blob/main/.claude/commands/actualizar.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.claude/commands/atelier.md",
+    "title": "/blob/main/.claude/commands/atelier.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.claude/commands/ordenar.md",
+    "title": "/blob/main/.claude/commands/ordenar.md",
+    "count": 1,
+    "uniques": 1
+  },
+  {
+    "path": "/Mazalucas/El-DT-Lightweight-Army/blob/main/.claude/commands/procesar-reuniones.md",
+    "title": "/blob/main/.claude/commands/procesar-reuniones.md",
+    "count": 1,
+    "uniques": 1
+  }
+]
