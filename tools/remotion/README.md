@@ -2,7 +2,7 @@
 
 Video programático con [Remotion](https://www.remotion.dev/) cuando [`tools/video/ROUTING.md`](../video/ROUTING.md) cierra en el carril Remotion. Subagente **remotion-producer**, command **`/remotion`**. Un clip de lanzamiento de 15–25 s va por **`/brag`**. Una grabación de la app corriendo va por **`/recordly`**.
 
-**Punto de entrada:** instalá y corré desde **`tools/remotion/`** (el cerebro DT no tiene Remotion en la raíz del repo).
+**Punto de entrada:** instalá y corré desde **`tools/remotion/`** (el repo del DT no tiene Remotion en la raíz del repo).
 
 ## Quick start (dentro del DT)
 
@@ -37,7 +37,7 @@ Remotion es gratis para equipos de hasta 3 personas. Equipos más grandes necesi
 ## Modelo de capas
 
 ```text
-El-DT-Lightweight-Army/     ← cerebro DT (sin Remotion en raíz)
+El-DT-Lightweight-Army/     ← repo del DT (sin Remotion en raíz)
   tools/
     remotion/               ← instalás y corrés acá
       starter/              ← proyecto npm (workspace)

@@ -5,7 +5,7 @@ type: concept
 status: canonical
 owner: dt-platform
 created: 2026-06-13
-updated: 2026-06-13
+updated: 2026-11-10
 tags:
   - design
   - atelier
@@ -35,7 +35,7 @@ source_of_truth: true
 | Capa | Ubicación |
 |------|-----------|
 | Índice | `.cursor/skills/design/README.md` |
-| Contexto | `.agents/design-context.md` (local) |
+| Contexto | `.agents/design-context.md` (local; criterio en `SPEC-DESIGN-001` § Contexto de diseño) |
 | Motor | `ruby scripts/dt-design-select.rb` |
 | Skill táctica | una por tarea bajo `design/` |
 | Datos | `vitals/data/design/*.yaml` (solo scripts) |

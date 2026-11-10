@@ -1,13 +1,13 @@
 ---
 name: dt-drive
-description: "[Rutina] Conectar Google Drive al cerebro del DT — marketplace oficial del IDE, selector de carpetas, solo lectura. Use when the user invokes /drive or wants to sync Drive folders as organizational context."
+description: "[Rutina] Conectar Google Drive a la memoria del equipo — marketplace oficial del IDE, selector de carpetas, solo lectura. Use when the user invokes /drive or wants to sync Drive folders as organizational context."
 ---
 
 # dt-drive
 
 Integración **opcional** de Google Drive vía el **MCP oficial del IDE**. El servidor propio `google-drive-dt` está descontinuado.
 
-**Spec (embudo + install por IDE):** `vitals/specs/google-apps-mcp.md`. **Guía usuario:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`). **ADR:** `DOC-DEC-006`.
+**Spec (embudo + install por IDE):** `vitals/specs/google-apps-mcp.md`. **Guía usuario:** `docs/02_guides/google-contexto-setup.md` (`DOC-GUIDE-009`). **ADR:** `DOC-DEC-006`.
 
 No abras el runbook de IT ni fichas de Google Cloud en este chat.
 
@@ -52,7 +52,7 @@ Si no hay tools o no aparece **Authenticate**:
 
 ## Flujo `/drive` — selector de carpetas
 
-Objetivo: el usuario elige **qué carpetas** comparte al cerebro (no todo el Drive salvo que lo pida).
+Objetivo: el usuario elige **qué carpetas** comparte con la memoria del equipo (no todo el Drive salvo que lo pida).
 
 1. Leer `vitals/config/drive-context.yaml` si existe.
 2. Con las tools oficiales, listar unidades compartidas y carpetas raíz de Mi unidad (nombres + ids).

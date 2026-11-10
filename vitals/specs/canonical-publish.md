@@ -43,6 +43,7 @@ Con el destino oficial, el gate y el `pre-push` miran el árbol. No entra al rem
 
 - `vitals/ops/session.yaml`, la marca de `/oficial`, el perfil local y `collaboration.local.yaml` (el README y los ejemplos de `vitals/ops/` sí se publican)
 - `vitals/work/inbox/` y capturas bajo `vitals/work/knowledge/` (sí el README de la zona)
+- `vitals/pulse/entries/`: el pulse del checkout oficial es local (sí viajan `.gitkeep` y `_plantilla.md`). `/oficial` las agrega a `.git/info/exclude` de esa carpeta
 - `vitals/config/collaboration.yaml`
 - `vitals/config/roster.yaml` si `team` tiene personas
 

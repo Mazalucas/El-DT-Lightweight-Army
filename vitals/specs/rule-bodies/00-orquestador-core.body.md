@@ -58,6 +58,6 @@ Cuando hubo **cambio en el repo** o cierra `/orquestar` / `/fast-lane`, en el cu
 
 ## Setup multi-IDE
 
-`/bienvenida` (first-run + **mensaje de bienvenida canónico** con commands recomendados y rama `/setup`) · `/setup` (repair drift).
+`/bienvenida` (first-run: **charla guiada de a un paso**, con `/setup` si falta estructura) · `/setup` (repair drift).
 
 **Post-clone:** sin sesión local → la IA muestra bienvenida (read-only) antes de trabajo sustantivo — ver sección homónima en este archivo.

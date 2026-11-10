@@ -77,4 +77,4 @@ Evitar el flujo manual y propenso a errores de "clonar, borrar el `.git`, recone
 - [Actualizar framework DT](actualizar-framework-dt.md) (`DOC-GUIDE-007`)
 - [Configuración multi-IDE](ide-setup.md) (`DOC-GUIDE-001`)
 - [Adoptar El DT en un repo existente](adopt-dt-in-existing-repo.md) (`DOC-GUIDE-003`)
-- [Cerebro del equipo](../00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
+- [Memoria del equipo](../00_overview/memoria-equipo-mecanismos-dt.md) (`DOC-OV-004`)

@@ -31,7 +31,7 @@ Uso:
 
 Después: /yo → /drive, /gmail o /calendar
 Spec: vitals/specs/google-apps-mcp.md
-Guía: docs/02_guides/drive-cerebro-setup.md
+Guía: docs/02_guides/google-contexto-setup.md
 EOF
 }
 

@@ -52,7 +52,7 @@ Esta carpeta `docs/` organiza el conocimiento por **capas semánticas** y **tipo
 
 - **Si querés entender el protocolo documental y cómo escribir para IA:** [99_meta/protocolo-documentacion-ia.md](99_meta/protocolo-documentacion-ia.md)
 - **Si querés configurar Cursor vs Antigravity en este repo:** [02_guides/ide-setup.md](02_guides/ide-setup.md)
-- **Si querés el mapa del cerebro (sesión, Git, commands, FAQ):** [00_overview/cerebro-equipo-mecanismos-dt.md](00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
+- **Si querés el mapa de la memoria del equipo (sesión, Git, commands, FAQ):** [00_overview/memoria-equipo-mecanismos-dt.md](00_overview/memoria-equipo-mecanismos-dt.md) (`DOC-OV-004`)
 - **Si querés la forma de sesión/roster/roles (sin placeholders):** [03_reference/dt-session-roster.md](03_reference/dt-session-roster.md) (`DOC-REF-001`)
 - **Si querés adoptar El DT en un repo que ya existe:** [02_guides/adopt-dt-in-existing-repo.md](02_guides/adopt-dt-in-existing-repo.md)
 - **Si querés entender Vitals (pulse, memoria, specs del orquestador):** [01_concepts/dt-vitals.md](01_concepts/dt-vitals.md)
@@ -69,7 +69,7 @@ Esta carpeta `docs/` organiza el conocimiento por **capas semánticas** y **tipo
 | DOC-GUIDE-001 | [Configuración multi-IDE](02_guides/ide-setup.md) |
 | DOC-CONCEPT-001 | [Vitals — telemetría y normativa DT](01_concepts/dt-vitals.md) |
 | DOC-GUIDE-003 | [Adoptar El DT en un repo existente](02_guides/adopt-dt-in-existing-repo.md) |
-| DOC-OV-004 | [Cerebro del equipo — mecanismos DT](00_overview/cerebro-equipo-mecanismos-dt.md) |
+| DOC-OV-004 | [Memoria del equipo — mecanismos DT](00_overview/memoria-equipo-mecanismos-dt.md) |
 | DOC-OPS-001 | [Colaboración Git](06_operations/git-colaboracion-dt.md) |
 
 ## Related docs

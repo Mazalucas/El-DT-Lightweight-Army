@@ -4,4 +4,4 @@
 
 ## Si usás **Cursor**
 
-La fuente de reglas del agente son las **Project Rules** en **`.cursor/rules/*.mdc`**. **IA:** `AGENTS.md` · **Cerebro:** `docs/00_overview/cerebro-equipo-mecanismos-dt.md`.
+La fuente de reglas del agente son las **Project Rules** en **`.cursor/rules/*.mdc`**. **IA:** `AGENTS.md` · **Memoria del equipo:** `docs/00_overview/memoria-equipo-mecanismos-dt.md`.

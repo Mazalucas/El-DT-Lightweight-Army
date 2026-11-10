@@ -34,7 +34,7 @@ Quien clona el DT no tiene que encontrar tu sesión, tu roster ni documentación
 1. Corré `./scripts/dt-publish-gate.sh`. Si sale **0** o **50**, seguí **Checkout oficial** y no los pasos que escriben roster, `collaboration.yaml` o inbox en Git.
 2. Si no existe `vitals/ops/session.yaml` → se crea al confirmar identidad.
 3. Si hay `operator.id` + `operator.name` → **"¿Seguís como {name}?"**
-   - Sí → actualizar `identified_at`.
+   - Sí → actualizar `identified_at` y seguir con los pasos 7 y 8: si el `id` no está en `team[]` (por ejemplo, después de `/bootstrap`), agregarlo.
    - No → identificación nueva (paso 4).
 4. Preguntar **quién trabaja hoy**: nombre (y rol si el usuario no lo dijo).
 5. `id` = slug minúsculas sin espacios (derivado del nombre si hace falta, confirmar con el usuario).
@@ -45,6 +45,10 @@ Quien clona el DT no tiene que encontrar tu sesión, tu roster ni documentación
 10. `mkdir -p vitals/work/inbox/{id}/` solo fuera del checkout oficial.
 11. `./scripts/dt-agent.sh inbox --team --as {id}`. Si hay un URGENTE, decirlo primero. Después, si hay abiertos, una línea: «Tenés N abiertos; `release-bot` tiene M». Si hay agentes `pending` con `owner: {id}`, sumar: «`bot` pide alta: `dt-agent.sh activate bot`». Si no hay nada, no decir nada.
 12. Confirmar id, nombre, rol, inbox y postura. Si hubo alta en roster o se escribió `collaboration.yaml`: recordar **`/guardar`** para subirlos. En checkout oficial no hay alta que subir.
+13. **Cerrar con un solo paso siguiente**, en un mensaje corto (guion: `.cursor/skills/dt-setup/references/welcome-message.md`):
+    - `origin` es el remoto oficial del DT y `dt-upstream.md` dice `mode: consumer` → «**Paso 2 de 3:** escribí `/bootstrap`». No pidas `/guardar` antes: `/bootstrap` resetea roster y postura.
+    - Recién pasó `/bootstrap` → «Listo. Pedime lo primero. Al terminar: `/guardar`» y el ritual diario en una línea.
+    - Otro caso → «Pedime lo que necesites».
 
 ## Modo agente
 

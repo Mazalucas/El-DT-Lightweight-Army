@@ -53,12 +53,8 @@ Señales de que hace falta `/setup` repair:
 
 ## 6. Cierre obligatorio
 
-- Entregar el mensaje completo según [`welcome-message.md`](welcome-message.md) (§ plantilla).
-- Recordar: **`/yo`** con nombre y rol.
-
-## 7. Entrega non-dev (deprecado — usar welcome-message.md)
-
-Usar solo [`welcome-message.md`](welcome-message.md) como formato único de bienvenida.
+- Seguir el guion de [`welcome-message.md`](welcome-message.md): un mensaje por paso, esperando la respuesta.
+- El checklist no se muestra salvo que falle (mensaje M0-B).
 
 ## Troubleshooting plain
 

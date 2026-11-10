@@ -146,6 +146,6 @@ Si la org todavía tiene un Desktop OAuth y `google-drive-dt` en `mcp.json`:
 
 ## Related docs
 
-- [Setup usuario](../02_guides/drive-cerebro-setup.md) (`DOC-GUIDE-009`)
+- [Setup usuario](../02_guides/google-contexto-setup.md) (`DOC-GUIDE-009`)
 - [ADR-006](../05_decisions/adr-006-mcp-google-oficial.md) (`DOC-DEC-006`)
 - [Colaboración Git](git-colaboracion-dt.md) (`DOC-OPS-001`)

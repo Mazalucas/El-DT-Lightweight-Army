@@ -60,12 +60,12 @@ Convierte el template El DT en la **base de tu propio proyecto**: lo promueve a 
      - Spec: [`vitals/specs/project-version.md`](../../../vitals/specs/project-version.md)
    - `vitals/config/roster.yaml` → `team: []`.
    - Borrar `vitals/config/collaboration.yaml` si existe (conservar el `.example`). No preguntar postura: el proyecto nuevo la responde en el primer `/yo`, con el roster ya vacío.
-   - `vitals/pulse/` → limpiar entries de ejemplo (conservar `current.md` como puntero vacío).
+   - `vitals/pulse/entries/` → borrar las entries heredadas; **conservar `_plantilla.md` y `.gitkeep`**. `vitals/pulse/current.md` → puntero vacío.
    - Banner/README → placeholder del nuevo proyecto (preguntar antes de reescribir).
 
 6. **Garantizar estructura**: correr el skill `dt-setup` (`/setup`) para el/los IDE(s) elegido(s).
 7. **Verificar**: `./scripts/dt-doctor.sh` en verde.
-8. **Resumen**: remoto nuevo + `dt-upstream`, `VERSION` del **producto** (existente o `0.1.0`) + `project-version.yaml`, primer **`/guardar`** (resolve + bump o tag inicial; si `auto_bump` era `none`, pasa a `classify`). Este checkout ya no publica al DT: `/guardar` empuja solo al `origin` propio. El framework entra por `/actualizar-dt`. La versión del DT queda en `framework_version`, nunca en la app.
+8. **Resumen**: remoto nuevo + `dt-upstream`, `VERSION` del **producto** (existente o `0.1.0`) + `project-version.yaml`, primer **`/guardar`** (resolve + bump o tag inicial; si `auto_bump` era `none`, pasa a `classify`). Este checkout ya no publica al DT: `/guardar` empuja solo al `origin` propio. El framework entra por `/actualizar-dt`. La versión del DT queda en `framework_version`, nunca en la app. Cerrá con **un** paso: «**Paso 3 de 3:** escribí `/yo` para registrarte en tu proyecto nuevo».
 
 ## Gate duro (no saltear)
 

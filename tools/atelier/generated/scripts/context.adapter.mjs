@@ -11,10 +11,8 @@ import { spawnSync } from 'node:child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = process.cwd();
 
-const DESIGN_CONTEXT_PATHS = [
-  '.agents/design-context.md',
-  '.claude/design-context.md',
-];
+// Única ruta canónica (vitals/specs/design-skills-protocol.md § Contexto de diseño).
+const DESIGN_CONTEXT_PATHS = ['.agents/design-context.md'];
 
 const MARKETING_PATH = '.agents/product-marketing.md';
 
@@ -60,7 +58,7 @@ function runUpstreamContext(passthrough) {
   if (!fs.existsSync(launcher)) {
     process.stdout.write('NO_DESIGN_CONTEXT\n');
     process.stdout.write(
-      'No design context found. Run `/atelier init` (skill design-context).\n',
+      'No design context found. Run `/atelier init` (skill design-context). Format: .cursor/skills/design/design-context/references/context-schema.md\n',
     );
     return;
   }
@@ -71,6 +69,7 @@ function runUpstreamContext(passthrough) {
   });
   let out = (result.stdout || '') + (result.stderr || '');
   out = out.replace(/NO_PRODUCT_MD/g, 'NO_DESIGN_CONTEXT');
+  out = out.replace(/\/impeccable init/g, '/atelier init');
   out = out.replace(/PRODUCT\.md/g, '.agents/design-context.md');
   out = out.replace(/DESIGN\.md/g, 'design-context tokens section');
   out = out.replace(/reference\/init\.md/g, 'tools/atelier/generated/references/init.md');

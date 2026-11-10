@@ -393,6 +393,11 @@ module DtCanonicalPublish
     paths = []
     text.to_s.each_line do |line|
       next if line.strip.empty?
+      # Un borrado (en stage o en el árbol) saca el archivo del repo: es limpieza, no rastro.
+      # Nuevo, modificado o sin trackear sigue contando. En renombres/copias cuenta solo el destino.
+      x = line[0]
+      y = line[1]
+      next if x == "D" || (x == " " && y == "D")
 
       body = line.length > 3 ? line[3..] : ""
       body = body.strip
@@ -545,8 +550,35 @@ module DtCanonicalPublish
     end
 
     write_sentinel(login, url, slug, toplevel)
+    ensure_pulse_exclude!
     exit report(0, allowed_message(toplevel, url, login))
   end
+
+# Pulse local en el checkout oficial: las entries no aparecen como cambios.
+# Va a .git/info/exclude (solo esta carpeta), no al .gitignore del template.
+PULSE_EXCLUDE = [
+  "# El DT — pulse local del checkout oficial (lo agrega /oficial)",
+  "vitals/pulse/entries/*",
+  "!vitals/pulse/entries/.gitkeep",
+  "!vitals/pulse/entries/_plantilla.md"
+].freeze
+
+def ensure_pulse_exclude!
+  rel = git_out("rev-parse", "--git-path", "info/exclude")
+  return if rel.nil? || rel.empty?
+
+  path = File.expand_path(rel, ROOT)
+  current = File.exist?(path) ? File.read(path) : ""
+  have = current.lines.map(&:chomp)
+  missing = PULSE_EXCLUDE.reject { |line| have.include?(line) }
+  return if missing.empty?
+
+  FileUtils.mkdir_p(File.dirname(path))
+  prefix = current.empty? || current.end_with?("\n") ? "" : "\n"
+  File.open(path, "a") { |f| f.write(prefix + missing.join("\n") + "\n") }
+rescue StandardError
+  nil
+end
 
   def cmd_off
     if File.exist?(SENTINEL_PATH)
@@ -587,11 +619,23 @@ module DtCanonicalPublish
 
     raise "sesión no marcada como privada" unless private_path?("vitals/ops/session.yaml", config)
     raise "el README de ops no es un rastro" if private_path?("vitals/ops/README.md", config)
-    raise "inbox no marcado como privado" unless private_path?("vitals/work/inbox/lucas/nota.md", config)
+    raise "inbox no marcado como privado" unless private_path?("vitals/work/inbox/ana-g/nota.md", config)
+    raise "pulse no marcado como privado" unless private_path?("vitals/pulse/entries/2026-01-01-dt-20260101-001.md", config)
+    raise "la plantilla de pulse no debería bloquear" if private_path?("vitals/pulse/entries/_plantilla.md", config)
     raise "el gitkeep del inbox no debería bloquear" if private_path?("vitals/work/inbox/.gitkeep", config)
     raise "README de knowledge no debería bloquear" if private_path?("vitals/work/knowledge/README.md", config)
     raise "collaboration.yaml no marcado" unless private_path?("vitals/config/collaboration.yaml", config)
     raise "el ejemplo de collaboration no es el archivo real" if private_path?("vitals/config/collaboration.yaml.example", config)
+
+    sample = "D  vitals/pulse/entries/2026-01-01-dt-20260101-001.md\n D vitals/ops/context-profile.yaml\n" \
+             "A  vitals/ops/session.yaml\n M vitals/config/collaboration.yaml\n" \
+             "?? vitals/work/inbox/ana-g/nota.md\nR  docs/viejo.md -> vitals/ops/collaboration.local.yaml\n"
+    got = porcelain_paths(sample)
+    raise "un borrado contó como rastro" if got.include?("vitals/pulse/entries/2026-01-01-dt-20260101-001.md") || got.include?("vitals/ops/context-profile.yaml")
+    %w[vitals/ops/session.yaml vitals/config/collaboration.yaml vitals/work/inbox/ana-g/nota.md vitals/ops/collaboration.local.yaml].each do |want|
+      raise "#{want} (nuevo/modificado/renombrado) dejó de contar" unless got.include?(want)
+    end
+    raise "el origen de un renombre contó como rastro" if got.include?("docs/viejo.md")
 
     empty = roster_people("version: 1\nteam: []\n")
     raise "team vacío contó personas" unless empty.empty?

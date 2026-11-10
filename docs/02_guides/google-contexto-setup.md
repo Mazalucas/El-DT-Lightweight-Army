@@ -1,18 +1,18 @@
 ---
 id: DOC-GUIDE-009
-title: "Google Drive, Gmail y Calendar como cerebro — setup para usuarios"
+title: "Google Drive, Gmail y Calendar como contexto del equipo — setup para usuarios"
 type: guide
 status: canonical
 owner: dt-platform
 created: 2026-07-30
-updated: 2026-10-05
+updated: 2026-11-10
 tags:
   - drive
   - gmail
   - calendar
   - google
   - onboarding
-  - cerebro
+  - contexto-equipo
   - mcp
   - antigravity
   - cursor
@@ -32,7 +32,7 @@ keywords:
   - calendar
   - google
   - mcp
-  - cerebro
+  - contexto-equipo
   - marketplace
   - antigravity
   - cursor
@@ -45,7 +45,7 @@ source_of_truth: true
 review_cycle_days: 90
 ---
 
-# Google Drive, Gmail y Calendar como cerebro — setup para usuarios
+# Google Drive, Gmail y Calendar como contexto del equipo — setup para usuarios
 
 ## Summary
 
@@ -166,5 +166,5 @@ Nada de eso va a GitHub. También se actualiza `google-apps.yaml`.
 
 - [Admin Workspace / Google Cloud](../06_operations/drive-google-cloud-admin.md) (`DOC-OPS-002`) — solo IT, no el chat de `/gmail`
 - [Multi-IDE](ide-setup.md) (`DOC-GUIDE-001`)
-- [Cerebro equipo](../00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
+- [Memoria del equipo](../00_overview/memoria-equipo-mecanismos-dt.md) (`DOC-OV-004`)
 - [ADR-006](../05_decisions/adr-006-mcp-google-oficial.md) (`DOC-DEC-006`)

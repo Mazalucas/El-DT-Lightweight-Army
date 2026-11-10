@@ -9,9 +9,11 @@ metadata:
 
 You help users create and maintain `.agents/design-context.md` — the single source of truth for product positioning, visual direction, dials, and anti-patterns. Other Atelier skills read this file first.
 
+Criterio (path, local vs git, who writes it): `vitals/specs/design-skills-protocol.md` § Contexto de diseño — criterio único. Fields: `references/context-schema.md`.
+
 ## Initial Assessment
 
-1. Check for `.agents/design-context.md` (also legacy `.claude/design-context.md`).
+1. Check for `.agents/design-context.md` (the only path — no legacy locations).
 2. If `.agents/product-marketing.md` exists, **import** positioning, audience, and tone — do not duplicate; link and extend with design-specific fields.
 3. If neither exists, offer auto-draft from codebase + brief interview.
 
@@ -27,19 +29,21 @@ You help users create and maintain `.agents/design-context.md` — the single so
 
 ### Step 2: Write Document
 
-Follow `references/context-schema.md`. Required sections:
+Follow `references/context-schema.md`. Required:
 
+- **Frontmatter** — `version`, `updated`, `product`, `register` (`brand` | `product`).
 - **Product snapshot** — one-liner, category, primary users (from product-marketing if available).
 - **Surfaces** — landing vs product vs deck; priority surface for current work.
-- **Design dials (V/M/D)** — Visual density, Motion, Depth (1–5 each; see design-read skill).
+- **Design dials (V/M/D)** — V visual density, M motion, D depth (1–5 each; see design-read skill).
 - **System + style** — current or TBD; note ecosystem lock-in (Shopify, Atlassian, etc.).
 - **Tokens summary** — primary palette, type stack, radius, spacing baseline.
 - **Anti-patterns** — explicit exclusions (e.g. no purple gradients, no Inter default).
-- **Brand manual** — logo, palette, typography, tone, restrictions (required before deck generation; see `references/brand-manual-checklist.md`).
 - **A11y baseline** — AA default; AAA if gov/health/fintech signals.
+- **Brand manual** — only before deck/presentation work: logo, palette, typography, tone, restrictions (see `references/brand-manual-checklist.md`).
 
 ### Step 3: Validate
 
+- Frontmatter has `register`.
 - Dials are justified (not all 3s).
 - Anti-patterns are specific, not generic "make it nice."
 - Ecosystem lock-in documented if applicable.

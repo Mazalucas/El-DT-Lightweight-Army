@@ -13,7 +13,7 @@ tags:
   - dt
 domain:
   - meta
-summary: Cómo volcar archivos, carpetas y dumps del chat al cerebro del repo — clasificación por capas, manifests y retrieval eficiente.
+summary: Cómo volcar archivos, carpetas y dumps del chat a la memoria del equipo — clasificación por capas, manifests y retrieval eficiente.
 related:
   - DOC-META-001
   - DOC-CONCEPT-001
@@ -118,4 +118,4 @@ Skill operativa: `.cursor/skills/dt-ordenar/SKILL.md`.
 - [Protocolo de documentación orientada a IA](../99_meta/protocolo-documentacion-ia.md) (`DOC-META-001`)
 - [Vitals — concepto](../01_concepts/dt-vitals.md) (`DOC-CONCEPT-001`)
 - [Colaboración Git y zonas](../06_operations/git-colaboracion-dt.md) (`DOC-OPS-001`)
-- [Cerebro del equipo](../00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
+- [Memoria del equipo](../00_overview/memoria-equipo-mecanismos-dt.md) (`DOC-OV-004`)

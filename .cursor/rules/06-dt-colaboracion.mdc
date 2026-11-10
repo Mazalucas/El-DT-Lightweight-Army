@@ -68,4 +68,4 @@ Spec: `vitals/specs/canonical-publish.md`.
 
 Excluir: `session.yaml`, `canonical-checkout.yaml`, `context-profile.yaml`, `99-perfil-local`, `.env`, `*.credentials`, `vitals/workspace.yaml`, `drive-context.yaml`, `gmail-context.yaml`, `calendar-context.yaml`, `google-apps.yaml`. Requiere sesión válida (`/yo` previo) y el gate de arriba. `/dt-config` no autoriza este paso.
 
-Referencia: `docs/00_overview/cerebro-equipo-mecanismos-dt.md` (`DOC-OV-004`)
+Referencia: `docs/00_overview/memoria-equipo-mecanismos-dt.md` (`DOC-OV-004`)

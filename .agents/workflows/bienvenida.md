@@ -1,11 +1,11 @@
 ---
-description: "[Rutina] Primera vez post-clone — checklist + mensaje de bienvenida con commands recomendados (incluye /setup si falta estructura)."
+description: "[Rutina] Primera vez: te guío paso a paso para arrancar y crear tu proyecto."
 dt_command: bienvenida
 ---
 # /bienvenida
 
 **Grupo:** Rutina del día a día
-**En una frase:** Primera vez post-clone — checklist + mensaje de bienvenida con commands recomendados (incluye /setup si falta estructura).
+**En una frase:** Primera vez: te guío paso a paso para arrancar y crear tu proyecto.
 **Cuándo:** Justo después de clonar o abrir el DT por primera vez; la IA también puede mostrarlo sin invocación si no hay sesión local.
 **Quién:** Cualquier operador del repo.
 

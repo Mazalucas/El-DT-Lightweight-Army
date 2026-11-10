@@ -4,7 +4,7 @@ globs: "vitals/config/gmail-context.yaml, vitals/config/gmail-context.yaml.examp
 alwaysApply: false
 ---
 
-# Gmail como contexto del cerebro
+# Gmail como contexto del equipo
 
 Integración **opcional** vía el MCP **oficial del IDE**. Aplica cuando existe `vitals/config/gmail-context.yaml` o el usuario invocó `/gmail`.
 
@@ -27,4 +27,4 @@ Integración **opcional** vía el MCP **oficial del IDE**. Aplica cuando existe 
 ## Referencias
 
 - Skill: `.cursor/skills/dt-gmail/` · command `/gmail`
-- Guía: `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`)
+- Guía: `docs/02_guides/google-contexto-setup.md` (`DOC-GUIDE-009`)

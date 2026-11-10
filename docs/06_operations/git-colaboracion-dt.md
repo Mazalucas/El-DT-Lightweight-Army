@@ -12,7 +12,7 @@ tags:
   - session
 domain:
   - meta
-summary: Zonas de escritura, conflictos y ritual actualizar → yo → guardar para equipos que comparten el cerebro DT.
+summary: Zonas de escritura, conflictos y ritual actualizar → yo → guardar para equipos que comparten la memoria del equipo.
 related:
   - DOC-OV-004
   - DOC-GUIDE-003
@@ -60,4 +60,4 @@ Dos personas **no editan el mismo archivo** al mismo tiempo sin coordinar. La se
 
 ## Related docs
 
-- [Cerebro del equipo — mecanismos DT](../00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
+- [Memoria del equipo — mecanismos DT](../00_overview/memoria-equipo-mecanismos-dt.md) (`DOC-OV-004`)

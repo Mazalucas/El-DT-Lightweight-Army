@@ -6,6 +6,20 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.15.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.15.0) - 2026-11-10
+
+Minor. La primera vez es una charla guiada; el framework queda más limpio y con un criterio único para el contexto de diseño.
+
+- **Bienvenida conversacional:** `/bienvenida` guía de a un paso por mensaje, con opciones numeradas y caminos claros (construir tu proyecto, conocer el DT, mantener el DT).
+- **Roster tras `/bootstrap`:** el primer `/yo` en el proyecto nuevo te registra en el roster aunque confirmes la identidad previa.
+- **Limpieza del template:** fuera rastros no genéricos y comandos huérfanos; `vitals/security/baseline.yaml` y `vitals/pulse/current.md` quedan como plantillas vacías.
+- **"Memoria del equipo":** la metáfora del contexto compartido se renombra; docs `memoria-equipo-mecanismos-dt.md` y `google-contexto-setup.md`.
+- **Pulse local en el checkout oficial:** las entries no se versionan; solo `current.md`, `.gitkeep` y `_plantilla.md`. `/bootstrap` conserva la plantilla al limpiar.
+- **dt-doctor:** chequeo de pulse privado en el checkout oficial y aviso de comandos huérfanos fuera de `commands-meta.yaml`.
+- **Gate de publicación:** sacar del repo un archivo privado ya no bloquea `/guardar`; uno nuevo o modificado sigue bloqueando (cubierto en `self-check`).
+- **Contexto de diseño, criterio único:** `SPEC-DESIGN-001` define ruta (`.agents/design-context.md`, local), quién lo escribe y formato (`context-schema.md`: frontmatter con `register`, dials V/M/D = densidad visual / movimiento / profundidad, sección `Anti-patterns`). Sin rutas legacy.
+- **Ruta canónica de product-marketing:** las skills de marketing leen solo `.agents/product-marketing.md` (local); si aparece una copia vieja, ofrecen moverla.
+
 ## [1.14.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.14.0) - 2026-10-26
 
 Minor. Quien ya usa agentes en el roster gana herramientas de coordinación; sin agentes, el cambio es casi invisible (regla `31-agent-inbox` solo al tocar inbox).
@@ -104,7 +118,7 @@ Menos contexto fijo: reglas condicionales, Esencia DT y `GUIDE.md`.
 
 ## [1.7.3](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.7.3) - 2026-06-30
 
-Template DT v1.7.3, junto con el tag de Cerebro App v1.54.
+Template DT v1.7.3.
 
 ## [1.6.3](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.6.3) - 2026-05-29
 
@@ -120,7 +134,7 @@ Template v1.6.1.
 
 ## [1.6.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.6.0) - 2026-05-27
 
-Cerebro colaborativo, sesión local y rutina Git.
+Memoria del equipo colaborativa, sesión local y rutina Git.
 
 - Ritual `/actualizar` → `/yo` → `/guardar`.
 - La sesión local la crea solo `/yo`.
@@ -148,4 +162,4 @@ Soporte multi-IDE: Cursor y Antigravity.
 
 ---
 
-Tags que no son el semver del DT: `pitch-media`, `cerebro-app-v1.54`.
+Tags que no son el semver del DT: `pitch-media`.

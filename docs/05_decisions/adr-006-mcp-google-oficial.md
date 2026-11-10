@@ -39,7 +39,7 @@ review_cycle_days: 180
 
 ## Summary
 
-El cerebro Google del DT usa los MCP **oficiales** de cada IDE. El paquete propio `@ibarcarty/mcp-server-google-drive` (`google-drive-dt`) queda fuera de mantenimiento.
+La integración Google del DT usa los MCP **oficiales** de cada IDE. El paquete propio `@ibarcarty/mcp-server-google-drive` (`google-drive-dt`) queda fuera de mantenimiento.
 
 ## Contexto
 
@@ -74,5 +74,5 @@ Mantener un servidor propio era costo continuo contra un producto que Google y C
 ## Related docs
 
 - Spec: `vitals/specs/google-apps-mcp.md`
-- Guía: [drive-cerebro-setup.md](../02_guides/drive-cerebro-setup.md) (`DOC-GUIDE-009`)
+- Guía: [google-contexto-setup.md](../02_guides/google-contexto-setup.md) (`DOC-GUIDE-009`)
 - Admin: [drive-google-cloud-admin.md](../06_operations/drive-google-cloud-admin.md) (`DOC-OPS-002`)

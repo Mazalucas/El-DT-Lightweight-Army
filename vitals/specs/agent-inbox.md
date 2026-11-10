@@ -19,7 +19,7 @@ Cómo un agente autónomo se suma al equipo y se comunica con otros miembros (hu
 
 ```bash
 ./scripts/dt-agent.sh register --id release-bot --name "Release bot" \
-  --owner lucas --runtime cursor-cloud --scope "Qué hace y qué paths toca"
+  --owner ana-g --runtime cursor-cloud --scope "Qué hace y qué paths toca"
 ```
 
 Escribe en `vitals/config/roster.yaml` → `team[]` (una entrada sin `kind` es `human`):
@@ -28,13 +28,13 @@ Escribe en `vitals/config/roster.yaml` → `team[]` (una entrada sin `kind` es `
   - id: release-bot            # slug único; también es su carpeta de inbox
     kind: agent
     name: "Release bot"
-    owner: lucas               # id de un humano del roster; responde por el agente
+    owner: ana-g               # id de un humano del roster; responde por el agente
     runtime: cursor-cloud      # texto libre: cursor-cloud | automation | claude-code | antigravity | ...
     scope: "..."
     status: pending
     registered_at: "<ISO8601>"
     # al cambiar de estado, dt-agent agrega:
-    # status_by: "lucas"       # debe ser el owner; si no, dt-doctor da error
+    # status_by: "ana-g"       # debe ser el owner; si no, dt-doctor da error
     # status_at: "<ISO8601>"
 ```
 

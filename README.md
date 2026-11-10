@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.14.0**
+**v1.15.0**
 
 Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
@@ -20,13 +20,13 @@ Delega en **24 especialistas** (producto, diseño, marketing, documentación, ca
 
 Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y más). **Empezá en 2 minutos:** [`/bienvenida`](#primera-vez) → [`/yo`](#ritual-del-día).
 
-> **El DT no es un prompt:** es un cerebro operativo con ~1.400 documentos canónicos, ~56.000 líneas de orquestación, 24 especialistas, 105 skills y un ecosistema de diseño/marketing/video que suma cientos de miles de líneas de plantillas listas para usar.
+> **El DT no es un prompt:** es la memoria operativa del equipo, con ~1.400 documentos canónicos, ~56.000 líneas de orquestación, 24 especialistas, 105 skills y un ecosistema de diseño/marketing/video que suma cientos de miles de líneas de plantillas listas para usar.
 
 ---
 
 ## Índice
 
-- [Qué trae v1.14.0](#que-trae)
+- [Qué trae v1.15.0](#que-trae)
 - [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
@@ -39,19 +39,17 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ---
 
-## Qué trae v1.14.0 {#que-trae}
+## Qué trae v1.15.0 {#que-trae}
 
-Capacidad nueva sobre **v1.13.0**. Sin agentes en el roster, casi no cambia el día a día. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
+Capacidad nueva sobre **v1.14.0**. Si ya usás el DT, el día a día sigue igual. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **`sync` sin bump** | Publicá coordinación de inbox con `dt-agent sync`; `/guardar` no versiona solo mensajes de inbox. |
-| **Cancel y avisos** | `cancel` deja el pedido en `cancelled`; `fyi` con vencimiento, `ack --fyi`, broadcast `send --to a,b,c`. |
-| **Owner on-behalf** | El humano owner puede `park`/`resume`/`cancel`/`escalate` sobre el inbox de sus agentes. |
-| **Carril y pausa** | `escalate` (urgente en `priority/`), `park`/`resume` para liberar cupo sin cerrar trabajo. |
-| **Regla `31-agent-inbox`** | Detalle del inbox solo cuando tocás inbox, roster de agentes o `dt-agent` (experimental hasta salida del piloto). |
-
-Spec: [agent-inbox.md](vitals/specs/agent-inbox.md) · [ADR-007](docs/05_decisions/adr-007-agentes-miembro-inbox.md). Agentes autónomos: [AGENTS.md](AGENTS.md).
+| **Bienvenida conversacional** | `/bienvenida` te guía de a un paso, con opciones numeradas, hasta tu proyecto. |
+| **Template limpio** | Sin rastros no genéricos ni comandos huérfanos; pulse del checkout oficial solo local. |
+| **Memoria del equipo** | Nuevo nombre para el contexto compartido del equipo. |
+| **dt-doctor y gate** | Chequeo de pulse privado, aviso de comandos huérfanos; borrar un archivo privado ya no bloquea `/guardar`. |
+| **Contexto de diseño** | Criterio único en [SPEC-DESIGN-001](vitals/specs/design-skills-protocol.md); `product-marketing` con una sola ruta. |
 
 ---
 
@@ -59,21 +57,21 @@ Spec: [agent-inbox.md](vitals/specs/agent-inbox.md) · [ADR-007](docs/05_decisio
 
 | Si querés… | Hacé esto |
 |------------|-----------|
-| Usar El DT por primera vez | `/bienvenida` → `/yo` |
+| Usar El DT por primera vez | `/bienvenida` — te guía paso a paso |
 | Trabajar en el día a día | `/actualizar` → `/yo` → trabajar → `/guardar` |
 | Una tarea grande, paso a paso | `/orquestar` |
 | Algo puntual ya definido | `/fast-lane` |
 | Diseñar una web, dashboard o presentación | `/atelier` |
 | Crear un video | Leé [`tools/video/ROUTING.md`](tools/video/ROUTING.md): `/recordly`, `/brag`, Hyperframes o `/remotion` |
 | Consultar Drive, Gmail o Calendar | `/drive`, `/gmail` o `/calendar` (opcional — ver [abajo](#google-drive--drive)) |
-| Volcar briefs, notas o dumps al cerebro del repo | `/ordenar` |
+| Volcar briefs, notas o dumps a la memoria del equipo | `/ordenar` |
 | Auditar seguridad del proyecto (auth, API, secrets…) | `/hack` |
 | Auditar cumplimiento legal (privacidad, cookies, cobros, menores) | `/auditoria-legal` |
 | Afinar qué reglas carga la IA en cada mensaje | `/dt-config` |
 | Validar un plan ya escrito, sin ejecutarlo | `/analisis-propuesta` |
 | Ver el equipo completo de especialistas | [Catálogo de 24](#catálogo-de-los-24-especialistas) |
 
-Este repo es **memoria compartida + reglas** para que varias personas trabajen con la misma IA sin pisarse. Guía humana: [cerebro del equipo](docs/00_overview/cerebro-equipo-mecanismos-dt.md). La IA lee **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
+Este repo es **memoria compartida + reglas** para que varias personas trabajen con la misma IA sin pisarse. Guía humana: [memoria del equipo](docs/00_overview/memoria-equipo-mecanismos-dt.md). La IA lee **[AGENTS.md](AGENTS.md)** al entrar al proyecto.
 
 ### Primera vez {#primera-vez}
 
@@ -82,7 +80,7 @@ git clone <este-repo>
 cd El-DT-Lightweight-Army
 ```
 
-En el chat: **`/bienvenida`** → **`/yo`** (ej. *"Soy Ana García, analista"*). Guía detallada: [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
+En el chat: **`/bienvenida`**. El DT te guía de a un paso: elegís qué querés hacer, `/yo` y, si es tu proyecto, `/bootstrap`. Guía detallada: [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
 
 No hace falta `/actualizar` en un clone recién hecho — usalo cuando el remoto del producto o del template tenga novedades.
 
@@ -100,7 +98,7 @@ No hace falta `/actualizar` en un clone recién hecho — usalo cuando el remoto
 | **`/yo`** | Decir quién sos en esta computadora |
 | **Trabajar** | Pedir lo que necesites (`/orquestar`, diseño, video, docs…) |
 | **`/guardar`** | Guardar tu trabajo — bump, sync y tag. Publica en el remoto de este proyecto; el repo oficial del DT solo si el dueño activó esta carpeta con `/oficial` |
-| **`/drive`** | Conectar Google Drive y elegir carpetas como contexto del cerebro (opcional) |
+| **`/drive`** | Conectar Google Drive y elegir carpetas como contexto del equipo (opcional) |
 
 Si la IA no sabe quién sos, te pedirá **`/yo`** antes de escribir en el repo. Tu identidad en esta PC **no se sube a GitHub** — es privada.
 
@@ -210,7 +208,7 @@ Integración **opcional** con el **MCP oficial del IDE** (marketplace Cursor, MC
 3. Instalar y autenticar el plugin o conector oficial
 4. Selector local (`vitals/config/*-context.yaml`, no Git)
 
-**Guía:** [drive-cerebro-setup.md](docs/02_guides/drive-cerebro-setup.md) · **Admin (solo IT):** [drive-google-cloud-admin.md](docs/06_operations/drive-google-cloud-admin.md) · **ADR:** [DOC-DEC-006](docs/05_decisions/adr-006-mcp-google-oficial.md)
+**Guía:** [google-contexto-setup.md](docs/02_guides/google-contexto-setup.md) · **Admin (solo IT):** [drive-google-cloud-admin.md](docs/06_operations/drive-google-cloud-admin.md) · **ADR:** [DOC-DEC-006](docs/05_decisions/adr-006-mcp-google-oficial.md)
 
 ---
 

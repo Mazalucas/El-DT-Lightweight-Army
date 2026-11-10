@@ -15,7 +15,7 @@ Usá este archivo para decidir **qué leer primero** y no inflar el contexto.
 | ¿Plantilla de handoff entre agentes? | [relay/handoff-template.md](relay/handoff-template.md) |
 | ¿Agente autónomo: alta en roster, inbox, mensajes? | [specs/agent-inbox.md](specs/agent-inbox.md) · [relay/inbox-message-template.md](relay/inbox-message-template.md) |
 | ¿Reglas sobre secretos en vitals? | [charter/no-secrets.md](charter/no-secrets.md) |
-| ¿Sesión local vs roster / ritual Git? | [../docs/00_overview/cerebro-equipo-mecanismos-dt.md](../docs/00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`) |
+| ¿Sesión local vs roster / ritual Git? | [../docs/00_overview/memoria-equipo-mecanismos-dt.md](../docs/00_overview/memoria-equipo-mecanismos-dt.md) (`DOC-OV-004`) |
 | ¿Commands y taglines (YAML canónico)? | [config/commands-meta.yaml](config/commands-meta.yaml) |
 | ¿Quién trabaja en esta máquina? | `ops/session.yaml` (local; usar `/yo`) |
 | ¿Equipo en Git? | [config/roster.yaml](config/roster.yaml) (vacío al clonar) |

@@ -1,6 +1,6 @@
 # Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agents/workflows
 version: 1
-updated: "2026-10-05"
+updated: "2026-11-10"
 locale: es
 
 groups:
@@ -71,7 +71,7 @@ commands:
     skill: dt-config
   bienvenida:
     group: routine
-    tagline: "Primera vez post-clone — checklist + mensaje de bienvenida con commands recomendados (incluye /setup si falta estructura)."
+    tagline: "Primera vez: te guío paso a paso para arrancar y crear tu proyecto."
     when: "Justo después de clonar o abrir el DT por primera vez; la IA también puede mostrarlo sin invocación si no hay sesión local."
     example: "/bienvenida"
     skill: dt-setup

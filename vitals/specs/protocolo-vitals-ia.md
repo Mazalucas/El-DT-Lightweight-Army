@@ -12,6 +12,7 @@ Definir cómo organizar `vitals/` para **recuperación eficiente de contexto** (
 4. **Sin secretos:** Ver [../charter/no-secrets.md](../charter/no-secrets.md).
 5. **Modularidad normativa:** La política larga vive en `specs/`; los entries solo enlazan a specs, no duplican párrafos enteros.
 6. **Compactación con opt-in:** Si hay muchos entries en un período, el DT puede **proponer** un `pulse/snapshots/YYYY-MM.md` con decisiones y enlaces. No borrar entries sin confirmación humana.
+7. **Checkout oficial del DT:** las entries son **locales** (`canonical-publish.yaml` → `private_prefixes`; `/oficial` las excluye en `.git/info/exclude`). En Git solo viajan `current.md` (versión), `entries/.gitkeep` y `entries/_plantilla.md`. En tu proyecto, el pulse sí se versiona.
 
 ## Metadatos mínimos por entry (`pulse/entries/`)
 

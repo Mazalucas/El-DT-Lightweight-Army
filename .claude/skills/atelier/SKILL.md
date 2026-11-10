@@ -15,7 +15,7 @@ Router unificado. Upstream: [Impeccable](https://github.com/pbakaus/impeccable) 
 Before writing files in the repo:
 
 1. Read `vitals/ops/session.yaml`. If missing or `operator.id` empty → stop and ask the user to run **`/yo`**.
-2. Design context canonical path: **`.agents/design-context.md`** (not separate PRODUCT.md/DESIGN.md unless exporting).
+2. Design context: **`.agents/design-context.md`** — only path, local (gitignored). Criterio: `vitals/specs/design-skills-protocol.md` § Contexto de diseño. Fields: `.cursor/skills/design/design-context/references/context-schema.md`. No separate PRODUCT.md/DESIGN.md unless exporting.
 
 ## DT context loader
 

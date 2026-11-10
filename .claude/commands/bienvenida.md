@@ -2,14 +2,14 @@
 dt_command: bienvenida
 group: routine
 group_title: "Rutina del día a día"
-tagline: "Primera vez post-clone — checklist + mensaje de bienvenida con commands recomendados (incluye /setup si falta estructura)."
+tagline: "Primera vez: te guío paso a paso para arrancar y crear tu proyecto."
 skill: dt-setup
 ---
 
 # /bienvenida
 
 **Grupo:** Rutina del día a día
-**En una frase:** Primera vez post-clone — checklist + mensaje de bienvenida con commands recomendados (incluye /setup si falta estructura).
+**En una frase:** Primera vez: te guío paso a paso para arrancar y crear tu proyecto.
 **Cuándo:** Justo después de clonar o abrir el DT por primera vez; la IA también puede mostrarlo sin invocación si no hay sesión local.
 **Quién:** Cualquier operador del repo.
 

@@ -80,4 +80,4 @@ Si el archivo no existe, la voz es `team`. `/yo` pregunta solo cuando el roster 
 
 ## Related docs
 
-- [Cerebro del equipo](../00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
+- [Memoria del equipo](../00_overview/memoria-equipo-mecanismos-dt.md) (`DOC-OV-004`)

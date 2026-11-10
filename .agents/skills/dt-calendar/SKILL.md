@@ -1,13 +1,13 @@
 ---
 name: dt-calendar
-description: "[Rutina] Conectar Google Calendar al cerebro del DT — marketplace oficial del IDE, calendarios, eventos. Use when the user invokes /calendar or wants the DT to list or create calendar events."
+description: "[Rutina] Conectar Google Calendar a la memoria del equipo — marketplace oficial del IDE, calendarios, eventos. Use when the user invokes /calendar or wants the DT to list or create calendar events."
 ---
 
 # dt-calendar
 
 Integración **opcional** de Calendar vía el **MCP oficial del IDE**. `google-drive-dt` está descontinuado.
 
-**Spec:** `vitals/specs/google-apps-mcp.md`. **Guía usuario:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`). **ADR:** `DOC-DEC-006`.
+**Spec:** `vitals/specs/google-apps-mcp.md`. **Guía usuario:** `docs/02_guides/google-contexto-setup.md` (`DOC-GUIDE-009`). **ADR:** `DOC-DEC-006`.
 
 No abras el runbook de IT ni fichas de Google Cloud en este chat.
 

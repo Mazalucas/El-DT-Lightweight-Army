@@ -57,7 +57,7 @@ Si [`tools/video/ROUTING.md`](../../../tools/video/ROUTING.md) no cierra en Remo
 
 ### Scaffold de proyecto
 
-**Dentro del cerebro DT** (desarrollo / preview en el template):
+**Dentro del repo del DT** (desarrollo / preview en el template):
 
 ```bash
 cd tools/remotion

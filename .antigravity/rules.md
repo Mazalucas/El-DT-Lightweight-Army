@@ -2,13 +2,13 @@
 
 Este proyecto soporta **multi-IDE** (Cursor, Antigravity, Claude Code, Codex, GitHub Copilot). Registro: `vitals/config/ide-targets.yaml`.
 
-**Primera vez:** `/bienvenida` (mensaje con commands recomendados + checklist; si falta algo → `/setup`) → `/yo`. **Repair:** `/setup`.
+**Primera vez:** `/bienvenida` (charla guiada de a un paso; si falta algo → `/setup`) → `/yo`. **Repair:** `/setup`.
 
 ## Reglas
 
 **`.agents/rules/`** — espejo de `.cursor/rules/`, incluye **`06-dt-colaboracion`** (sin sesión → pedir **`/yo`**; sesión solo local, no Git).
 
-**Cerebro:** `docs/00_overview/cerebro-equipo-mecanismos-dt.md` · **IA:** `AGENTS.md`
+**Memoria del equipo:** `docs/00_overview/memoria-equipo-mecanismos-dt.md` · **IA:** `AGENTS.md`
 
 ## Commands = workflows
 
@@ -26,11 +26,11 @@ Lógica en **`.agents/skills/<nombre>/SKILL.md`**, espejo de **`.cursor/skills/`
 | `/yo` | `dt-session` (crea sesión local) |
 | `/guardar` | `git-guardar` |
 
-### Subagentes (20)
+### Especialistas (24)
 
 Cada rol: **`.agents/skills/{nombre}/SKILL.md`**. Definiciones Cursor: **`.cursor/agents/{nombre}.md`**.
 
-Catálogo completo (20 filas + 42 skills de marketing): [README — Subagentes (20)](README.md#subagentes-20).
+Catálogo completo (24 especialistas + 42 skills de marketing): [README — Catálogo de los 24 especialistas](README.md#catálogo-de-los-24-especialistas).
 
 Tras editar skills en Cursor, corré `./scripts/sync-skills-parity.sh` o `./scripts/sync-ide.sh`.
 

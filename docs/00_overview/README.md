@@ -31,6 +31,6 @@ Puerta de entrada: mapa general, quickstart, vistas de conjunto.
 
 | ID | Documento |
 |----|-----------|
-| DOC-OV-004 | [Cerebro del equipo — mecanismos DT, Git, sesiones y commands](cerebro-equipo-mecanismos-dt.md) |
+| DOC-OV-004 | [Memoria del equipo — mecanismos DT, Git, sesiones y commands](memoria-equipo-mecanismos-dt.md) |
 
 Volver al [portal principal](../README.md).

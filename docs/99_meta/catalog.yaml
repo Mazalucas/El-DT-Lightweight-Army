@@ -3,7 +3,7 @@
 # Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
 
 version: 1
-updated: "2026-10-26"
+updated: "2026-11-10"
 documents:
   - id: DOC-ARCH-002
     title: "Arquitectura de la capacidad Atelier"
@@ -96,10 +96,10 @@ documents:
     type: guide
     tags: [atelier, impeccable, guide, vendor]
   - id: DOC-GUIDE-009
-    title: "Google Drive, Gmail y Calendar como cerebro — setup para usuarios"
-    path: 02_guides/drive-cerebro-setup.md
+    title: "Google Drive, Gmail y Calendar como contexto del equipo — setup para usuarios"
+    path: 02_guides/google-contexto-setup.md
     type: guide
-    tags: [drive, gmail, calendar, google, onboarding, cerebro, mcp, antigravity, cursor]
+    tags: [drive, gmail, calendar, google, onboarding, contexto-equipo, mcp, antigravity, cursor]
   - id: DOC-GUIDE-016
     title: "Capturar y ordenar conocimiento con /ordenar"
     path: 02_guides/ordenar-captura-conocimiento.md
@@ -141,8 +141,8 @@ documents:
     type: overview
     tags: [concepts]
   - id: DOC-OV-004
-    title: "Cerebro del equipo — mecanismos DT, Git, sesiones y commands"
-    path: 00_overview/cerebro-equipo-mecanismos-dt.md
+    title: "Memoria del equipo — mecanismos DT, Git, sesiones y commands"
+    path: 00_overview/memoria-equipo-mecanismos-dt.md
     type: overview
     tags: [dt, evolution, multi-user, sessions, commands, gitignore, git, platform, brain, faq, checklist, bienvenida]
   - id: DOC-OV-005

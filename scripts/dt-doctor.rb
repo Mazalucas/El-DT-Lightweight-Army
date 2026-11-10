@@ -618,6 +618,43 @@ rescue StandardError => e
   err("agents", e.message)
 end
 
+# 5) Checkout canónico: las entries de pulse son locales (canonical-publish.yaml → private_prefixes).
+def check_pulse_private
+  upstream = File.join(ROOT, "vitals/config/dt-upstream.md")
+  return unless File.exist?(upstream)
+  return unless (frontmatter(upstream) || {})["mode"] == "canonical"
+
+  allow = %w[vitals/pulse/entries/.gitkeep vitals/pulse/entries/_plantilla.md]
+  out, status = Open3.capture2("git", "-C", ROOT, "ls-files", "vitals/pulse/entries")
+  return unless status.success?
+
+  out.split("\n").reject { |p| allow.include?(p) }.each do |p|
+    err("pulse", "#{p} está versionado; en el repo canónico el pulse es local (git rm --cached)")
+  end
+end
+
+# 6) Commands huérfanos (WARN): archivos en commands_dir que no están en commands-meta.yaml.
+# Los sync emiten pero no borran; un huérfano queda colgado en un IDE.
+def check_orphan_commands
+  meta_path = File.join(ROOT, "vitals/config/commands-meta.yaml")
+  targets_path = File.join(ROOT, "vitals/config/ide-targets.yaml")
+  return unless File.exist?(meta_path) && File.exist?(targets_path)
+
+  known = ((YAML.safe_load(File.read(meta_path), permitted_classes: [Date, Time]) || {})["commands"] || {}).keys
+  targets = (YAML.safe_load(File.read(targets_path), permitted_classes: [Date, Time]) || {})["targets"] || {}
+  dirs = targets.values.select { |t| t.is_a?(Hash) && t["enabled"] && t["commands_dir"] }.map { |t| t["commands_dir"] }.uniq
+  dirs.each do |rel_dir|
+    Dir.glob(File.join(ROOT, rel_dir, "*.md")).sort.each do |f|
+      name = File.basename(f, ".md")
+      next if known.include?(name)
+
+      warn_("commands-orphan", "#{rel_dir}/#{name}.md no está en vitals/config/commands-meta.yaml — agregalo al meta o borralo")
+    end
+  end
+rescue StandardError => e
+  warn_("commands-orphan", e.message)
+end
+
 # --- run ---
 say "dt-doctor — verificación de orden (#{Time.now.strftime('%H:%M:%S')})"
 check_frontmatter
@@ -631,6 +668,8 @@ check_publish_gate
 check_collaboration
 check_agent_inbox
 check_pulse_freshness
+check_pulse_private
+check_orphan_commands
 
 unless QUIET
   if @errors.empty? && @warns.empty?

@@ -1,4 +1,4 @@
-# Google Calendar como contexto del cerebro
+# Google Calendar como contexto del equipo
 
 Integración **opcional** vía el MCP **oficial del IDE**. Aplica cuando existe `vitals/config/calendar-context.yaml` o el usuario invocó `/calendar`.
 
@@ -19,4 +19,4 @@ Integración **opcional** vía el MCP **oficial del IDE**. Aplica cuando existe 
 ## Referencias
 
 - Skill: `.cursor/skills/dt-calendar/` · command `/calendar`
-- Guía: `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`)
+- Guía: `docs/02_guides/google-contexto-setup.md` (`DOC-GUIDE-009`)

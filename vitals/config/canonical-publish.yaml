@@ -13,6 +13,7 @@ private_prefixes:
   - vitals/work/inbox/
   - vitals/work/knowledge/
   - vitals/work/audits/
+  - vitals/pulse/entries/
 private_exact:
   - vitals/ops/session.yaml
   - vitals/ops/canonical-checkout.yaml
@@ -28,7 +29,13 @@ private_exact:
   - .cursor/rules/99-perfil-local.mdc
   - .claude/rules/99-perfil-local.md
   - .agents/rules/99-perfil-local.md
+  - .agents/design-context.md
+  - .agents/product-marketing.md
+  - .claude/design-context.md
+  - .claude/product-marketing.md
 private_allow:
   - vitals/work/knowledge/README.md
   - vitals/work/audits/README.md
   - vitals/work/inbox/.gitkeep
+  - vitals/pulse/entries/.gitkeep
+  - vitals/pulse/entries/_plantilla.md

@@ -1,13 +1,34 @@
 # design-context.md Schema
 
-Canonical path: `.agents/design-context.md`
+Canonical path: `.agents/design-context.md` — the only path; local, never versioned.
+Criterio (what travels in git, what is local, who writes it): `vitals/specs/design-skills-protocol.md` § **Contexto de diseño — criterio único**. This file defines only the fields.
+
+## 0. Frontmatter (required)
 
 ```yaml
-# Frontmatter (optional YAML block at top)
+---
 version: 1
 updated: YYYY-MM-DD
 product: Project Name
+register: product   # product (app, dashboard, tool) | brand (marketing, landing, portfolio)
+---
 ```
+
+`register` selects the Atelier mode (product → Operate, brand → Persuade). See `.cursor/skills/atelier/SKILL.md` § Register references.
+
+## Sections
+
+| # | Section | Required |
+|---|---------|----------|
+| 1 | Product Snapshot | Yes |
+| 2 | Surfaces | Yes |
+| 3 | Design Dials (V / M / D) | Yes |
+| 4 | System & Style | Yes (`TBD` allowed) |
+| 5 | Tokens Summary | Yes (`TBD` allowed) |
+| 6 | Anti-patterns | Yes — never empty |
+| 7 | Accessibility Baseline | Yes |
+| 8 | Brand Manual | Only before deck/presentation work |
+| 9 | Open Decisions | Optional |
 
 ## 1. Product Snapshot
 
@@ -28,13 +49,13 @@ product: Project Name
 
 ## 3. Design Dials (V / M / D)
 
-Scale 1–5. Document rationale in one line each.
+**V** = visual density · **M** = motion · **D** = depth. Scale 1–5, one-line rationale each. Calibration: skill `design-read`.
 
 | Dial | 1 | 5 |
 |------|---|---|
-| **Visual (V)** | Sparse, lots of whitespace | Dense, information-rich |
-| **Motion (M)** | Static, instant | Expressive, choreographed |
-| **Depth (D)** | Flat, single plane | Layered, shadows/materials |
+| **V — visual density** | Sparse, lots of whitespace | Dense, information-rich |
+| **M — motion** | Static, instant | Expressive, choreographed |
+| **D — depth** | Flat, single plane | Layered, shadows/materials |
 
 Example:
 
@@ -63,9 +84,9 @@ Example:
 - **Spacing unit:** 4px grid
 ```
 
-## 6. Anti-Patterns (Required)
+## 6. Anti-patterns (required)
 
-Bulleted, testable exclusions:
+Section title is always `Anti-patterns`. Bulleted, testable exclusions; skill `anti-slop` reads this list:
 
 ```markdown
 - No purple-to-blue hero gradients
@@ -76,6 +97,8 @@ Bulleted, testable exclusions:
 - No bounce easing
 ```
 
+Approved brand exceptions go here too, each with its reason.
+
 ## 7. Accessibility Baseline
 
 ```markdown
@@ -85,7 +108,7 @@ Bulleted, testable exclusions:
 - Motion: prefers-reduced-motion honored
 ```
 
-## 8. Brand Manual (required for decks)
+## 8. Brand Manual (required before decks)
 
 Complete before any presentation work. See `references/brand-manual-checklist.md`.
 

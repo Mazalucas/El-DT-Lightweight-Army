@@ -3,7 +3,7 @@
   "evals": [
     {
       "prompt": "Initialize design context for new project with existing product-marketing.md",
-      "expected": ["design-context.md", "import", "anti_patterns", "DESIGN_VARIANCE"]
+      "expected": ["design-context.md", "import", "register", "Anti-patterns", "V/M/D"]
     }
   ]
 }

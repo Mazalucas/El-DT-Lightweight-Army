@@ -69,6 +69,9 @@ client_secret*.json
 # Atelier — contexto de diseño unificado (skill design-context)
 .agents/design-context.md
 .agents/design-system/
+# Red: rutas legacy que el DT no lee; nunca versionar
+.claude/design-context.md
+.claude/product-marketing.md
 
 # Demos temporales con marca (Atelier) — no versionar en plantilla
 .cursor/skills/design/templates/preview/examples/

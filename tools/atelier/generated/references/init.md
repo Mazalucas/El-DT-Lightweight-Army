@@ -4,7 +4,7 @@
 
 ## Goal
 
-Create or update **`.agents/design-context.md`** — single source of truth for product + visual direction in El DT.
+Create or update **`.agents/design-context.md`** — single source of truth for product + visual direction in El DT. Local file, never versioned. Criterio: `vitals/specs/design-skills-protocol.md` § Contexto de diseño.
 
 ## Prerequisites
 
@@ -13,16 +13,16 @@ Create or update **`.agents/design-context.md`** — single source of truth for 
 
 ## Interview flow
 
-1. **Register:** brand (marketing/landing/portfolio) vs product (app/dashboard/tool).
+1. **Register:** brand (marketing/landing/portfolio) vs product (app/dashboard/tool) → frontmatter `register`.
 2. **Surfaces:** primary surface, in-scope now, out-of-scope.
-3. **Design dials V/M/D** (1–5 each) with one-line rationale — not all 3s.
+3. **Design dials V/M/D** — V visual density, M motion, D depth (1–5 each) with one-line rationale — not all 3s.
 4. **Anti-patterns:** explicit list (e.g. no purple gradients, no Inter default).
 5. **Tokens summary:** palette, type stack, radius (OKLCH preferred).
-6. **Brand manual** (required before decks): logo, palette, typography — see `.cursor/skills/design/design-context/references/brand-manual-checklist.md`.
+6. **Brand manual** (only if decks are in scope): logo, palette, typography — see `.cursor/skills/design/design-context/references/brand-manual-checklist.md`.
 
 ## Write document
 
-Follow schema: `.cursor/skills/design/design-context/references/context-schema.md`.
+Follow schema: `.cursor/skills/design/design-context/references/context-schema.md` (frontmatter `version`, `updated`, `product`, `register`).
 
 Use skill **`design-context`** for full workflow.
 

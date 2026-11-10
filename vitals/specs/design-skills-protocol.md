@@ -4,7 +4,7 @@ title: Protocolo de skills Atelier
 type: policy
 status: canonical
 owner: dt-platform
-updated: 2026-06-13
+updated: 2026-11-10
 summary: Routing, handoffs y precedencia del pack design vs marketing y frontend.
 ---
 
@@ -16,11 +16,29 @@ El DT o **ui-designer** cuando el pedido incluya: UI, UX, landing, dashboard, mo
 
 Sugerir proactivamente: `/atelier init` si falta `.agents/design-context.md`; `/atelier select` si el brief es ambiguo.
 
+## Contexto de diseño — criterio único
+
+Fuente normativa. Skills, overlays y docs enlazan acá; no redefinen.
+
+| Qué | Dónde | Git |
+|-----|-------|-----|
+| Contexto de diseño del proyecto | `.agents/design-context.md` (**única** ruta canónica) | **Local**: `.gitignore` + `private_exact` de `canonical-publish.yaml` |
+| Contexto de marketing (se importa, no se duplica) | `.agents/product-marketing.md` | **Local**: igual que arriba |
+| Formato (campos y secciones) | [`context-schema.md`](../../.cursor/skills/design/design-context/references/context-schema.md) | Versionado |
+| Este criterio | esta sección | Versionado |
+
+1. **Quién lo escribe:** `/atelier init` (skill `design-context`) lo crea; `/atelier document` lo actualiza desde el código. Requiere sesión `/yo`. Las demás skills solo lo leen.
+2. **Una sola ruta.** No hay rutas legacy: `.claude/design-context.md` no se lee (queda en `.gitignore` solo como red). No crear `PRODUCT.md` / `DESIGN.md` salvo export explícito para herramientas externas (secundario, no canónico).
+3. **Formato:** frontmatter obligatorio `version`, `updated`, `product`, `register` (`brand` | `product`). Sección **Anti-patterns** siempre presente. **Brand manual** obligatorio solo antes de decks.
+4. **Dials V/M/D:** **V** densidad visual · **M** movimiento · **D** profundidad (1–5). Calibración: skill `design-read`.
+5. **El repo del DT no tiene contexto de diseño propio.** El framework versiona el formato y este criterio; cada proyecto escribe el suyo. En el checkout oficial, `dt-publish-gate.sh` bloquea publicarlo.
+
+
 ## Precedencia
 
 1. `vitals/specs/precedence.md` (seguridad, sesión `/yo`)
 2. Ecosystem lock-in (decision-matrix.yaml)
-3. design-context.md (exclusiones explícitas del proyecto)
+3. `.agents/design-context.md` → sección **Anti-patterns** (exclusiones explícitas del proyecto)
 4. Salida de dt-design-select (incluye paths `TEMPLATE`)
 5. Skill táctica única
 
@@ -50,7 +68,7 @@ Misma regla Markdown-only: `templates/systems/{id}/` + `templates/shared/surface
 ## vs Marketing
 
 - **product-marketing.md** — posicionamiento, copy, canales
-- **design-context.md** — producto + diseño + dials + anti-patterns (importa marketing si existe)
+- **design-context.md** — producto + diseño + dials V/M/D + Anti-patterns (importa marketing si existe; ver § Contexto de diseño)
 - No duplicar semántica; marketing-strategist no reemplaza ui-designer
 
 ## Anti-contexto

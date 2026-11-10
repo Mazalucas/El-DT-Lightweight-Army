@@ -80,4 +80,4 @@ Seguir [`sync-from-upstream.md`](../../.cursor/skills/dt-actualizar/references/s
 
 - [Adoptar El DT en un repo existente](adopt-dt-in-existing-repo.md) (`DOC-GUIDE-003`)
 - [Usar El DT como base / bootstrap](usar-dt-como-base.md) (`DOC-GUIDE-004`)
-- [Cerebro del equipo](../00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
+- [Memoria del equipo](../00_overview/memoria-equipo-mecanismos-dt.md) (`DOC-OV-004`)

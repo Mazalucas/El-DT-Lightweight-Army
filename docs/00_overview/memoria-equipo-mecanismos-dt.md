@@ -1,11 +1,11 @@
 ---
 id: DOC-OV-004
-title: Cerebro del equipo — mecanismos DT, Git, sesiones y commands
+title: Memoria del equipo — mecanismos DT, Git, sesiones y commands
 type: overview
 status: canonical
 owner: dt-platform
 created: 2026-05-27
-updated: 2026-10-02
+updated: 2026-11-10
 tags:
   - dt
   - evolution
@@ -21,7 +21,7 @@ tags:
   - bienvenida
 domain:
   - meta
-summary: Referencia completa del repo como cerebro colaborativo — qué se commitea, sesiones, commands, multi-IDE y filosofía de trabajo con la IA.
+summary: Referencia completa del repo como memoria colaborativa del equipo — qué se commitea, sesiones, commands, multi-IDE y filosofía de trabajo con la IA.
 related:
   - DOC-OV-001
   - DOC-CONCEPT-001
@@ -31,7 +31,7 @@ related:
   - DOC-OPS-001
   - DOC-REF-011
 keywords:
-  - cerebro
+  - memoria-equipo
   - gitignore
   - session
   - guardar
@@ -46,11 +46,11 @@ source_of_truth: true
 review_cycle_days: 90
 ---
 
-# Cerebro del equipo — mecanismos DT, Git, sesiones y commands
+# Memoria del equipo — mecanismos DT, Git, sesiones y commands
 
 ## Para qué existe este documento
 
-Este repositorio no es solo una plantilla: es el **cerebro compartido** del equipo que usa El DT — memoria versionada, reglas para que varias personas no se pisen, y una IA que **pregunta quién sos** y **sabe qué no debe subir a Git**.
+Este repositorio no es solo una plantilla: es la **memoria compartida** del equipo que usa El DT — memoria versionada, reglas para que varias personas no se pisen, y una IA que **pregunta quién sos** y **sabe qué no debe subir a Git**.
 
 Manual rápido visible: [README.md](../../README.md). Marco del framework: [README del repo raíz](../../README.md) y portal [docs/README.md](../README.md) (`DOC-OV-001`).
 

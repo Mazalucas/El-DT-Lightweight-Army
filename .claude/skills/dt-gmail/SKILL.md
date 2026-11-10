@@ -1,13 +1,13 @@
 ---
 name: dt-gmail
-description: "[Rutina] Conectar Gmail al cerebro del DT — marketplace oficial del IDE, etiquetas, borradores en hilo. Use when the user invokes /gmail or wants the DT to search mail or leave drafts."
+description: "[Rutina] Conectar Gmail a la memoria del equipo — marketplace oficial del IDE, etiquetas, borradores en hilo. Use when the user invokes /gmail or wants the DT to search mail or leave drafts."
 ---
 
 # dt-gmail
 
 Integración **opcional** de Gmail vía el **MCP oficial del IDE**. `google-drive-dt` está descontinuado.
 
-**Spec:** `vitals/specs/google-apps-mcp.md`. **Guía usuario:** `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`). **ADR:** `DOC-DEC-006`.
+**Spec:** `vitals/specs/google-apps-mcp.md`. **Guía usuario:** `docs/02_guides/google-contexto-setup.md` (`DOC-GUIDE-009`). **ADR:** `DOC-DEC-006`.
 
 No abras el runbook de IT ni fichas de Google Cloud en este chat.
 

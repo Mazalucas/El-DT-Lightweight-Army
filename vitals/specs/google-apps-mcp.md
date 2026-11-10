@@ -102,5 +102,5 @@ Si `~/.cursor/mcp.json` o la config de Antigravity todavía tienen el servidor `
 ## Referencias
 
 - Skills: `.cursor/skills/dt-drive/` · `dt-gmail/` · `dt-calendar/`
-- Guía usuario: `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`)
+- Guía usuario: `docs/02_guides/google-contexto-setup.md` (`DOC-GUIDE-009`)
 - Paridad de skills: `/skills` · `vitals/specs/skill-standard.md`

@@ -5,7 +5,7 @@ type: guide
 status: canonical
 owner: dt-platform
 created: 2026-06-23
-updated: 2026-07-30
+updated: 2026-11-10
 tags:
   - onboarding
   - setup
@@ -13,7 +13,7 @@ tags:
   - first-run
 domain:
   - meta
-summary: Ritual de primera vez tras clonar El DT — /bienvenida (mensaje + commands) y /yo — sin Ruby ni comandos por IDE.
+summary: Primera vez tras clonar El DT — /bienvenida te guía de a un paso (camino, /yo y /bootstrap si es tu proyecto), sin Ruby ni comandos por IDE.
 related:
   - DOC-GUIDE-001
   - DOC-GUIDE-007
@@ -37,7 +37,7 @@ review_cycle_days: 90
 
 ## Summary
 
-Tras clonar el repo, ejecutá **`/bienvenida`** y luego **`/yo`**. No necesitás Ruby, npm ni elegir IDE — el DT ya trae la estructura multi-IDE en Git.
+Tras clonar el repo, escribí **`/bienvenida`**: el DT te guía de a un paso. No necesitás Ruby, npm ni elegir IDE — el DT ya trae la estructura multi-IDE en Git.
 
 ## Pasos (tarjeta)
 
@@ -45,19 +45,19 @@ Tras clonar el repo, ejecutá **`/bienvenida`** y luego **`/yo`**. No necesitás
 1. git clone <url-del-repo>
 2. cd <carpeta-del-repo>
 3. Abrí Cursor, Antigravity, Claude Code u otro IDE soportado
-4. En el chat: /bienvenida
-5. En el chat: /yo → "Soy Ana García, analista"
-6. Trabajá con normalidad
-7. Al cerrar: /guardar
+4. En el chat: /bienvenida → elegí 1, 2 o 3
+5. /yo → "Soy Ana García, analista"
+6. Si es tu proyecto: /bootstrap → /yo otra vez
+7. Trabajá y al cerrar: /guardar
 ```
 
 **`/actualizar`** sincroniza tu proyecto y avisa si hay release nuevo del framework DT (→ `/actualizar-dt`). No en un clone recién hecho salvo que el remoto ya tenga novedades.
 
 ## Qué hace `/bienvenida`
 
-La IA verifica reglas, skills y commands (checklist read-only) y entrega el **mensaje de bienvenida canónico**: commands recomendados, tarjeta ritual y —si falta estructura— el paso **`/setup`** integrado. **No** instala nada ni borra carpetas.
+Es una charla corta. La IA revisa la estructura en silencio y te hace **una** pregunta: qué querés hacer (construir tu proyecto, conocer el DT o mantener el DT oficial). Después te guía de a un paso: `/yo` y, si es tu proyecto, `/bootstrap`. Si falta estructura, te pide **`/setup`**. **No** instala nada ni borra carpetas; solo registra el upstream del DT y el hook `pre-push`, local y sin commit.
 
-Si abrís el repo por primera vez **sin** haber corrido `/yo`, la IA puede mostrar el mismo mensaje de forma proactiva (solo lectura).
+Si abrís el repo por primera vez **sin** haber corrido `/yo`, la IA puede arrancar la misma charla por su cuenta.
 
 Si algo falta → te lo dice en español claro; **`/setup`** repara drift; re-clonar solo si el clone está roto.
 
@@ -87,5 +87,5 @@ Usá **`/setup`** (repair) — requiere Ruby en la máquina; ver [ide-setup.md](
 
 - [Actualizar framework DT](actualizar-framework-dt.md) (`DOC-GUIDE-007`)
 - [Configuración multi-IDE](ide-setup.md) (`DOC-GUIDE-001`)
-- [Cerebro del equipo](../00_overview/cerebro-equipo-mecanismos-dt.md) (`DOC-OV-004`)
+- [Memoria del equipo](../00_overview/memoria-equipo-mecanismos-dt.md) (`DOC-OV-004`)
 - [Colaboración Git](../06_operations/git-colaboracion-dt.md) (`DOC-OPS-001`)

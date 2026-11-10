@@ -5,7 +5,7 @@ type: reference
 status: canonical
 owner: dt-platform
 created: 2026-06-13
-updated: 2026-06-13
+updated: 2026-11-10
 tags:
   - design
   - reference
@@ -44,7 +44,3 @@ source_of_truth: true
 ```bash
 ruby scripts/dt-design-select.rb "BRIEF" [--product NAME] [--format markdown] [--context PATH]
 ```
-
-## Overrides por página (opcional)
-
-`.agents/design-system/MASTER.md` + `.agents/design-system/pages/{page}.md` — reglas de página sobre master.

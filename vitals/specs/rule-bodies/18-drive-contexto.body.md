@@ -1,4 +1,4 @@
-# Google Drive como contexto del cerebro
+# Google Drive como contexto del equipo
 
 Integración **opcional** vía el MCP **oficial del IDE**. Aplica cuando existe `vitals/config/drive-context.yaml` o el usuario invocó `/drive`.
 
@@ -16,7 +16,7 @@ Integración **opcional** vía el MCP **oficial del IDE**. Aplica cuando existe 
 2. **Solo lectura** — no crear, editar, mover, borrar ni compartir, aunque el plugin oficial tenga esas tools.
 3. **Consulta dirigida** — listar/buscar primero; leer solo archivos relevantes. No volcar carpetas enteras al contexto.
 4. **Charter no-secrets** — no persistir en Git tokens, credenciales ni contenido sensible de Drive sin confirmación (`vitals/charter/no-secrets.md`).
-5. **Drive ≠ memoria del repo** — destilar a `vitals/` o `docs/` solo si el usuario pide guardar algo en el cerebro compartido.
+5. **Drive ≠ memoria del repo** — destilar a `vitals/` o `docs/` solo si el usuario pide guardar algo en la memoria del equipo.
 6. **Embudo** — preguntar si el acceso es solo Drive o también Gmail y Calendar. Instalar el MCP oficial de **ese IDE** (`vitals/specs/google-apps-mcp.md`).
 
 ## Resolución de carpeta
@@ -31,5 +31,5 @@ Antes de buscar, leer `vitals/config/drive-context.yaml`:
 
 - Skill: `.cursor/skills/dt-drive/` · command `/drive` · Gmail `/gmail` · Calendar `/calendar`
 - Spec: `vitals/specs/google-apps-mcp.md`
-- Guía usuario: `docs/02_guides/drive-cerebro-setup.md` (`DOC-GUIDE-009`)
+- Guía usuario: `docs/02_guides/google-contexto-setup.md` (`DOC-GUIDE-009`)
 - Paridad de skills: `/skills` · `vitals/specs/skill-standard.md`
