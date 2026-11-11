@@ -6,6 +6,16 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.15.1](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.15.1) - 2026-11-11
+
+Patch. La bienvenida explica más sin dejar de ser de a un paso; `/bootstrap` ya no vuelve a preguntar la postura.
+
+- **Bienvenida con microexplicaciones:** el primer mensaje dice quién es el DT, para qué está y en qué ayuda. Cada paso trae **Qué hacemos** y **Por qué sirve**, con un único 👉 y hasta 12 líneas. El cierre de cada camino muestra **Qué más podés hacer** y el ritual diario.
+- **Caminos completos:** «Conocer» invita a probar con un pedido chico; «Mantener» guía a `/oficial`.
+- **`/bootstrap` conversacional:** una pregunta por mensaje (nombre, dónde se guarda, historial), resumen de máximo 6 puntos antes del OK y detección automática de la raíz.
+- **Postura conservada:** `/bootstrap` mantiene `collaboration.yaml` si existe (el template nunca la publica), así el `/yo` final no repregunta.
+- **`/bootstrap` más robusto:** stash antes de soltar el remoto y pop antes del historial limpio, respaldo de `.git` y submódulos registrados de nuevo.
+
 ## [1.15.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.15.0) - 2026-11-10
 
 Minor. La primera vez es una charla guiada; el framework queda más limpio y con un criterio único para el contexto de diseño.

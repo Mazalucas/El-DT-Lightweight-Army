@@ -45,9 +45,11 @@ Quien clona el DT no tiene que encontrar tu sesión, tu roster ni documentación
 10. `mkdir -p vitals/work/inbox/{id}/` solo fuera del checkout oficial.
 11. `./scripts/dt-agent.sh inbox --team --as {id}`. Si hay un URGENTE, decirlo primero. Después, si hay abiertos, una línea: «Tenés N abiertos; `release-bot` tiene M». Si hay agentes `pending` con `owner: {id}`, sumar: «`bot` pide alta: `dt-agent.sh activate bot`». Si no hay nada, no decir nada.
 12. Confirmar id, nombre, rol, inbox y postura. Si hubo alta en roster o se escribió `collaboration.yaml`: recordar **`/guardar`** para subirlos. En checkout oficial no hay alta que subir.
-13. **Cerrar con un solo paso siguiente**, en un mensaje corto (guion: `.cursor/skills/dt-setup/references/welcome-message.md`):
-    - `origin` es el remoto oficial del DT y `dt-upstream.md` dice `mode: consumer` → «**Paso 2 de 3:** escribí `/bootstrap`». No pidas `/guardar` antes: `/bootstrap` resetea roster y postura.
-    - Recién pasó `/bootstrap` → «Listo. Pedime lo primero. Al terminar: `/guardar`» y el ritual diario en una línea.
+13. **Cerrar con un solo paso siguiente**, con el formato del guion [`welcome-message.md`](../dt-setup/references/welcome-message.md): «Paso X de N», **Qué hacemos:**, **Por qué sirve:** y un único 👉; máximo 12 líneas con texto. Usá el texto del guion para cada caso:
+    - `origin` es el remoto oficial del DT y `dt-upstream.md` dice `mode: consumer` → camino elegido en M1: **Construir** («Paso 2 de 3: hacerlo tuyo» → `/bootstrap`) o **Conocer** («Paso 2 de 2: probame»). Si no se sabe, Construir. No pidas `/guardar` antes: `/bootstrap` resetea el roster (la postura se conserva).
+    - `dt-upstream.md` dice `mode: canonical` → camino **Mantener**: «Paso 2 de 2: habilitar la publicación» (`/oficial`) si la carpeta no está activada; si ya lo está, **Cierre del camino (Mantener)**.
+    - Recién pasó `/bootstrap` (sin `origin` y `project-version.yaml` con `initialized: false`) → **Cierre común**: «Qué más podés hacer» + ritual diario en una línea.
+    - `origin` es el repo de un equipo y es la primera vez de esta persona → **Cierre común** con «¿qué hay pendiente?».
     - Otro caso → «Pedime lo que necesites».
 
 ## Modo agente
@@ -69,12 +71,12 @@ Un agente nunca cambia su propio `status` ni el de otro miembro. En checkout ofi
 
 No vive en `session.yaml`. Archivo Git: `vitals/config/collaboration.yaml` (`posture: personal` | `team`). Plantilla de forma: `vitals/config/collaboration.yaml.example`.
 
-Resolvela en el **mismo** `/yo`, después de saber el nombre. No es un comando aparte y **`/bootstrap` no la pregunta**.
+Resolvela en el **mismo** `/yo`, después de saber el nombre. No es un comando aparte. **`/bootstrap` no la pregunta y la conserva**: el template nunca publica `collaboration.yaml` (`private_exact`), así que si existe la escribió el `/yo` de este recorrido.
 
 1. Si el usuario ya dijo `personal` o equipo/`team` en este mensaje → usar eso. No repreguntar.
 2. Si `collaboration.yaml` ya tiene `posture: personal` o `team` → no preguntar. Mencionala al confirmar.
 3. Si no hay postura válida y `team[]` **ya tenía** al menos una persona (`id` no vacío) antes de este `/yo` → escribir `posture: team`. No preguntar: el roster ya confirma equipo. La persona que se está identificando ahora no cuenta para esa señal.
-4. Si el roster está vacío y no hay postura válida → **una** pregunta de seguimiento: ¿este checkout es para vos (`personal`) o para un equipo (`team`)? No inventes el valor.
+4. Si el roster está vacío y no hay postura válida → **una** pregunta de seguimiento con el formato del guion ([`welcome-message.md`](../dt-setup/references/welcome-message.md) § Pregunta de postura): «1. Solo mío · 2. De un equipo» y **Por qué sirve:** «en equipo te consulto más antes de actuar». Guardá `personal` o `team`. No inventes el valor.
 
 `personal` apaga las preguntas rutinarias de la regla `01`. `team` las deja. Las compuertas (secretos, publish gate, doctor) no cambian. Sin archivo, fuera de este `/yo`, la voz sigue siendo team.
 

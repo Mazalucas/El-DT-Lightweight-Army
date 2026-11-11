@@ -36,7 +36,7 @@ No vive en `session.yaml`. Archivo Git: `vitals/config/collaboration.yaml`. Lo r
 - `roster.yaml` con al menos una persona **antes** de este `/yo`, y sin archivo válido → `team`, escribir el archivo, no preguntar. Quien se identifica ahora no cuenta.
 - Roster vacío y sin archivo válido → una pregunta de seguimiento. No inventar el valor.
 
-Sin el archivo, las escrituras no se bloquean: la voz default es team (regla `01`). `/bootstrap` no entrevista; al resetear el template borra `collaboration.yaml` para que el proyecto nuevo responda en el primer `/yo`.
+Sin el archivo, las escrituras no se bloquean: la voz default es team (regla `01`). `/bootstrap` no entrevista y **conserva** `collaboration.yaml` si existe: el template nunca la publica, así que solo puede venir del `/yo` de ese recorrido. Si falta, la pregunta el primer `/yo` del proyecto.
 
 ## Zonas
 

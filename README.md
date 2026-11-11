@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.15.0**
+**v1.15.1**
 
 Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
@@ -26,7 +26,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ## Índice
 
-- [Qué trae v1.15.0](#que-trae)
+- [Qué trae v1.15.1](#que-trae)
 - [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
@@ -39,18 +39,15 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ---
 
-## Qué trae v1.15.0 {#que-trae}
+## Qué trae v1.15.1 {#que-trae}
 
-Capacidad nueva sobre **v1.14.0**. Si ya usás el DT, el día a día sigue igual. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
+Corrección sobre **v1.15.0**. El día a día sigue igual. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **Bienvenida conversacional** | `/bienvenida` te guía de a un paso, con opciones numeradas, hasta tu proyecto. |
-| **Template limpio** | Sin rastros no genéricos ni comandos huérfanos; pulse del checkout oficial solo local. |
-| **Memoria del equipo** | Nuevo nombre para el contexto compartido del equipo. |
-| **dt-doctor y gate** | Chequeo de pulse privado, aviso de comandos huérfanos; borrar un archivo privado ya no bloquea `/guardar`. |
-| **Contexto de diseño** | Criterio único en [SPEC-DESIGN-001](vitals/specs/design-skills-protocol.md); `product-marketing` con una sola ruta. |
-
+| **Bienvenida que explica** | Quién es el DT, qué hacemos y por qué sirve en cada paso, y qué más podés hacer al final. |
+| **`/bootstrap` conversacional** | Una pregunta por mensaje, resumen corto antes del OK y detección automática de la raíz. |
+| **Postura conservada** | Después de `/bootstrap`, `/yo` ya no repregunta si el proyecto es personal o de equipo. |
 ---
 
 ## Empezá acá
@@ -80,7 +77,7 @@ git clone <este-repo>
 cd El-DT-Lightweight-Army
 ```
 
-En el chat: **`/bienvenida`**. El DT te guía de a un paso: elegís qué querés hacer, `/yo` y, si es tu proyecto, `/bootstrap`. Guía detallada: [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
+En el chat: **`/bienvenida`**. El DT se presenta y te guía de a un paso, explicando qué hacemos y por qué sirve: elegís qué querés hacer, `/yo` y, si es tu proyecto, `/bootstrap`. Al final te muestra qué más podés hacer. Guía detallada: [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
 
 No hace falta `/actualizar` en un clone recién hecho — usalo cuando el remoto del producto o del template tenga novedades.
 

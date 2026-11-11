@@ -5,7 +5,7 @@ type: guide
 status: canonical
 owner: dt-platform
 created: 2026-06-23
-updated: 2026-11-10
+updated: 2026-11-11
 tags:
   - onboarding
   - setup
@@ -55,7 +55,7 @@ Tras clonar el repo, escribí **`/bienvenida`**: el DT te guía de a un paso. No
 
 ## Qué hace `/bienvenida`
 
-Es una charla corta. La IA revisa la estructura en silencio y te hace **una** pregunta: qué querés hacer (construir tu proyecto, conocer el DT o mantener el DT oficial). Después te guía de a un paso: `/yo` y, si es tu proyecto, `/bootstrap`. Si falta estructura, te pide **`/setup`**. **No** instala nada ni borra carpetas; solo registra el upstream del DT y el hook `pre-push`, local y sin commit.
+Es una charla corta. La IA revisa la estructura en silencio, se presenta (quién es, para qué está y en qué te ayuda) y te hace **una** pregunta: qué querés hacer (construir tu proyecto, conocer el DT o mantener el DT oficial). Después te guía de a un paso: `/yo` y, si es tu proyecto, `/bootstrap` y otra vez `/yo`. Cada paso te dice **qué hacemos** y **por qué sirve**. Al final te muestra **qué más podés hacer** y el ritual diario. Si falta estructura, te pide **`/setup`**. **No** instala nada ni borra carpetas; solo registra el upstream del DT y el hook `pre-push`, local y sin commit.
 
 Si abrís el repo por primera vez **sin** haber corrido `/yo`, la IA puede arrancar la misma charla por su cuenta.
 

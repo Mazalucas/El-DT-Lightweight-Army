@@ -20,7 +20,7 @@ Registro de IDEs: `vitals/config/ide-targets.yaml`. No hardcodear IDEs en este s
 
 ## Modo A — first-run (default en `/bienvenida`)
 
-La bienvenida es una **charla corta**: **un paso por mensaje**, y esperás la respuesta antes de seguir. Guion obligatorio: [`references/welcome-message.md`](references/welcome-message.md).
+La bienvenida es una **charla corta**: **un paso por mensaje**, y esperás la respuesta antes de seguir. El primer mensaje presenta al DT (quién es, para qué está, en qué ayuda); cada paso dice **Qué hacemos** y **Por qué sirve**, con un único 👉 y máximo 12 líneas con texto; el cierre del camino muestra **Qué más podés hacer** y el ritual diario. Guion obligatorio: [`references/welcome-message.md`](references/welcome-message.md).
 
 El clone **ya trae** `.cursor/`, `.agents/`, `.claude/`, commands y skills en Git. El usuario **no necesita Ruby** para empezar.
 
