@@ -6,6 +6,14 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.17.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.17.0) - 2026-11-13
+
+Minor. Antes de instalar algo que el proyecto no tenía, el DT para y da un veredicto. El resto de los comandos sigue igual.
+
+- **Freno de instalación:** plugin, MCP, repo, paquete nuevo o submodule. Un veredicto: instalar, instalar con límite, o no instalar. El install sigue solo si el veredicto fue instalar y ya se había pedido.
+- **Atajo:** Drive, Gmail y Calendar, cuando los pide el propio DT, se resumen en una línea. Reinstalar el lockfile no pasa por el freno.
+- **Dónde está:** skill `dt-revisar-instalacion`, regla del orquestador y guía `DOC-GUIDE-017`.
+
 ## [1.16.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.16.0) - 2026-11-13
 
 Minor. Quien ya usa el DT puede pedir `/ayuda` y recibe una bienvenida que se presenta antes de pedir el nombre. El resto de los comandos sigue igual.

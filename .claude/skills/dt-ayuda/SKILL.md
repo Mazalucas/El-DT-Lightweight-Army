@@ -58,6 +58,7 @@ No pegues el README. Si pide “mostrame todo”, enlazá [README — comandos](
 | Muchos archivos o notas | `/ordenar` |
 | Convertir el DT en su proyecto | `/bootstrap` |
 | Video | skill `video-routing` antes de producir |
+| Instalar plugin, MCP, repo o paquete nuevo | skill `dt-revisar-instalacion` antes de instalar |
 
 ## No hacer
 

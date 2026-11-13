@@ -105,6 +105,11 @@ documents:
     path: 02_guides/ordenar-captura-conocimiento.md
     type: guide
     tags: [documentation, ordenar, knowledge, dt]
+  - id: DOC-GUIDE-017
+    title: "Revisar antes de instalar algo externo"
+    path: 02_guides/revisar-instalacion.md
+    type: guide
+    tags: [security, plugins, mcp]
   - id: DOC-META-001
     title: "Protocolo de documentación orientada a IA"
     path: 99_meta/protocolo-documentacion-ia.md

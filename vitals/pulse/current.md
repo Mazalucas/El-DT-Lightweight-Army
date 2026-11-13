@@ -2,7 +2,7 @@
 
 **Último pulse_id:** — (en tu proyecto lo completa `/guardar`; en el checkout oficial del DT el pulse es local)
 
-**Versión template:** 1.16.0
+**Versión template:** 1.17.0
 
 **Resumen:** —
 

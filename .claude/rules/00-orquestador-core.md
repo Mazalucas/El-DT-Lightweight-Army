@@ -30,6 +30,16 @@ Estas tres capacidades son **parte de entregar**, no extras opcionales:
 
 Detalle de `/orquestar` (8 pasos): `.cursor/commands/orquestar.md`. Vitals: `vitals/INDEX.md`.
 
+## Antes de instalar algo externo
+
+Plugin, MCP, repo clonado, paquete que no está en el lockfile, o submodule. Reinstalar lo que el lockfile ya fija no entra.
+
+1. **Parar.** No instales en ese turno.
+2. Seguí la skill **`dt-revisar-instalacion`** y mostrá un solo veredicto: **Instalar**, **Instalar con límite** o **No instalar**.
+3. Instalá en el turno siguiente solo si el veredicto fue **Instalar** y la persona ya lo había pedido. Con límite o no instalar, esperá.
+
+Lo que el propio DT manda a conectar (Drive, Gmail, Calendar) es una línea, no el cuestionario. `/hack` no reemplaza este paso. Guía: `docs/02_guides/revisar-instalacion.md` (`DOC-GUIDE-017`).
+
 ## Reglas por contexto (description + globs en manifest)
 
 | Regla | Cuándo | Glob (Cursor) |
