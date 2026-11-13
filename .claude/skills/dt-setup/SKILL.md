@@ -20,15 +20,15 @@ Registro de IDEs: `vitals/config/ide-targets.yaml`. No hardcodear IDEs en este s
 
 ## Modo A — first-run (default en `/bienvenida`)
 
-La bienvenida es una **charla corta**: **un paso por mensaje**, y esperás la respuesta antes de seguir. El primer mensaje presenta al DT (quién es, para qué está, en qué ayuda); cada paso dice **Qué hacemos** y **Por qué sirve**, con un único 👉 y máximo 12 líneas con texto; el cierre del camino muestra **Qué más podés hacer** y el ritual diario. Guion obligatorio: [`references/welcome-message.md`](references/welcome-message.md).
+La bienvenida es una **charla**: **un paso por mensaje**, y esperás la respuesta antes de seguir. El primer mensaje es la **Presentación** del guion (quién soy, para qué existo, objetivo, `/yo` y `/ayuda`). El camino de un clone se pregunta después, si todavía no está elegido. Guion obligatorio: [`references/welcome-message.md`](references/welcome-message.md).
 
 El clone **ya trae** `.cursor/`, `.agents/`, `.claude/`, commands y skills en Git. El usuario **no necesita Ruby** para empezar.
 
 1. Resolver `git_root` (multi-proyecto: `vitals/workspace.yaml` si existe).
 2. Correr **en silencio** [`references/first-run-checklist.md`](references/first-run-checklist.md): paths, Git, desajuste. No lo muestres salvo que falle.
-3. Leer la **señal de camino** (tabla del guion) y mandar **solo el primer mensaje** que corresponda: M0-B, M1, M1-E, M1-P o M1-O. Esperar la respuesta.
-4. Con la respuesta a M1: registrar dt-upstream (abajo) según la opción elegida e instalar el pre-push con `./scripts/dt-oficial.sh install-hook`.
-5. Mandar M2 (paso 1: `/yo`). Desde ahí sigue `dt-session`, que cierra con el paso siguiente del camino.
+3. Si el checklist falla, mandá **M0-B**. Si no, mandá **solo la Presentación**. Esperá la respuesta.
+4. Con `/yo` empieza `dt-session`. Si todavía no hay camino (clone del DT, sin `dt-upstream`, sin `/oficial`), la pregunta de camino va **después** de la identidad, con el texto M1 del guion. Según la opción, registrá dt-upstream (abajo) e instalá el pre-push con `./scripts/dt-oficial.sh install-hook`.
+5. `dt-session` cierra con el paso siguiente del camino. No repitas la presentación.
 6. **No correr** `sync-ide` ni `dt-doctor` salvo desajuste evidente **y** que el usuario pida reparar → modo B.
 
 ### Escrituras permitidas en first-run

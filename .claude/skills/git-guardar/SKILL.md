@@ -119,6 +119,8 @@ Corré `./scripts/dt-publish-gate.sh`. El exit es una decisión. Leé la línea 
 
    `DT-Member` es obligatorio si el commit agrega mensajes en `vitals/work/inbox/`: `dt-doctor` lo cruza con el `from` de cada mensaje ([`agent-inbox.md`](../../../vitals/specs/agent-inbox.md)).
 
+   El hook `prepare-commit-msg` (lo instala `/yo` y `install-hook`) agrega `DT-Member` en cualquier commit si hay sesión y **no** es checkout oficial. Escribí el trailer igual: si ya está, el hook no lo duplica. Sin `operator.id`, no commitees: pedí `/yo`.
+
 11. `git push origin HEAD` — solo si el gate salió **0** o **10**. Sin `--force` en main/master. Si el remoto rechaza por permisos, pará: ese remoto no es de este checkout. No pidas acceso ni reintentes contra el DT oficial.
 12. **Tag** tras push OK, cuando hubo bump o reset inicial. En gate **20**, no corras el tag con `--push`:
 

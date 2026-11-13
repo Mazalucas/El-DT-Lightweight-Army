@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.15.1**
+**v1.16.0**
 
 Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
@@ -26,7 +26,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ## Índice
 
-- [Qué trae v1.15.1](#que-trae)
+- [Qué trae v1.16.0](#que-trae)
 - [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
@@ -39,15 +39,15 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ---
 
-## Qué trae v1.15.1 {#que-trae}
+## Qué trae v1.16.0 {#que-trae}
 
-Corrección sobre **v1.15.0**. El día a día sigue igual. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
+Capacidad nueva sobre **v1.15.1**. El día a día sigue igual. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **Bienvenida que explica** | Quién es el DT, qué hacemos y por qué sirve en cada paso, y qué más podés hacer al final. |
-| **`/bootstrap` conversacional** | Una pregunta por mensaje, resumen corto antes del OK y detección automática de la raíz. |
-| **Postura conservada** | Después de `/bootstrap`, `/yo` ya no repregunta si el proyecto es personal o de equipo. |
+| **`/ayuda`** | Decís qué necesitás y el DT señala un comando o un especialista. |
+| **Bienvenida** | Se presenta, dice para qué existe y arranca con `/yo`. |
+| **Quién hizo el commit** | En un proyecto propio, cada commit lleva tu id después de `/yo`. |
 ---
 
 ## Empezá acá
@@ -162,6 +162,7 @@ Detalle: [protocolos DT](.cursor/rules/01-protocolos-dt.mdc).
 | **`/actualizar`** | Sincronizar tu proyecto y avisar si hay DT nuevo |
 | **`/actualizar-dt`** | Incorporar release del framework DT (cuando /actualizar avise) |
 | **`/yo`** | Decir quién sos en esta máquina |
+| **`/ayuda`** | Decime qué necesitás y te señalo un comando o un especialista |
 | **`/guardar`** | Guardar tu trabajo — la IA elige el bump, sync README/paquetes, tag `vX.Y.Z`. El repo oficial del DT solo con `/oficial` |
 | **`/bootstrap`** | Usar este clone como base de tu proyecto y soltar el remoto del DT |
 | **`/oficial`** | El dueño marca esta carpeta como el único checkout que publica al DT |

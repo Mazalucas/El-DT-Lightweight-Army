@@ -8,6 +8,7 @@ Memoria del equipo de **El DT**. Reglas operativas: **`.cursor/rules/`** (Cursor
 |----------|--------|
 | Ritual Git / equipo | `docs/00_overview/memoria-equipo-mecanismos-dt.md` (`DOC-OV-004`) |
 | Sesión local | `vitals/ops/session.yaml` — sin `operator.id` → **`/yo`** |
+| Qué puedo hacer | **`/ayuda`** — un comando o un especialista, según lo que necesitás |
 | Cuánto contexto | `/dt-config` — perfil local, no va a Git |
 | Commands | `vitals/config/commands-meta.yaml` |
 | Reglas y subagentes | `.cursor/rules/` · [README — 24 especialistas](README.md#catálogo-de-los-24-especialistas) |

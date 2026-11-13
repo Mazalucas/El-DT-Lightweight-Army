@@ -5,7 +5,7 @@ type: runbook
 status: canonical
 owner: dt-platform
 created: 2026-05-27
-updated: 2026-09-23
+updated: 2026-11-13
 tags:
   - git
   - collaboration
@@ -50,6 +50,10 @@ Dos personas **no editan el mismo archivo** al mismo tiempo sin coordinar. La se
 | Postura personal/team | `vitals/config/collaboration.yaml` | `/yo` (no `/bootstrap`) | **SÍ** |
 | Checkout oficial | `vitals/ops/canonical-checkout.yaml` | Solo el dueño, con `/oficial` | **NO** |
 | Workspace multi-repo | `vitals/workspace.yaml` | Solo máquina local | **NO** |
+
+## Quién firmó el commit
+
+`/yo` escribe la sesión solo en esta máquina e instala `prepare-commit-msg`. Desde ahí, cada commit de un proyecto propio agrega el trailer `DT-Member: {id}` (`scripts/dt-stamp-author.sh`), aunque no pase por `/guardar`. La sesión no se versiona. En el checkout oficial el hook no estampa: el framework se publica sin operador.
 
 ## Conflictos
 

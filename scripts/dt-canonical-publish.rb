@@ -317,9 +317,38 @@ module DtCanonicalPublish
     File.write(dest, body)
     File.chmod(0o755, dest)
     warn "dt-canonical-publish: pre-push instalado en #{dest}" if changed
+    install_author_hook!(dir)
     dest
   rescue StandardError => e
     warn "dt-canonical-publish: no pude instalar pre-push (#{e.message})"
+    nil
+  end
+
+  def author_hook_body
+    <<~SH
+      #!/usr/bin/env bash
+      # #{HOOK_MARKER} — prepare-commit-msg de El DT.
+      # Si hay /yo en esta máquina, el commit lleva DT-Member.
+      # Checkout oficial: no estampa (el framework se publica sin operador).
+      root="$(git rev-parse --show-toplevel)"
+      exec "$root/scripts/dt-stamp-author.sh" "$@"
+    SH
+  end
+
+  def install_author_hook!(dir)
+    dest = File.join(dir, "prepare-commit-msg")
+    body = author_hook_body
+    if File.exist?(dest) && !File.read(dest).include?(HOOK_MARKER)
+      warn "dt-canonical-publish: prepare-commit-msg ya existe y no es del DT; no lo pisé"
+      return nil
+    end
+    changed = !File.exist?(dest) || File.read(dest) != body
+    File.write(dest, body)
+    File.chmod(0o755, dest)
+    warn "dt-canonical-publish: prepare-commit-msg instalado en #{dest}" if changed
+    dest
+  rescue StandardError => e
+    warn "dt-canonical-publish: no pude instalar prepare-commit-msg (#{e.message})"
     nil
   end
 

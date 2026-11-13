@@ -1,6 +1,6 @@
 # Fuente canónica de commands DT — editar aquí primero, luego reflejar en .cursor/commands y .agents/workflows
 version: 1
-updated: "2026-11-10"
+updated: "2026-11-13"
 locale: es
 
 groups:
@@ -69,6 +69,12 @@ commands:
     when: "Querés más o menos contexto del DT, o ver qué está siempre activo y qué entra solo cuando hace falta."
     example: "/dt-config  ·  Recomendado  ·  Docs  ·  Web"
     skill: dt-config
+  ayuda:
+    group: routine
+    tagline: "Decime qué necesitás y te señalo un comando o un especialista."
+    when: "No sabés por dónde seguir, o querés saber qué puede hacer el DT sin leer el manual."
+    example: "/ayuda  ·  /ayuda quiero revisar si la app es segura"
+    skill: dt-ayuda
   bienvenida:
     group: routine
     tagline: "Primera vez: te guío paso a paso para arrancar y crear tu proyecto."

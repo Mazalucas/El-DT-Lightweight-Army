@@ -6,6 +6,14 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.16.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.16.0) - 2026-11-13
+
+Minor. Quien ya usa el DT puede pedir `/ayuda` y recibe una bienvenida que se presenta antes de pedir el nombre. El resto de los comandos sigue igual.
+
+- **`/ayuda`:** decís qué necesitás y el DT señala un comando o un especialista, con una alternativa. Si no decís nada, ofrece tres caminos y cierra en `/orquestar`.
+- **Bienvenida:** el primer mensaje dice para qué existe el DT, el objetivo y cómo empezar (`/yo` con nombre, rol y objetivo). `/ayuda` queda como salida si no sabés qué pedir. El camino de un clone se pregunta después de identificarte.
+- **Identidad en cada commit:** `/yo` instala un hook que agrega `DT-Member` en los commits de un proyecto propio. En el checkout oficial no estampa: el framework se publica sin operador.
+
 ## [1.15.1](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.15.1) - 2026-11-11
 
 Patch. La bienvenida explica más sin dejar de ser de a un paso; `/bootstrap` ya no vuelve a preguntar la postura.
