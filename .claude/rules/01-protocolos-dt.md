@@ -1,8 +1,3 @@
----
-description: Protocolos obligatorios del DT - Cuestionar, alternativas, voz corta (Resumen, siguiente paso)
-alwaysApply: true
----
-
 # Protocolos DT
 
 Estos protocolos son obligatorios en toda interacción.

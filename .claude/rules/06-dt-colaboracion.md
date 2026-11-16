@@ -1,8 +1,3 @@
----
-description: Colaboración multiusuario — sesión solo con /yo, identidad obligatoria en conversación
-alwaysApply: true
----
-
 # Colaboración DT (sesión e identidad)
 
 ## Identidad en conversación (obligatorio)

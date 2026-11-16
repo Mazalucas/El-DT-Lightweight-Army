@@ -1,7 +1,5 @@
 ---
-description: Convenciones de frontend, componentes, estado, accesibilidad
-globs: "**/*.tsx, **/*.vue, **/*.jsx, **/frontend/**/*, **/components/**/*"
-alwaysApply: false
+paths: "**/*.tsx, **/*.vue, **/*.jsx, **/frontend/**/*, **/components/**/*"
 ---
 
 # Frontend y UI

@@ -7,7 +7,9 @@ updated: "2026-07-30"
 
 # Formatos de frontmatter para reglas:
 #   cursor → ---\n description, [globs], alwaysApply \n---
-#   agent  → ---\n description, [globs], [alwaysApply] \n---   (Antigravity / Claude)
+#   agent  → ---\n description, [globs], [alwaysApply] \n---   (Antigravity)
+#   claude → ---\n paths \n--- solo si hay globs; sin globs y alwaysApply: false = regla a pedido,
+#            no se emite en rules/ y se lista en CLAUDE.md (Claude Code solo lee `paths`)
 targets:
   cursor:
     label: "Cursor"
@@ -54,7 +56,7 @@ targets:
     rules:
       dir: .claude/rules
       ext: .md
-      frontmatter: agent
+      frontmatter: claude               # solo `paths`; las reglas a pedido van listadas en CLAUDE.md
     commands_dir: .claude/commands
     skills_dir: .claude/skills
     agents_dir: .claude/agents
@@ -66,6 +68,7 @@ targets:
       mode: generate                    # puntero generado a AGENTS.md
       points_to: AGENTS.md
     settings: .claude/settings.json
+    atelier_hook: true                  # PostToolUse Edit|Write → impeccable hook (equivalente al preToolUse de Cursor)
 
   copilot:
     label: "GitHub Copilot"

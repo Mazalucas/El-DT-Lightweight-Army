@@ -18,6 +18,7 @@
 require_relative "lib/force_utf8"
 require "yaml"
 require "fileutils"
+require "json"
 
 ROOT = File.expand_path("..", __dir__)
 TARGETS = YAML.load_file(File.join(ROOT, "vitals/config/ide-targets.yaml"))["targets"] || {}
@@ -75,6 +76,29 @@ def agent_frontmatter(rule)
   lines.join("\n") + "\n"
 end
 
+# Claude Code solo lee `paths`: sin él, la regla carga siempre.
+def claude_frontmatter(rule)
+  return "" unless rule["globs"]
+
+  "---\npaths: \"#{rule['globs']}\"\n---\n"
+end
+
+def on_demand_rule?(rule)
+  !rule["globs"] && rule.fetch("alwaysApply", true) == false
+end
+
+def remove_file(path)
+  return unless File.exist?(path)
+
+  @drift << rel(path)
+  if CHECK_ONLY
+    puts "DRIFT (sobra) #{rel(path)}"
+  else
+    File.delete(path)
+    puts "removed #{rel(path)}"
+  end
+end
+
 def emit_rules(cfg)
   rules_cfg = cfg["rules"]
   return unless rules_cfg
@@ -83,9 +107,20 @@ def emit_rules(cfg)
   ext = rules_cfg["ext"]
   fmt = rules_cfg["frontmatter"]
   MANIFEST.each do |rule|
+    path = File.join(dir, "#{rule['stem']}#{ext}")
+    if fmt == "claude" && on_demand_rule?(rule)
+      remove_file(path)
+      next
+    end
+
     body = rule_body(rule["stem"])
-    fm = fmt == "cursor" ? cursor_frontmatter(rule) : agent_frontmatter(rule)
-    write_file(File.join(dir, "#{rule['stem']}#{ext}"), fm + "\n" + body)
+    fm =
+      case fmt
+      when "cursor" then cursor_frontmatter(rule)
+      when "claude" then claude_frontmatter(rule)
+      else agent_frontmatter(rule)
+      end
+    write_file(path, fm.empty? ? body : fm + "\n" + body)
   end
 end
 
@@ -161,8 +196,25 @@ def emit_agents(cfg)
   end
 end
 
-def claude_pointer
+def claude_on_demand_section
+  rules = MANIFEST.select { |r| on_demand_rule?(r) }
+  return "" if rules.empty?
+
+  items = rules.map do |r|
+    "- `vitals/specs/rule-bodies/#{r['stem']}.body.md` — #{r['agent_description'] || r['description']}"
+  end
   <<~MD
+
+    ## Reglas a pedido
+
+    No viven en `.claude/rules/`: leé la que corresponda **antes de actuar** cuando la tarea encaje con su descripción.
+
+    #{items.join("\n")}
+  MD
+end
+
+def claude_pointer
+  <<~MD + claude_on_demand_section
     # CLAUDE.md
 
     > Puntero generado por `scripts/sync-ide`. No editar a mano.
@@ -223,16 +275,37 @@ def emit_pointer(cfg)
   write_file(file, content)
 end
 
+ATELIER_LAUNCHER = "tools/atelier/generated/scripts/impeccable"
+
+# Claude usa el verbo `hook` (PostToolUse); Cursor usa `hook-before-edit` (ver tools/atelier/scripts/merge-hooks.mjs).
+def atelier_claude_hooks
+  {
+    "PostToolUse" => [
+      {
+        "matcher" => "Edit|Write",
+        "hooks" => [
+          {
+            "type" => "command",
+            "command" => "\"${CLAUDE_PROJECT_DIR}/#{ATELIER_LAUNCHER}\" hook",
+            "timeout" => 5
+          }
+        ]
+      }
+    ]
+  }
+end
+
 def emit_settings(cfg)
   return unless cfg["settings"]
 
-  content = <<~JSON
-    {
-      "_generated_by": "scripts/sync-ide",
-      "_note": "El DT — entrada canónica en AGENTS.md; reglas en .claude/rules/, skills en .claude/skills/, commands en .claude/commands/."
-    }
-  JSON
-  write_file(File.join(ROOT, cfg["settings"]), content)
+  data = {
+    "_generated_by" => "scripts/sync-ide",
+    "_note" => "El DT — entrada canónica en AGENTS.md; reglas en .claude/rules/, skills en .claude/skills/, commands en .claude/commands/."
+  }
+  if cfg["atelier_hook"] && File.exist?(File.join(ROOT, ATELIER_LAUNCHER))
+    data["hooks"] = atelier_claude_hooks
+  end
+  write_file(File.join(ROOT, cfg["settings"]), JSON.pretty_generate(data) + "\n")
 end
 
 # --- run ---

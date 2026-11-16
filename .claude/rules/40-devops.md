@@ -1,7 +1,5 @@
 ---
-description: Convenciones DevOps — CI/CD, IaC, deploy Firebase, DRY en pipelines
-globs: "**/.github/workflows/**, **/Dockerfile*, **/docker-compose*, **/terraform/**, **/firebase.json, **/cloudbuild*"
-alwaysApply: false
+paths: "**/.github/workflows/**, **/Dockerfile*, **/docker-compose*, **/terraform/**, **/firebase.json, **/cloudbuild*"
 ---
 
 # DevOps e infraestructura

@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.17.0**
+**v1.18.0**
 
 Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
@@ -26,7 +26,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ## Índice
 
-- [Qué trae v1.17.0](#que-trae)
+- [Qué trae v1.18.0](#que-trae)
 - [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
@@ -39,15 +39,15 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ---
 
-## Qué trae v1.17.0 {#que-trae}
+## Qué trae v1.18.0 {#que-trae}
 
-Capacidad nueva sobre **v1.16.0**. El día a día sigue igual. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
+Capacidad nueva sobre **v1.17.0**. El día a día en Cursor sigue igual. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **Antes de instalar** | Plugin, MCP, repo o paquete nuevo: un veredicto, y recién después se instala. |
-| **Oficiales del DT** | Drive, Gmail y Calendar se resumen en una línea. |
-| **Qué no frena** | Reinstalar lo que el lockfile ya fija. |
+| **Claude Code** | Las reglas cargan como en Cursor: por archivos, o a pedido desde `CLAUDE.md`. |
+| **Atelier** | El detector de diseño corre después de cada edición también en Claude. |
+| **Los demás IDE** | Cursor, Antigravity, Codex y Copilot no cambian. |
 ---
 
 ## Empezá acá

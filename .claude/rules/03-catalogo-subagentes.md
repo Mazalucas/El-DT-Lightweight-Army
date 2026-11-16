@@ -1,8 +1,3 @@
----
-description: Catálogo de subagentes - Qué existen y cuándo invocarlos
-alwaysApply: true
----
-
 # Catálogo de Subagentes
 
 Cursor inyecta la descripción de cada subagente en la herramienta **Task**. Usá este mapa para elegir rol; al delegar, incluí protocolos DT (`01-protocolos-dt`).

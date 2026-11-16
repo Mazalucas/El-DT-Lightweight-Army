@@ -1,7 +1,5 @@
 ---
-description: OBLIGATORIO al consultar Gmail vía MCP — política de labels/queries, borradores, nunca enviar
-globs: "vitals/config/gmail-context.yaml, vitals/config/gmail-context.yaml.example, vitals/config/google-apps.yaml, vitals/config/google-apps.yaml.example"
-alwaysApply: false
+paths: "vitals/config/gmail-context.yaml, vitals/config/gmail-context.yaml.example, vitals/config/google-apps.yaml, vitals/config/google-apps.yaml.example"
 ---
 
 # Gmail como contexto del equipo

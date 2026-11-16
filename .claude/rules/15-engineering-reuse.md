@@ -1,7 +1,5 @@
 ---
-description: OBLIGATORIO al escribir o modificar código — discover before create, sección Qué reutilicé
-globs: "**/*.ts, **/*.tsx, **/*.js, **/*.jsx, **/*.py, **/*.go, **/src/**"
-alwaysApply: false
+paths: "**/*.ts, **/*.tsx, **/*.js, **/*.jsx, **/*.py, **/*.go, **/src/**"
 ---
 
 # Ingeniería reuse-first

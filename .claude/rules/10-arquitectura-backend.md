@@ -1,7 +1,5 @@
 ---
-description: Convenciones de arquitectura backend, APIs, capas, manejo de errores
-globs: "**/backend/**/*, **/api/**/*, **/*.py, **/*.go, **/*.ts, **/server/**/*"
-alwaysApply: false
+paths: "**/backend/**/*, **/api/**/*, **/*.py, **/*.go, **/*.ts, **/server/**/*"
 ---
 
 # Arquitectura Backend

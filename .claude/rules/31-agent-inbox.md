@@ -1,7 +1,5 @@
 ---
-description: OBLIGATORIO con inbox de agentes, roster kind:agent o dt-agent — contrato, sync, on-behalf del owner
-globs: "vitals/work/inbox/**, vitals/config/roster.yaml, scripts/dt-agent*"
-alwaysApply: false
+paths: "vitals/work/inbox/**, vitals/config/roster.yaml, scripts/dt-agent*"
 ---
 
 # Agentes miembro e inbox

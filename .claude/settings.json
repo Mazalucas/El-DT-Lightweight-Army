@@ -1,4 +1,18 @@
 {
   "_generated_by": "scripts/sync-ide",
-  "_note": "El DT — entrada canónica en AGENTS.md; reglas en .claude/rules/, skills en .claude/skills/, commands en .claude/commands/."
+  "_note": "El DT — entrada canónica en AGENTS.md; reglas en .claude/rules/, skills en .claude/skills/, commands en .claude/commands/.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR}/tools/atelier/generated/scripts/impeccable\" hook",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
 }

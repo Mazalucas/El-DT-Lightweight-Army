@@ -6,6 +6,14 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.18.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.18.0) - 2026-11-16
+
+Minor. Quien abre el DT en Claude Code recibe las reglas como en Cursor. El uso en Cursor, Antigravity, Codex y Copilot no cambia.
+
+- **Reglas:** las que dependen de archivos cargan solo al tocarlos (`paths`). Las cuatro a pedido salen de `.claude/rules/` y quedan listadas en `CLAUDE.md`.
+- **Atelier:** `.claude/settings.json` corre el detector de diseño después de cada edición.
+- **Dónde está:** formato `claude` en `ide-targets.yaml`, emisor `sync-ide.rb`, guía `DOC-GUIDE-001`.
+
 ## [1.17.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.17.0) - 2026-11-13
 
 Minor. Antes de instalar algo que el proyecto no tenía, el DT para y da un veredicto. El resto de los comandos sigue igual.

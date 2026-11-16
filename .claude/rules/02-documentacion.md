@@ -1,7 +1,5 @@
 ---
-description: OBLIGATORIO al crear o editar docs/ — protocolo DOC-META-001, capas, IDs, catálogo sync-catalog
-globs: "docs/**"
-alwaysApply: false
+paths: "docs/**"
 ---
 
 # Documentación (DT)

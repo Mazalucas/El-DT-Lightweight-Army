@@ -1,7 +1,5 @@
 ---
-description: OBLIGATORIO al consultar Google Drive vía MCP — solo carpetas registradas, solo lectura, consulta dirigida
-globs: "vitals/config/drive-context.yaml, vitals/config/drive-context.yaml.example, vitals/config/google-apps.yaml, vitals/config/google-apps.yaml.example"
-alwaysApply: false
+paths: "vitals/config/drive-context.yaml, vitals/config/drive-context.yaml.example, vitals/config/google-apps.yaml, vitals/config/google-apps.yaml.example"
 ---
 
 # Google Drive como contexto del equipo

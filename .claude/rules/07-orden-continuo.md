@@ -1,7 +1,5 @@
 ---
-description: OBLIGATORIO tras cambios en docs/, reglas, commands, skills o vitals/specs — una pasada dt-doctor y corregir hallazgos
-globs: "docs/**, .cursor/**, vitals/**"
-alwaysApply: false
+paths: "docs/**, .cursor/**, vitals/**"
 ---
 
 # Orden continuo

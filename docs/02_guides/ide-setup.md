@@ -5,7 +5,7 @@ type: guide
 status: canonical
 owner: dt-platform
 created: 2026-04-19
-updated: 2026-10-05
+updated: 2026-11-16
 tags:
   - cursor
   - antigravity
@@ -63,6 +63,20 @@ El set soportado vive en **`vitals/config/ide-targets.yaml`**. Stubs: Gemini CLI
 | Claude Code | `CLAUDE.md` (puntero) | `.claude/rules/*.md` | `.claude/skills/` | `.claude/{commands,agents,settings.json}` |
 | Codex | `AGENTS.md` | — | `.agents/skills/` | Comandos = skills |
 | GitHub Copilot | `.github/copilot-instructions.md` | — | — | Puntero a `AGENTS.md` |
+
+### Claude Code: cómo se traducen las reglas
+
+Claude Code solo lee el campo `paths` del frontmatter de `.claude/rules/`. Una regla sin `paths` carga en cada mensaje. Por eso `sync-ide` emite el formato `claude` así:
+
+| En `rules-manifest.yaml` | En Claude |
+|---|---|
+| `alwaysApply: true` | `.claude/rules/` sin frontmatter: carga siempre |
+| `globs` | `.claude/rules/` con `paths:`: carga al tocar esos archivos |
+| Sin `globs` y `alwaysApply: false` (a pedido) | No va a `.claude/rules/`. `CLAUDE.md` la lista en **Reglas a pedido** con su ruta en `vitals/specs/rule-bodies/` |
+
+El hook de Atelier también se emite en `.claude/settings.json` (`atelier_hook: true`), como `PostToolUse` sobre `Edit|Write` con el verbo `hook`. Cursor usa `preToolUse` con `hook-before-edit`.
+
+Canvas, `AskQuestion` y los plugins de Cursor no existen en Claude: las reglas que los nombran caen a markdown.
 
 ## Post-clone: `/bienvenida`
 

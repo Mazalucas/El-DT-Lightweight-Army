@@ -1,7 +1,5 @@
 ---
-description: Seguridad y manejo de secrets - nunca hardcodear credenciales
-globs: "**/.env*, **/config/**/*, **/*secrets*, **/*credentials*"
-alwaysApply: false
+paths: "**/.env*, **/config/**/*, **/*secrets*, **/*credentials*"
 ---
 
 # Seguridad y Secrets

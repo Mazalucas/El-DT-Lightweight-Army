@@ -1,7 +1,5 @@
 ---
-description: OBLIGATORIO al consultar Google Calendar vía MCP — calendarios registrados, confirmar antes de borrar
-globs: "vitals/config/calendar-context.yaml, vitals/config/calendar-context.yaml.example, vitals/config/google-apps.yaml, vitals/config/google-apps.yaml.example"
-alwaysApply: false
+paths: "vitals/config/calendar-context.yaml, vitals/config/calendar-context.yaml.example, vitals/config/google-apps.yaml, vitals/config/google-apps.yaml.example"
 ---
 
 # Google Calendar como contexto del equipo

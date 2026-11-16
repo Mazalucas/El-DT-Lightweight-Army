@@ -1,7 +1,5 @@
 ---
-description: Convenciones de testing, cobertura mínima, tipos de tests, mocks
-globs: "**/*.test.*, **/*.spec.*, **/tests/**/*, **/__tests__/**/*"
-alwaysApply: false
+paths: "**/*.test.*, **/*.spec.*, **/tests/**/*, **/__tests__/**/*"
 ---
 
 # Testing
