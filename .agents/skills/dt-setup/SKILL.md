@@ -1,6 +1,6 @@
 ---
 name: dt-setup
-description: "[Rutina/Framework] Primera vez o repair multi-IDE. /bienvenida = charla guiada de a un paso (checklist en silencio, pregunta de camino, /yo); /setup = repair drift. Use when the user invokes /bienvenida, /setup, or first conversation post-clone without session."
+description: "[Rutina/Framework] Primera vez o repair multi-IDE. /bienvenida = charla guiada de a un paso (checklist en silencio, pregunta de camino, /yo). Si faltan git, Ruby, gh, Node o Python, pregunta antes de instalar. /setup = repair drift. Use when the user invokes /bienvenida, /setup, or first conversation post-clone without session."
 ---
 
 # dt-setup
@@ -26,10 +26,23 @@ El clone **ya trae** `.cursor/`, `.agents/`, `.claude/`, commands y skills en Gi
 
 1. Resolver `git_root` (multi-proyecto: `vitals/workspace.yaml` si existe).
 2. Correr **en silencio** [`references/first-run-checklist.md`](references/first-run-checklist.md): paths, Git, desajuste. No lo muestres salvo que falle.
-3. Si el checklist falla, mandá **M0-B**. Si no, mandá **solo la Presentación**. Esperá la respuesta.
-4. Con `/yo` empieza `dt-session`. Si todavía no hay camino (clone del DT, sin `dt-upstream`, sin `/oficial`), la pregunta de camino va **después** de la identidad, con el texto M1 del guion. Según la opción, registrá dt-upstream (abajo) e instalá el pre-push con `./scripts/dt-oficial.sh install-hook`.
-5. `dt-session` cierra con el paso siguiente del camino. No repitas la presentación.
-6. **No correr** `sync-ide` ni `dt-doctor` salvo desajuste evidente **y** que el usuario pida reparar → modo B.
+3. En silencio, `./scripts/dt-install.sh --check` (macOS) o `powershell -ExecutionPolicy Bypass -File .\scripts\dt-install.ps1 -Check` (Windows). Si sale 0, no hables de instalar. Si sale distinto de 0, guardá las líneas `✗` / `FALTA` para la pregunta de toolchain. **No instales** en este paso.
+4. Si el checklist falla, mandá **M0-B**. Si no, mandá **solo la Presentación**. Esperá la respuesta.
+5. Con `/yo` empieza `dt-session`. Si el check de toolchain falló y esta conversación todavía no lo preguntó, `dt-session` manda **solo** esa pregunta (guion) y espera. Recién con la respuesta sigue M1 o el paso 2. Si todavía no hay camino (clone del DT, sin `dt-upstream`, sin `/oficial`), la pregunta de camino va **después**, con el texto M1 del guion. Según la opción, registrá dt-upstream (abajo) e instalá el pre-push con `./scripts/dt-oficial.sh install-hook`.
+6. `dt-session` cierra con el paso siguiente del camino. No repitas la presentación.
+7. **No correr** `sync-ide` ni `dt-doctor` salvo desajuste evidente **y** que el usuario pida reparar → modo B.
+
+### Pregunta de toolchain
+
+Texto y opciones: [`references/welcome-message.md`](references/welcome-message.md) § Pregunta de toolchain. Una sola vez por conversación. No suma un paso del camino.
+
+| Respuesta | Acción |
+|-----------|--------|
+| 1 | macOS: `./scripts/dt-install.sh` · Windows: `dt-install.ps1` sin flags |
+| 2 | No instales. Seguí el guion. |
+| 3 | macOS: `./scripts/dt-install.sh --full` · Windows: `dt-install.ps1 -Full` |
+
+Mostrá el resultado del script. Si abre el diálogo de Command Line Tools, pedí que lo termine y escriba «listo» para correr el mismo comando otra vez. No commitees.
 
 ### Escrituras permitidas en first-run
 
@@ -39,7 +52,7 @@ Solo estas, locales y **sin commit**:
 - `vitals/config/dt-upstream.md` (desde `vitals/config/dt-upstream.example.md`)
 - `./scripts/dt-oficial.sh install-hook`
 
-Nada más hasta `/yo`.
+Nada más en el repo hasta `/yo`. Si la persona eligió instalar (pregunta de toolchain), corré el script: escribe en el home (`~/.local/el-dt` o `%LOCALAPPDATA%\ElDT`) y puede anotar el PATH. No hace commit.
 
 ### Registro dt-upstream (first-run)
 
@@ -59,10 +72,11 @@ No commitear durante `/bienvenida` salvo que el usuario pida `/guardar`. Si ese 
 
 ## Modo B — repair (default en `/setup`, drift, post-pull grande)
 
-1. Mismos checks del modo A.
-2. Si Ruby disponible → pipeline completo en [`references/post-sync-pipeline.md`](references/post-sync-pipeline.md).
-3. Si Ruby **no** disponible → explicar que la estructura del clone suele bastar; sugerir Ruby solo a maintainers.
-4. Informar: targets `enabled` garantizados, resultado de `dt-doctor`, versión `VERSION`.
+1. Mismos checks del modo A, incluido el `--check` del instalador.
+2. Si ese check falla, mandá la pregunta de toolchain y esperá. Con **1** o **3**, corré el script que corresponde y seguí. Con **2**, no instales.
+3. Si Ruby disponible → pipeline completo en [`references/post-sync-pipeline.md`](references/post-sync-pipeline.md).
+4. Si Ruby **no** disponible → la estructura del clone suele bastar para usar el DT. Reparar el drift pide el perfil base; la pregunta de arriba es el camino.
+5. Informar: targets `enabled` garantizados, resultado de `dt-doctor`, versión `VERSION`.
 
 ## Inferencia de modo
 

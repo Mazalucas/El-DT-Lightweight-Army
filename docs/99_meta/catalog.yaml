@@ -3,7 +3,7 @@
 # Convención id: DOC-<DOMINIO>-<NNN> — ver id-registry.md
 
 version: 1
-updated: "2026-11-16"
+updated: "2026-11-25"
 documents:
   - id: DOC-ARCH-002
     title: "Arquitectura de la capacidad Atelier"
@@ -110,6 +110,11 @@ documents:
     path: 02_guides/revisar-instalacion.md
     type: guide
     tags: [security, plugins, mcp]
+  - id: DOC-GUIDE-018
+    title: "Instalar el toolchain de El DT (macOS y Windows)"
+    path: 02_guides/instalar-toolchain-dt.md
+    type: guide
+    tags: [setup, toolchain, macos, windows]
   - id: DOC-META-001
     title: "Protocolo de documentación orientada a IA"
     path: 99_meta/protocolo-documentacion-ia.md

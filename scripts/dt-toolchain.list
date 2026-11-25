@@ -1,0 +1,10 @@
+# Ids de Homebrew y winget. Los fallbacks (CLT, zip, tarball) viven en los scripts.
+# profile|id|check|brew|winget
+# base = runtimes para operar el DT. video = solo con --video o --full.
+# Atelier (impeccable) y Remotion no están acá: son flags, no perfil base.
+base|git|git|git|Git.Git
+base|ruby|ruby|ruby|RubyInstallerTeam.Ruby.3.4
+base|gh|gh|gh|GitHub.cli
+base|node|node|node|OpenJS.NodeJS.LTS
+base|python|python3|python|Python.Python.3.12
+video|ffmpeg|ffmpeg|ffmpeg|Gyan.FFmpeg

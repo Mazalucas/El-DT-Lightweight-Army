@@ -5,7 +5,7 @@ type: guide
 status: canonical
 owner: dt-platform
 created: 2026-06-23
-updated: 2026-11-11
+updated: 2026-11-25
 tags:
   - onboarding
   - setup
@@ -17,6 +17,7 @@ summary: Primera vez tras clonar El DT — /bienvenida te guía de a un paso (ca
 related:
   - DOC-GUIDE-001
   - DOC-GUIDE-007
+  - DOC-GUIDE-018
   - DOC-OV-004
   - DOC-OPS-001
 keywords:
@@ -55,11 +56,15 @@ Tras clonar el repo, escribí **`/bienvenida`**: el DT te guía de a un paso. No
 
 ## Qué hace `/bienvenida`
 
-Es una charla corta. La IA revisa la estructura en silencio, se presenta (quién es, para qué está y en qué te ayuda) y te hace **una** pregunta: qué querés hacer (construir tu proyecto, conocer el DT o mantener el DT oficial). Después te guía de a un paso: `/yo` y, si es tu proyecto, `/bootstrap` y otra vez `/yo`. Cada paso te dice **qué hacemos** y **por qué sirve**. Al final te muestra **qué más podés hacer** y el ritual diario. Si falta estructura, te pide **`/setup`**. **No** instala nada ni borra carpetas; solo registra el upstream del DT y el hook `pre-push`, local y sin commit.
+Es una charla corta. La IA revisa la estructura en silencio, se presenta (quién es, para qué está y en qué te ayuda) y te hace **una** pregunta: qué querés hacer (construir tu proyecto, conocer el DT o mantener el DT oficial). Después te guía de a un paso: `/yo` y, si es tu proyecto, `/bootstrap` y otra vez `/yo`. Cada paso te dice **qué hacemos** y **por qué sirve**. Al final te muestra **qué más podés hacer** y el ritual diario. Si falta estructura, te pide **`/setup`**. Si faltan git, Ruby, GitHub CLI, Node o Python, pregunta si instalarlos y solo corre el script si decís que sí. No borra carpetas. Registra el upstream del DT y el hook `pre-push`, local y sin commit.
 
 Si abrís el repo por primera vez **sin** haber corrido `/yo`, la IA puede arrancar la misma charla por su cuenta.
 
 Si algo falta → te lo dice en español claro; **`/setup`** repara drift; re-clonar solo si el clone está roto.
+
+## Toolchain (Ruby, Node, Python, GitHub CLI)
+
+El script deja git, Ruby, GitHub CLI, Node.js y Python, y si un camino falla prueba el siguiente: [instalar-toolchain-dt.md](instalar-toolchain-dt.md) (`DOC-GUIDE-018`). Podés correrlo vos antes de la charla. Si no, `/bienvenida` pregunta y solo instala con un sí. Atelier y Remotion no entran en el perfil base.
 
 ## Qué hace `/yo`
 
@@ -89,3 +94,4 @@ Usá **`/setup`** (repair) — requiere Ruby en la máquina; ver [ide-setup.md](
 - [Configuración multi-IDE](ide-setup.md) (`DOC-GUIDE-001`)
 - [Memoria del equipo](../00_overview/memoria-equipo-mecanismos-dt.md) (`DOC-OV-004`)
 - [Colaboración Git](../06_operations/git-colaboracion-dt.md) (`DOC-OPS-001`)
+- [Instalar el toolchain](instalar-toolchain-dt.md) (`DOC-GUIDE-018`)

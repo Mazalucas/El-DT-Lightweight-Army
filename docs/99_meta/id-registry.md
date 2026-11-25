@@ -5,7 +5,7 @@ type: reference
 status: canonical
 owner: dt-platform
 created: 2026-04-19
-updated: 2026-10-02
+updated: 2026-11-25
 tags:
   - documentation
   - ids
@@ -33,7 +33,7 @@ Antes de crear un documento con un prefijo nuevo, añadí una fila a esta tabla 
 | Prefijo (`DOMINIO`) | Descripción | Ejemplos |
 |---------------------|-------------|----------|
 | META | Meta-documentación, protocolo, políticas editoriales | DOC-META-001 … DOC-META-002 |
-| GUIDE | Guías how-to del repositorio / DT | DOC-GUIDE-001 … DOC-GUIDE-009; reservados para proyectos consumidores: DOC-GUIDE-010 … DOC-GUIDE-015; DT: DOC-GUIDE-016 (`/ordenar`), DOC-GUIDE-017 (revisar instalación) |
+| GUIDE | Guías how-to del repositorio / DT | DOC-GUIDE-001 … DOC-GUIDE-009; reservados para proyectos consumidores: DOC-GUIDE-010 … DOC-GUIDE-015; DT: DOC-GUIDE-016 (`/ordenar`), DOC-GUIDE-017 (revisar instalación), DOC-GUIDE-018 (toolchain macOS/Windows) |
 | OV | Overview, índices de capa, quickstart, portal `docs/README` | DOC-OV-001 … DOC-OV-010 (DOC-OV-004 = memoria del equipo; DOC-OV-010 = índice de guías) |
 | OPS | Operaciones, runbooks en `06_operations` | DOC-OPS-001 … DOC-OPS-002 |
 | CONCEPT | Conceptos en `01_concepts` | DOC-CONCEPT-001 |

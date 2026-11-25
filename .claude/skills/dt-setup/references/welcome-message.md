@@ -99,6 +99,40 @@ Respuesta → acción interna (antes del mensaje siguiente):
 
 Escrituras permitidas acá: `git remote add dt-upstream`, `vitals/config/dt-upstream.md`, `./scripts/dt-oficial.sh install-hook`. Locales, sin commit.
 
+## Pregunta de toolchain
+
+No suma un paso. Una sola vez por conversación.
+
+Corré en silencio `./scripts/dt-install.sh --check` (macOS) o `powershell -ExecutionPolicy Bypass -File .\scripts\dt-install.ps1 -Check` (Windows). Si sale 0, no preguntes.
+
+Cuándo preguntar, y esperar antes de seguir:
+
+- `/bienvenida`: después de `/yo` y de la postura, antes de M1 o del paso 2.
+- `/setup`: antes de reparar, si el check falla.
+
+`{faltan}` = los nombres de las líneas `✗` o `FALTA`, en una frase corta.
+
+```markdown
+Antes de seguir, a esta computadora le falta: {faltan}.
+
+**Qué hacemos:** lo instalo con un script. Si un camino falla, prueba el siguiente.
+**Por qué sirve:** git, Ruby, GitHub, Node y Python dejan guardar, reparar y verificar números.
+
+1. **Instalar lo básico** ← recomendado
+2. Ahora no
+3. Básico, más diseño y video
+
+👉 Respondé **1**, **2** o **3**.
+```
+
+| Elige | Acción |
+|---|---|
+| 1 | `./scripts/dt-install.sh` o `dt-install.ps1` |
+| 2 | Seguí el guion. No instales. |
+| 3 | `./scripts/dt-install.sh --full` o `dt-install.ps1 -Full` |
+
+Mostrá cómo terminó el script. Si macOS abre las Command Line Tools, pedí que terminen ese diálogo y escriban «listo». No commitees.
+
 ## Después de la presentación
 
 `/yo` (skill `dt-session`) toma la charla. No repitas la presentación ni pidas el nombre otra vez.

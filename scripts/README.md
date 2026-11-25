@@ -2,6 +2,7 @@
 
 | Script | Uso |
 |--------|-----|
+| [dt-install.sh](dt-install.sh) / [dt-install.ps1](dt-install.ps1) | Toolchain macOS y Windows. Perfil base: git, Ruby, `gh`, Node, Python. Si Homebrew o winget fallan, sigue con Command Line Tools, zip o tarball. `--atelier` / `-Atelier` y `--video` / `-Video` son opcionales (`--full` / `-Full` pide los dos). Lista de ids: [dt-toolchain.list](dt-toolchain.list). Guía: `DOC-GUIDE-018` |
 | [dt-doctor.sh](dt-doctor.sh) | **Verificador read-only del orden** (frontmatter, enlaces, catálogo, paridad multi-IDE, pulse). Motor del loop de orden continuo. Exit 0 = verde |
 | [dt-publish-gate.sh](dt-publish-gate.sh) | Antes de `/guardar` o de un push: ¿este checkout puede publicar, y a qué remoto? Exit 30/40 = parar, sin pedir acceso al DT |
 | [dt-agent.sh](dt-agent.sh) | Miembros agente e inbox: `register`, `login`, `activate`, `members`, `inbox`, `sent`, `send` (`--to` broadcast), `claim`/`done`/`decline`, `park`/`resume`, `escalate`, `cancel` (`cancelled`), `ack --fyi`, `sync` (sin bump), `archive`. `--on-behalf` del owner. `vitals/specs/agent-inbox.md` |

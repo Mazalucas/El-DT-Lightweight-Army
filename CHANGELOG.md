@@ -6,6 +6,15 @@ Cada `/guardar` que bumpéa agrega una entrada acá y publica la misma nota en [
 
 Las notas salen del tag y del commit de esa versión. No hay releases inventados para números que no se taguearon.
 
+## [1.19.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.19.0) - 2026-11-25
+
+Minor. Un script instala git, Ruby, GitHub CLI, Node y Python en macOS o Windows. Quien ya usa el DT sigue igual: Atelier y video no entran solos.
+
+- **Instalador:** `./scripts/dt-install.sh` en macOS y `scripts/dt-install.ps1` en Windows. Si Homebrew o winget fallan, prueba Command Line Tools, zip o tarball. Lo que ya responde no se reinstala.
+- **Perfil base:** git, Ruby, `gh`, Node y Python. Atelier y Remotion se piden con `--atelier`, `--video` o `--full`.
+- **Bienvenida:** si falta alguna de esas herramientas, `/bienvenida` pregunta antes de instalar. Con un no, no corre el script.
+- **Dónde está:** guía `DOC-GUIDE-018`, lista `scripts/dt-toolchain.list`, primer setup en el README.
+
 ## [1.18.0](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases/tag/v1.18.0) - 2026-11-16
 
 Minor. Quien abre el DT en Claude Code recibe las reglas como en Cursor. El uso en Cursor, Antigravity, Codex y Copilot no cambia.

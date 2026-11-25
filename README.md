@@ -3,7 +3,7 @@
 # El DT — Director de proyecto con IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-**v1.18.0**
+**v1.19.0**
 
 Novedades de cada release: [CHANGELOG.md](CHANGELOG.md) · [GitHub Releases](https://github.com/Mazalucas/El-DT-Lightweight-Army/releases)
 
@@ -26,7 +26,7 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ## Índice
 
-- [Qué trae v1.18.0](#que-trae)
+- [Qué trae v1.19.0](#que-trae)
 - [Novedades de cada release](CHANGELOG.md)
 - [Empezá acá](#empezá-acá)
 - [Ritual del día](#ritual-del-día)
@@ -39,22 +39,22 @@ Todo desde el chat de tu editor (**Cursor**, **Antigravity**, **Claude Code** y 
 
 ---
 
-## Qué trae v1.18.0 {#que-trae}
+## Qué trae v1.19.0 {#que-trae}
 
-Capacidad nueva sobre **v1.17.0**. El día a día en Cursor sigue igual. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
+Capacidad nueva sobre **v1.18.0**. Quien ya trabaja con el DT no tiene que cambiar de hábito. El historial completo está en [CHANGELOG.md](CHANGELOG.md).
 
 | Tema | Qué cambia |
 |------|------------|
-| **Claude Code** | Las reglas cargan como en Cursor: por archivos, o a pedido desde `CLAUDE.md`. |
-| **Atelier** | El detector de diseño corre después de cada edición también en Claude. |
-| **Los demás IDE** | Cursor, Antigravity, Codex y Copilot no cambian. |
+| **Setup** | Un script instala git, Ruby, GitHub CLI, Node y Python en macOS o Windows. |
+| **Si falla un camino** | Sin Homebrew o sin winget, sigue por descarga directa o por las Command Line Tools. |
+| **Bienvenida** | Pregunta si instalar solo cuando falta algo. Atelier y video no entran en el perfil base. |
 ---
 
 ## Empezá acá
 
 | Si querés… | Hacé esto |
 |------------|-----------|
-| Usar El DT por primera vez | `/bienvenida` — te guía paso a paso |
+| Usar El DT por primera vez | Instalá las herramientas (abajo) y después `/bienvenida` |
 | Trabajar en el día a día | `/actualizar` → `/yo` → trabajar → `/guardar` |
 | Una tarea grande, paso a paso | `/orquestar` |
 | Algo puntual ya definido | `/fast-lane` |
@@ -77,7 +77,23 @@ git clone <este-repo>
 cd El-DT-Lightweight-Army
 ```
 
-En el chat: **`/bienvenida`**. El DT se presenta y te guía de a un paso, explicando qué hacemos y por qué sirve: elegís qué querés hacer, `/yo` y, si es tu proyecto, `/bootstrap`. Al final te muestra qué más podés hacer. Guía detallada: [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
+Instalá git, Ruby, GitHub CLI, Node.js y Python. Si ya están, el script no reinstala nada. Si un camino falla (por ejemplo un Mac sin Homebrew), prueba el siguiente.
+
+macOS:
+
+```bash
+./scripts/dt-install.sh
+```
+
+Windows (PowerShell):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\dt-install.ps1
+```
+
+Diseño (Atelier) y video no entran en ese perfil. Si los querés: `--full` en Mac, o `-Full` en Windows. Guía: [instalar-toolchain-dt.md](docs/02_guides/instalar-toolchain-dt.md).
+
+En el chat: **`/bienvenida`**. El DT se presenta y te guía de a un paso. Si el script no se corrió y falta alguna herramienta, pregunta si instalarla. Después: `/yo` y, si es tu proyecto, `/bootstrap`. Guía de la charla: [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
 
 No hace falta `/actualizar` en un clone recién hecho — usalo cuando el remoto del producto o del template tenga novedades.
 
@@ -323,10 +339,11 @@ Flujo: **marketing-strategist** lee la matriz y deriva. Carril Remotion → **re
 ## Quick setup (English)
 
 1. **Clone** this repo (or **Use this template** on GitHub).
-2. In chat: **`/bienvenida`** then **`/yo`** — see [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
-3. **Daily ritual:** `/actualizar` → `/yo` → work → `/guardar` (pushes to this checkout's remote; the official DT repo only after the owner runs `/oficial` here. A new project starts with `/bootstrap`)
-4. **Design:** `/atelier` · **Video:** [`tools/video/ROUTING.md`](tools/video/ROUTING.md) (`/recordly`, `/brag` o `/remotion`) · **Knowledge:** `/ordenar` · **Security:** `/hack` · **Deep work:** `/orquestar` or `/fast-lane`
-5. **Repair IDE drift:** `/setup` — see [ide-setup.md](docs/02_guides/ide-setup.md)
+2. **Install the toolchain** (git, Ruby, GitHub CLI, Node.js, Python). Skips what you already have. macOS: `./scripts/dt-install.sh`. Windows PowerShell: `powershell -ExecutionPolicy Bypass -File .\scripts\dt-install.ps1`. Atelier and video: `--full` / `-Full`. Guide: [instalar-toolchain-dt.md](docs/02_guides/instalar-toolchain-dt.md).
+3. In chat: **`/bienvenida`** then **`/yo`**. If a base tool is still missing, the DT asks before installing. See [primer-setup-dt.md](docs/02_guides/primer-setup-dt.md).
+4. **Daily ritual:** `/actualizar` → `/yo` → work → `/guardar` (pushes to this checkout's remote; the official DT repo only after the owner runs `/oficial` here. A new project starts with `/bootstrap`)
+5. **Design:** `/atelier` · **Video:** [`tools/video/ROUTING.md`](tools/video/ROUTING.md) (`/recordly`, `/brag` o `/remotion`) · **Knowledge:** `/ordenar` · **Security:** `/hack` · **Deep work:** `/orquestar` or `/fast-lane`
+6. **Repair IDE drift:** `/setup` — see [ide-setup.md](docs/02_guides/ide-setup.md)
 
 Adopting El DT in an existing repo: [adopt-dt-in-existing-repo.md](docs/02_guides/adopt-dt-in-existing-repo.md).
 

@@ -38,7 +38,7 @@ git --version
 git remote -v
 ```
 
-- Si `git` no está instalado → instrucciones plain por OS; **no** instalar sin confirmación explícita.
+- Si `git` no está instalado → no lo instales acá. La pregunta de toolchain del guion ofrece `./scripts/dt-install.sh` (macOS) o `dt-install.ps1` (Windows). Sin un sí, no corras el script.
 - Si no hay `origin` → puede ser repo post-`/bootstrap`; explicar que Fase A de `/actualizar` sincroniza el producto.
 - **dt-upstream:** si hay `origin`, no hay remote `dt-upstream`, y el repo es El DT → registrar según skill `dt-setup` (consumidor vs canónico). Copiar `vitals/config/dt-upstream.example.md` si falta config. `mode: canonical` no autoriza el push.
 - Instalar el pre-push local: `./scripts/dt-oficial.sh install-hook`. Frena un push al remoto oficial si esta carpeta no pasó por `/oficial`. Si no hay Ruby, seguí igual: `/guardar` corre el mismo gate y corta el push.
@@ -61,5 +61,5 @@ Señales de que hace falta `/setup` repair:
 | Problema | Qué decir |
 |----------|-----------|
 | Falta un archivo del checklist | "El clone parece incompleto. Volvé a clonar o pedí ayuda al equipo." |
-| Git no instalado | "Necesitás Git para `/guardar` y `/actualizar`. Instalalo desde …" |
+| Git no instalado | "Para guardar y actualizar hace falta Git. En la charla te pregunto si lo instalo con el script del DT." |
 | Quieren editar rules | "Editá fuentes en `vitals/specs/rule-bodies/` o `.cursor/skills/` — no espejos generados a mano." |
